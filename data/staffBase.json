@@ -1,0 +1,102 @@
+{
+  "Resources": [
+    {
+      "typeOfResource": "Front End",
+      "options": [
+        "React",
+        "Angular",
+        "Vue",
+        "Svelte",
+        "jQuery",
+        "Ember.js",
+        "Backbone.js",
+        "Semantic-UI",
+        "Foundation",
+        "Preact",
+        "Aurelia"
+      ]
+    },
+    {
+      "typeOfResource": "Back End",
+      "options": [
+        "Django",
+        "ASP.NET Core",
+        "Laravel",
+        "Ruby on Rails",
+        "Flask",
+        "CakePHP",
+        "NestJS",
+        "Meteor",
+        "Node.js",
+        "Express.js",
+        "Feathers.js",
+        "Sails.js"
+      ]
+    },
+    {
+      "typeOfResource": "DevOps",
+      "options": [
+        "TOGAF (The Open Group Architecture Framework)",
+        "Zachman Framework,AWS Well-Architected Framework",
+        "ArchiMate"
+      ]
+    },
+    {
+      "typeOfResource": "Quality Assurance",
+      "options": [
+        "Automation",
+        "Manual",
+        "Both"
+      ]
+    },
+    {
+      "typeOfResource": "Automation",
+      "options": [
+        "Selenium",
+        "JUnit",
+        "TestNG",
+        "Appium",
+        "Cucumber",
+        "TestComplete",
+        "Postman"
+      ]
+    },
+    {
+      "typeOfResource": "UI/UX",
+      "options": [
+        "Figma",
+        "Sketch",
+        "Adobe XD",
+        "InVision",
+        "Zeplin",
+        "Marvel",
+        "Axure RP"
+      ]
+    },
+    {
+      "typeOfResource": "Data Engineer",
+      "options": [
+        "Apache Hadoop",
+        "Apache Spark",
+        "Apache Kafka",
+        "Snowflake",
+        "Apache Flink",
+        "Airflow",
+        "Talend",
+        "Informatica",
+        "Apache Cassandra",
+        "Elasticsearch",
+        "Presto",
+        "MySQL"
+      ]
+    },
+    {
+      "typeOfResource": "Full Stack",
+      "options": []
+    },
+    {
+      "typeOfResource": "Solution Architect",
+      "options": []
+    }
+  ]
+}
