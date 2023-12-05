@@ -1,37 +1,69 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { getQuestions } from '../../lib/api/getData'
 import { postData } from '../../lib/api/postData'
+import {
+  Box,
+  Typography,
+  Button,
+  Slide,
+  IconButton,
+  Stack,
+  Stepper,
+  Step,
+  StepButton,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemText,
+  TextField,
+  useTheme,
+  OutlinedInput,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  Chip,
+} from '@mui/material'
 
 const Staff = () => {
+  const theme = useTheme()
+
   const [staffQuestions, setStaffQuestions] = useState([])
   const [additionalQuestions, setAdditionalQuestions] = useState([])
   const [activeQuestions, setActiveQuestions] = useState('staffQuestions')
-  const [userdata, setUserData] = useState('')
+  const [formInput, setFormInput] = useState({
+    userName: '',
+    email: '',
+  })
+  const [errorMessage, setErrorMessage] = useState({
+    usernameError: null,
+    emailError: null,
+  })
   const [resourcesList, setResourcesList] = useState({})
   const [preState, setPreState] = useState(0)
   const [currentAdditionalQuestionIndex, setCurrentAdditionalQuestionIndex] =
     useState(0)
   const [currentResource, setCurrentResource] = useState({
-    resource: null,
-    resourceOption: null,
-    seniorityLevel: null,
-    numOfResources: null,
+    resource: '',
+    resourceOption: '',
+    seniorityLevel: '',
+    numOfResources: '',
   })
-  const [currentAdditionalQuestion, setCurrentAdditionalQuestion] = useState({
-    question: null,
-    options: null,
-    category: null,
-    selectedOption: null,
+  const setCurrentAdditionalQuestion = useRef({
+    question: '',
+    options: '',
+    category: '',
+    selectedOption: '',
   })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getQuestions();
-        // console.log("Data", data);
-        const { Resources, additionalQuestions } = data;
+        const data = await getQuestions()
+        // console.log('Data', data)
+        const { Resources, additionalQuestions } = data
         setStaffQuestions(Resources)
         setAdditionalQuestions(additionalQuestions)
       } catch (error) {
@@ -41,6 +73,7 @@ const Staff = () => {
     fetchData()
   }, [])
 
+  console.log(additionalQuestions)
   const typeOfResourceOptions = useMemo(
     () => staffQuestions.map(item => item.typeOfResource),
     [staffQuestions]
@@ -58,23 +91,15 @@ const Staff = () => {
     setCurrentResource({
       ...currentResource,
       resource: selectedResource,
-      resourceOption: null,
+      resourceOption: '',
     })
   }
-
-  const showOptionsList = selectedResourceOption => {
-    setCurrentResource({
-      ...currentResource,
-      resourceOption: selectedResourceOption,
-    })
-  }
-  console.log(currentResource);
 
   const handleSeniorityLevelChange = selectedSeniorityLevel => {
     setCurrentResource({
       ...currentResource,
       seniorityLevel: selectedSeniorityLevel,
-      numOfResources: null,
+      numOfResources: '',
     })
   }
 
@@ -86,12 +111,16 @@ const Staff = () => {
   }
 
   const handleOptions = selectedOption => {
-    setCurrentAdditionalQuestion({
+    setCurrentAdditionalQuestion.current = {
+      _id: additionalQuestions[currentAdditionalQuestionIndex]._id,
       question: additionalQuestions[currentAdditionalQuestionIndex].question,
       options: additionalQuestions[currentAdditionalQuestionIndex].options,
       category: additionalQuestions[currentAdditionalQuestionIndex].category,
+      typeofselection:
+        additionalQuestions[currentAdditionalQuestionIndex].typeofselection,
+      label: additionalQuestions[currentAdditionalQuestionIndex].label,
       selectedOption: selectedOption,
-    })
+    }
   }
 
   const addResource = () => {
@@ -117,20 +146,24 @@ const Staff = () => {
 
       setPreState(preState + 1)
       setCurrentResource({
-        resource: null,
-        resourceOption: null,
-        seniorityLevel: null,
-        numOfResources: null,
+        resource: '',
+        resourceOption: '',
+        seniorityLevel: '',
+        numOfResources: '',
       })
     }
   }
 
   function goNext() {
     if (activeQuestions === 'staffQuestions') {
-      const { responses } = resourcesList
-      if (responses[0]) {
-        setPreState(0);
-        setActiveQuestions('additionalQuestions');
+      if (
+        currentResource.resource &&
+        currentResource.resourceOption &&
+        currentResource.seniorityLevel &&
+        currentResource.numOfResources
+      ) {
+        setPreState(0)
+        setActiveQuestions('additionalQuestions')
       } else {
         alert('Please add at least one resource before proceeding.')
       }
@@ -140,14 +173,13 @@ const Staff = () => {
   function Next() {
     const { responses } = resourcesList
     if (
-      currentAdditionalQuestion.question &&
-      currentAdditionalQuestion.options &&
-      currentAdditionalQuestion.category &&
-      currentAdditionalQuestion.selectedOption &&
-      responses[0]
+      setCurrentAdditionalQuestion.current.question &&
+      setCurrentAdditionalQuestion.current.options &&
+      setCurrentAdditionalQuestion.current.category &&
+      setCurrentAdditionalQuestion.current.selectedOption
     ) {
       setResourcesList({
-        responses: [...responses, { ...currentAdditionalQuestion }],
+        responses: [...responses, { ...setCurrentAdditionalQuestion.current }],
       })
     } else {
       console.log('Something is Missing')
@@ -157,16 +189,27 @@ const Staff = () => {
         setCurrentAdditionalQuestionIndex(currentAdditionalQuestionIndex + 1)
       } else {
         setActiveQuestions('userData')
-        alert('No more additional questions.')
       }
     }
   }
 
-  function userData(values) {
-    setResourcesList({ ...values, responses: [...responses] })
-    postData(resourcesList)
-    alert('Thank you we will contact you soon');
-    setActiveQuestions('submitted');
+  const submitForm = (formInput) => {
+    if (!formInput.userName) {
+      setErrorMessage({ usernameError: 'Incorrect UserName' })
+    }
+    if (!formInput.email) {
+      setErrorMessage({ emailError: 'Incorrect Email' })
+    }
+    if (formInput.userName && formInput.email) {
+      console.log("hello")
+      setCurrentResource({
+        ...formInput,
+        ...resourcesList,
+      })
+      setErrorMessage({ usernameError: null, emailError: null });
+      setActiveQuestions('Submitted');
+
+    }
   }
   const { responses } = resourcesList
   const totalPrice =
@@ -176,624 +219,325 @@ const Staff = () => {
       return total + price
     }, 0)
 
-  console.log('In Staff', resourcesList)
+  if(activeQuestions === 'Submitted'){
+    postData(resourcesList);
+  }
 
-  // const sendData = useMemo(() => {
-  //   console.log('In function', resourcesList);
-  //   if (!resourcesList.name == undefined && !resourcesList.email == undefined) {
-  //     postData(resourcesList)
-  //     alert('Thank you we will contact you soon')
-  //     setActiveQuestions('submitted')
-  //   } else {
-  //     alert('User Credentials are Missing')
-  //   }
-  // }, []);
+  /* ---------------------------- Styles ---------------------------- */
+  const ITEM_HEIGHT = 48
+  const ITEM_PADDING_TOP = 8
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      },
+    },
+  }
 
   return (
     <>
-      <h1>
+      <Typography variant="h5" mt={2} mb={5}>
         <strong>Staff Questions</strong>
-      </h1>
-      {activeQuestions === 'staffQuestions' && responses && responses[0] && (
-        <div>
+      </Typography>
+      {/* {activeQuestions === 'staffQuestions' && responses && responses[0] && (
+        <Box>
           <p>{`Total Price: ${totalPrice}`}</p>
-        </div>
-      )}
+        </Box>
+      )} */}
+
       {activeQuestions === 'staffQuestions' &&
         responses &&
         responses[0].resources.map((resource, index) => (
-          <div key={index}>
-            <p>{`Resource ${index + 1}: ${resource.resource}, Option: ${
-              resource.resourceOption.opt
-            }, Seniority Level: ${resource.seniorityLevel}, No. of Persons: ${
-              resource.numOfResources
-            }`}</p>
-          </div>
+          <Box key={index} sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex' }}>
+              <Typography variant="h6">Resource: </Typography>
+              <Button>{resource.resource}</Button>
+            </Box>
+            <Box sx={{ display: 'flex' }}>
+              <Typography variant="h6">Option:</Typography>
+              <Button>{resource.resourceOption}</Button>
+            </Box>
+            <Box sx={{ display: 'flex' }}>
+              <Typography variant="h6">Seniority Level:</Typography>
+              <Button>{resource.seniorityLevel}</Button>
+            </Box>
+            <Box sx={{ display: 'flex' }}>
+              <Typography variant="h6">No. of Persons:</Typography>
+              <Button>{resource.numOfResources}</Button>
+            </Box>
+          </Box>
         ))}
 
       {activeQuestions === 'staffQuestions' && (
-        <div>
+        <Box>
           {/* Current Resource Dropdown */}
-          <div>
-            <label>Select Resource Type:</label>
-            <select onChange={e => handleResourceChange(e.target.value)}>
-              <option value="">Resource Type</option>
+          <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="demo-multiple-chip-label">Resource Type</InputLabel>
+            <Select
+              labelId="demo-multiple-chip-label"
+              id="demo-multiple-chip"
+              value={currentResource.resource}
+              onChange={e => handleResourceChange(e.target.value)}
+              input={
+                <OutlinedInput
+                  id="select-multiple-chip"
+                  label="Resource Type"
+                />
+              }
+              renderValue={selected => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  <Chip key={selected} label={selected} />
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
               {typeOfResourceOptions.map((resource, index) => (
-                <option key={index} value={resource}>
+                <MenuItem
+                  key={index}
+                  value={resource}
+                  style={{ fontWeight: theme.typography.fontWeightRegular }}
+                >
                   {resource}
-                </option>
+                </MenuItem>
               ))}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
 
           {currentResource.resource && (
-            <div>
-              <label>Select Resource Option:</label>
-              <select
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="demo-multiple-chip-label">
+                Resource Option
+              </InputLabel>
+              <Select
+                value={currentResource.resourceOption}
                 onChange={e =>
-                  showOptionsList(
-                    staffQuestions.find(
-                      item => item.typeOfResource === currentResource.resource
-                    ).options[e.target.selectedIndex]
-                  )
+                  setCurrentResource({
+                    ...currentResource,
+                    resourceOption: e.target.value,
+                  })
                 }
+                input={
+                  <OutlinedInput
+                    id="select-multiple-chip"
+                    label="Resource Type"
+                  />
+                }
+                renderValue={selected => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    <Chip key={selected} label={selected} />
+                  </Box>
+                )}
+                MenuProps={MenuProps}
               >
-                <option>Resource Option</option>
                 {staffQuestions
                   .find(
                     item => item.typeOfResource === currentResource.resource
                   )
                   .options.map((option, index) => (
-                    <option key={index} value={option.opt}>
+                    <MenuItem
+                      key={index}
+                      value={option.opt}
+                      style={{
+                        fontWeight: theme.typography.fontWeightRegular,
+                      }}
+                    >
                       {option.opt}
-                    </option>
+                    </MenuItem>
                   ))}
-              </select>
-            </div>
+              </Select>
+            </FormControl>
           )}
 
           {currentResource.resourceOption && (
-            <div>
-              <label>Select Seniority Level:</label>
-              <select
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="demo-multiple-chip-label">
+                Seniority Level
+              </InputLabel>
+              <Select
+                value={currentResource.seniorityLevel}
                 onChange={e => handleSeniorityLevelChange(e.target.value)}
+                input={
+                  <OutlinedInput
+                    id="select-multiple-chip"
+                    label="Resource Type"
+                  />
+                }
+                renderValue={selected => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    <Chip key={selected} label={selected} />
+                  </Box>
+                )}
+                MenuProps={MenuProps}
               >
-                <option value="">Seniority Level</option>
                 {seniorityLevelOptions.map((level, index) => (
-                  <option key={index} value={level}>
+                  <MenuItem
+                    key={index}
+                    value={level}
+                    style={{ fontWeight: theme.typography.fontWeightRegular }}
+                  >
                     {level}
-                  </option>
+                  </MenuItem>
                 ))}
-              </select>
-            </div>
+              </Select>
+            </FormControl>
           )}
 
           {currentResource.seniorityLevel && (
-            <div>
-              <label>Select No. of Persons:</label>
-              <select
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="demo-multiple-chip-label">
+                No. of Person
+              </InputLabel>
+              <Select
+                value={currentResource.numOfResources}
                 onChange={e =>
                   handleNumOfResourcesChange(parseInt(e.target.value))
                 }
+                input={
+                  <OutlinedInput
+                    id="select-multiple-chip"
+                    label="Resource Type"
+                  />
+                }
+                renderValue={selected => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    <Chip key={selected} label={selected} />
+                  </Box>
+                )}
+                MenuProps={MenuProps}
               >
-                <option value="">Persons</option>
                 {numOfResourcesOptions[currentResource.seniorityLevel].map(
                   (num, index) => (
-                    <option key={index} value={num}>
+                    <MenuItem
+                      key={index}
+                      value={num}
+                      style={{ fontWeight: theme.typography.fontWeightRegular }}
+                    >
                       {num}
-                    </option>
+                    </MenuItem>
                   )
                 )}
-              </select>
-            </div>
+              </Select>
+            </FormControl>
           )}
 
-          <a href="#" onClick={addResource}>
-            Add More Resources
-          </a>
-          <button className="btn" onClick={goNext}>
-            Next
-          </button>
-        </div>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '2em',
+            }}
+          >
+            <Button variant="text" onClick={addResource}>
+              Add More Resources
+            </Button>
+            <Button
+              variant="outlined"
+              className="btn"
+              onClick={() => {
+                goNext()
+                addResource()
+              }}
+            >
+              Next
+            </Button>
+          </Box>
+        </Box>
       )}
 
       {activeQuestions === 'additionalQuestions' && (
-        <div>
-          <h2>{`Question ${currentAdditionalQuestionIndex + 1} / ${
-            additionalQuestions.length
-          }`}</h2>
-          <p>{additionalQuestions[currentAdditionalQuestionIndex].question}</p>
-          <ul>
+        <Box>
+          <Typography variant="h4">
+            {additionalQuestions[currentAdditionalQuestionIndex].question}
+          </Typography>
+          <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
             {additionalQuestions[currentAdditionalQuestionIndex].options.map(
               (option, index) => (
-                <li
-                  key={index}
-                  value={option.opt}
-                  onClick={e => handleOptions(option)}
-                >
-                  <strong>{index + 1}.</strong>
-                  {option.opt}
-                </li>
+                <React.Fragment key={index}>
+                  <Button
+                    variant="outlined"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      margin: 20,
+                    }}
+                    onClick={() => {
+                      handleOptions(option)
+                      Next()
+                    }}
+                  >
+                    {option.opt}
+                  </Button>
+                </React.Fragment>
               )
             )}
-          </ul>
-        </div>
-      )}
-      {activeQuestions === 'additionalQuestions' && (
-        <button className="btn" onClick={Next}>
-          Next
-        </button>
+          </Stack>
+        </Box>
       )}
       {activeQuestions === 'userData' && (
         <form>
-          <label>Name*</label>
-          <input
-            onChange={e => setUserData({ name: e.target.value })}
-            type="text"
-            placeholder="Your Name"
-            required
-          />
-
-          <label>Email*</label>
-          <input
-            onChange={e => setUserData({ ...userdata, email: e.target.value })}
-            type="email"
-            placeholder="Your Email"
-            required
-          />
-
-          {/* <button onClick={() => userData()}>Submit</button> */}
+          <Box>
+            <TextField
+              sx={{ mb: 3 }}
+              style={{ width: 500 }}
+              id="outlined-basic, user-name"
+              label="userName"
+              variant="outlined"
+              value={formInput.userName}
+              onChange={e => {
+                setFormInput({
+                  userName: e.target.value,
+                  email: formInput.email,
+                })
+                console.log(
+                  'userName: ',
+                  formInput.userName,
+                  'email: ',
+                  formInput.email
+                )
+              }}
+              helperText={errorMessage.usernameError}
+            />
+            <br />
+            <TextField
+              sx={{ mb: 3 }}
+              style={{ width: 500 }}
+              // fullWidth
+              id="outlined-basic, user-email"
+              label="Email"
+              variant="outlined"
+              value={formInput.email}
+              onChange={e => {
+                setFormInput({
+                  userName: formInput.userName,
+                  email: e.target.value,
+                })
+                console.log(
+                  'userName: ',
+                  formInput.userName,
+                  'email: ',
+                  formInput.email
+                )
+              }}
+              helperText={errorMessage.emailError}
+            />
+            <br />
+            <Button
+              variant="contained"
+              onClick={() => {
+                submitForm(formInput)
+              }}
+            >
+              Submit
+            </Button>
+          </Box>
         </form>
       )}
-      {activeQuestions === 'userData' && userdata.name && userdata.email && (
-        <button
-          value="Submit"
-          onClick={e => userData(userdata)}
-          className="btn"
-        >
-          Submit
-        </button>
-      )}
-      {activeQuestions === 'submitted' && (
-        <h1>Thank you we will soon contact with you</h1>
+      {activeQuestions === 'Submitted' && (
+        <Typography variant="h3" component="h3">
+          Thank you! We will contact you soon
+        </Typography>
       )}
     </>
   )
 }
 
 export default Staff
-
-// import React, { useState, useEffect, useMemo } from 'react';
-// import { getQuestions } from '../../lib/api/getData';
-
-// const Staff = () => {
-//   const [staffQuestions, setStaffQuestions] = useState([]);
-//   const [additionalQuestions, setAdditionalQuestions] = useState([]);
-//   const [activeQuestions, setActiveQuestions] = useState('staffQuestions');
-//   const [resourcesList, setResourcesList] = useState([]);
-//   const [preState, setPreState] = useState(0);
-//   const [currentResource, setCurrentResource] = useState({
-//     resource: null,
-//     resourceOption: null,
-//     seniorityLevel: null,
-//     numOfResources: null,
-//   });
-//   const [answered, setAnswered] = useState([]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const data = await getQuestions();
-//         const { Resources, additionalQuestions } = data;
-//         setStaffQuestions(Resources);
-//         setAdditionalQuestions(additionalQuestions);
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     };
-//     fetchData();
-//   }, []);
-
-//   const typeOfResourceOptions = useMemo(() => staffQuestions.map((item) => item.typeOfResource), [
-//     staffQuestions,
-//   ]);
-
-//   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
-
-//   const numOfResourcesOptions = {
-//     "Mid Level": [1, 2, 3, 4],
-//     "Senior Level": [1, 2, 3, 4, 5],
-//     "Team Lead": [1, 2],
-//   };
-
-//   const handleResourceChange = (selectedResource) => {
-//     setCurrentResource({ ...currentResource, resource: selectedResource, resourceOption: null });
-//   };
-
-//   const showOptionsList = (selectedResourceOption) => {
-//     setCurrentResource({ ...currentResource, resourceOption: selectedResourceOption });
-//   };
-
-//   const handleSeniorityLevelChange = (selectedSeniorityLevel) => {
-//     setCurrentResource({
-//       ...currentResource,
-//       seniorityLevel: selectedSeniorityLevel,
-//       numOfResources: null,
-//     });
-//   };
-
-//   const handleNumOfResourcesChange = (selectedNumOfResources) => {
-//     setCurrentResource({ ...currentResource, numOfResources: selectedNumOfResources });
-//   };
-
-//   const addResource = () => {
-//     if (
-//       currentResource.resource &&
-//       currentResource.resourceOption &&
-//       currentResource.seniorityLevel &&
-//       currentResource.numOfResources
-//     ) {
-//       setResourcesList([...resourcesList, { ...currentResource }]);
-//       setPreState(preState + 1);
-//       setCurrentResource({
-//         resource: null,
-//         resourceOption: null,
-//         seniorityLevel: null,
-//         numOfResources: null,
-//       });
-//     }
-//   };
-
-//   const handleOptionClick = (questionIndex, optionIndex) => {
-//     const updatedAnswered = [...answered];
-//     if (!updatedAnswered[questionIndex]) {
-//       updatedAnswered[questionIndex] = [];
-//     }
-//     updatedAnswered[questionIndex][0] = optionIndex; // Assuming each question has only one correct option
-//     setAnswered(updatedAnswered);
-//   };
-
-//   function goNext() {
-//     if (activeQuestions === 'staffQuestions') {
-//       if (resourcesList.length > 0) {
-//         setPreState(0);
-//         setActiveQuestions('additionalQuestions');
-//       } else {
-//         alert("Please add at least one resource before proceeding.");
-//       }
-//     } else if (activeQuestions === 'additionalQuestions') {
-//       const currentQuestionIndex = answered.length;
-//       if (currentQuestionIndex < additionalQuestions.length) {
-//         setPreState(0);
-//         setActiveQuestions('additionalQuestions');
-//         setAnswered([...answered, []]);
-//       } else {
-//         alert("No more additional questions.");
-//       }
-//     }
-//   }
-
-//   return (
-//     <>
-//       <h1><strong>Staff Questions</strong></h1>
-//       {activeQuestions === 'staffQuestions' && (
-//         resourcesList.map((resource, index) => (
-//           <div key={index}>
-//             <p>{`Resource ${index + 1}: ${resource.resource}, Option: ${resource.resourceOption}, Seniority Level: ${resource.seniorityLevel}, No. of Resources: ${resource.numOfResources}`}</p>
-//           </div>
-//         ))
-//       )}
-
-//       {activeQuestions === 'staffQuestions' && (
-//         <div>
-//           {/* Current Resource Dropdown */}
-//           <div>
-//             <label>Select Resource Type:</label>
-//             <select onChange={(e) => handleResourceChange(e.target.value)}>
-//               <option value="">Select Resource Type</option>
-//               {typeOfResourceOptions.map((resource, index) => (
-//                 <option key={index} value={resource}>
-//                   {resource}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-
-//           {currentResource.resource && (
-//             <div>
-//               <label>Select Resource Option:</label>
-//               <select onChange={(e) => showOptionsList(e.target.value)}>
-//                 <option value="">Select Resource Option</option>
-//                 {staffQuestions
-//                   .find((item) => item.typeOfResource === currentResource.resource)
-//                   .options.map((option, index) => (
-//                     <option key={index} value={option}>
-//                       {option}
-//                     </option>
-//                   ))}
-//               </select>
-//             </div>
-//           )}
-
-//           {currentResource.resourceOption && (
-//             <div>
-//               <label>Select Seniority Level:</label>
-//               <select onChange={(e) => handleSeniorityLevelChange(e.target.value)}>
-//                 <option value="">Select Seniority Level</option>
-//                 {seniorityLevelOptions.map((level, index) => (
-//                   <option key={index} value={level}>
-//                     {level}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-//           )}
-
-//           {currentResource.seniorityLevel && (
-//             <div>
-//               <label>Select No. of Resources:</label>
-//               <select onChange={(e) => handleNumOfResourcesChange(parseInt(e.target.value))}>
-//                 <option value="">Select No. of Resources</option>
-//                 {numOfResourcesOptions[currentResource.seniorityLevel].map((num, index) => (
-//                   <option key={index} value={num}>
-//                     {num}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-//           )}
-
-//           <a href="#" onClick={addResource}>
-//             Add More Resources
-//           </a>
-//           <button className='btn' onClick={goNext}>Next</button>
-//         </div>
-//       )}
-
-//       {activeQuestions === 'additionalQuestions' && (
-//         additionalQuestions.map((question, index) => (
-//           <div key={index}>
-//             <h2>{`Question ${index + 1} / ${additionalQuestions.length}`}</h2>
-//             <p>{question.question}</p>
-//             <ul>
-//               {question.options.map((option, optionIndex) => (
-//                 <li
-//                   key={optionIndex}
-//                   value={option}
-//                   onClick={() => handleOptionClick(index, optionIndex)}
-//                 >
-//                   <strong>{optionIndex + 1}.</strong> {option}
-//                 </li>
-//               ))}
-//             </ul>
-//           </div>
-//         ))
-//       )}
-
-//       {activeQuestions === 'additionalQuestions' && (
-//         <button className='btn' onClick={goNext}>Next</button>
-//       )}
-//     </>
-//   );
-// };
-
-// export default Staff;
-
-// const Staff = () => {
-//   const [staffQuestions, setStaffQuestions] = useState([]);
-//   const [resourcesList, setResourcesList] = useState([]);
-//   const [currentResource, setCurrentResource] = useState({
-//     resource: null,
-//     resourceOption: null,
-//     seniorityLevel: null,
-//     numOfResources: null,
-//   });
-
-//   console.log(" before");
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const data = await getQuestions();
-//         const { Resources } = data;
-//         setStaffQuestions(Resources);
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     };
-//     fetchData();
-//   }, []);
-
-//   const typeOfResourceOptions = useMemo(() => staffQuestions.map((item) => item.typeOfResource), [
-//     staffQuestions,
-//   ]);
-
-//   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
-
-//   const numOfResourcesOptions = {
-//     "Mid Level": [1, 2, 3, 4],
-//     "Senior Level": [1, 2, 3, 4, 5],
-//     "Team Lead": [1, 2],
-//   };
-
-//   const handleResourceChange = (selectedResource) => {
-//     setCurrentResource({ ...currentResource, resource: selectedResource, resourceOption: null });
-//   };
-
-//   const showOptionsList = (selectedResourceOption) => {
-//     setCurrentResource({ ...currentResource, resourceOption: selectedResourceOption });
-//   };
-
-//   const handleSeniorityLevelChange = (selectedSeniorityLevel) => {
-//     setCurrentResource({
-//       ...currentResource,
-//       seniorityLevel: selectedSeniorityLevel,
-//       numOfResources: null,
-//     });
-//   };
-
-//   const handleNumOfResourcesChange = (selectedNumOfResources) => {
-//     setCurrentResource({ ...currentResource, numOfResources: selectedNumOfResources });
-//   };
-
-//   const addResource = () => {
-//     if (
-//       currentResource.resource &&
-//       currentResource.resourceOption &&
-//       currentResource.seniorityLevel &&
-//       currentResource.numOfResources
-//     ) {
-//       setResourcesList([...resourcesList, { ...currentResource }]);
-//       setCurrentResource({
-//         resource: null,
-//         resourceOption: null,
-//         seniorityLevel: null,
-//         numOfResources: null,
-//       });
-//     }
-//   };
-
-//   return (
-//     <>
-//       <h1><strong>Staff Questions</strong></h1>
-
-//       {/* Old Resources Dropdowns */}
-//       {resourcesList.map((resource, index) => (
-//         <div key={index}>
-//           <label>{`Resource ${index + 1}:`}</label>
-
-//           {/* Resource Type Dropdown */}
-//           <select
-//             value={resource.resource}
-//             onChange={(e) => handleResourceChange(e.target.value)}
-//           >
-//             <option value="">Select Resource Type</option>
-//             {typeOfResourceOptions.map((option, index) => (
-//               <option key={index} value={option}>
-//                 {option}
-//               </option>
-//             ))}
-//           </select>
-
-//           {/* Resource Option Dropdown */}
-//           {resource.resource && (
-//             <div>
-//               <label>Select Resource Option:</label>
-//               <select
-//                 value={resource.resourceOption}
-//                 onChange={(e) => showOptionsList(e.target.value)}
-//               >
-//                 <option value="">Select Resource Option</option>
-//                 {staffQuestions
-//                   .find((item) => item.typeOfResource === resource.resource)
-//                   .options.map((option, index) => (
-//                     <option key={index} value={option}>
-//                       {option}
-//                     </option>
-//                   ))}
-//               </select>
-//             </div>
-//           )}
-
-//           {/* Seniority Level Dropdown */}
-//           {resource.resourceOption && (
-//             <div>
-//               <label>Select Seniority Level:</label>
-//               <select
-//                 value={resource.seniorityLevel}
-//                 onChange={(e) => handleSeniorityLevelChange(e.target.value)}
-//               >
-//                 <option value="">Select Seniority Level</option>
-//                 {seniorityLevelOptions.map((level, index) => (
-//                   <option key={index} value={level}>
-//                     {level}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-//           )}
-
-//           {/* No. of Resources Dropdown */}
-//           {resource.seniorityLevel && (
-//             <div>
-//               <label>Select No. of Resources:</label>
-//               <select
-//                 value={resource.numOfResources}
-//                 onChange={(e) => handleNumOfResourcesChange(parseInt(e.target.value))}
-//               >
-//                 <option value="">Select No. of Resources</option>
-//                 {numOfResourcesOptions[resource.seniorityLevel].map((num, index) => (
-//                   <option key={index} value={num}>
-//                     {num}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-//           )}
-//         </div>
-//       ))}
-
-//       {/* Current Resource Dropdown */}
-//       <div>
-//         <label>Select Resource Type:</label>
-//         <select onChange={(e) => handleResourceChange(e.target.value)}>
-//           <option value="">Select Resource Type</option>
-//           {typeOfResourceOptions.map((resource, index) => (
-//             <option key={index} value={resource}>
-//               {resource}
-//             </option>
-//           ))}
-//         </select>
-//       </div>
-
-//       {currentResource.resource && (
-//         <div>
-//           <label>Select Resource Option:</label>
-//           <select onChange={(e) => showOptionsList(e.target.value)}>
-//             <option value="">Select Resource Option</option>
-//             {staffQuestions
-//               .find((item) => item.typeOfResource === currentResource.resource)
-//               .options.map((option, index) => (
-//                 <option key={index} value={option}>
-//                   {option}
-//                 </option>
-//               ))}
-//           </select>
-//         </div>
-//       )}
-
-//       {currentResource.resourceOption && (
-//         <div>
-//           <label>Select Seniority Level:</label>
-//           <select onChange={(e) => handleSeniorityLevelChange(e.target.value)}>
-//             <option value="">Select Seniority Level</option>
-//             {seniorityLevelOptions.map((level, index) => (
-//               <option key={index} value={level}>
-//                 {level}
-//               </option>
-//             ))}
-//           </select>
-//         </div>
-//       )}
-
-//       {currentResource.seniorityLevel && (
-//         <div>
-//           <label>Select No. of Resources:</label>
-//           <select onChange={(e) => handleNumOfResourcesChange(parseInt(e.target.value))}>
-//             <option value="">Select No. of Resources</option>
-//             {numOfResourcesOptions[currentResource.seniorityLevel].map((num, index) => (
-//               <option key={index} value={num}>
-//                 {num}
-//               </option>
-//             ))}
-//           </select>
-//         </div>
-//       )}
-
-//       <a href="#" onClick={addResource}>
-//         Add More Resources
-//       </a>
-//     </>
-//   );
-// };
-
-// export default Staff;

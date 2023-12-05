@@ -1,15 +1,16 @@
-import React from 'react';
 
 export const postData = async (data) => {
   try {
 
-    if (data) {
-        await fetch('https://a1fb-182-180-118-76.ngrok.io/postdata', {
+    console.log(data);
+
+    if (data.responses && data.responses.length > 0) {
+        await fetch('http://localhost:4500/postdata', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: {userName: '', email: '', responses: [data.responses]},
+            body: JSON.stringify(data),
         });
     }
     else {
@@ -19,11 +20,4 @@ export const postData = async (data) => {
     console.log('Error', error);
   }
 }
-
-
-// export function getStaticprops(data){
-//     return {
-//         props: data
-//     }
-// }
 
