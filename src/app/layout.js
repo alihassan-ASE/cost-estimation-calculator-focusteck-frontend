@@ -24,9 +24,6 @@ export const metadata = {
   title: "Next.js App Router + Material UI v5",
   description: "Next.js App Router + Material UI v5",
 };
-  title: "Next.js App Router + Material UI v5",
-  description: "Next.js App Router + Material UI v5",
-};
 
 const DRAWER_WIDTH = 300;
 
