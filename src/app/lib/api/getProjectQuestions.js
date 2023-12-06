@@ -17,14 +17,11 @@ export const getQuestions = async () => {
 
 export const getDynamicQuestion = async (ID) => {
     let questions; 
-    console.log('In getApi: ', ID);
     const id = ID ? ID : "6560a181c9f7ceabb2c23846";
     try {
       questions = await fetch(`http://localhost:4500/question/${id}`);
-      
       const projectQuestions = await questions.json();
       const projectBased = projectQuestions.data;
-      console.log(projectBased);
       return projectBased;
 
     } catch (error) {
