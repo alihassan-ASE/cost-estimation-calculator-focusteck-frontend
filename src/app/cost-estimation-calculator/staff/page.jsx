@@ -46,7 +46,7 @@ const Staff = () => {
     emailError: null,
   });
   const [resourcesList, setResourcesList] = useState({});
-  const [preState, setPreState] = useState(0);
+  const [preState, setPreState] = useState(-1);
   const [currentAdditionalQuestionIndex, setCurrentAdditionalQuestionIndex] =
     useState(0);
   const [currentResource, setCurrentResource] = useState({
@@ -121,13 +121,12 @@ const Staff = () => {
 
   const handleOptions = (selectedOption) => {
     setCurrentAdditionalQuestion.current = {
-      _id: additionalQuestions[currentAdditionalQuestionIndex]._id,
-      question: additionalQuestions[currentAdditionalQuestionIndex].question,
-      options: additionalQuestions[currentAdditionalQuestionIndex].options,
-      category: additionalQuestions[currentAdditionalQuestionIndex].category,
-      typeofselection:
-        additionalQuestions[currentAdditionalQuestionIndex].typeofselection,
-      label: additionalQuestions[currentAdditionalQuestionIndex].label,
+      _id: additionalQuestions[preState]._id,
+      question: additionalQuestions[preState].question,
+      options: additionalQuestions[preState].options,
+      category: additionalQuestions[preState].category,
+      typeofselection: additionalQuestions[preState].typeofselection,
+      label: additionalQuestions[preState].label,
       selectedOption: selectedOption,
     };
   };
@@ -186,6 +185,20 @@ const Staff = () => {
       setCurrentAdditionalQuestion.current.category &&
       setCurrentAdditionalQuestion.current.selectedOption
     ) {
+      if (resourcesList.responses && resourcesList.responses.length > 1) {
+        resourcesList.responses.forEach((element, index) => {
+          if (
+            element.question === setCurrentAdditionalQuestion.current.question
+          ) {
+            // console.log("Update this Question: ", element);
+            element.question = setCurrentAdditionalQuestion.current.question;
+            element.options = setCurrentAdditionalQuestion.current.options;
+            element.category = setCurrentAdditionalQuestion.current.category;
+            element.selectedOption =
+              setCurrentAdditionalQuestion.current.selectedOption;
+          }
+        });
+      }
       setResourcesList({
         responses: [...responses, { ...setCurrentAdditionalQuestion.current }],
       });
@@ -193,8 +206,8 @@ const Staff = () => {
       console.log("Something is Missing in Additional Questions");
     }
     if (activeQuestions === "additionalQuestions") {
-      if (currentAdditionalQuestionIndex < additionalQuestions.length - 1) {
-        setCurrentAdditionalQuestionIndex(currentAdditionalQuestionIndex + 1);
+      if (preState < additionalQuestions.length - 1) {
+        setPreState(preState + 1);
       } else {
         setActiveQuestions("userData");
       }
@@ -282,17 +295,17 @@ const Staff = () => {
         </ListItemButton>
       </List>
       <Box>
-        {/* {preState > 0 ? (
-            <span>
-              <IconButton
-                onClick={() => {
-                  setPreState(preState - 1);
-                }}
-              >
-                <ArrowBack />
-              </IconButton>
-            </span>
-          ) : null} */}
+        {preState > 0 ? (
+          <span>
+            <IconButton
+              onClick={() => {
+                setPreState(preState - 1);
+              }}
+            >
+              <ArrowBack />
+            </IconButton>
+          </span>
+        ) : null}
 
         {activeQuestions === "staffQuestions" &&
           responses &&
@@ -500,30 +513,25 @@ const Staff = () => {
         {activeQuestions === "additionalQuestions" && (
           <Box>
             <Typography variant="h4">
-              {additionalQuestions[currentAdditionalQuestionIndex].question}
+              {additionalQuestions[preState].question}
             </Typography>
             <Stack direction="row" sx={{ flexWrap: "wrap" }}>
-              {additionalQuestions[currentAdditionalQuestionIndex].options.map(
-                (option, index) => (
-                  <React.Fragment key={index}>
-                    <Button
-                      variant="outlined"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                        margin: 20,
-                      }}
-                      onClick={() => {
-                        handleOptions(option);
-                        Next();
-                        setPreState(preState + 1);
-                      }}
-                    >
-                      {option.opt} ({option.price} $)
-                    </Button>
-                  </React.Fragment>
-                )
-              )}
+              {additionalQuestions[preState].options.map((option, index) => (
+                <React.Fragment key={index}>
+                  <Button
+                    size="large"
+                    variant="outlined"
+                    sx={{ maxWidth: 260, m: 1.5 }}
+                    onClick={() => {
+                      handleOptions(option);
+                      Next();
+                      setPreState(preState + 1);
+                    }}
+                  >
+                    {option.opt} ({option.price} $)
+                  </Button>
+                </React.Fragment>
+              ))}
             </Stack>
           </Box>
         )}
