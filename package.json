@@ -1,6 +1,6 @@
 {
-  "name": "cost-estimation-calculator-focusteck-frontend",
-  "version": "0.1.0",
+  "name": "material-ui-nextjs",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

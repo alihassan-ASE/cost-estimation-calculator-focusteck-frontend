@@ -20,11 +20,21 @@ import Groups from "@mui/icons-material/Groups";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
-
 export const metadata = {
   title: "Next.js App Router + Material UI v5",
   description: "Next.js App Router + Material UI v5",
 };
+  title: "Next.js App Router + Material UI v5",
+  description: "Next.js App Router + Material UI v5",
+};
+
+const DRAWER_WIDTH = 300;
+
+const LINKS = [
+  { text: "Home", href: "/", icon: HomeIcon },
+  { text: "Project", href: "/calculator/project", icon: AccountTree },
+  { text: "Staff", href: "/calculator/staff", icon: Groups },
+];
 
 export default function RootLayout({ children }) {
   return (
