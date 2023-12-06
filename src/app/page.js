@@ -17,20 +17,6 @@ export default function HomePage() {
           <AlertTitle>Hello 👋</AlertTitle>
           This app uses the Next.js App Router and Material UI v5.
         </Alert>
-        <Grid container rowSpacing={3} columnSpacing={3}>
-          <Grid xs={6}>
-            <MediaCard
-              heading="CMYK"
-              text="The CMYK color model (also known as process color, or four color) is a subtractive color model, based on the CMY color model, used in color printing, and is also used to describe the printing process itself."
-            />
-          </Grid>
-          <Grid xs={6}>
-            <MediaCard
-              heading="HSL and HSV"
-              text="HSL (for hue, saturation, lightness) and HSV (for hue, saturation, value; also known as HSB, for hue, saturation, brightness) are alternative representations of the RGB color model, designed in the 1970s by computer graphics researchers."
-            />
-          </Grid>
-        </Grid>
       </div>
     </Box>
   );

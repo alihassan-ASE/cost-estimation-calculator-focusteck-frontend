@@ -42,6 +42,8 @@ const page = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
+
+        
         const data = await getQuestions();
         const dynamic = await getDynamicQuestion();
         setPreQuestions(data.preProjectQuestion);
@@ -190,9 +192,9 @@ const page = () => {
   // }
 
   function saveAllData(selectedOption, question) {
-    console.log(selectedOption);
+    // console.log(selectedOption);
     if(selectedOption.opt === "Other (Specify)"){
-      console.log("Other Coming");
+      // console.log("Other Coming");
     }
     if (selectedOption.userName && selectedOption.email) {
       setSaveData({
@@ -352,7 +354,6 @@ const page = () => {
     }
   }
 
-  console.log(saveData);
 
   // const getPreSequenceLength = () => {
   //   const Sequence = AdditionalQuestionSequence.find(
@@ -644,9 +645,10 @@ const page = () => {
             </Stepper>
           </Stack>
         }  */}
-    <Grid container spacing={2} sx={{ flexDirection: { xs: "column", md: "row"} }}>
-      <Grid item md={3}>
-          <Item><List>
+    {/* <Grid container spacing={2} sx={{ flexDirection: { xs: "column", md: "row"} }}>
+      <Grid item md={3}> */}
+          {/* <Item> */}
+            <List>
           <ListItemButton component="a" href="#estimated-cost">
             <ListItemText
               // primary="Estimated Cost"
@@ -663,22 +665,17 @@ const page = () => {
               }
             />
           </ListItemButton>
-          <ListItemButton component="a" href="#estimated-hours">
-            <ListItemText primary="Estimated Hours" />
-          </ListItemButton>
-          <ListItemButton component="a" href="#expected-team">
-            <ListItemText primary="Expected Team" />
-          </ListItemButton>
-        </List></Item>
-        </Grid>
-      <Grid item md={9}>
+        </List>
+        {/* </Item> */}
+        {/* </Grid> */}
+      {/* <Grid item md={9}>
         <Item>
-        <Slide
-          direction={slideDirection}
+        <Slide */}
+          {/* direction={slideDirection}
           in={!slideIn}
           mountOnEnter
           unmountOnExit
-        >
+        > */}
           <Box>
             <Stack
               direction="row"
@@ -892,9 +889,7 @@ const page = () => {
                       : null}
                   </React.Fragment>
                 ))
-              ) : (
-                <React.Fragment>
-                  {currentState === "post" ? (
+              ) : (currentState === "post" ? (
                     <form>
                       <Box>
                         <TextField
@@ -944,8 +939,7 @@ const page = () => {
                         Thank You! We will contact you shortly
                       </Typography>
                     </React.Fragment>
-                  )}
-                </React.Fragment>
+                  )
               )}
               {multiple >= 3 && (
                 <Button
@@ -962,10 +956,10 @@ const page = () => {
               )}
             </Stack>
           </Box>
-        </Slide>
-        </Item>
-      </Grid>
-    </Grid>
+        {/* </Slide>
+        </Item> */}
+      {/* </Grid>
+    </Grid> */}
     </Box>
   );
 };
