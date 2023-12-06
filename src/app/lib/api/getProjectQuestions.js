@@ -42,7 +42,6 @@ export const postData = async (data) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
         },
         body: JSON.stringify(data),
       });

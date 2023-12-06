@@ -39,88 +39,21 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry>
-          <AppBar position="fixed" sx={{ zIndex: 2000 }}>
-            <Toolbar sx={{ backgroundColor: "background.paper" }}>
-              <DashboardIcon
-                sx={{ color: "#444", mr: 2, transform: "translateY(-2px)" }}
-              />
-              <Typography variant="h6" noWrap component="div" color="black">
-                Cost Estimation Calculator
-              </Typography>
-
-              {/* <Box>
-                <Link href="/">
-                  <Typography variant="h6" noWrap component="div" color="black">
-                    <HomeIcon
-                      sx={{
-                        color: "#444",
-                        mr: 2,
-                        transform: "translateY(-2px)",
-                      }}
-                    />{" "}
-                    Home
-                  </Typography>
-                </Link>
-                <Typography variant="h6" noWrap component="div" color="black">
-                  <Link href="/calculator/project">
-                    <AccountTree
-                      sx={{
-                        color: "#444",
-                        mr: 2,
-                        transform: "translateY(-2px)",
-                      }}
-                    />{" "}
-                    Project
-                  </Link>
-                </Typography>
-                <Typography variant="h6" noWrap component="div" color="black">
-                  <Link href="/calculator/staff">
-                    <Groups
-                      sx={{
-                        color: "#444",
-                        mr: 2,
-                        transform: "translateY(-2px)",
-                      }}
-                    />{" "}
-                    Staff
-                  </Link>
-                </Typography>
-              </Box> */}
-
-              {LINKS.map(({ text, href, icon: Icon }) => (
-                // <Typography variant="h6" key={href} component={Link} href={href}>
-                //   <Icon />
-                //   {text}
-                // </Typography>
-                <ListItem key={href} disablePadding>
-                  <ListItemButton color="black" component={Link} href={href}>
-                    <ListItemIcon>
-                      <Icon sx={{ p: 0 }} />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      primaryTypographyProps={{ sx: { color: "black" } }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </Toolbar>
-          </AppBar>
-
-          <Box
+       
+        <Box
             component="main"
             sx={{
               flexGrow: 1,
               bgcolor: "background.default",
-              ml: `${DRAWER_WIDTH}px`,
-              mt: ["48px", "56px", "64px"],
-              p: 3,
+            //   ml: `${DRAWER_WIDTH}px`,
+              // mt: ["48px", "56px", "64px"],
+              pb: 3,
+              pl: 3,
+              pr: 3
             }}
           >
             {children}
           </Box>
-        </ThemeRegistry>
       </body>
     </html>
   );
