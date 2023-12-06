@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect, useMemo, useRef } from 'react'
-import { getQuestions } from '../../lib/api/getData'
-import { postData } from '../../lib/api/postData'
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { getQuestions } from "../../lib/api/getData";
+import { postData } from "../../lib/api/postData";
 import {
   Box,
   Typography,
@@ -25,92 +25,101 @@ import {
   FormControl,
   Select,
   Chip,
-} from '@mui/material'
+  Grid,
+  Paper,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const Staff = () => {
-  const theme = useTheme()
+  const theme = useTheme();
+  const DRAWER_WIDTH = 240;
 
-  const [staffQuestions, setStaffQuestions] = useState([])
-  const [additionalQuestions, setAdditionalQuestions] = useState([])
-  const [activeQuestions, setActiveQuestions] = useState('staffQuestions')
+  const [staffQuestions, setStaffQuestions] = useState([]);
+  const [additionalQuestions, setAdditionalQuestions] = useState([]);
+  const [activeQuestions, setActiveQuestions] = useState("staffQuestions");
   const [formInput, setFormInput] = useState({
-    userName: '',
-    email: '',
-  })
+    userName: "",
+    email: "",
+  });
   const [errorMessage, setErrorMessage] = useState({
     usernameError: null,
     emailError: null,
-  })
-  const [resourcesList, setResourcesList] = useState({})
-  const [preState, setPreState] = useState(0)
+  });
+  const [resourcesList, setResourcesList] = useState({});
+  const [preState, setPreState] = useState(0);
   const [currentAdditionalQuestionIndex, setCurrentAdditionalQuestionIndex] =
-    useState(0)
+    useState(0);
   const [currentResource, setCurrentResource] = useState({
-    resource: '',
-    resourceOption: '',
-    seniorityLevel: '',
-    numOfResources: '',
-  })
-  const setCurrentAdditionalQuestion = useRef({
-    question: '',
-    options: '',
-    category: '',
-    selectedOption: '',
-  })
+    resource: "",
+    resourceOption: "",
+    seniorityLevel: "",
+    numOfResources: "",
+  });
+  const setCurrentAdditionalQuestion = useRef({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getQuestions()
-        // console.log('Data', data)
-        const { Resources, additionalQuestions } = data
-        setStaffQuestions(Resources)
-        setAdditionalQuestions(additionalQuestions)
+        const data = await getQuestions();
+        const { Resources, additionalQuestions } = data;
+        setStaffQuestions(Resources);
+        setAdditionalQuestions(additionalQuestions);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
 
-  console.log(additionalQuestions)
   const typeOfResourceOptions = useMemo(
-    () => staffQuestions.map(item => item.typeOfResource),
+    () => staffQuestions.map((item) => item.typeOfResource),
     [staffQuestions]
-  )
+  );
 
-  const seniorityLevelOptions = ['Mid Level', 'Senior Level', 'Team Lead']
+  const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
 
   const numOfResourcesOptions = {
-    'Mid Level': [1, 2, 3, 4],
-    'Senior Level': [1, 2, 3, 4, 5],
-    'Team Lead': [1, 2],
-  }
+    "Mid Level": [1, 2, 3, 4],
+    "Senior Level": [1, 2, 3, 4, 5],
+    "Team Lead": [1, 2],
+  };
 
-  const handleResourceChange = selectedResource => {
+  const handleResourceChange = (selectedResource) => {
     setCurrentResource({
       ...currentResource,
       resource: selectedResource,
-      resourceOption: '',
-    })
-  }
+      resourceOption: { opt: "", price: "" },
+    });
+  };
+  const handleResourceOption = (selectedOption) => {
+    staffQuestions
+      .find((item) => item.typeOfResource === currentResource.resource)
+      .options.map((option, index) => {
+        if (selectedOption === option.opt) {
+          setCurrentResource({
+            ...currentResource,
+            resourceOption: { ...option },
+          });
+        }
+      });
+  };
 
-  const handleSeniorityLevelChange = selectedSeniorityLevel => {
+  const handleSeniorityLevelChange = (selectedSeniorityLevel) => {
     setCurrentResource({
       ...currentResource,
       seniorityLevel: selectedSeniorityLevel,
-      numOfResources: '',
-    })
-  }
+      numOfResources: "",
+    });
+  };
 
-  const handleNumOfResourcesChange = selectedNumOfResources => {
+  const handleNumOfResourcesChange = (selectedNumOfResources) => {
     setCurrentResource({
       ...currentResource,
       numOfResources: selectedNumOfResources,
-    })
-  }
+    });
+  };
 
-  const handleOptions = selectedOption => {
+  const handleOptions = (selectedOption) => {
     setCurrentAdditionalQuestion.current = {
       _id: additionalQuestions[currentAdditionalQuestionIndex]._id,
       question: additionalQuestions[currentAdditionalQuestionIndex].question,
@@ -120,8 +129,8 @@ const Staff = () => {
         additionalQuestions[currentAdditionalQuestionIndex].typeofselection,
       label: additionalQuestions[currentAdditionalQuestionIndex].label,
       selectedOption: selectedOption,
-    }
-  }
+    };
+  };
 
   const addResource = () => {
     if (
@@ -130,48 +139,48 @@ const Staff = () => {
       currentResource.seniorityLevel &&
       currentResource.numOfResources
     ) {
-      const { responses } = resourcesList
+      const { responses } = resourcesList;
 
       if (responses === undefined) {
         setResourcesList({
           responses: [{ resources: [{ ...currentResource }] }],
-        })
+        });
       } else {
-        const data = responses[0]
-        const { resources } = data
+        const data = responses[0];
+        const { resources } = data;
         setResourcesList({
           responses: [{ resources: [...resources, { ...currentResource }] }],
-        })
+        });
       }
 
-      setPreState(preState + 1)
+      setPreState(preState + 1);
       setCurrentResource({
-        resource: '',
-        resourceOption: '',
-        seniorityLevel: '',
-        numOfResources: '',
-      })
+        resource: "",
+        resourceOption: { opt: "", price: "" },
+        seniorityLevel: "",
+        numOfResources: "",
+      });
     }
-  }
+  };
 
   function goNext() {
-    if (activeQuestions === 'staffQuestions') {
+    if (activeQuestions === "staffQuestions") {
       if (
         currentResource.resource &&
         currentResource.resourceOption &&
         currentResource.seniorityLevel &&
         currentResource.numOfResources
       ) {
-        setPreState(0)
-        setActiveQuestions('additionalQuestions')
+        setPreState(0);
+        setActiveQuestions("additionalQuestions");
       } else {
-        alert('Please add at least one resource before proceeding.')
+        alert("Please add at least one resource before proceeding.");
       }
     }
   }
 
   function Next() {
-    const { responses } = resourcesList
+    const { responses } = resourcesList;
     if (
       setCurrentAdditionalQuestion.current.question &&
       setCurrentAdditionalQuestion.current.options &&
@@ -180,95 +189,114 @@ const Staff = () => {
     ) {
       setResourcesList({
         responses: [...responses, { ...setCurrentAdditionalQuestion.current }],
-      })
+      });
     } else {
-      console.log('Something is Missing')
+      console.log("Something is Missing in Additional Questions");
     }
-    if (activeQuestions === 'additionalQuestions') {
+    if (activeQuestions === "additionalQuestions") {
       if (currentAdditionalQuestionIndex < additionalQuestions.length - 1) {
-        setCurrentAdditionalQuestionIndex(currentAdditionalQuestionIndex + 1)
+        setCurrentAdditionalQuestionIndex(currentAdditionalQuestionIndex + 1);
       } else {
-        setActiveQuestions('userData')
+        setActiveQuestions("userData");
       }
     }
   }
 
   const submitForm = (formInput) => {
     if (!formInput.userName) {
-      setErrorMessage({ usernameError: 'Incorrect UserName' })
+      setErrorMessage({ usernameError: "Incorrect UserName" });
     }
     if (!formInput.email) {
-      setErrorMessage({ emailError: 'Incorrect Email' })
+      setErrorMessage({ emailError: "Incorrect Email" });
     }
     if (formInput.userName && formInput.email) {
-      console.log("hello")
-      setCurrentResource({
+      setResourcesList({
+        totalCost: totalPrice,
         ...formInput,
         ...resourcesList,
-      })
+      });
       setErrorMessage({ usernameError: null, emailError: null });
-      setActiveQuestions('Submitted');
+      setActiveQuestions("Submitted");
+    }
+  };
+  const { responses } = resourcesList;
+  let totalPrice = 0;
 
+  if (responses) {
+    totalPrice = responses[0].resources.reduce((total, resource) => {
+      const price =
+        resource.resourceOption?.price || resource.selectedOption?.price || 0;
+      return total + price;
+    }, 0);
+
+    // For subsequent objects in responses array
+    if (responses.length > 1) {
+      totalPrice += responses.reduce((total, resource) => {
+        const price = resource.selectedOption?.price || 0;
+        return total + price;
+      }, 0);
     }
   }
-  const { responses } = resourcesList
-  const totalPrice =
-    responses &&
-    responses[0].resources.reduce((total, resource) => {
-      const price = resource.resourceOption?.price || 0
-      return total + price
-    }, 0)
 
-  if(activeQuestions === 'Submitted'){
+  if (activeQuestions === "Submitted") {
     postData(resourcesList);
   }
 
   /* ---------------------------- Styles ---------------------------- */
-  const ITEM_HEIGHT = 48
-  const ITEM_PADDING_TOP = 8
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
   const MenuProps = {
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       },
     },
-  }
+  };
+
+  const Item = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "center",
+  }));
 
   return (
     <>
-      <Typography variant="h5" mt={2} mb={5}>
-        <strong>Staff Questions</strong>
+      <Typography variant="h3" mt={2} mb={5}>
+        Staff Questions
       </Typography>
+      {/* <Grid container spacing={2}>
+        <Grid item xs={9}>
+          <Item> */}
       {/* {activeQuestions === 'staffQuestions' && responses && responses[0] && (
-        <Box>
-          <p>{`Total Price: ${totalPrice}`}</p>
-        </Box>
-      )} */}
+            <Box>
+              <p>{`Total Price: ${totalPrice}`}</p>
+            </Box>
+            )} */}
 
-      {activeQuestions === 'staffQuestions' &&
+      {activeQuestions === "staffQuestions" &&
         responses &&
         responses[0].resources.map((resource, index) => (
-          <Box key={index} sx={{ display: 'flex' }}>
-            <Box sx={{ display: 'flex' }}>
+          <Box key={index} sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex" }}>
               <Typography variant="h6">Resource: </Typography>
               <Button>{resource.resource}</Button>
             </Box>
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: "flex" }}>
               <Typography variant="h6">Option:</Typography>
-              <Button>{resource.resourceOption}</Button>
+              <Button>{resource.resourceOption.opt}</Button>
             </Box>
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: "flex" }}>
               <Typography variant="h6">Seniority Level:</Typography>
               <Button>{resource.seniorityLevel}</Button>
             </Box>
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: "flex" }}>
               <Typography variant="h6">No. of Persons:</Typography>
               <Button>{resource.numOfResources}</Button>
             </Box>
           </Box>
         ))}
 
-      {activeQuestions === 'staffQuestions' && (
+      {activeQuestions === "staffQuestions" && (
         <Box>
           {/* Current Resource Dropdown */}
           <FormControl sx={{ m: 1, width: 300 }}>
@@ -277,15 +305,15 @@ const Staff = () => {
               labelId="demo-multiple-chip-label"
               id="demo-multiple-chip"
               value={currentResource.resource}
-              onChange={e => handleResourceChange(e.target.value)}
+              onChange={(e) => handleResourceChange(e.target.value)}
               input={
                 <OutlinedInput
                   id="select-multiple-chip"
                   label="Resource Type"
                 />
               }
-              renderValue={selected => (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              renderValue={(selected) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   <Chip key={selected} label={selected} />
                 </Box>
               )}
@@ -295,7 +323,9 @@ const Staff = () => {
                 <MenuItem
                   key={index}
                   value={resource}
-                  style={{ fontWeight: theme.typography.fontWeightRegular }}
+                  style={{
+                    fontWeight: theme.typography.fontWeightRegular,
+                  }}
                 >
                   {resource}
                 </MenuItem>
@@ -309,21 +339,16 @@ const Staff = () => {
                 Resource Option
               </InputLabel>
               <Select
-                value={currentResource.resourceOption}
-                onChange={e =>
-                  setCurrentResource({
-                    ...currentResource,
-                    resourceOption: e.target.value,
-                  })
-                }
+                value={currentResource.resourceOption.opt}
+                onChange={(e) => handleResourceOption(e.target.value)}
                 input={
                   <OutlinedInput
                     id="select-multiple-chip"
                     label="Resource Type"
                   />
                 }
-                renderValue={selected => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     <Chip key={selected} label={selected} />
                   </Box>
                 )}
@@ -331,7 +356,7 @@ const Staff = () => {
               >
                 {staffQuestions
                   .find(
-                    item => item.typeOfResource === currentResource.resource
+                    (item) => item.typeOfResource === currentResource.resource
                   )
                   .options.map((option, index) => (
                     <MenuItem
@@ -341,46 +366,49 @@ const Staff = () => {
                         fontWeight: theme.typography.fontWeightRegular,
                       }}
                     >
-                      {option.opt}
+                      {option.opt} ({option.price} $)
                     </MenuItem>
                   ))}
               </Select>
             </FormControl>
           )}
 
-          {currentResource.resourceOption && (
-            <FormControl sx={{ m: 1, width: 300 }}>
-              <InputLabel id="demo-multiple-chip-label">
-                Seniority Level
-              </InputLabel>
-              <Select
-                value={currentResource.seniorityLevel}
-                onChange={e => handleSeniorityLevelChange(e.target.value)}
-                input={
-                  <OutlinedInput
-                    id="select-multiple-chip"
-                    label="Resource Type"
-                  />
-                }
-                renderValue={selected => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    <Chip key={selected} label={selected} />
-                  </Box>
-                )}
-                MenuProps={MenuProps}
-              >
-                {seniorityLevelOptions.map((level, index) => (
-                  <MenuItem
-                    key={index}
-                    value={level}
-                    style={{ fontWeight: theme.typography.fontWeightRegular }}
-                  >
-                    {level}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
+          {currentResource.resourceOption &&
+            currentResource.resourceOption.opt !== "" && (
+              <FormControl sx={{ m: 1, width: 300 }}>
+                <InputLabel id="demo-multiple-chip-label">
+                  Seniority Level
+                </InputLabel>
+                <Select
+                  value={currentResource.seniorityLevel}
+                  onChange={(e) => handleSeniorityLevelChange(e.target.value)}
+                  input={
+                    <OutlinedInput
+                      id="select-multiple-chip"
+                      label="Resource Type"
+                    />
+                  }
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      <Chip key={selected} label={selected} />
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {seniorityLevelOptions.map((level, index) => (
+                    <MenuItem
+                      key={index}
+                      value={level}
+                      style={{
+                        fontWeight: theme.typography.fontWeightRegular,
+                      }}
+                    >
+                      {level}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
 
           {currentResource.seniorityLevel && (
             <FormControl sx={{ m: 1, width: 300 }}>
@@ -389,7 +417,7 @@ const Staff = () => {
               </InputLabel>
               <Select
                 value={currentResource.numOfResources}
-                onChange={e =>
+                onChange={(e) =>
                   handleNumOfResourcesChange(parseInt(e.target.value))
                 }
                 input={
@@ -398,8 +426,8 @@ const Staff = () => {
                     label="Resource Type"
                   />
                 }
-                renderValue={selected => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     <Chip key={selected} label={selected} />
                   </Box>
                 )}
@@ -410,7 +438,9 @@ const Staff = () => {
                     <MenuItem
                       key={index}
                       value={num}
-                      style={{ fontWeight: theme.typography.fontWeightRegular }}
+                      style={{
+                        fontWeight: theme.typography.fontWeightRegular,
+                      }}
                     >
                       {num}
                     </MenuItem>
@@ -422,8 +452,8 @@ const Staff = () => {
 
           <Box
             sx={{
-              display: 'flex',
-              gap: '2em',
+              display: "flex",
+              gap: "2em",
             }}
           >
             <Button variant="text" onClick={addResource}>
@@ -433,8 +463,8 @@ const Staff = () => {
               variant="outlined"
               className="btn"
               onClick={() => {
-                goNext()
-                addResource()
+                goNext();
+                addResource();
               }}
             >
               Next
@@ -443,28 +473,28 @@ const Staff = () => {
         </Box>
       )}
 
-      {activeQuestions === 'additionalQuestions' && (
+      {activeQuestions === "additionalQuestions" && (
         <Box>
           <Typography variant="h4">
             {additionalQuestions[currentAdditionalQuestionIndex].question}
           </Typography>
-          <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
+          <Stack direction="row" sx={{ flexWrap: "wrap" }}>
             {additionalQuestions[currentAdditionalQuestionIndex].options.map(
               (option, index) => (
                 <React.Fragment key={index}>
                   <Button
                     variant="outlined"
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-around',
+                      display: "flex",
+                      justifyContent: "space-around",
                       margin: 20,
                     }}
                     onClick={() => {
-                      handleOptions(option)
-                      Next()
+                      handleOptions(option);
+                      Next();
                     }}
                   >
-                    {option.opt}
+                    {option.opt} ({option.price} $)
                   </Button>
                 </React.Fragment>
               )
@@ -472,27 +502,21 @@ const Staff = () => {
           </Stack>
         </Box>
       )}
-      {activeQuestions === 'userData' && (
+      {activeQuestions === "userData" && (
         <form>
           <Box>
             <TextField
               sx={{ mb: 3 }}
               style={{ width: 500 }}
               id="outlined-basic, user-name"
-              label="userName"
+              label="Name"
               variant="outlined"
               value={formInput.userName}
-              onChange={e => {
+              onChange={(e) => {
                 setFormInput({
                   userName: e.target.value,
                   email: formInput.email,
-                })
-                console.log(
-                  'userName: ',
-                  formInput.userName,
-                  'email: ',
-                  formInput.email
-                )
+                });
               }}
               helperText={errorMessage.usernameError}
             />
@@ -505,17 +529,11 @@ const Staff = () => {
               label="Email"
               variant="outlined"
               value={formInput.email}
-              onChange={e => {
+              onChange={(e) => {
                 setFormInput({
                   userName: formInput.userName,
                   email: e.target.value,
-                })
-                console.log(
-                  'userName: ',
-                  formInput.userName,
-                  'email: ',
-                  formInput.email
-                )
+                });
               }}
               helperText={errorMessage.emailError}
             />
@@ -523,7 +541,7 @@ const Staff = () => {
             <Button
               variant="contained"
               onClick={() => {
-                submitForm(formInput)
+                submitForm(formInput);
               }}
             >
               Submit
@@ -531,13 +549,55 @@ const Staff = () => {
           </Box>
         </form>
       )}
-      {activeQuestions === 'Submitted' && (
+      {activeQuestions === "Submitted" && (
         <Typography variant="h3" component="h3">
           Thank you! We will contact you soon
         </Typography>
       )}
+      {/* </Item>
+        </Grid>
+        <Grid item xs={3}>
+          <Item> */}
+      <Drawer
+        sx={{
+          width: DRAWER_WIDTH,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: DRAWER_WIDTH,
+            boxSizing: "border-box",
+            top: ["48px", "56px", "64px"],
+            height: "auto",
+            bottom: 0,
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        {/* Side Bar */}
+        <List>
+          <ListItemButton component="a" href="#estimated-cost">
+            <ListItemText
+              // primary="Estimated Cost"
+              primary={
+                <React.Fragment>
+                  <Typography variant="h4" component="p" color="text.primary">
+                    Estimated Cost
+                  </Typography>
+                  <Typography variant="h5" component="p" color="text.secondary">
+                    {totalPrice} $
+                  </Typography>
+                  {/* Other components or data */}
+                </React.Fragment>
+              }
+            />
+          </ListItemButton>
+        </List>
+      </Drawer>
+      {/* </Item>
+        </Grid>
+      </Grid> */}
     </>
-  )
-}
+  );
+};
 
-export default Staff
+export default Staff;
