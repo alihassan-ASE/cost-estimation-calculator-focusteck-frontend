@@ -29,10 +29,10 @@ import {
   Paper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 
 const Staff = () => {
   const theme = useTheme();
-  const DRAWER_WIDTH = 240;
 
   const [staffQuestions, setStaffQuestions] = useState([]);
   const [additionalQuestions, setAdditionalQuestions] = useState([]);
@@ -153,7 +153,6 @@ const Staff = () => {
         });
       }
 
-      setPreState(preState + 1);
       setCurrentResource({
         resource: "",
         resourceOption: { opt: "", price: "" },
@@ -171,7 +170,7 @@ const Staff = () => {
         currentResource.seniorityLevel &&
         currentResource.numOfResources
       ) {
-        setPreState(0);
+        // setPreState(0);
         setActiveQuestions("additionalQuestions");
       } else {
         alert("Please add at least one resource before proceeding.");
@@ -260,87 +259,76 @@ const Staff = () => {
   }));
 
   return (
-    <>
-      <Typography variant="h3" mt={2} mb={5}>
+    <Box sx={{ flexGrow: 1 }}>
+      <Typography variant="h4" mb={4} mt={4}>
         Staff Questions
       </Typography>
-      {/* <Grid container spacing={2}>
-        <Grid item xs={9}>
-          <Item> */}
-      {/* {activeQuestions === 'staffQuestions' && responses && responses[0] && (
-            <Box>
-              <p>{`Total Price: ${totalPrice}`}</p>
-            </Box>
-            )} */}
+      <List>
+        <ListItemButton component="a" href="#estimated-cost">
+          <ListItemText
+            // primary="Estimated Cost"
+            primary={
+              <React.Fragment>
+                <Typography variant="h4" component="p" color="text.primary">
+                  Estimated Cost
+                </Typography>
+                <Typography variant="h5" component="p" color="text.secondary">
+                  {totalPrice} $
+                </Typography>
+                {/* Other components or data */}
+              </React.Fragment>
+            }
+          />
+        </ListItemButton>
+      </List>
+      <Box>
+        {/* {preState > 0 ? (
+            <span>
+              <IconButton
+                onClick={() => {
+                  setPreState(preState - 1);
+                }}
+              >
+                <ArrowBack />
+              </IconButton>
+            </span>
+          ) : null} */}
 
-      {activeQuestions === "staffQuestions" &&
-        responses &&
-        responses[0].resources.map((resource, index) => (
-          <Box key={index} sx={{ display: "flex" }}>
-            <Box sx={{ display: "flex" }}>
-              <Typography variant="h6">Resource: </Typography>
-              <Button>{resource.resource}</Button>
+        {activeQuestions === "staffQuestions" &&
+          responses &&
+          responses[0].resources.map((resource, index) => (
+            <Box key={index} sx={{ display: "flex" }}>
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="h6">Resource: </Typography>
+                <Button>{resource.resource}</Button>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="h6">Option:</Typography>
+                <Button>{resource.resourceOption.opt}</Button>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="h6">Seniority Level:</Typography>
+                <Button>{resource.seniorityLevel}</Button>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="h6">No. of Persons:</Typography>
+                <Button>{resource.numOfResources}</Button>
+              </Box>
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography variant="h6">Option:</Typography>
-              <Button>{resource.resourceOption.opt}</Button>
-            </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography variant="h6">Seniority Level:</Typography>
-              <Button>{resource.seniorityLevel}</Button>
-            </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography variant="h6">No. of Persons:</Typography>
-              <Button>{resource.numOfResources}</Button>
-            </Box>
-          </Box>
-        ))}
+          ))}
 
-      {activeQuestions === "staffQuestions" && (
-        <Box>
-          {/* Current Resource Dropdown */}
-          <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="demo-multiple-chip-label">Resource Type</InputLabel>
-            <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
-              value={currentResource.resource}
-              onChange={(e) => handleResourceChange(e.target.value)}
-              input={
-                <OutlinedInput
-                  id="select-multiple-chip"
-                  label="Resource Type"
-                />
-              }
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  <Chip key={selected} label={selected} />
-                </Box>
-              )}
-              MenuProps={MenuProps}
-            >
-              {typeOfResourceOptions.map((resource, index) => (
-                <MenuItem
-                  key={index}
-                  value={resource}
-                  style={{
-                    fontWeight: theme.typography.fontWeightRegular,
-                  }}
-                >
-                  {resource}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {currentResource.resource && (
+        {activeQuestions === "staffQuestions" && (
+          <Box>
+            {/* Current Resource Dropdown */}
             <FormControl sx={{ m: 1, width: 300 }}>
               <InputLabel id="demo-multiple-chip-label">
-                Resource Option
+                Resource Type
               </InputLabel>
               <Select
-                value={currentResource.resourceOption.opt}
-                onChange={(e) => handleResourceOption(e.target.value)}
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                value={currentResource.resource}
+                onChange={(e) => handleResourceChange(e.target.value)}
                 input={
                   <OutlinedInput
                     id="select-multiple-chip"
@@ -354,34 +342,28 @@ const Staff = () => {
                 )}
                 MenuProps={MenuProps}
               >
-                {staffQuestions
-                  .find(
-                    (item) => item.typeOfResource === currentResource.resource
-                  )
-                  .options.map((option, index) => (
-                    <MenuItem
-                      key={index}
-                      value={option.opt}
-                      style={{
-                        fontWeight: theme.typography.fontWeightRegular,
-                      }}
-                    >
-                      {option.opt} ({option.price} $)
-                    </MenuItem>
-                  ))}
+                {typeOfResourceOptions.map((resource, index) => (
+                  <MenuItem
+                    key={index}
+                    value={resource}
+                    style={{
+                      fontWeight: theme.typography.fontWeightRegular,
+                    }}
+                  >
+                    {resource}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
-          )}
 
-          {currentResource.resourceOption &&
-            currentResource.resourceOption.opt !== "" && (
+            {currentResource.resource && (
               <FormControl sx={{ m: 1, width: 300 }}>
                 <InputLabel id="demo-multiple-chip-label">
-                  Seniority Level
+                  Resource Option
                 </InputLabel>
                 <Select
-                  value={currentResource.seniorityLevel}
-                  onChange={(e) => handleSeniorityLevelChange(e.target.value)}
+                  value={currentResource.resourceOption.opt}
+                  onChange={(e) => handleResourceOption(e.target.value)}
                   input={
                     <OutlinedInput
                       id="select-multiple-chip"
@@ -395,208 +377,210 @@ const Staff = () => {
                   )}
                   MenuProps={MenuProps}
                 >
-                  {seniorityLevelOptions.map((level, index) => (
-                    <MenuItem
-                      key={index}
-                      value={level}
-                      style={{
-                        fontWeight: theme.typography.fontWeightRegular,
-                      }}
-                    >
-                      {level}
-                    </MenuItem>
-                  ))}
+                  {staffQuestions
+                    .find(
+                      (item) => item.typeOfResource === currentResource.resource
+                    )
+                    .options.map((option, index) => (
+                      <MenuItem
+                        key={index}
+                        value={option.opt}
+                        style={{
+                          fontWeight: theme.typography.fontWeightRegular,
+                        }}
+                      >
+                        {option.opt} ({option.price} $)
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             )}
 
-          {currentResource.seniorityLevel && (
-            <FormControl sx={{ m: 1, width: 300 }}>
-              <InputLabel id="demo-multiple-chip-label">
-                No. of Person
-              </InputLabel>
-              <Select
-                value={currentResource.numOfResources}
-                onChange={(e) =>
-                  handleNumOfResourcesChange(parseInt(e.target.value))
-                }
-                input={
-                  <OutlinedInput
-                    id="select-multiple-chip"
-                    label="Resource Type"
-                  />
-                }
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    <Chip key={selected} label={selected} />
-                  </Box>
-                )}
-                MenuProps={MenuProps}
+            {currentResource.resourceOption &&
+              currentResource.resourceOption.opt !== "" && (
+                <FormControl sx={{ m: 1, width: 300 }}>
+                  <InputLabel id="demo-multiple-chip-label">
+                    Seniority Level
+                  </InputLabel>
+                  <Select
+                    value={currentResource.seniorityLevel}
+                    onChange={(e) => handleSeniorityLevelChange(e.target.value)}
+                    input={
+                      <OutlinedInput
+                        id="select-multiple-chip"
+                        label="Resource Type"
+                      />
+                    }
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        <Chip key={selected} label={selected} />
+                      </Box>
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {seniorityLevelOptions.map((level, index) => (
+                      <MenuItem
+                        key={index}
+                        value={level}
+                        style={{
+                          fontWeight: theme.typography.fontWeightRegular,
+                        }}
+                      >
+                        {level}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
+            {currentResource.seniorityLevel && (
+              <FormControl sx={{ m: 1, width: 300 }}>
+                <InputLabel id="demo-multiple-chip-label">
+                  No. of Person
+                </InputLabel>
+                <Select
+                  value={currentResource.numOfResources}
+                  onChange={(e) =>
+                    handleNumOfResourcesChange(parseInt(e.target.value))
+                  }
+                  input={
+                    <OutlinedInput
+                      id="select-multiple-chip"
+                      label="Resource Type"
+                    />
+                  }
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      <Chip key={selected} label={selected} />
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {numOfResourcesOptions[currentResource.seniorityLevel].map(
+                    (num, index) => (
+                      <MenuItem
+                        key={index}
+                        value={num}
+                        style={{
+                          fontWeight: theme.typography.fontWeightRegular,
+                        }}
+                      >
+                        {num}
+                      </MenuItem>
+                    )
+                  )}
+                </Select>
+              </FormControl>
+            )}
+
+            <Box
+              sx={{
+                display: "flex",
+                gap: "2em",
+              }}
+            >
+              <Button variant="text" onClick={addResource}>
+                Add More Resources
+              </Button>
+              <Button
+                variant="outlined"
+                className="btn"
+                onClick={() => {
+                  goNext();
+                  addResource();
+                  setPreState(preState + 1);
+                }}
               >
-                {numOfResourcesOptions[currentResource.seniorityLevel].map(
-                  (num, index) => (
-                    <MenuItem
-                      key={index}
-                      value={num}
+                Next
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        {activeQuestions === "additionalQuestions" && (
+          <Box>
+            <Typography variant="h4">
+              {additionalQuestions[currentAdditionalQuestionIndex].question}
+            </Typography>
+            <Stack direction="row" sx={{ flexWrap: "wrap" }}>
+              {additionalQuestions[currentAdditionalQuestionIndex].options.map(
+                (option, index) => (
+                  <React.Fragment key={index}>
+                    <Button
+                      variant="outlined"
                       style={{
-                        fontWeight: theme.typography.fontWeightRegular,
+                        display: "flex",
+                        justifyContent: "space-around",
+                        margin: 20,
+                      }}
+                      onClick={() => {
+                        handleOptions(option);
+                        Next();
+                        setPreState(preState + 1);
                       }}
                     >
-                      {num}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-            </FormControl>
-          )}
-
-          <Box
-            sx={{
-              display: "flex",
-              gap: "2em",
-            }}
-          >
-            <Button variant="text" onClick={addResource}>
-              Add More Resources
-            </Button>
-            <Button
-              variant="outlined"
-              className="btn"
-              onClick={() => {
-                goNext();
-                addResource();
-              }}
-            >
-              Next
-            </Button>
+                      {option.opt} ({option.price} $)
+                    </Button>
+                  </React.Fragment>
+                )
+              )}
+            </Stack>
           </Box>
-        </Box>
-      )}
-
-      {activeQuestions === "additionalQuestions" && (
-        <Box>
-          <Typography variant="h4">
-            {additionalQuestions[currentAdditionalQuestionIndex].question}
+        )}
+        {activeQuestions === "userData" && (
+          <form>
+            <Box>
+              <TextField
+                sx={{ mb: 3 }}
+                style={{ width: 500 }}
+                id="outlined-basic, user-name"
+                label="Name"
+                variant="outlined"
+                value={formInput.userName}
+                onChange={(e) => {
+                  setFormInput({
+                    userName: e.target.value,
+                    email: formInput.email,
+                  });
+                }}
+                helperText={errorMessage.usernameError}
+              />
+              <br />
+              <TextField
+                sx={{ mb: 3 }}
+                style={{ width: 500 }}
+                // fullWidth
+                id="outlined-basic, user-email"
+                label="Email"
+                variant="outlined"
+                value={formInput.email}
+                onChange={(e) => {
+                  setFormInput({
+                    userName: formInput.userName,
+                    email: e.target.value,
+                  });
+                }}
+                helperText={errorMessage.emailError}
+              />
+              <br />
+              <Button
+                variant="contained"
+                onClick={() => {
+                  submitForm(formInput);
+                }}
+              >
+                Submit
+              </Button>
+            </Box>
+          </form>
+        )}
+        {activeQuestions === "Submitted" && (
+          <Typography variant="h3" component="h3">
+            Thank you! We will contact you soon
           </Typography>
-          <Stack direction="row" sx={{ flexWrap: "wrap" }}>
-            {additionalQuestions[currentAdditionalQuestionIndex].options.map(
-              (option, index) => (
-                <React.Fragment key={index}>
-                  <Button
-                    variant="outlined"
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      margin: 20,
-                    }}
-                    onClick={() => {
-                      handleOptions(option);
-                      Next();
-                    }}
-                  >
-                    {option.opt} ({option.price} $)
-                  </Button>
-                </React.Fragment>
-              )
-            )}
-          </Stack>
-        </Box>
-      )}
-      {activeQuestions === "userData" && (
-        <form>
-          <Box>
-            <TextField
-              sx={{ mb: 3 }}
-              style={{ width: 500 }}
-              id="outlined-basic, user-name"
-              label="Name"
-              variant="outlined"
-              value={formInput.userName}
-              onChange={(e) => {
-                setFormInput({
-                  userName: e.target.value,
-                  email: formInput.email,
-                });
-              }}
-              helperText={errorMessage.usernameError}
-            />
-            <br />
-            <TextField
-              sx={{ mb: 3 }}
-              style={{ width: 500 }}
-              // fullWidth
-              id="outlined-basic, user-email"
-              label="Email"
-              variant="outlined"
-              value={formInput.email}
-              onChange={(e) => {
-                setFormInput({
-                  userName: formInput.userName,
-                  email: e.target.value,
-                });
-              }}
-              helperText={errorMessage.emailError}
-            />
-            <br />
-            <Button
-              variant="contained"
-              onClick={() => {
-                submitForm(formInput);
-              }}
-            >
-              Submit
-            </Button>
-          </Box>
-        </form>
-      )}
-      {activeQuestions === "Submitted" && (
-        <Typography variant="h3" component="h3">
-          Thank you! We will contact you soon
-        </Typography>
-      )}
-      {/* </Item>
-        </Grid>
-        <Grid item xs={3}>
-          <Item> */}
-      <Drawer
-        sx={{
-          width: DRAWER_WIDTH,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: DRAWER_WIDTH,
-            boxSizing: "border-box",
-            top: ["48px", "56px", "64px"],
-            height: "auto",
-            bottom: 0,
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        {/* Side Bar */}
-        <List>
-          <ListItemButton component="a" href="#estimated-cost">
-            <ListItemText
-              // primary="Estimated Cost"
-              primary={
-                <React.Fragment>
-                  <Typography variant="h4" component="p" color="text.primary">
-                    Estimated Cost
-                  </Typography>
-                  <Typography variant="h5" component="p" color="text.secondary">
-                    {totalPrice} $
-                  </Typography>
-                  {/* Other components or data */}
-                </React.Fragment>
-              }
-            />
-          </ListItemButton>
-        </List>
-      </Drawer>
-      {/* </Item>
-        </Grid>
-      </Grid> */}
-    </>
+        )}
+      </Box>
+    </Box>
   );
 };
 

@@ -1,8 +1,31 @@
-export default function Home() {
+import * as React from 'react';
+import Box from '@mui/material/Box';
+// import Grid from '@mui/material/Unstable_Grid2';
+// import Drawer from '@mui/material/Drawer';
+import Typography from '@mui/material/Typography';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+// import MediaCard from '@/components/MediaCard';
+import { Link, Button } from "@mui/material"
+
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {/* <h1>Dynamic Questionnaire App</h1> */}
-      {/* <Questionnaire questions={questions} /> */}
-    </main>
-  )
+    <Box>
+      <Typography variant="h3">Software Development
+        Scaling
+        Rescue
+        From Scratch</Typography>
+      <div>
+        <Alert severity="info" sx={{ mt: 2, mb: 5 }}>
+          <AlertTitle>Hello 👋</AlertTitle>
+          This app uses the Next.js App Router and Material UI v5.
+        </Alert>
+      </div>
+      <Link href="/cost-estimation-calculator" >
+        <Button variant='outlined'>Start Now</Button>
+      </Link>
+    </Box>
+  );
 }
