@@ -14,7 +14,7 @@ const LINKS = [
     href: "/cost-estimation-calculator/project",
     icon: AccountTree,
   },
-  { text: "Staff", href: "/cost-estimation-calculator/staff", icon: Groups },
+  // { text: "Staff", href: "/cost-estimation-calculator/staff", icon: Groups },
 ];
 
 const MainRoute = () => {
