@@ -20,11 +20,11 @@ const LINKS = [
 const MainRoute = () => {
   return (
     <Box>
-      <Typography variant="h4" style={{ textAlign: "center" }} sx={{ m: 2 }}>
+      <Typography variant="h4" style={{ textAlign: "center" }} sx={{m: 2}}>
         SOFTWARE DEVELOPMENT COST CALCULATOR
       </Typography>
 
-      <Typography variant="h5" style={{ textAlign: "center" }}>
+      <Typography variant="h5"  style={{ textAlign: "center" }}>
         Answer a few questions and get an immediate report
       </Typography>
 
@@ -34,14 +34,15 @@ const MainRoute = () => {
           //   <Icon />
           //   {text}
           // </Typography>
-          <ListItem key={href} style={{ width: 300 }}>
-            <ListItemButton color="black" component={Link} href={href}>
+          <ListItem key={href} style={{width: 300}}>
+            <ListItemButton color="black" component={Link} href={href} >
               <ListItemIcon>
                 <Icon sx={{ p: 0 }} />
               </ListItemIcon>
               <ListItemText
                 primary={text}
-                primaryTypographyProps={{ sx: { color: "black" } }}
+                primaryTypographyProps={{ sx: { color: "black"} }
+              }
               />
             </ListItemButton>
           </ListItem>
@@ -51,4 +52,3 @@ const MainRoute = () => {
   );
 };
 export default MainRoute;
-
