@@ -560,6 +560,7 @@ const page = () => {
     // color: theme.palette.text.secondary,
   }));
 
+  console.log("response: ", saveData);
   return (
     <Box sx={{ flexGrow: 1 }}>
       {/* Main Heading */}
@@ -591,22 +592,20 @@ const page = () => {
       <Grid item md={3}> */}
       {/* <Item> */}
       <List>
-        <ListItemButton component="a" href="#estimated-cost">
-          <ListItemText
-            // primary="Estimated Cost"
-            primary={
-              <React.Fragment>
-                <Typography variant="h4" component="p" color="text.primary">
-                  Estimated Cost
-                </Typography>
-                <Typography variant="h5" component="p" color="text.secondary">
-                  {priceVal} $
-                </Typography>
-                {/* Other components or data */}
-              </React.Fragment>
-            }
-          />
-        </ListItemButton>
+        <ListItemText
+          // primary="Estimated Cost"
+          primary={
+            <React.Fragment>
+              <Typography variant="h4" component="p" color="text.primary">
+                Estimated Cost
+              </Typography>
+              <Typography variant="h5" component="p" color="text.secondary">
+                {priceVal} $
+              </Typography>
+              {/* Other components or data */}
+            </React.Fragment>
+          }
+        />
       </List>
       {/* </Item> */}
       {/* </Grid> */}
