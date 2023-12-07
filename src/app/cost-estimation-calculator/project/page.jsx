@@ -75,7 +75,6 @@ const page = () => {
   const DRAWER_WIDTH = 240;
   const [saveData, setSaveData] = useState({});
 
-  // State for Checking the index of the Dynamic questions. If state is set to -1, then the dynamic questions have ended and the Post Questions will start.
   const [returnedIndexVal, setReturnedIndexVal] = useState(0);
 
   // For go back button
@@ -153,7 +152,7 @@ const page = () => {
         (total, response) => total - response.selectedOption.price,
         saveData.totalCost
       );
-  
+
       saveData.totalCost = updatedTotalCost;
       setPriceVal(updatedTotalCost);
       saveData.responses.length = step;
@@ -161,22 +160,21 @@ const page = () => {
 
     if (currentState === "Pre") {
       setPreOption(step);
-    }
-    else if (currentState === "post") {
-      if(postOption < postQuestions.length){
-        postQuestions.map((data, index)=> {
-          if(data.label.toLowerCase() === label.question.toLowerCase()){
+    } else if (currentState === "post") {
+      if (postOption < postQuestions.length) {
+        postQuestions.map((data, index) => {
+          if (data.label.toLowerCase() === label.question.toLowerCase()) {
             setPostOption(index);
           }
-        })
+        });
       }
       if (step <= preQuestions.length) {
-        preQuestions.map((data, index)=> {
-          if(data.label.toLowerCase() === label.question.toLowerCase()){
+        preQuestions.map((data, index) => {
+          if (data.label.toLowerCase() === label.question.toLowerCase()) {
             setCurrentState("Pre");
             setPreOption(index);
           }
-        })
+        });
       }
     }
   };
@@ -344,10 +342,31 @@ const page = () => {
   }
 
   const handleFlow = (question) => {
+    saveData.responses.pop();
+
+    if (
+      Array.isArray(question.selectedOption) &&
+      question.selectedOption.length > 0
+    ) {
+      debugger
+      const subtract = question.selectedOption.reduce((total, resource) => {
+        const price = resource?.price || 0;
+        return total + price;
+      }, 0);
+
+      saveData.totalCost -= subtract;
+      setArray.current = [];
+    } else {
+      saveData.totalCost -= question.selectedOption?.price || 0;
+    }
+
+    setPriceVal(saveData.totalCost);
+
+
     if (currentState === "Pre" && preOption >= 0) {
-      saveData.responses.pop();
-      saveData.totalCost = saveData.totalCost - question.selectedOption.price;
-      setPriceVal(saveData.totalCost);
+      // saveData.responses.pop();
+      // saveData.totalCost = saveData.totalCost - question.selectedOption.price;
+      // setPriceVal(saveData.totalCost);
       setPreOption(preOption - 1);
     } else if (currentState === "Dynamic") {
       if (saveData && saveData.responses) {
@@ -355,20 +374,24 @@ const page = () => {
 
         if (responsesLength <= preQuestions.length) {
           setCurrentState("Pre");
+          // saveData.responses.pop();
+          // saveData.totalCost =
+          //   saveData.totalCost - question.selectedOption.price;
+          // setPriceVal(saveData.totalCost);
           setPreOption(responsesLength - 1);
         } else if (responsesLength > preQuestions.length) {
           setProjectBasedQuestion(question);
-          saveData.responses.pop();
-          saveData.totalCost =
-            saveData.totalCost - question.selectedOption.price;
-          setPriceVal(saveData.totalCost);
+          // saveData.responses.pop();
+          // saveData.totalCost =
+          //   saveData.totalCost - question.selectedOption.price;
+          // setPriceVal(saveData.totalCost);
         }
       }
     } else if (currentState === "post" && postOption >= 0) {
       setPostOption(postOption - 1);
-      saveData.responses.pop();
-      saveData.totalCost = saveData.totalCost - question.selectedOption.price;
-      setPriceVal(saveData.totalCost);
+      // saveData.responses.pop();
+      // saveData.totalCost = saveData.totalCost - question.selectedOption.price;
+      // setPriceVal(saveData.totalCost);
     }
     if (currentState === "post" && postOption === 0) {
       setCurrentState("Dynamic");
@@ -376,37 +399,34 @@ const page = () => {
     }
   };
 
+  console.log(saveData);
   const { question, options, nextQuestion } = projectBasedQuestion;
 
-  let i=0;
-
+  let i = 0;
 
   const getNextDynamicQuestion = async (nextQuestion, value, question) => {
-
     try {
       let nextQuestionID;
-      
+
       if (value === "Other (Specify)") {
         setInputField(!inputField);
       } else {
-        if (Array.isArray(nextQuestion)){
+        if (Array.isArray(nextQuestion)) {
           console.log("Array", nextQuestion);
           let array = nextQuestion;
-          if(array.length>i && i===0){
+          if (array.length > i && i === 0) {
             nextQuestionID = array[i];
             i++;
+          } else if (array.length > i && i > 0) {
+            nextQuestionID = array[i + 1];
           }
-          else if(array.length > i && i > 0){
-            nextQuestionID = array[i+1];
-          }
-        }
-        else if (nextQuestion === "" || nextQuestion === undefined) {
+        } else if (nextQuestion === "" || nextQuestion === undefined) {
           nextQuestionID = question.nextQuestion;
-          if (setRefForBothVal.current === "Both" && nextQuestionID === "") { 
+          if (setRefForBothVal.current === "Both" && nextQuestionID === "") {
             setRefForBothVal.current = "Seperate";
             nextQuestionID = "6560a181c9f7ceabb2c23848";
           }
-        }  else if (value === "Both" && nextQuestion) {
+        } else if (value === "Both" && nextQuestion) {
           nextQuestionID = nextQuestion;
           setRefForBothVal.current = "Both";
         } else {
