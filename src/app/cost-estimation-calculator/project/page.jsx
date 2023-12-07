@@ -75,7 +75,6 @@ const page = () => {
   const DRAWER_WIDTH = 240;
   const [saveData, setSaveData] = useState({});
 
-  // State for Checking the index of the Dynamic questions. If state is set to -1, then the dynamic questions have ended and the Post Questions will start.
   const [returnedIndexVal, setReturnedIndexVal] = useState(0);
 
   // For go back button
@@ -343,10 +342,31 @@ const page = () => {
   }
 
   const handleFlow = (question) => {
+    saveData.responses.pop();
+
+    if (
+      Array.isArray(question.selectedOption) &&
+      question.selectedOption.length > 0
+    ) {
+      debugger
+      const subtract = question.selectedOption.reduce((total, resource) => {
+        const price = resource?.price || 0;
+        return total + price;
+      }, 0);
+
+      saveData.totalCost -= subtract;
+      setArray.current = [];
+    } else {
+      saveData.totalCost -= question.selectedOption?.price || 0;
+    }
+
+    setPriceVal(saveData.totalCost);
+
+
     if (currentState === "Pre" && preOption >= 0) {
-      saveData.responses.pop();
-      saveData.totalCost = saveData.totalCost - question.selectedOption.price;
-      setPriceVal(saveData.totalCost);
+      // saveData.responses.pop();
+      // saveData.totalCost = saveData.totalCost - question.selectedOption.price;
+      // setPriceVal(saveData.totalCost);
       setPreOption(preOption - 1);
     } else if (currentState === "Dynamic") {
       if (saveData && saveData.responses) {
@@ -354,20 +374,24 @@ const page = () => {
 
         if (responsesLength <= preQuestions.length) {
           setCurrentState("Pre");
+          // saveData.responses.pop();
+          // saveData.totalCost =
+          //   saveData.totalCost - question.selectedOption.price;
+          // setPriceVal(saveData.totalCost);
           setPreOption(responsesLength - 1);
         } else if (responsesLength > preQuestions.length) {
           setProjectBasedQuestion(question);
-          saveData.responses.pop();
-          saveData.totalCost =
-            saveData.totalCost - question.selectedOption.price;
-          setPriceVal(saveData.totalCost);
+          // saveData.responses.pop();
+          // saveData.totalCost =
+          //   saveData.totalCost - question.selectedOption.price;
+          // setPriceVal(saveData.totalCost);
         }
       }
     } else if (currentState === "post" && postOption >= 0) {
       setPostOption(postOption - 1);
-      saveData.responses.pop();
-      saveData.totalCost = saveData.totalCost - question.selectedOption.price;
-      setPriceVal(saveData.totalCost);
+      // saveData.responses.pop();
+      // saveData.totalCost = saveData.totalCost - question.selectedOption.price;
+      // setPriceVal(saveData.totalCost);
     }
     if (currentState === "post" && postOption === 0) {
       setCurrentState("Dynamic");
@@ -375,6 +399,7 @@ const page = () => {
     }
   };
 
+  console.log(saveData);
   const { question, options, nextQuestion } = projectBasedQuestion;
 
   let i = 0;
