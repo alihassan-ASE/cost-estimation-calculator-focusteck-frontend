@@ -119,81 +119,69 @@ const page = () => {
     setMultipleValues(multiple + 1);
   };
 
-  // // Stepper
-  // const handleStep = (step, label) => {
-  //   console.log("In handleStep getting Params", step, label);
-  //   console.log("In Handle", currentState);
-  //   let getQuestion;
-  //   let getIndexOfQuestion;
-  //   // let additionalQuestion;
-  //   let additionalQuestionIndex;
-  //   if (step !== undefined && label !== undefined) {
-  //     ProjectQuestions.forEach((data, index) => {
-  //       if (data.question === label.question) {
-  //         getQuestion = data;
-  //         getIndexOfQuestion = index;
-  //       }
-  //     });
-  //     // if (!getQuestion && !getIndexOfQuestion) {
-  //     //    const index = getPreSequenceLength().sequence.findIndex(data =>
-  //     //     data === label.id
-  //     //   );
-  //     //   additionalQuestionIndex = index;
+  // Stepper
 
-  //     //   if(!getIndexOfQuestion){
-  //     //     const index = getPostSequenceLength().sequence.findIndex(data =>
-  //     //       data === label.id);
-  //     //       additionalQuestionIndex = index;
-  //     //   }
-  //     // }
-  //   }
+  const handleStep = async (step, label) => {
+    console.log("step", step);
+    console.log("Question", label);
 
-  //   console.log("In handleStep", getQuestion, getIndexOfQuestion);
-  //   if (currentState === "Pre") {
-  //     if(getQuestion){
-  //       setCurrentState('Dynamic');
-  //       setDynamicOption(getIndexOfQuestion);
-  //     }
-  //     if (preOption !== step && !getQuestion) {
-  //       setPreOption(step);
-  //     }
+    if (currentState === "Dynamic") {
+      if (saveData.responses && saveData.responses.length > 0) {
+        saveData.responses.map(async (object, index) => {
+          if (
+            object.label.toLowerCase() === label.question.toLowerCase() &&
+            step > preQuestions.length
+          ) {
+            setProjectBasedQuestion(object);
+            await getDynamicQuestion(object._id);
+          } else if (
+            object.label.toLowerCase() === label.question.toLowerCase() &&
+            step <= preQuestions.length
+          ) {
+            setCurrentState("Pre");
+            setPreOption(step);
+            const dynamicQuestion = await getDynamicQuestion();
+            setProjectBasedQuestion(dynamicQuestion);
+          }
+        });
+      }
+    }
 
-  //   } else if (currentState === "Dynamic") {
-  //     if (!getQuestion  && step < preSequenceLength) {
-  //       setCurrentState("Pre");
-  //       setPreOption(step);
-  //     }
-  //     else {
-  //       console.log("In Dynamic for Post", additionalQuestionIndex);
-  //       setCurrentState('post');
-  //       setPostOption(step)
-  //     }
-  //     if (dynamicOption !== step && getQuestion !== undefined) {
-  //       setDynamicOption(getIndexOfQuestion);
-  //     }
-  //   } else if (currentState === "post") {
-  //     if (postOption !== step && !getQuestion) {
-  //       setPostOption(step);
-  //     }
-  //     if (!getQuestion) {
-  //       setCurrentState("Pre");
-  //       setPreOption(step);
-  //     } else {
-  //       setCurrentState("Dynamic");
-  //       setDynamicOption(getIndexOfQuestion);
-  //     }
-  //   }
-  // };
+    if (saveData && saveData.responses && saveData.responses.length > 0) {
+      const selectedOptions = saveData.responses.slice(step);
+      const updatedTotalCost = selectedOptions.reduce(
+        (total, response) => total - response.selectedOption.price,
+        saveData.totalCost
+      );
+  
+      saveData.totalCost = updatedTotalCost;
+      setPriceVal(updatedTotalCost);
+      saveData.responses.length = step;
+    }
 
-  // const priceTotal = value => {
-  //   // setPriceVal(priceVal + value);
-  // }
+    if (currentState === "Pre") {
+      setPreOption(step);
+    }
+    else if (currentState === "post") {
+      if(postOption < postQuestions.length){
+        postQuestions.map((data, index)=> {
+          if(data.label.toLowerCase() === label.question.toLowerCase()){
+            setPostOption(index);
+          }
+        })
+      }
+      if (step <= preQuestions.length) {
+        preQuestions.map((data, index)=> {
+          if(data.label.toLowerCase() === label.question.toLowerCase()){
+            setCurrentState("Pre");
+            setPreOption(index);
+          }
+        })
+      }
+    }
+  };
 
   function saveAllData(selectedOption, question) {
-    // console.log(selectedOption);
-    if (selectedOption.opt === "Other (Specify)") {
-      // console.log("Other Coming");
-    }
     if (selectedOption.userName && selectedOption.email) {
       setSaveData({
         userName: selectedOption.userName,
@@ -220,7 +208,6 @@ const page = () => {
           question.category !== undefined &&
           question.options !== undefined &&
           selectedOption !== undefined
-          // priceVal !==undefined
         ) {
           if (
             saveData.responses &&
@@ -238,6 +225,7 @@ const page = () => {
                     options: question.options,
                     category: question.category,
                     selectedOption: selectedOption,
+                    label: question.label,
                     state: currentState,
                   },
                 ],
@@ -254,6 +242,7 @@ const page = () => {
                     options: question.options,
                     category: question.category,
                     selectedOption: selectedOption,
+                    label: question.label,
                     state: currentState,
                   },
                 ],
@@ -291,6 +280,7 @@ const page = () => {
                   options: question.options,
                   category: question.category,
                   selectedOption: selectedOption,
+                  label: question.label,
                   state: currentState,
                 },
               ],
@@ -327,6 +317,7 @@ const page = () => {
                   nextQuestion: question.nextQuestion
                     ? question.nextQuestion
                     : selectedOption.nextQuestion,
+                  label: question.label,
                   state: currentState,
                 },
               ],
@@ -351,20 +342,6 @@ const page = () => {
       }
     }
   }
-
-  // const getPreSequenceLength = () => {
-  //   const Sequence = AdditionalQuestionSequence.find(
-  //     data => data.order === 'pre' && data.category === 'Project'
-  //   )
-  //   return Sequence
-  // }
-
-  // const getPostSequenceLength = () => {
-  //   const Sequence = AdditionalQuestionSequence.find(
-  //     data => data.order === 'post' && data.category === 'Project'
-  //   )
-  //   return Sequence
-  // }
 
   const handleFlow = (question) => {
     if (currentState === "Pre" && preOption >= 0) {
@@ -399,76 +376,37 @@ const page = () => {
     }
   };
 
-  // const preSequenceLength = getPreSequenceLength().sequence.length
   const { question, options, nextQuestion } = projectBasedQuestion;
 
-  // const handleSlide = () => {
-  //   setSlideDirection(slideDirection === "left" ? "right" : "left");
-  //   setSlideIn(slideIn === true ? false : true);
-  // };
+  let i=0;
 
-  // const handleStep = (index, step) => () => {
-  //   console.log("Step", step);
-  //   const { _id, question, state } = step;
-  //   console.log("Hello in Stepper", _id, question, state);
-  //   const getID = AdditionalQuestions.find((data) => data._id === id);
-  //   const getIndexDynamic = ProjectQuestions.findIndex(
-  //     (data) => data.label === questionLabel
-  //   );
 
-  //   console.log("GEt getID: ", getID);
-  //   console.log("GEt Index Dynamic: ", getIndexDynamic);
-  //   console.log("State Val: ", stateVal);
-  //   console.log("Label from Response: ", questionLabel);
-
-  //   if (getID) {
-  //     if (stateVal === "Pre") {
-  //       const getIndexAdditional = getPreSequenceLength().sequence.findIndex(
-  //         (data) => data === getID._id
-  //       );
-  //       console.log("Index Val In Pre: ", getIndexAdditional);
-  //       setActiveStep(index);
-  //       setCurrentState("Pre");
-  //       setPreOption(getIndexAdditional);
-  //     } else if (stateVal === "Post") {
-  //       const getIndexAdditional = getPostSequenceLength().sequence.findIndex(
-  //         (data) => data === getID._id
-  //       );
-  //       console.log("Index Val In Post: ", getIndexAdditional);
-  //       setActiveStep(index);
-  //       setCurrentState("Post");
-  //       setPostOption(getIndexAdditional);
-  //       console.log("IN POST HAndle Step");
-  //     }
-  //   }
-  //   if (getIndexDynamic !== -1) {
-  //     if (stateVal === "Dynamic") {
-  //       setActiveStep(index);
-  //       setCurrentState("Dynamic");
-  //       setDynamicOption(getIndexDynamic);
-  //       console.log("DynamicOption: ", dynamicOption);
-  //       console.log("ActiveStep: ", activeStep);
-  //     }
-  //   }
-  // };
   const getNextDynamicQuestion = async (nextQuestion, value, question) => {
+
     try {
       let nextQuestionID;
+      
       if (value === "Other (Specify)") {
         setInputField(!inputField);
       } else {
-        if (nextQuestion === "" || nextQuestion === undefined) {
+        if (Array.isArray(nextQuestion)){
+          console.log("Array", nextQuestion);
+          let array = nextQuestion;
+          if(array.length>i && i===0){
+            nextQuestionID = array[i];
+            i++;
+          }
+          else if(array.length > i && i > 0){
+            nextQuestionID = array[i+1];
+          }
+        }
+        else if (nextQuestion === "" || nextQuestion === undefined) {
           nextQuestionID = question.nextQuestion;
-          if (setRefForBothVal.current === "Both" && nextQuestionID === "") {
+          if (setRefForBothVal.current === "Both" && nextQuestionID === "") { 
             setRefForBothVal.current = "Seperate";
             nextQuestionID = "6560a181c9f7ceabb2c23848";
           }
-        } else if (
-          setRefForBothVal.current === "Both" &&
-          nextQuestionID === ""
-        ) {
-          nextQuestionID = "6560a181c9f7ceabb2c23848";
-        } else if (value === "Both" && nextQuestion) {
+        }  else if (value === "Both" && nextQuestion) {
           nextQuestionID = nextQuestion;
           setRefForBothVal.current = "Both";
         } else {
@@ -526,58 +464,45 @@ const page = () => {
     }
   };
 
-  // const getActiveStep = () => {
-  //   if (saveData.responses) {
-  //     const saveDataLength = saveData.responses.length
-  //     return saveDataLength
-  //   }
-  //   return 0
-  // }
+  const getActiveStep = () => {
+    if (saveData.responses) {
+      const saveDataLength = saveData.responses.length;
+      return saveDataLength;
+    }
+    return 0;
+  };
 
-  // const getUniqueSteps = () => {
-  //   const uniqueSteps = new Set()
+  const getUniqueSteps = () => {
+    const uniqueSteps = new Set();
 
-  //   if (saveData.responses && saveData.responses.length > 0) {
-  //     saveData.responses.forEach(response => {
-  //       // console.log(response);
-  //       if (response.question) {
-  //         // const question = response.question;
-  //         // const id = response._id;
-  //         uniqueSteps.add(response.question)
-  //       }
-  //     })
-  //   }
-  //   if (
-  //     getPreAdditionalQuestion().getQuestions?.question &&
-  //     currentState === 'Pre'
-  //   ) {
-  //     uniqueSteps.add(getPreAdditionalQuestion().getQuestions.question)
-  //   }
+    if (saveData.responses && saveData.responses.length > 0) {
+      saveData.responses.forEach((response) => {
+        if (response.label) {
+          uniqueSteps.add(response.label.toUpperCase());
+        }
+      });
+    }
 
-  //   if (
-  //     ProjectQuestions[dynamicOption]?.question &&
-  //     currentState === 'Dynamic'
-  //   ) {
-  //     uniqueSteps.add(ProjectQuestions[dynamicOption].question)
-  //   }
+    const preQuestion = getPreAdditionalQuestion().getQuestions;
+    const dynamicQuestion = projectBasedQuestion.question;
+    const postQuestion = getPostAdditionalQuestion();
+    if (preQuestion && currentState === "Pre") {
+      uniqueSteps.add(preQuestion.label.toUpperCase());
+    }
 
-  //   if (getPostAdditionalQuestion()?.question && currentState === 'post') {
-  //     uniqueSteps.add(getPostAdditionalQuestion().question)
-  //   }
+    if (dynamicQuestion && currentState === "Dynamic") {
+      uniqueSteps.add(projectBasedQuestion.label.toUpperCase());
+    }
 
-  //   return Array.from(uniqueSteps).map(question => ({
-  //     question,
-  //     // id: question.id,
-  //     id:
-  //       getPreAdditionalQuestion().getQuestions._id ||
-  //       getPostAdditionalQuestion()._id ||
-  //       ProjectQuestions[dynamicOption]._id,
-  //     // state: question.state,
-  //     completed: false,
-  //   }))
-  // }
+    if (postQuestion && currentState === "post") {
+      uniqueSteps.add(postQuestion.label.toUpperCase());
+    }
 
-  // const combinedSteps = getUniqueSteps();
+    return Array.from(uniqueSteps).map((question) => ({
+      question: question.question || question,
+      completed: false,
+    }));
+  };
 
   const submitOtherVal = () => {
     if (!formInput.otherval) {
@@ -623,26 +548,26 @@ const page = () => {
         Project Base Question
       </Typography>
       {/* Stepper */}
-      {/* {
-          <Stack direction="column" spacing={1}>
-            <Stepper nonLinear activeStep={getActiveStep()} alternativeLabel>
-              {getUniqueSteps().map((step, index) => (
-                <Step key={index} completed={step.completed}>
-                  <StepButton
-                    color="inherit"
-                    onClick={() => {
-                      console.log("In onClick", step);
-                      handleStep(index, step);
-                      console.log("Clicked");
-                    }}
-                  >
-                    {step.question}
-                  </StepButton>
-                </Step>
-              ))}
-            </Stepper>
-          </Stack>
-        }  */}
+      {
+        <Stack direction="column" spacing={1}>
+          <Stepper nonLinear activeStep={getActiveStep()} alternativeLabel>
+            {getUniqueSteps().map((step, index) => (
+              <Step key={index} completed={step.completed}>
+                <StepButton
+                  color="inherit"
+                  onClick={() => {
+                    console.log("In onClick", step);
+                    handleStep(index, step);
+                    console.log("Clicked");
+                  }}
+                >
+                  {step.question}
+                </StepButton>
+              </Step>
+            ))}
+          </Stepper>
+        </Stack>
+      }
       {/* <Grid container spacing={2} sx={{ flexDirection: { xs: "column", md: "row"} }}>
       <Grid item md={3}> */}
       {/* <Item> */}
@@ -808,7 +733,6 @@ const page = () => {
                           variant="outlined"
                           sx={{ width: "90%" }}
                           onChange={(e) => {
-                            // setInputValue(e.target.value);
                             setFormInput({ otherval: e.target.value });
                           }}
                         />
