@@ -120,55 +120,156 @@ const page = () => {
   };
 
   // Stepper
+  // const handleStep = async (step, label) => {
+  //   console.log("step", step);
+  //   console.log("Question", label);
+
+  //   if (currentState === "Dynamic") {
+  //     if (saveData.responses && saveData.responses.length > 0) {
+  //       saveData.responses.map(async (object, index) => {
+  //         if (
+  //           object.label.toLowerCase() === label.question.toLowerCase() &&
+  //           step > preQuestions.length
+  //         ) {
+  //           setProjectBasedQuestion(object);
+  //           await getDynamicQuestion(object._id);
+  //         } else if (
+  //           object.label.toLowerCase() === label.question.toLowerCase() &&
+  //           step <= preQuestions.length
+  //         ) {
+  //           setCurrentState("Pre");
+  //           setPreOption(step);
+  //           const dynamicQuestion = await getDynamicQuestion();
+  //           setProjectBasedQuestion(dynamicQuestion);
+  //         }
+  //       });
+  //     }
+  //   }
+
+  //   if (saveData && saveData.responses && saveData.responses.length > 0) {
+  //     const selectedOptions = saveData.responses.slice(step);
+
+  //     const updatedTotalCost = selectedOptions.reduce((total, response) => {
+  //       if (Array.isArray(response.selectedOption)) {
+  //         const arrayTotal = response.selectedOption.reduce(
+  //           (arraySum, arrayItem) => arraySum + arrayItem.price,
+  //           0
+  //         );
+  //         return total - arrayTotal;
+  //       } else {
+  //         return total - response.selectedOption.price;
+  //       }
+  //     }, saveData.totalCost);
+  //     setArray.current = [];
+
+  //     saveData.totalCost = updatedTotalCost;
+  //     setPriceVal(updatedTotalCost);
+  //     saveData.responses.length = step;
+  //   }
+
+  //   if (currentState === "Pre") {
+  //     setPreOption(step);
+  //   } else if (currentState === "post") {
+  //     if (
+  //       postOption < postQuestions.length ||
+  //       postOption === postQuestions.length
+  //     ) {
+  //       postQuestions.map((data, index) => {
+  //         if (data.label.toLowerCase() === label.question.toLowerCase()) {
+  //           setPostOption(index);
+  //         }
+  //       });
+  //     } else if (
+  //       step > preQuestions.length &&
+  //       postOption === postQuestions.length-1
+  //     ) {
+  //       saveData.responses.map((questions, index) => {
+  //         if(question.question === questions.question){
+  //           setCurrentState("Dynamic");
+  //           const dynamicQuestion = await getDynamicQuestion(questions._id);
+  //           setProjectBasedQuestion(dynamicQuestion);
+  //           console.log("hello in post fro Dynamic");
+  //         }
+  //       })
+  //     }
+  //     if (step <= preQuestions.length) {
+  //       preQuestions.map((data, index) => {
+  //         if (data.label.toLowerCase() === label.question.toLowerCase()) {
+  //           setCurrentState("Pre");
+  //           setPreOption(index);
+  //         }
+  //       });
+  //     }
+  //   }
+  // };
 
   const handleStep = async (step, label) => {
-    console.log("step", step);
-    console.log("Question", label);
+    setInputField(false);
+    let check = false;
+    postQuestions.map((data, index) => {
+      if (label.question.toLowerCase() === data.label.toLowerCase()) {
+        check = true;
+      }
+    });
 
     if (currentState === "Dynamic") {
       if (saveData.responses && saveData.responses.length > 0) {
-        saveData.responses.map(async (object, index) => {
-          if (
-            object.label.toLowerCase() === label.question.toLowerCase() &&
-            step > preQuestions.length
-          ) {
-            setProjectBasedQuestion(object);
-            await getDynamicQuestion(object._id);
-          } else if (
-            object.label.toLowerCase() === label.question.toLowerCase() &&
-            step <= preQuestions.length
-          ) {
-            setCurrentState("Pre");
-            setPreOption(step);
-            const dynamicQuestion = await getDynamicQuestion();
-            setProjectBasedQuestion(dynamicQuestion);
-          }
-        });
+        await Promise.all(
+          saveData.responses.map(async (object) => {
+            if (
+              object.label.toLowerCase() === label.question.toLowerCase() &&
+              step > preQuestions.length
+            ) {
+              setProjectBasedQuestion(object);
+              await getDynamicQuestion(object._id);
+            } else if (
+              object.label.toLowerCase() === label.question.toLowerCase() &&
+              step <= preQuestions.length
+            ) {
+              setCurrentState("Pre");
+              setPreOption(step);
+              const dynamicQuestion = await getDynamicQuestion();
+              setProjectBasedQuestion(dynamicQuestion);
+            }
+          })
+        );
       }
-    }
-
-    if (saveData && saveData.responses && saveData.responses.length > 0) {
-      const selectedOptions = saveData.responses.slice(step);
-      const updatedTotalCost = selectedOptions.reduce(
-        (total, response) => total - response.selectedOption.price,
-        saveData.totalCost
-      );
-
-      saveData.totalCost = updatedTotalCost;
-      setPriceVal(updatedTotalCost);
-      saveData.responses.length = step;
     }
 
     if (currentState === "Pre") {
       setPreOption(step);
     } else if (currentState === "post") {
-      if (postOption < postQuestions.length) {
+      if (
+        (step > preQuestions.length &&
+          !check &&
+          postOption === postQuestions.length - 1) ||
+        postOption === postQuestions.length
+      ) {
+        await Promise.all(
+          saveData.responses.map(async (questions) => {
+            if (
+              label.question.toLowerCase() === questions.label.toLowerCase()
+            ) {
+              setCurrentState("Dynamic");
+              const dynamicQuestion = await getDynamicQuestion(questions._id);
+              setProjectBasedQuestion(dynamicQuestion);
+            }
+          })
+        );
+      } else if (
+        postOption < postQuestions.length ||
+        (postOption === postQuestions.length && check)
+      ) {
         postQuestions.map((data, index) => {
           if (data.label.toLowerCase() === label.question.toLowerCase()) {
             setPostOption(index);
           }
         });
+      } else if (step <= preQuestions.length && !check) {
+        setCurrentState("Pre");
+        setPreOption(step);
       }
+
       if (step <= preQuestions.length) {
         preQuestions.map((data, index) => {
           if (data.label.toLowerCase() === label.question.toLowerCase()) {
@@ -177,6 +278,26 @@ const page = () => {
           }
         });
       }
+    }
+    if (saveData && saveData.responses && saveData.responses.length > 0) {
+      const selectedOptions = saveData.responses.slice(step);
+
+      const updatedTotalCost = selectedOptions.reduce((total, response) => {
+        if (Array.isArray(response.selectedOption)) {
+          const arrayTotal = response.selectedOption.reduce(
+            (arraySum, arrayItem) => arraySum + arrayItem.price,
+            0
+          );
+          return total - arrayTotal;
+        } else {
+          return total - response.selectedOption.price;
+        }
+      }, saveData.totalCost);
+      setArray.current = [];
+
+      saveData.totalCost = updatedTotalCost;
+      setPriceVal(updatedTotalCost);
+      saveData.responses.length = step;
     }
   };
 
@@ -381,7 +502,6 @@ const page = () => {
     }
   };
 
-  console.log(saveData);
   const { question, options, nextQuestion } = projectBasedQuestion;
 
   let i = 0;
@@ -394,7 +514,6 @@ const page = () => {
         setInputField(!inputField);
       } else {
         if (Array.isArray(nextQuestion)) {
-          console.log("Array", nextQuestion);
           let array = nextQuestion;
           if (array.length > i && i === 0) {
             nextQuestionID = array[i];
@@ -498,6 +617,8 @@ const page = () => {
 
     if (postQuestion && currentState === "post") {
       uniqueSteps.add(postQuestion.label.toUpperCase());
+    } else if (postOption === postQuestions.length && currentState === "post") {
+      uniqueSteps.add("User Form");
     }
 
     return Array.from(uniqueSteps).map((question) => ({
@@ -549,50 +670,45 @@ const page = () => {
       </Typography>
 
       {/* Stepper */}
-      <Paper
-        style={{
-          minHeight: 110,
-          overflow: "auto",
-          border: "none",
-          boxShadow: "none",
-        }}
-      >
-        <Stepper nonLinear activeStep={getActiveStep()} alternativeLabel>
-          {getUniqueSteps().map((step, index) => (
-            <Step key={index} completed={step.completed}>
-              <StepButton
-                color="inherit"
-                onClick={() => {
-                  console.log("In onClick", step);
-                  handleStep(index, step);
-                  console.log("Clicked");
-                }}
-              >
-                {step.question}
-              </StepButton>
-            </Step>
-          ))}
-        </Stepper>
-      </Paper>
+      {currentState !== "Submitted" ? (
+        <Stack direction="column" spacing={1}>
+          <Stepper nonLinear activeStep={getActiveStep()} alternativeLabel>
+            {getUniqueSteps().map((step, index) => (
+              <Step key={index} completed={step.completed}>
+                <StepButton
+                  color="inherit"
+                  onClick={() => {
+                    handleStep(index, step);
+                  }}
+                >
+                  {step.question}
+                </StepButton>
+              </Step>
+            ))}
+          </Stepper>
+        </Stack>
+      ) : null}
       {/* <Grid container spacing={2} sx={{ flexDirection: { xs: "column", md: "row"} }}>
       <Grid item md={3}> */}
       {/* <Item> */}
-      <List>
-        <ListItemText
-          // primary="Estimated Cost"
-          primary={
-            <React.Fragment>
-              <Typography variant="h4" component="p" color="text.primary">
-                Estimated Cost
-              </Typography>
-              <Typography variant="h5" component="p" color="text.secondary">
-                {priceVal} $
-              </Typography>
-              {/* Other components or data */}
-            </React.Fragment>
-          }
-        />
-      </List>
+      {currentState !== "Submitted" ? (
+        <List>
+          <ListItemText
+            // primary="Estimated Cost"
+            primary={
+              <React.Fragment>
+                <Typography variant="h4" component="p" color="text.primary">
+                  Estimated Cost
+                </Typography>
+                <Typography variant="h5" component="p" color="text.secondary">
+                  {priceVal} $
+                </Typography>
+                {/* Other components or data */}
+              </React.Fragment>
+            }
+          />
+        </List>
+      ) : null}
       {/* </Item> */}
       {/* </Grid> */}
       {/* <Grid item md={9}>
@@ -612,7 +728,7 @@ const page = () => {
           }}
         >
           {/* GO Back Button */}
-          {preOption > 0 ? (
+          {preOption > 0 && currentState !== "Submitted" ? (
             <span>
               <IconButton
                 onClick={() => {

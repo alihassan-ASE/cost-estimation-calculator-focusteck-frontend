@@ -81,10 +81,9 @@ const Staff = () => {
   }, []);
 
   const typeOfResourceOptions = useMemo(
-    () => staffQuestions.map((item) => item.label),
+    () => staffQuestions.map((item) => item.typeOfResource),
     [staffQuestions]
   );
-
 
   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
 

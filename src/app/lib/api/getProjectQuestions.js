@@ -22,7 +22,6 @@ export const getDynamicQuestion = async (_id) => {
     questions = await fetch(`${baseUrl}/question/${_id?_id:""}`);
     const projectQuestions = await questions.json();
     const projectBased = projectQuestions.data;
-    console.log("In APi",projectBased);
     return projectBased;
   } catch (error) {
     console.error("Error fetching Project Question data:", error);
