@@ -13,16 +13,6 @@ import { Link, Button } from "@mui/material"
 export default function HomePage() {
   return (
     <Box>
-      <Typography variant="h3">Software Development
-        Scaling
-        Rescue
-        From Scratch</Typography>
-      <div>
-        <Alert severity="info" sx={{ mt: 2, mb: 5 }}>
-          <AlertTitle>Hello 👋</AlertTitle>
-          This app uses the Next.js App Router and Material UI v5.
-        </Alert>
-      </div>
       <Link href="/cost-estimation-calculator" >
         <Button variant='outlined'>Start Now</Button>
       </Link>
