@@ -8,6 +8,7 @@ export const getQuestions = async () => {
     const postQuestions = await post.json();
     const preProjectQuestion = preQuestions.data;
     const postProjectQuestion = postQuestions.data;
+
     return { preProjectQuestion, postProjectQuestion };
   } catch (error) {
     console.error("Error fetching additional question data:", error);
@@ -15,19 +16,20 @@ export const getQuestions = async () => {
   }
 };
 
-export const getDynamicQuestion = async (ID) => {
+export const getDynamicQuestion = async (_id) => {
   let questions;
-  const id = ID || "6560a181c9f7ceabb2c23846";
   try {
-    questions = await fetch(`${baseUrl}/question/${id}`);
+    questions = await fetch(`${baseUrl}/question/${_id?_id:""}`);
     const projectQuestions = await questions.json();
     const projectBased = projectQuestions.data;
+    console.log("In APi",projectBased);
     return projectBased;
   } catch (error) {
     console.error("Error fetching Project Question data:", error);
     throw new Error("Failed to fetch Project Question Data");
   }
 };
+
 
 export const postData = async (data) => {
   try {

@@ -378,24 +378,35 @@ const page = () => {
 
   const { question, options, nextQuestion } = projectBasedQuestion;
 
+  let i=0;
+
+
   const getNextDynamicQuestion = async (nextQuestion, value, question) => {
+
     try {
       let nextQuestionID;
+      
       if (value === "Other (Specify)") {
         setInputField(!inputField);
       } else {
-        if (nextQuestion === "" || nextQuestion === undefined) {
+        if (Array.isArray(nextQuestion)){
+          console.log("Array", nextQuestion);
+          let array = nextQuestion;
+          if(array.length>i && i===0){
+            nextQuestionID = array[i];
+            i++;
+          }
+          else if(array.length > i && i > 0){
+            nextQuestionID = array[i+1];
+          }
+        }
+        else if (nextQuestion === "" || nextQuestion === undefined) {
           nextQuestionID = question.nextQuestion;
-          if (setRefForBothVal.current === "Both" && nextQuestionID === "") {
+          if (setRefForBothVal.current === "Both" && nextQuestionID === "") { 
             setRefForBothVal.current = "Seperate";
             nextQuestionID = "6560a181c9f7ceabb2c23848";
           }
-        } else if (
-          setRefForBothVal.current === "Both" &&
-          nextQuestionID === ""
-        ) {
-          nextQuestionID = "6560a181c9f7ceabb2c23848";
-        } else if (value === "Both" && nextQuestion) {
+        }  else if (value === "Both" && nextQuestion) {
           nextQuestionID = nextQuestion;
           setRefForBothVal.current = "Both";
         } else {
@@ -721,7 +732,6 @@ const page = () => {
                           variant="outlined"
                           sx={{ width: "90%" }}
                           onChange={(e) => {
-                            // setInputValue(e.target.value);
                             setFormInput({ otherval: e.target.value });
                           }}
                         />
