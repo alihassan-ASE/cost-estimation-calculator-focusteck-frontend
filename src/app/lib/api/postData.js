@@ -1,9 +1,12 @@
+import { baseUrl } from "../../../config/constants";
+
+
 export const postData = async (data) => {
   try {
     console.log("------", data);
 
     if (data.responses && data.responses.length > 0) {
-      await fetch("http://localhost:4500/postdata", {
+      await fetch(`${baseUrl}/postdata`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

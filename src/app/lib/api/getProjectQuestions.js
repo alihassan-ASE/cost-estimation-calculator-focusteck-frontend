@@ -17,7 +17,7 @@ export const getQuestions = async () => {
 
 export const getDynamicQuestion = async (ID) => {
   let questions;
-  const id = ID ? ID : "6560a181c9f7ceabb2c23846";
+  const id = ID || "6560a181c9f7ceabb2c23846";
   try {
     questions = await fetch(`${baseUrl}/question/${id}`);
     const projectQuestions = await questions.json();

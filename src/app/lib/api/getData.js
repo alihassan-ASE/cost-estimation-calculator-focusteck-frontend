@@ -1,19 +1,18 @@
+import { baseUrl } from "../../../config/constants";
+
+
 export const getQuestions = async () => {
   try {
-    const staffQuestion = await fetch("http://localhost:4500/resources");
+    const staffQuestion = await fetch(`${baseUrl}/resources`);
     const staff = await staffQuestion.json();
 
     const additionalQuestion = await fetch(
-      "http://localhost:4500/additionalquestions/Staff"
+      `${baseUrl}/additionalquestions/Staff`
     );
     const additional = await additionalQuestion.json();
 
     const staffQuestions = staff.data;
     const additionalQuestions = additional.data;
-
-    // console.log("Staff", staffQuestions);
-    // console.log("Additional: ", additionalQuestions);
-
     return {
       Resources: staffQuestions,
       additionalQuestions: additionalQuestions,
