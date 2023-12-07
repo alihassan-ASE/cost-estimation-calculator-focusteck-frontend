@@ -81,9 +81,10 @@ const Staff = () => {
   }, []);
 
   const typeOfResourceOptions = useMemo(
-    () => staffQuestions.map((item) => item.typeOfResource),
+    () => staffQuestions.map((item) => item.label),
     [staffQuestions]
   );
+
 
   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
 
@@ -331,49 +332,53 @@ const Staff = () => {
         Staff Questions
       </Typography>
 
-      <Stepper nonLinear activeStep={preState + 1} alternativeLabel>
-        {getUniqueSteps().map((step, index) =>
-          index <= preState + 1 ? (
-            <Step key={index} completed={completed[index]}>
-              <StepButton
-                color="inherit"
-                onClick={() => {
-                  setPreState(index - 1);
-                  resourcesList.responses.length = index;
-                  if (preState <= 0) {
-                    setActiveQuestions("staffQuestions");
-                  } else if (preState > additionalQuestions.length) {
-                    setActiveQuestions("userData");
-                  } else {
-                    setActiveQuestions("additionalQuestions");
-                  }
-                }}
-              >
-                {step}
-              </StepButton>
-            </Step>
-          ) : null
-        )}
-      </Stepper>
+      {activeQuestions !== "Submitted" ? (
+        <Stepper nonLinear activeStep={preState + 1} alternativeLabel>
+          {getUniqueSteps().map((step, index) =>
+            index <= preState + 1 ? (
+              <Step key={index} completed={completed[index]}>
+                <StepButton
+                  color="inherit"
+                  onClick={() => {
+                    setPreState(index - 1);
+                    resourcesList.responses.length = index;
+                    if (preState <= 0) {
+                      setActiveQuestions("staffQuestions");
+                    } else if (preState > additionalQuestions.length) {
+                      setActiveQuestions("userData");
+                    } else {
+                      setActiveQuestions("additionalQuestions");
+                    }
+                  }}
+                >
+                  {step}
+                </StepButton>
+              </Step>
+            ) : null
+          )}
+        </Stepper>
+      ) : null}
 
-      <List>
-        <ListItemText
-          // primary="Estimated Cost"
-          primary={
-            <React.Fragment>
-              <Typography variant="h4" component="p" color="text.primary">
-                Estimated Cost
-              </Typography>
-              <Typography variant="h5" component="p" color="text.secondary">
-                {totalPrice} $
-              </Typography>
-              {/* Other components or data */}
-            </React.Fragment>
-          }
-        />
-      </List>
+      {activeQuestions !== "Submitted" ? (
+        <List>
+          <ListItemText
+            // primary="Estimated Cost"
+            primary={
+              <React.Fragment>
+                <Typography variant="h4" component="p" color="text.primary">
+                  Estimated Cost
+                </Typography>
+                <Typography variant="h5" component="p" color="text.secondary">
+                  {totalPrice} $
+                </Typography>
+                {/* Other components or data */}
+              </React.Fragment>
+            }
+          />
+        </List>
+      ) : null}
       <Box>
-        {preState >= 0 ? (
+        {preState >= 0 && activeQuestions !== "Submitted" ? (
           <span>
             <IconButton
               onClick={() => {

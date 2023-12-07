@@ -25,6 +25,7 @@ import {
   TextField,
   Grid,
   Paper,
+  TabScrollButton,
 } from "@mui/material";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { styled } from "@mui/material/styles";
@@ -343,30 +344,22 @@ const page = () => {
 
   const handleFlow = (question) => {
     saveData.responses.pop();
-
     if (
       Array.isArray(question.selectedOption) &&
       question.selectedOption.length > 0
     ) {
-      debugger
       const subtract = question.selectedOption.reduce((total, resource) => {
         const price = resource?.price || 0;
         return total + price;
       }, 0);
-
       saveData.totalCost -= subtract;
       setArray.current = [];
     } else {
       saveData.totalCost -= question.selectedOption?.price || 0;
     }
-
     setPriceVal(saveData.totalCost);
 
-
     if (currentState === "Pre" && preOption >= 0) {
-      // saveData.responses.pop();
-      // saveData.totalCost = saveData.totalCost - question.selectedOption.price;
-      // setPriceVal(saveData.totalCost);
       setPreOption(preOption - 1);
     } else if (currentState === "Dynamic") {
       if (saveData && saveData.responses) {
@@ -374,24 +367,13 @@ const page = () => {
 
         if (responsesLength <= preQuestions.length) {
           setCurrentState("Pre");
-          // saveData.responses.pop();
-          // saveData.totalCost =
-          //   saveData.totalCost - question.selectedOption.price;
-          // setPriceVal(saveData.totalCost);
           setPreOption(responsesLength - 1);
         } else if (responsesLength > preQuestions.length) {
           setProjectBasedQuestion(question);
-          // saveData.responses.pop();
-          // saveData.totalCost =
-          //   saveData.totalCost - question.selectedOption.price;
-          // setPriceVal(saveData.totalCost);
         }
       }
     } else if (currentState === "post" && postOption >= 0) {
       setPostOption(postOption - 1);
-      // saveData.responses.pop();
-      // saveData.totalCost = saveData.totalCost - question.selectedOption.price;
-      // setPriceVal(saveData.totalCost);
     }
     if (currentState === "post" && postOption === 0) {
       setCurrentState("Dynamic");
@@ -559,34 +541,39 @@ const page = () => {
     // color: theme.palette.text.secondary,
   }));
 
-  console.log("response: ", saveData);
   return (
     <Box sx={{ flexGrow: 1 }}>
       {/* Main Heading */}
       <Typography variant="h4" mb={4} mt={4}>
         Project Base Question
       </Typography>
+
       {/* Stepper */}
-      {
-        <Stack direction="column" spacing={1}>
-          <Stepper nonLinear activeStep={getActiveStep()} alternativeLabel>
-            {getUniqueSteps().map((step, index) => (
-              <Step key={index} completed={step.completed}>
-                <StepButton
-                  color="inherit"
-                  onClick={() => {
-                    console.log("In onClick", step);
-                    handleStep(index, step);
-                    console.log("Clicked");
-                  }}
-                >
-                  {step.question}
-                </StepButton>
-              </Step>
-            ))}
-          </Stepper>
-        </Stack>
-      }
+      <Paper
+        style={{
+          minHeight: 110,
+          overflow: "auto",
+          border: "none",
+          boxShadow: "none",
+        }}
+      >
+        <Stepper nonLinear activeStep={getActiveStep()} alternativeLabel>
+          {getUniqueSteps().map((step, index) => (
+            <Step key={index} completed={step.completed}>
+              <StepButton
+                color="inherit"
+                onClick={() => {
+                  console.log("In onClick", step);
+                  handleStep(index, step);
+                  console.log("Clicked");
+                }}
+              >
+                {step.question}
+              </StepButton>
+            </Step>
+          ))}
+        </Stepper>
+      </Paper>
       {/* <Grid container spacing={2} sx={{ flexDirection: { xs: "column", md: "row"} }}>
       <Grid item md={3}> */}
       {/* <Item> */}
