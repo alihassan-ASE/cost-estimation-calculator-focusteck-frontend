@@ -506,7 +506,6 @@ const page = () => {
     if (formInput.otherval) {
       setErrorMessage({ otherValError: null });
       setInputField(!inputField);
-      return;
     }
   };
 
@@ -660,9 +659,8 @@ const page = () => {
                             label="Other"
                             variant="outlined"
                             sx={{ width: "90%" }}
-                            // value={inputValue}
+                            value={formInput.otherval}
                             onChange={(e) => {
-                              // setInputValue(e.target.value);
                               setFormInput({ otherval: e.target.value });
                             }}
                             helperText={errorMessage.otherValError}
@@ -672,16 +670,19 @@ const page = () => {
                             onClick={() => {
                               otherData.price = data.price;
                               otherData.opt = formInput.otherval;
-                              {
-                                formInput.otherval === ""
-                                  ? submitOtherVal()
-                                  : getNextQuestionFromAdditional(inputValue);
+
+                              if (formInput.otherval !== "") {
+                                saveAllData(
+                                  otherData,
+                                  getPreAdditionalQuestion()?.getQuestions
+                                );
+                                getNextQuestionFromAdditional(inputValue);
+                                setInputField(false);
+                                setFormInput({ otherval: "" });
+                                setErrorMessage({ otherValError: null });
+                              } else {
+                                submitOtherVal(inputValue);
                               }
-                              saveAllData(
-                                otherData,
-                                getPreAdditionalQuestion()?.getQuestions
-                              );
-                              setInputField(false);
                             }}
                           >
                             Enter
@@ -708,10 +709,6 @@ const page = () => {
                     if (data.opt !== "Other (Specify)") {
                       saveAllData(data, projectBasedQuestion);
                     }
-                    // {
-                    //   data.value !== "Other (Specify)"
-                    //     : null;
-                    // }
                   }}
                 >
                   {data.opt} ({data.price}$)
@@ -725,23 +722,29 @@ const page = () => {
                           label="Other"
                           variant="outlined"
                           sx={{ width: "90%" }}
+                          value={formInput.otherval}
                           onChange={(e) => {
                             setFormInput({ otherval: e.target.value });
                           }}
                         />
-
                         <Button
                           variant="contained"
                           onClick={() => {
                             otherData.price = data.price;
                             otherData.opt = formInput.otherval;
-                            getNextDynamicQuestion(
-                              data.nextQuestion,
-                              otherData.opt,
-                              projectBasedQuestion
-                            );
-                            saveAllData(otherData, projectBasedQuestion);
-                            setInputField(false);
+                            if (formInput.otherval !== "") {
+                              getNextDynamicQuestion(
+                                data.nextQuestion,
+                                otherData.opt,
+                                projectBasedQuestion
+                              );
+                              saveAllData(otherData, projectBasedQuestion);
+                              setInputField(false);
+                              setFormInput({ otherval: "" });
+                              setErrorMessage({ otherValError: null });
+                            } else {
+                              submitOtherVal(inputValue);
+                            }
                           }}
                         >
                           Enter
@@ -789,9 +792,18 @@ const page = () => {
                           onClick={() => {
                             otherData.price = data.price;
                             otherData.opt = inputValue;
-                            saveAllData(otherData, getPostAdditionalQuestion());
-                            getNextQuestionFromAdditional(inputValue);
-                            setInputField(false);
+                            if (formInput.otherval !== "") {
+                              saveAllData(
+                                otherData,
+                                getPostAdditionalQuestion()
+                              );
+                              getNextQuestionFromAdditional(inputValue);
+                              setInputField(false);
+                              setFormInput({ otherval: "" });
+                              setErrorMessage({ otherValError: null });
+                            } else {
+                              submitOtherVal(inputValue);
+                            }
                           }}
                         >
                           Enter
