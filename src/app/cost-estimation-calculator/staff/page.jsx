@@ -33,7 +33,14 @@ import ArrowBack from "@mui/icons-material/ArrowBack";
 
 const Staff = () => {
   const theme = useTheme();
-
+  // For Other (Specify) Button
+  const [inputField, setInputField] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  let otherData = {
+    opt: null,
+    price: null,
+  };
+  const [completed, setCompleted] = React.useState({});
   const [staffQuestions, setStaffQuestions] = useState([]);
   const [additionalQuestions, setAdditionalQuestions] = useState([]);
   const [activeQuestions, setActiveQuestions] = useState("staffQuestions");
@@ -47,8 +54,7 @@ const Staff = () => {
   });
   const [resourcesList, setResourcesList] = useState({});
   const [preState, setPreState] = useState(-1);
-  const [currentAdditionalQuestionIndex, setCurrentAdditionalQuestionIndex] =
-    useState(0);
+
   const [currentResource, setCurrentResource] = useState({
     resource: "",
     resourceOption: "",
@@ -82,6 +88,35 @@ const Staff = () => {
     "Mid Level": [1, 2, 3, 4],
     "Senior Level": [1, 2, 3, 4, 5],
     "Team Lead": [1, 2],
+  };
+  const addResource = () => {
+    if (
+      currentResource.resource &&
+      currentResource.resourceOption &&
+      currentResource.seniorityLevel &&
+      currentResource.numOfResources
+    ) {
+      const { responses } = resourcesList;
+
+      if (responses === undefined) {
+        setResourcesList({
+          responses: [{ resources: [{ ...currentResource }] }],
+        });
+      } else {
+        const data = responses[0];
+        const { resources } = data;
+        setResourcesList({
+          responses: [{ resources: [...resources, { ...currentResource }] }],
+        });
+      }
+
+      setCurrentResource({
+        resource: "",
+        resourceOption: { opt: "", price: "" },
+        seniorityLevel: "",
+        numOfResources: "",
+      });
+    }
   };
 
   const handleResourceChange = (selectedResource) => {
@@ -131,36 +166,6 @@ const Staff = () => {
     };
   };
 
-  const addResource = () => {
-    if (
-      currentResource.resource &&
-      currentResource.resourceOption &&
-      currentResource.seniorityLevel &&
-      currentResource.numOfResources
-    ) {
-      const { responses } = resourcesList;
-
-      if (responses === undefined) {
-        setResourcesList({
-          responses: [{ resources: [{ ...currentResource }] }],
-        });
-      } else {
-        const data = responses[0];
-        const { resources } = data;
-        setResourcesList({
-          responses: [{ resources: [...resources, { ...currentResource }] }],
-        });
-      }
-
-      setCurrentResource({
-        resource: "",
-        resourceOption: { opt: "", price: "" },
-        seniorityLevel: "",
-        numOfResources: "",
-      });
-    }
-  };
-
   function goNext() {
     if (activeQuestions === "staffQuestions") {
       if (
@@ -169,8 +174,8 @@ const Staff = () => {
         currentResource.seniorityLevel &&
         currentResource.numOfResources
       ) {
-        // setPreState(0);
         setActiveQuestions("additionalQuestions");
+        setPreState(preState + 1);
       } else {
         alert("Please add at least one resource before proceeding.");
       }
@@ -178,6 +183,7 @@ const Staff = () => {
   }
 
   function Next() {
+    let getQuestionIndex;
     const { responses } = resourcesList;
     if (
       setCurrentAdditionalQuestion.current.question &&
@@ -185,23 +191,23 @@ const Staff = () => {
       setCurrentAdditionalQuestion.current.category &&
       setCurrentAdditionalQuestion.current.selectedOption
     ) {
-      if (resourcesList.responses && resourcesList.responses.length > 1) {
-        resourcesList.responses.forEach((element, index) => {
-          if (
-            element.question === setCurrentAdditionalQuestion.current.question
-          ) {
-            // console.log("Update this Question: ", element);
-            element.question = setCurrentAdditionalQuestion.current.question;
-            element.options = setCurrentAdditionalQuestion.current.options;
-            element.category = setCurrentAdditionalQuestion.current.category;
-            element.selectedOption =
-              setCurrentAdditionalQuestion.current.selectedOption;
-          }
-        });
+      if (responses && responses.length >= 1) {
+        getQuestionIndex = responses.findIndex(
+          (data) =>
+            data.question === setCurrentAdditionalQuestion.current.question
+        );
+        if (getQuestionIndex !== -1) {
+          responses[getQuestionIndex].selectedOption =
+            setCurrentAdditionalQuestion.current.selectedOption;
+        } else {
+          setResourcesList({
+            responses: [
+              ...responses,
+              { ...setCurrentAdditionalQuestion.current },
+            ],
+          });
+        }
       }
-      setResourcesList({
-        responses: [...responses, { ...setCurrentAdditionalQuestion.current }],
-      });
     } else {
       console.log("Something is Missing in Additional Questions");
     }
@@ -210,9 +216,26 @@ const Staff = () => {
         setPreState(preState + 1);
       } else {
         setActiveQuestions("userData");
+        setPreState(preState + 1);
       }
     }
   }
+
+  const getPreviousData = () => {
+    if (preState === 0) {
+      setPreState(preState - 1);
+      setActiveQuestions("staffQuestions");
+      resourcesList.responses[0].resources.pop();
+    } else if (preState <= additionalQuestions.length - 1) {
+      setPreState(preState - 1);
+      setActiveQuestions("additionalQuestions");
+      resourcesList.responses.pop();
+    } else if (preState === additionalQuestions.length) {
+      setActiveQuestions("additionalQuestions");
+      setPreState(preState - 1);
+      resourcesList.responses.pop();
+    }
+  };
 
   const submitForm = (formInput) => {
     if (!formInput.userName) {
@@ -235,7 +258,7 @@ const Staff = () => {
   let totalPrice = 0;
 
   if (responses) {
-    totalPrice = responses[0].resources.reduce((total, resource) => {
+    totalPrice = responses[0]?.resources.reduce((total, resource) => {
       const price =
         resource.resourceOption?.price || resource.selectedOption?.price || 0;
       return total + price;
@@ -271,11 +294,56 @@ const Staff = () => {
     textAlign: "center",
   }));
 
+  /* ---------------------------- Stepper ---------------------------- */
+
+  const getUniqueSteps = () => {
+    const uniqueSteps = [];
+    let label;
+
+    uniqueSteps[0] = "Resources";
+    additionalQuestions.forEach((data) => uniqueSteps.push(data.label));
+    if (activeQuestions === "staffQuestions") {
+      label = "Resources";
+      uniqueSteps.push(label);
+    }
+    uniqueSteps.push("form Data");
+
+    return uniqueSteps;
+  };
+
+  console.log("Resource List", resourcesList);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Typography variant="h4" mb={4} mt={4}>
         Staff Questions
       </Typography>
+
+      <Stepper nonLinear activeStep={preState + 1} alternativeLabel>
+        {getUniqueSteps().map((step, index) =>
+          index <= preState + 1 ? (
+            <Step key={index} completed={completed[index]}>
+              <StepButton
+                color="inherit"
+                onClick={() => {
+                  setPreState(index - 1);
+                  resourcesList.responses.length = index;
+                  if (preState <= 0) {
+                    setActiveQuestions("staffQuestions");
+                  } else if (preState > additionalQuestions.length) {
+                    setActiveQuestions("userData");
+                  } else {
+                    setActiveQuestions("additionalQuestions");
+                  }
+                }}
+              >
+                {step}
+              </StepButton>
+            </Step>
+          ) : null
+        )}
+      </Stepper>
+
       <List>
         <ListItemButton component="a" href="#estimated-cost">
           <ListItemText
@@ -295,11 +363,11 @@ const Staff = () => {
         </ListItemButton>
       </List>
       <Box>
-        {preState > 0 ? (
+        {preState >= 0 ? (
           <span>
             <IconButton
               onClick={() => {
-                setPreState(preState - 1);
+                getPreviousData();
               }}
             >
               <ArrowBack />
@@ -309,7 +377,7 @@ const Staff = () => {
 
         {activeQuestions === "staffQuestions" &&
           responses &&
-          responses[0].resources.map((resource, index) => (
+          responses[0]?.resources.map((resource, index) => (
             <Box key={index} sx={{ display: "flex" }}>
               <Box sx={{ display: "flex" }}>
                 <Typography variant="h6">Resource: </Typography>
@@ -330,10 +398,10 @@ const Staff = () => {
             </Box>
           ))}
 
-        {activeQuestions === "staffQuestions" && (
+        {activeQuestions === "staffQuestions" && preState === -1 && (
           <Box>
             {/* Current Resource Dropdown */}
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl sx={{ m: 1, width: 250 }}>
               <InputLabel id="demo-multiple-chip-label">
                 Resource Type
               </InputLabel>
@@ -341,7 +409,9 @@ const Staff = () => {
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
                 value={currentResource.resource}
-                onChange={(e) => handleResourceChange(e.target.value)}
+                onChange={(e) => {
+                  handleResourceChange(e.target.value);
+                }}
                 input={
                   <OutlinedInput
                     id="select-multiple-chip"
@@ -370,7 +440,7 @@ const Staff = () => {
             </FormControl>
 
             {currentResource.resource && (
-              <FormControl sx={{ m: 1, width: 300 }}>
+              <FormControl sx={{ m: 1, width: 250 }}>
                 <InputLabel id="demo-multiple-chip-label">
                   Resource Option
                 </InputLabel>
@@ -411,7 +481,7 @@ const Staff = () => {
 
             {currentResource.resourceOption &&
               currentResource.resourceOption.opt !== "" && (
-                <FormControl sx={{ m: 1, width: 300 }}>
+                <FormControl sx={{ m: 1, width: 250 }}>
                   <InputLabel id="demo-multiple-chip-label">
                     Seniority Level
                   </InputLabel>
@@ -447,7 +517,7 @@ const Staff = () => {
               )}
 
             {currentResource.seniorityLevel && (
-              <FormControl sx={{ m: 1, width: 300 }}>
+              <FormControl sx={{ m: 1, width: 250 }}>
                 <InputLabel id="demo-multiple-chip-label">
                   No. of Person
                 </InputLabel>
@@ -501,7 +571,6 @@ const Staff = () => {
                 onClick={() => {
                   goNext();
                   addResource();
-                  setPreState(preState + 1);
                 }}
               >
                 Next
@@ -510,7 +579,7 @@ const Staff = () => {
           </Box>
         )}
 
-        {activeQuestions === "additionalQuestions" && (
+        {activeQuestions === "additionalQuestions" && preState >= 0 && (
           <Box>
             <Typography variant="h4">
               {additionalQuestions[preState].question}
@@ -523,65 +592,95 @@ const Staff = () => {
                     variant="outlined"
                     sx={{ maxWidth: 260, m: 1.5 }}
                     onClick={() => {
-                      handleOptions(option);
-                      Next();
-                      setPreState(preState + 1);
+                      if (option.opt !== "Other") {
+                        handleOptions(option);
+                        Next();
+                      } else {
+                        setInputField(true);
+                      }
                     }}
                   >
                     {option.opt} ({option.price} $)
                   </Button>
+                  {option.opt === "Other"
+                    ? inputField && (
+                        <Box>
+                          <TextField
+                            fullWidth
+                            id="fullWidth"
+                            label="Other"
+                            variant="outlined"
+                            sx={{ width: "90%" }}
+                            onChange={(e) => setInputValue(e.target.value)}
+                          />
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              otherData.price = option.price;
+                              otherData.opt = inputValue;
+                              handleOptions(otherData);
+                              Next();
+                              setInputField(false);
+                            }}
+                          >
+                            Enter
+                          </Button>
+                        </Box>
+                      )
+                    : null}
                 </React.Fragment>
               ))}
             </Stack>
           </Box>
         )}
-        {activeQuestions === "userData" && (
-          <form>
-            <Box>
-              <TextField
-                sx={{ mb: 3 }}
-                style={{ width: 500 }}
-                id="outlined-basic, user-name"
-                label="Name"
-                variant="outlined"
-                value={formInput.userName}
-                onChange={(e) => {
-                  setFormInput({
-                    userName: e.target.value,
-                    email: formInput.email,
-                  });
-                }}
-                helperText={errorMessage.usernameError}
-              />
-              <br />
-              <TextField
-                sx={{ mb: 3 }}
-                style={{ width: 500 }}
-                // fullWidth
-                id="outlined-basic, user-email"
-                label="Email"
-                variant="outlined"
-                value={formInput.email}
-                onChange={(e) => {
-                  setFormInput({
-                    userName: formInput.userName,
-                    email: e.target.value,
-                  });
-                }}
-                helperText={errorMessage.emailError}
-              />
-              <br />
-              <Button
-                variant="contained"
-                onClick={() => {
-                  submitForm(formInput);
-                }}
-              >
-                Submit
-              </Button>
-            </Box>
-          </form>
-        )}
+        {activeQuestions === "userData" &&
+          preState >= additionalQuestions.length && (
+            <form>
+              <Box>
+                <TextField
+                  sx={{ mb: 3 }}
+                  style={{ width: 500 }}
+                  id="outlined-basic, user-name"
+                  label="Name"
+                  variant="outlined"
+                  value={formInput.userName}
+                  onChange={(e) => {
+                    setFormInput({
+                      userName: e.target.value,
+                      email: formInput.email,
+                    });
+                  }}
+                  helperText={errorMessage.usernameError}
+                />
+                <br />
+                <TextField
+                  sx={{ mb: 3 }}
+                  style={{ width: 500 }}
+                  // fullWidth
+                  id="outlined-basic, user-email"
+                  label="Email"
+                  variant="outlined"
+                  value={formInput.email}
+                  onChange={(e) => {
+                    setFormInput({
+                      userName: formInput.userName,
+                      email: e.target.value,
+                    });
+                  }}
+                  helperText={errorMessage.emailError}
+                />
+                <br />
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    submitForm(formInput);
+                  }}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </form>
+          )}
         {activeQuestions === "Submitted" && (
           <Typography variant="h3" component="h3">
             Thank you! We will contact you soon

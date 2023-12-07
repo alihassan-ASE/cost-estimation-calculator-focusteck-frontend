@@ -11,9 +11,6 @@ export const getQuestions = async () => {
     const staffQuestions = staff.data;
     const additionalQuestions = additional.data;
 
-    // console.log("Staff", staffQuestions);
-    // console.log("Additional: ", additionalQuestions);
-
     return {
       Resources: staffQuestions,
       additionalQuestions: additionalQuestions,

@@ -24,10 +24,10 @@ import {
   ListItemText,
   TextField,
   Grid,
-  Paper
+  Paper,
 } from "@mui/material";
 import ArrowBack from "@mui/icons-material/ArrowBack";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 const page = () => {
   const [preQuestions, setPreQuestions] = useState([]);
@@ -42,8 +42,6 @@ const page = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-
-        
         const data = await getQuestions();
         const dynamic = await getDynamicQuestion();
         setPreQuestions(data.preProjectQuestion);
@@ -193,7 +191,7 @@ const page = () => {
 
   function saveAllData(selectedOption, question) {
     // console.log(selectedOption);
-    if(selectedOption.opt === "Other (Specify)"){
+    if (selectedOption.opt === "Other (Specify)") {
       // console.log("Other Coming");
     }
     if (selectedOption.userName && selectedOption.email) {
@@ -353,7 +351,6 @@ const page = () => {
       }
     }
   }
-
 
   // const getPreSequenceLength = () => {
   //   const Sequence = AdditionalQuestionSequence.find(
@@ -614,18 +611,19 @@ const page = () => {
   const Item = styled(Paper)(({ theme }) => ({
     // ...theme.typography.body2,
     padding: theme.spacing(1),
-    textAlign: 'center',
+    textAlign: "center",
     // color: theme.palette.text.secondary,
   }));
 
+  console.log("response: ", saveData);
   return (
     <Box sx={{ flexGrow: 1 }}>
-           {/* Main Heading */}
-        <Typography variant="h4" mb={4} mt={4}>
-          Project Base Question
-        </Typography>
-        {/* Stepper */}
-        {/* {
+      {/* Main Heading */}
+      <Typography variant="h4" mb={4} mt={4}>
+        Project Base Question
+      </Typography>
+      {/* Stepper */}
+      {/* {
           <Stack direction="column" spacing={1}>
             <Stepper nonLinear activeStep={getActiveStep()} alternativeLabel>
               {getUniqueSteps().map((step, index) => (
@@ -645,318 +643,314 @@ const page = () => {
             </Stepper>
           </Stack>
         }  */}
-    {/* <Grid container spacing={2} sx={{ flexDirection: { xs: "column", md: "row"} }}>
+      {/* <Grid container spacing={2} sx={{ flexDirection: { xs: "column", md: "row"} }}>
       <Grid item md={3}> */}
-          {/* <Item> */}
-            <List>
-          <ListItemButton component="a" href="#estimated-cost">
-            <ListItemText
-              // primary="Estimated Cost"
-              primary={
-                <React.Fragment>
-                  <Typography variant="h4" component="p" color="text.primary">
-                    Estimated Cost
-                  </Typography>
-                  <Typography variant="h5" component="p" color="text.secondary">
-                    {priceVal} $
-                  </Typography>
-                  {/* Other components or data */}
-                </React.Fragment>
-              }
-            />
-          </ListItemButton>
-        </List>
-        {/* </Item> */}
-        {/* </Grid> */}
+      {/* <Item> */}
+      <List>
+        <ListItemButton component="a" href="#estimated-cost">
+          <ListItemText
+            // primary="Estimated Cost"
+            primary={
+              <React.Fragment>
+                <Typography variant="h4" component="p" color="text.primary">
+                  Estimated Cost
+                </Typography>
+                <Typography variant="h5" component="p" color="text.secondary">
+                  {priceVal} $
+                </Typography>
+                {/* Other components or data */}
+              </React.Fragment>
+            }
+          />
+        </ListItemButton>
+      </List>
+      {/* </Item> */}
+      {/* </Grid> */}
       {/* <Grid item md={9}>
         <Item>
         <Slide */}
-          {/* direction={slideDirection}
+      {/* direction={slideDirection}
           in={!slideIn}
           mountOnEnter
           unmountOnExit
         > */}
-          <Box>
-            <Stack
-              direction="row"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {/* GO Back Button */}
-              {preOption > 0 ? (
-                <span>
-                  <IconButton
+      <Box>
+        <Stack
+          direction="row"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {/* GO Back Button */}
+          {preOption > 0 ? (
+            <span>
+              <IconButton
+                onClick={() => {
+                  const previousQuestion =
+                    saveData.responses[saveData.responses.length - 1];
+                  handleFlow(previousQuestion);
+                }}
+              >
+                <ArrowBack />
+              </IconButton>
+            </span>
+          ) : null}
+        </Stack>
+
+        {/* Main Question */}
+        <Typography variant="h4" p={2} style={{ textAlign: "left" }}>
+          {currentState === "Pre"
+            ? getPreAdditionalQuestion()?.getQuestions?.question
+            : currentState === "Dynamic"
+            ? question
+            : postOption < postQuestions.length
+            ? getPostAdditionalQuestion()?.question
+            : null}
+        </Typography>
+
+        {/* Options */}
+        <Stack direction="row" sx={{ flexWrap: "wrap" }}>
+          {currentState === "Pre" ? (
+            getPreAdditionalQuestion()?.getQuestions?.options.map(
+              (data, index) => (
+                <React.Fragment key={index}>
+                  <Button
+                    size="large"
+                    variant="outlined"
+                    sx={{ maxWidth: 260, m: 1.5 }}
                     onClick={() => {
-                      const previousQuestion =
-                        saveData.responses[saveData.responses.length - 1];
-                      handleFlow(previousQuestion);
+                      if (data.opt !== "Other (Specify)") {
+                        saveAllData(
+                          data,
+                          getPreAdditionalQuestion()?.getQuestions
+                        );
+                        getNextQuestionFromAdditional(data);
+                      } else {
+                        setInputField(!inputField);
+                      }
                     }}
                   >
-                    <ArrowBack />
-                  </IconButton>
-                </span>
-              ) : null}
-            </Stack>
-
-            {/* Main Question */}
-            <Typography variant="h4" p={2}  style={{textAlign: 'left'}}>
-              {currentState === "Pre"
-                ? getPreAdditionalQuestion()?.getQuestions?.question
-                : currentState === "Dynamic"
-                ? question
-                : postOption < postQuestions.length
-                ? getPostAdditionalQuestion()?.question
-                : null}
-            </Typography>
-
-            {/* Options */}
-            <Stack direction="row" sx={{ flexWrap: "wrap" }}>
-              {currentState === "Pre" ? (
-                getPreAdditionalQuestion()?.getQuestions?.options.map(
-                  (data, index) => (
-                    <React.Fragment key={index}>
-                      <Button
-                        size="large"
-                        variant="outlined"
-                        sx={{ maxWidth: 260, m: 1.5 }}
-                        onClick={() => {
-                          if (data.opt !== "Other (Specify)") {
-                            saveAllData(
-                              data,
-                              getPreAdditionalQuestion()?.getQuestions
-                            );
-                            getNextQuestionFromAdditional(data);
-                          } else {
-                            setInputField(!inputField);
-                          }
-                        }}
-                      >
-                        {data.opt} ({data.price}$)
-                      </Button>
-                      {data.opt === "Other (Specify)"
-                        ? inputField && (
-                            <Box>
-                              <TextField
-                                fullWidth
-                                id="fullWidth"
-                                label="Other"
-                                variant="outlined"
-                                sx={{ width: "90%" }}
-                                // value={inputValue}
-                                onChange={(e) => {
-                                  // setInputValue(e.target.value);
-                                  setFormInput({ otherval: e.target.value });
-                                }}
-                                helperText={errorMessage.otherValError}
-                              />
-                              <Button
-                                variant="contained"
-                                onClick={() => {
-                                  otherData.price = data.price;
-                                  otherData.opt = formInput.otherval;
-                                  {
-                                    formInput.otherval === ""
-                                      ? submitOtherVal()
-                                      : getNextQuestionFromAdditional(inputValue);
-                                  }
-                                  saveAllData(
-                                    otherData,
-                                    getPreAdditionalQuestion()?.getQuestions
-                                  );
-                                  setInputField(false);
-                                }}
-                              >
-                                Enter
-                              </Button>
-                            </Box>
-                          )
-                        : null}
-                    </React.Fragment>
-                  )
-                )
-              ) : currentState === "Dynamic" ? (
-                options?.map((data, index) => (
-                  <React.Fragment key={index}>
-                    <Button
-                      size="large"
-                      variant="outlined"
-                      sx={{ maxWidth: 260, m: 1.5 }}
-                      onClick={() => {
-                        getNextDynamicQuestion(
-                          data.nextQuestion,
-                          data.opt,
-                          projectBasedQuestion
-                        );
-                        if(data.opt !== "Other (Specify)"){
-                          saveAllData(data, projectBasedQuestion);
-                        }
-                        // {
-                        //   data.value !== "Other (Specify)"
-                        //     : null;
-                        // }
-                      }}
-                    >
-                      {data.opt} ({data.price}$)
-                    </Button>
-                    {data.opt === "Other (Specify)"
-                      ? inputField && (
-                          <Box>
-                            <TextField
-                              fullWidth
-                              id="fullWidth"
-                              label="Other"
-                              variant="outlined"
-                              sx={{ width: "90%" }}
-                              onChange={(e) => {
-                                // setInputValue(e.target.value);
-                                setFormInput({ otherval: e.target.value });
-                              }}
-                            />
-
-                            <Button
-                              variant="contained"
-                              onClick={() => {
-                                otherData.price = data.price;
-                                otherData.opt = formInput.otherval;
-                                getNextDynamicQuestion(
-                                  data.nextQuestion,
-                                  otherData.opt,
-                                  projectBasedQuestion
-                                );
-                                saveAllData(otherData, projectBasedQuestion);
-                                setInputField(false);
-                              }}
-                            >
-                              Enter
-                            </Button>
-                          </Box>
-                        )
-                      : null}
-                  </React.Fragment>
-                ))
-              ) : postOption < postQuestions.length ? (
-                getPostAdditionalQuestion()?.options.map((data, index) => (
-                  <React.Fragment key={index}>
-                    <Button
-                      size="large"
-                      variant="outlined"
-                      sx={{ maxWidth: 260, m: 1.5 }}
-                      onClick={() => {
-                        const additionalQuestion = getPostAdditionalQuestion();
-
-                        if (additionalQuestion.typeofselection === "single") {
-                          getNextQuestionFromAdditional(data);
-                          if (data.opt !== "Other (Specify)") {
-                            saveAllData(data, additionalQuestion);
-                          }
-                        } else {
-                          getMultipleValues(data);
-                        }
-                      }}
-                    >
-                      {data.opt} ({data.price}$)
-                    </Button>
-                    {data.opt === "Other (Specify)"
-                      ? inputField && (
-                          <Box>
-                            <TextField
-                              fullWidth
-                              id="fullWidth"
-                              label="Other"
-                              variant="outlined"
-                              sx={{ width: "90%" }}
-                              onChange={(e) => setInputValue(e.target.value)}
-                            />
-                            <Button
-                              variant="contained"
-                              onClick={() => {
-                                otherData.price = data.price;
-                                otherData.opt = inputValue;
-                                saveAllData(
-                                  otherData,
-                                  getPostAdditionalQuestion()
-                                );
-                                getNextQuestionFromAdditional(inputValue);
-                                setInputField(false);
-                              }}
-                            >
-                              Enter
-                            </Button>
-                          </Box>
-                        )
-                      : null}
-                  </React.Fragment>
-                ))
-              ) : (currentState === "post" ? (
-                    <form>
+                    {data.opt} ({data.price}$)
+                  </Button>
+                  {data.opt === "Other (Specify)"
+                    ? inputField && (
+                        <Box>
+                          <TextField
+                            fullWidth
+                            id="fullWidth"
+                            label="Other"
+                            variant="outlined"
+                            sx={{ width: "90%" }}
+                            // value={inputValue}
+                            onChange={(e) => {
+                              // setInputValue(e.target.value);
+                              setFormInput({ otherval: e.target.value });
+                            }}
+                            helperText={errorMessage.otherValError}
+                          />
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              otherData.price = data.price;
+                              otherData.opt = formInput.otherval;
+                              {
+                                formInput.otherval === ""
+                                  ? submitOtherVal()
+                                  : getNextQuestionFromAdditional(inputValue);
+                              }
+                              saveAllData(
+                                otherData,
+                                getPreAdditionalQuestion()?.getQuestions
+                              );
+                              setInputField(false);
+                            }}
+                          >
+                            Enter
+                          </Button>
+                        </Box>
+                      )
+                    : null}
+                </React.Fragment>
+              )
+            )
+          ) : currentState === "Dynamic" ? (
+            options?.map((data, index) => (
+              <React.Fragment key={index}>
+                <Button
+                  size="large"
+                  variant="outlined"
+                  sx={{ maxWidth: 260, m: 1.5 }}
+                  onClick={() => {
+                    getNextDynamicQuestion(
+                      data.nextQuestion,
+                      data.opt,
+                      projectBasedQuestion
+                    );
+                    if (data.opt !== "Other (Specify)") {
+                      saveAllData(data, projectBasedQuestion);
+                    }
+                    // {
+                    //   data.value !== "Other (Specify)"
+                    //     : null;
+                    // }
+                  }}
+                >
+                  {data.opt} ({data.price}$)
+                </Button>
+                {data.opt === "Other (Specify)"
+                  ? inputField && (
                       <Box>
                         <TextField
-                          sx={{ mb: 3 }}
                           fullWidth
-                          id="outlined-basic, user-name"
-                          label="Username"
+                          id="fullWidth"
+                          label="Other"
                           variant="outlined"
-                          value={formInput.userName}
+                          sx={{ width: "90%" }}
                           onChange={(e) => {
-                            setFormInput({
-                              userName: e.target.value,
-                              email: formInput.email,
-                            });
+                            // setInputValue(e.target.value);
+                            setFormInput({ otherval: e.target.value });
                           }}
-                          helperText={errorMessage.usernameError}
                         />
-                        <TextField
-                          sx={{ mb: 3 }}
-                          fullWidth
-                          id="outlined-basic, user-email"
-                          label="Email"
-                          variant="outlined"
-                          value={formInput.email}
-                          onChange={(e) => {
-                            setFormInput({
-                              userName: formInput.userName,
-                              email: e.target.value,
-                            });
+
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            otherData.price = data.price;
+                            otherData.opt = formInput.otherval;
+                            getNextDynamicQuestion(
+                              data.nextQuestion,
+                              otherData.opt,
+                              projectBasedQuestion
+                            );
+                            saveAllData(otherData, projectBasedQuestion);
+                            setInputField(false);
                           }}
-                          helperText={errorMessage.emailError}
+                        >
+                          Enter
+                        </Button>
+                      </Box>
+                    )
+                  : null}
+              </React.Fragment>
+            ))
+          ) : postOption < postQuestions.length ? (
+            getPostAdditionalQuestion()?.options.map((data, index) => (
+              <React.Fragment key={index}>
+                <Button
+                  size="large"
+                  variant="outlined"
+                  sx={{ maxWidth: 260, m: 1.5 }}
+                  onClick={() => {
+                    const additionalQuestion = getPostAdditionalQuestion();
+
+                    if (additionalQuestion.typeofselection === "single") {
+                      getNextQuestionFromAdditional(data);
+                      if (data.opt !== "Other (Specify)") {
+                        saveAllData(data, additionalQuestion);
+                      }
+                    } else {
+                      getMultipleValues(data);
+                    }
+                  }}
+                >
+                  {data.opt} ({data.price}$)
+                </Button>
+                {data.opt === "Other (Specify)"
+                  ? inputField && (
+                      <Box>
+                        <TextField
+                          fullWidth
+                          id="fullWidth"
+                          label="Other"
+                          variant="outlined"
+                          sx={{ width: "90%" }}
+                          onChange={(e) => setInputValue(e.target.value)}
                         />
                         <Button
                           variant="contained"
                           onClick={() => {
-                            submitForm();
-                            saveAllData(formInput);
+                            otherData.price = data.price;
+                            otherData.opt = inputValue;
+                            saveAllData(otherData, getPostAdditionalQuestion());
+                            getNextQuestionFromAdditional(inputValue);
+                            setInputField(false);
                           }}
                         >
-                          Submit
+                          Enter
                         </Button>
                       </Box>
-                    </form>
-                  ) : (
-                    <React.Fragment>
-                      <Typography variant="h3" component="h3">
-                        Thank You! We will contact you shortly
-                      </Typography>
-                    </React.Fragment>
-                  )
-              )}
-              {multiple >= 3 && (
+                    )
+                  : null}
+              </React.Fragment>
+            ))
+          ) : currentState === "post" ? (
+            <form>
+              <Box>
+                <TextField
+                  sx={{ mb: 3 }}
+                  fullWidth
+                  id="outlined-basic, user-name"
+                  label="Username"
+                  variant="outlined"
+                  value={formInput.userName}
+                  onChange={(e) => {
+                    setFormInput({
+                      userName: e.target.value,
+                      email: formInput.email,
+                    });
+                  }}
+                  helperText={errorMessage.usernameError}
+                />
+                <TextField
+                  sx={{ mb: 3 }}
+                  fullWidth
+                  id="outlined-basic, user-email"
+                  label="Email"
+                  variant="outlined"
+                  value={formInput.email}
+                  onChange={(e) => {
+                    setFormInput({
+                      userName: formInput.userName,
+                      email: e.target.value,
+                    });
+                  }}
+                  helperText={errorMessage.emailError}
+                />
                 <Button
-                variant="contained"
-                style={{minWidth: 200}}
+                  variant="contained"
                   onClick={() => {
-                    setPostOption(postOption + 1);
-                    saveAllData(setArray.current, getPostAdditionalQuestion());
-                    setMultipleValues(0);
+                    submitForm();
+                    saveAllData(formInput);
                   }}
                 >
-                  Next
+                  Submit
                 </Button>
-              )}
-            </Stack>
-          </Box>
-        {/* </Slide>
+              </Box>
+            </form>
+          ) : (
+            <React.Fragment>
+              <Typography variant="h3" component="h3">
+                Thank You! We will contact you shortly
+              </Typography>
+            </React.Fragment>
+          )}
+          {multiple >= 3 && (
+            <Button
+              variant="contained"
+              style={{ minWidth: 200 }}
+              onClick={() => {
+                setPostOption(postOption + 1);
+                saveAllData(setArray.current, getPostAdditionalQuestion());
+                setMultipleValues(0);
+              }}
+            >
+              Next
+            </Button>
+          )}
+        </Stack>
+      </Box>
+      {/* </Slide>
         </Item> */}
       {/* </Grid>
     </Grid> */}
