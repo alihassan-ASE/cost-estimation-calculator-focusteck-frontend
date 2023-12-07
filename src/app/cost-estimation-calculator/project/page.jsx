@@ -153,7 +153,7 @@ const page = () => {
         (total, response) => total - response.selectedOption.price,
         saveData.totalCost
       );
-  
+
       saveData.totalCost = updatedTotalCost;
       setPriceVal(updatedTotalCost);
       saveData.responses.length = step;
@@ -161,22 +161,21 @@ const page = () => {
 
     if (currentState === "Pre") {
       setPreOption(step);
-    }
-    else if (currentState === "post") {
-      if(postOption < postQuestions.length){
-        postQuestions.map((data, index)=> {
-          if(data.label.toLowerCase() === label.question.toLowerCase()){
+    } else if (currentState === "post") {
+      if (postOption < postQuestions.length) {
+        postQuestions.map((data, index) => {
+          if (data.label.toLowerCase() === label.question.toLowerCase()) {
             setPostOption(index);
           }
-        })
+        });
       }
       if (step <= preQuestions.length) {
-        preQuestions.map((data, index)=> {
-          if(data.label.toLowerCase() === label.question.toLowerCase()){
+        preQuestions.map((data, index) => {
+          if (data.label.toLowerCase() === label.question.toLowerCase()) {
             setCurrentState("Pre");
             setPreOption(index);
           }
-        })
+        });
       }
     }
   };
@@ -378,35 +377,31 @@ const page = () => {
 
   const { question, options, nextQuestion } = projectBasedQuestion;
 
-  let i=0;
-
+  let i = 0;
 
   const getNextDynamicQuestion = async (nextQuestion, value, question) => {
-
     try {
       let nextQuestionID;
-      
+
       if (value === "Other (Specify)") {
         setInputField(!inputField);
       } else {
-        if (Array.isArray(nextQuestion)){
+        if (Array.isArray(nextQuestion)) {
           console.log("Array", nextQuestion);
           let array = nextQuestion;
-          if(array.length>i && i===0){
+          if (array.length > i && i === 0) {
             nextQuestionID = array[i];
             i++;
+          } else if (array.length > i && i > 0) {
+            nextQuestionID = array[i + 1];
           }
-          else if(array.length > i && i > 0){
-            nextQuestionID = array[i+1];
-          }
-        }
-        else if (nextQuestion === "" || nextQuestion === undefined) {
+        } else if (nextQuestion === "" || nextQuestion === undefined) {
           nextQuestionID = question.nextQuestion;
-          if (setRefForBothVal.current === "Both" && nextQuestionID === "") { 
+          if (setRefForBothVal.current === "Both" && nextQuestionID === "") {
             setRefForBothVal.current = "Seperate";
             nextQuestionID = "6560a181c9f7ceabb2c23848";
           }
-        }  else if (value === "Both" && nextQuestion) {
+        } else if (value === "Both" && nextQuestion) {
           nextQuestionID = nextQuestion;
           setRefForBothVal.current = "Both";
         } else {
@@ -572,22 +567,20 @@ const page = () => {
       <Grid item md={3}> */}
       {/* <Item> */}
       <List>
-        <ListItemButton component="a" href="#estimated-cost">
-          <ListItemText
-            // primary="Estimated Cost"
-            primary={
-              <React.Fragment>
-                <Typography variant="h4" component="p" color="text.primary">
-                  Estimated Cost
-                </Typography>
-                <Typography variant="h5" component="p" color="text.secondary">
-                  {priceVal} $
-                </Typography>
-                {/* Other components or data */}
-              </React.Fragment>
-            }
-          />
-        </ListItemButton>
+        <ListItemText
+          // primary="Estimated Cost"
+          primary={
+            <React.Fragment>
+              <Typography variant="h4" component="p" color="text.primary">
+                Estimated Cost
+              </Typography>
+              <Typography variant="h5" component="p" color="text.secondary">
+                {priceVal} $
+              </Typography>
+              {/* Other components or data */}
+            </React.Fragment>
+          }
+        />
       </List>
       {/* </Item> */}
       {/* </Grid> */}

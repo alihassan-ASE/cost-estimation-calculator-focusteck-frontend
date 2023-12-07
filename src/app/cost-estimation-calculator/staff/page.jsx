@@ -40,6 +40,7 @@ const Staff = () => {
     opt: null,
     price: null,
   };
+
   const [completed, setCompleted] = React.useState({});
   const [staffQuestions, setStaffQuestions] = useState([]);
   const [additionalQuestions, setAdditionalQuestions] = useState([]);
@@ -51,7 +52,9 @@ const Staff = () => {
   const [errorMessage, setErrorMessage] = useState({
     usernameError: null,
     emailError: null,
+    otherValError: "",
   });
+
   const [resourcesList, setResourcesList] = useState({});
   const [preState, setPreState] = useState(-1);
 
@@ -311,7 +314,16 @@ const Staff = () => {
     return uniqueSteps;
   };
 
-  console.log("Resource List", resourcesList);
+  /* ---------------------------- Others ---------------------------- */
+  const submitOtherVal = (inputVal) => {
+    if (!inputVal) {
+      setErrorMessage({ otherValError: "Field cannot be empty" });
+    }
+    if (inputVal) {
+      setErrorMessage({ otherValError: "" });
+      setInputField(!inputField);
+    }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -345,22 +357,20 @@ const Staff = () => {
       </Stepper>
 
       <List>
-        <ListItemButton component="a" href="#estimated-cost">
-          <ListItemText
-            // primary="Estimated Cost"
-            primary={
-              <React.Fragment>
-                <Typography variant="h4" component="p" color="text.primary">
-                  Estimated Cost
-                </Typography>
-                <Typography variant="h5" component="p" color="text.secondary">
-                  {totalPrice} $
-                </Typography>
-                {/* Other components or data */}
-              </React.Fragment>
-            }
-          />
-        </ListItemButton>
+        <ListItemText
+          // primary="Estimated Cost"
+          primary={
+            <React.Fragment>
+              <Typography variant="h4" component="p" color="text.primary">
+                Estimated Cost
+              </Typography>
+              <Typography variant="h5" component="p" color="text.secondary">
+                {totalPrice} $
+              </Typography>
+              {/* Other components or data */}
+            </React.Fragment>
+          }
+        />
       </List>
       <Box>
         {preState >= 0 ? (
@@ -611,16 +621,22 @@ const Staff = () => {
                             label="Other"
                             variant="outlined"
                             sx={{ width: "90%" }}
+                            value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
+                            helperText={errorMessage.otherValError}
                           />
                           <Button
                             variant="contained"
                             onClick={() => {
                               otherData.price = option.price;
                               otherData.opt = inputValue;
-                              handleOptions(otherData);
-                              Next();
-                              setInputField(false);
+                              if (inputValue !== "") {
+                                handleOptions(otherData);
+                                Next();
+                                setInputField(false);
+                              } else {
+                                submitOtherVal(inputValue);
+                              }
                             }}
                           >
                             Enter
