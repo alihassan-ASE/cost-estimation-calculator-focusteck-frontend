@@ -91,6 +91,7 @@ const page = () => {
     emailError: null,
     otherValError: null,
   });
+  const [checkInputVal, setCheckInputVal] = useState(false);
 
   const [priceVal, setPriceVal] = useState(0);
 
@@ -509,43 +510,38 @@ const page = () => {
   const getNextDynamicQuestion = async (nextQuestion, value, question) => {
     try {
       let nextQuestionID;
-
-      if (value === "Other (Specify)") {
-        setInputField(!inputField);
+      if (Array.isArray(nextQuestion)) {
+        let array = nextQuestion;
+        if (array.length > i && i === 0) {
+          nextQuestionID = array[i];
+          i++;
+        } else if (array.length > i && i > 0) {
+          nextQuestionID = array[i + 1];
+        }
+      } else if (nextQuestion === "" || nextQuestion === undefined) {
+        nextQuestionID = question.nextQuestion;
+        if (setRefForBothVal.current === "Both" && nextQuestionID === "") {
+          setRefForBothVal.current = "Seperate";
+          nextQuestionID = "6560a181c9f7ceabb2c23848";
+        }
+      } else if (value === "Both" && nextQuestion) {
+        nextQuestionID = nextQuestion;
+        setRefForBothVal.current = "Both";
       } else {
-        if (Array.isArray(nextQuestion)) {
-          let array = nextQuestion;
-          if (array.length > i && i === 0) {
-            nextQuestionID = array[i];
-            i++;
-          } else if (array.length > i && i > 0) {
-            nextQuestionID = array[i + 1];
-          }
-        } else if (nextQuestion === "" || nextQuestion === undefined) {
-          nextQuestionID = question.nextQuestion;
-          if (setRefForBothVal.current === "Both" && nextQuestionID === "") {
-            setRefForBothVal.current = "Seperate";
-            nextQuestionID = "6560a181c9f7ceabb2c23848";
-          }
-        } else if (value === "Both" && nextQuestion) {
-          nextQuestionID = nextQuestion;
-          setRefForBothVal.current = "Both";
-        } else {
-          nextQuestionID = nextQuestion;
-        }
+        nextQuestionID = nextQuestion;
+      }
 
-        const projectBased = await getDynamicQuestion(nextQuestionID);
-        setProjectBasedQuestion(projectBased);
+      const projectBased = await getDynamicQuestion(nextQuestionID);
+      setProjectBasedQuestion(projectBased);
 
-        if (
-          (currentState === "Dynamic" &&
-            setRefForBothVal.current === "Seperate" &&
-            nextQuestionID === "") ||
-          nextQuestionID === undefined
-        ) {
-          setCurrentState("post");
-          setPostOption(0);
-        }
+      if (
+        (currentState === "Dynamic" &&
+          setRefForBothVal.current === "Seperate" &&
+          nextQuestionID === "") ||
+        nextQuestionID === undefined
+      ) {
+        setCurrentState("post");
+        setPostOption(0);
       }
     } catch (error) {
       console.log(error);
@@ -565,16 +561,9 @@ const page = () => {
     return getQuestion;
   };
 
-  const getNextQuestionFromAdditional = (option) => {
-    const value = option.opt;
-
+  const getNextQuestionFromAdditional = () => {
     if (returnedIndexVal !== -1) {
-      if (value === "Other (Specify)") {
-        setInputField(!inputField);
-      } else if (
-        currentState === "Pre" &&
-        preOption === preQuestions.length - 1
-      ) {
+      if (currentState === "Pre" && preOption === preQuestions.length - 1) {
         setCurrentState("Dynamic");
       } else if (currentState === "post") {
         setCurrentState("post");
@@ -629,24 +618,31 @@ const page = () => {
 
   const submitOtherVal = () => {
     if (!formInput.otherval) {
+      console.log("Empty");
       setErrorMessage({ otherValError: "Field cannot be empty" });
+      setCheckInputVal(true);
     }
     if (formInput.otherval) {
+      console.log("Not Empty");
       setErrorMessage({ otherValError: null });
-      setInputField(!inputField);
+      setInputField(false);
+      setCheckInputVal(false);
     }
   };
 
   const submitForm = () => {
     if (!formInput.userName) {
       setErrorMessage({ usernameError: "Incorrect userName" });
+      setCheckInputVal(true);
     }
     if (!formInput.email) {
       setErrorMessage({ emailError: "Incorrect Email" });
+      setCheckInputVal(true);
     }
     if (formInput.userName && formInput.email) {
       setErrorMessage({ usernameError: null, emailError: null });
       setCurrentState("Submitted");
+      setCheckInputVal(false);
     }
   };
 
@@ -766,11 +762,15 @@ const page = () => {
                     sx={{ maxWidth: 260, m: 1.5 }}
                     onClick={() => {
                       if (data.opt !== "Other (Specify)") {
+                        setInputField(false);
+                        setFormInput({ otherval: "" });
+                        setErrorMessage({ otherValError: "" });
+                        setCheckInputVal(false);
                         saveAllData(
                           data,
                           getPreAdditionalQuestion()?.getQuestions
                         );
-                        getNextQuestionFromAdditional(data);
+                        getNextQuestionFromAdditional();
                       } else {
                         setInputField(!inputField);
                       }
@@ -791,6 +791,7 @@ const page = () => {
                             onChange={(e) => {
                               setFormInput({ otherval: e.target.value });
                             }}
+                            error={checkInputVal}
                             helperText={errorMessage.otherValError}
                           />
                           <Button
@@ -804,12 +805,13 @@ const page = () => {
                                   otherData,
                                   getPreAdditionalQuestion()?.getQuestions
                                 );
-                                getNextQuestionFromAdditional(inputValue);
                                 setInputField(false);
                                 setFormInput({ otherval: "" });
-                                setErrorMessage({ otherValError: null });
+                                setErrorMessage({ otherValError: "" });
+                                setCheckInputVal(false);
+                                getNextQuestionFromAdditional();
                               } else {
-                                submitOtherVal(inputValue);
+                                submitOtherVal();
                               }
                             }}
                           >
@@ -829,13 +831,19 @@ const page = () => {
                   variant="outlined"
                   sx={{ maxWidth: 260, m: 1.5 }}
                   onClick={() => {
-                    getNextDynamicQuestion(
-                      data.nextQuestion,
-                      data.opt,
-                      projectBasedQuestion
-                    );
                     if (data.opt !== "Other (Specify)") {
+                      setInputField(false);
+                      setFormInput({ otherval: "" });
+                      setErrorMessage({ otherValError: "" });
+                      setCheckInputVal(false);
                       saveAllData(data, projectBasedQuestion);
+                      getNextDynamicQuestion(
+                        data.nextQuestion,
+                        data.opt,
+                        projectBasedQuestion
+                      );
+                    } else {
+                      setInputField(!inputField);
                     }
                   }}
                 >
@@ -854,6 +862,8 @@ const page = () => {
                           onChange={(e) => {
                             setFormInput({ otherval: e.target.value });
                           }}
+                          error={checkInputVal}
+                          helperText={errorMessage.otherValError}
                         />
                         <Button
                           variant="contained"
@@ -869,9 +879,10 @@ const page = () => {
                               saveAllData(otherData, projectBasedQuestion);
                               setInputField(false);
                               setFormInput({ otherval: "" });
-                              setErrorMessage({ otherValError: null });
+                              setErrorMessage({ otherValError: "" });
+                              setCheckInputVal(false);
                             } else {
-                              submitOtherVal(inputValue);
+                              submitOtherVal();
                             }
                           }}
                         >
@@ -893,9 +904,15 @@ const page = () => {
                     const additionalQuestion = getPostAdditionalQuestion();
 
                     if (additionalQuestion.typeofselection === "single") {
-                      getNextQuestionFromAdditional(data);
                       if (data.opt !== "Other (Specify)") {
+                        setInputField(false);
+                        setFormInput({ otherval: "" });
+                        setErrorMessage({ otherValError: "" });
+                        setCheckInputVal(false);
                         saveAllData(data, additionalQuestion);
+                        getNextQuestionFromAdditional();
+                      } else {
+                        setInputField(!inputField);
                       }
                     } else {
                       getMultipleValues(data);
@@ -914,6 +931,8 @@ const page = () => {
                           variant="outlined"
                           sx={{ width: "90%" }}
                           onChange={(e) => setInputValue(e.target.value)}
+                          error={checkInputVal}
+                          helperText={errorMessage.otherValError}
                         />
                         <Button
                           variant="contained"
@@ -921,16 +940,17 @@ const page = () => {
                             otherData.price = data.price;
                             otherData.opt = inputValue;
                             if (formInput.otherval !== "") {
+                              setInputField(false);
+                              setFormInput({ otherval: "" });
+                              setErrorMessage({ otherValError: "" });
+                              setCheckInputVal(false);
                               saveAllData(
                                 otherData,
                                 getPostAdditionalQuestion()
                               );
-                              getNextQuestionFromAdditional(inputValue);
-                              setInputField(false);
-                              setFormInput({ otherval: "" });
-                              setErrorMessage({ otherValError: null });
+                              getNextQuestionFromAdditional();
                             } else {
-                              submitOtherVal(inputValue);
+                              submitOtherVal();
                             }
                           }}
                         >
@@ -957,6 +977,7 @@ const page = () => {
                       email: formInput.email,
                     });
                   }}
+                  error={checkInputVal}
                   helperText={errorMessage.usernameError}
                 />
                 <TextField
@@ -972,6 +993,7 @@ const page = () => {
                       email: e.target.value,
                     });
                   }}
+                  error={checkInputVal}
                   helperText={errorMessage.emailError}
                 />
                 <Button

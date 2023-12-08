@@ -54,6 +54,7 @@ const Staff = () => {
     emailError: null,
     otherValError: "",
   });
+  const [checkInputVal, setCheckInputVal] = useState(false);
 
   const [resourcesList, setResourcesList] = useState({});
   const [preState, setPreState] = useState(-1);
@@ -243,9 +244,11 @@ const Staff = () => {
   const submitForm = (formInput) => {
     if (!formInput.userName) {
       setErrorMessage({ usernameError: "Incorrect UserName" });
+      setCheckInputVal(true);
     }
     if (!formInput.email) {
       setErrorMessage({ emailError: "Incorrect Email" });
+      setCheckInputVal(true);
     }
     if (formInput.userName && formInput.email) {
       setResourcesList({
@@ -255,6 +258,7 @@ const Staff = () => {
       });
       setErrorMessage({ usernameError: null, emailError: null });
       setActiveQuestions("Submitted");
+      setCheckInputVal(false);
     }
   };
   const { responses } = resourcesList;
@@ -318,9 +322,11 @@ const Staff = () => {
   const submitOtherVal = (inputVal) => {
     if (!inputVal) {
       setErrorMessage({ otherValError: "Field cannot be empty" });
+      setCheckInputVal(true);
     }
     if (inputVal) {
       setErrorMessage({ otherValError: "" });
+      setCheckInputVal(false);
       setInputField(!inputField);
     }
   };
@@ -627,6 +633,7 @@ const Staff = () => {
                             sx={{ width: "90%" }}
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
+                            error={checkInputVal}
                             helperText={errorMessage.otherValError}
                           />
                           <Button
@@ -637,7 +644,11 @@ const Staff = () => {
                               if (inputValue !== "") {
                                 handleOptions(otherData);
                                 Next();
+
                                 setInputField(false);
+                                setCheckInputVal(false);
+                                setErrorMessage({ otherValError: "" });
+                                setInputValue("");
                               } else {
                                 submitOtherVal(inputValue);
                               }
@@ -670,6 +681,7 @@ const Staff = () => {
                       email: formInput.email,
                     });
                   }}
+                  error={checkInputVal}
                   helperText={errorMessage.usernameError}
                 />
                 <br />
@@ -687,6 +699,7 @@ const Staff = () => {
                       email: e.target.value,
                     });
                   }}
+                  error={checkInputVal}
                   helperText={errorMessage.emailError}
                 />
                 <br />
