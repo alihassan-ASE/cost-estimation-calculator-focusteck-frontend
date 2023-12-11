@@ -20,7 +20,6 @@ export default function VerticalLinearStepper(props) {
   };
 
   useEffect(() => { setActiveStep(responses.length - 1); }, [responses.length]);
-
   return (
     <Box sx={{ maxWidth: 800 }}>
       <Stepper activeStep={activeStep} orientation="vertical">

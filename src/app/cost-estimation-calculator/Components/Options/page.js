@@ -1,8 +1,14 @@
 import React from 'react'
 
-const page = () => {
+const page = (props) => {
+
+  const {options} = props
   return (
-    <div>page</div>
+    <div>
+      {
+        options.map((opt ,key )=> <p key={key}>{opt.opt} ${opt.price}</p>)
+      }
+    </div>
   )
 }
 

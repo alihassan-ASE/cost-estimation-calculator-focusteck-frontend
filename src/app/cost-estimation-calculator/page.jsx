@@ -1,62 +1,21 @@
-'use client'
-import Stepper from './Components/Stepper/page';
-import Responses from '../jsonData/responses';
-import { useState } from 'react';
+"use client"
+import { useRouter } from 'next/navigation'
+import React from 'react'
+const Home = () => {
 
-const question =  {
-  "_id": "6560a181c9f7ceabb2c23853",
-  "question": "What is the preferred monetization model for the mobile app?",
-  "options": [
-    {
-      "opt": "Freemium",
-      "nextQuestion": "",
-      "price": 15
-    },
-    {
-      "opt": "In-app purchases",
-      "nextQuestion": "",
-      "price": 15
-    },
-    {
-      "opt": "Ad-supported",
-      "nextQuestion": "",
-      "price": 15
-    },
-    {
-      "opt": "Paid app",
-      "nextQuestion": "",
-      "price": 15
-    }
-  ],
-  "selectedOption": {
-    "opt": "In-app purchases",
-    "nextQuestion": "",
-    "price": 15
-  },
-  "nextQuestion": "",
-  "label": "monetization model",
-  "state": "Dynamic"
-}
+  const route = useRouter();
 
-const page = () => {
-
-
-  let [actualResponses , setActualResponses]  = useState(Responses);
-
-  const addQestion = ()=>{
-    setActualResponses((prevResponses) => [...prevResponses, question]);
-  }
-  const changeActiveQuestion = (index) => {
-    actualResponses.splice(index);
+  const goToRoute = (param)=>{
+    route.push(param);
   }
 
-  return (
-    <>
-      <Stepper responses={actualResponses} changeActiveQuestion={changeActiveQuestion} />
-      <button onClick={addQestion}>Add Question</button>
 
-    </>
+    return (
+    <div>
+      <button onClick={()=>goToRoute('cost-estimation-calculator/staff')}>Staff</button>
+      <button onClick={()=>goToRoute('cost-estimation-calculator/project')}>Project</button>
+    </div>
   )
 }
 
-export default page;
+export default Home;

@@ -12,8 +12,7 @@ const Home = () => {
 
     return (
     <div>
-      <button onClick={()=>goToRoute('cost-estimation-calculator/staff')}>Staff</button>
-      <button onClick={()=>goToRoute('cost-estimation-calculator/project')}>Project</button>
+      <button onClick={()=>goToRoute('/cost-estimation-calculator')}>Start</button>
     </div>
   )
 }
