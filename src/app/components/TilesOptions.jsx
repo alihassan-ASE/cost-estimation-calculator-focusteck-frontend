@@ -49,7 +49,7 @@ const TilesComponent = ({ responseData, selectedOptionFromChild }) => {
 
   return (
     <Box>
-      {/* <Typography variant="h4">Single Select Tiles</Typography> */}
+      <Typography variant="h6">Single Select Tiles</Typography>
       {responseData.responses[0].options.map((data, index) => (
         <Box sx={{ display: "inline-block", m: 1.5 }} key={index}>
           <CustomButton

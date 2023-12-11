@@ -34,7 +34,7 @@ const ShowOption = () => {
             responseData={responsesData}
             selectedOptionFromChild={selectedOptionFromChild}
           />
-          {/* <DropDownComponent
+          <DropDownComponent
             responseData={responsesData}
             selectedOptionFromChild={selectedOptionFromChild}
           />
@@ -45,7 +45,7 @@ const ShowOption = () => {
           <RadioButtonComponent
             responseData={responsesData}
             selectedOptionFromChild={selectedOptionFromChild}
-          /> */}
+          />
         </>
       ) : style === "MultipleSelectTiles" ? (
         <MultipleComponent

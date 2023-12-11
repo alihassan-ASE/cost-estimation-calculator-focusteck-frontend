@@ -6,7 +6,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Typography
+  Typography,
 } from "@mui/material";
 
 const RadioButtonComponent = ({ responseData, selectedOptionFromChild }) => {

@@ -12,12 +12,12 @@ import {
 const CheckBoxComponent = ({ responseData, selectedOptionFromChild }) => {
   const [selectedFormats, setSelectedFormats] = useState([]);
 
-  // Initialize selectedFormats with the responseData on mount
   useEffect(() => {
     setSelectedFormats(responseData.responses[2].selectedOption || []);
   }, [responseData]);
 
   const handleFormat = (event) => {
+    // console.log("Event: ", event);
     const selectedFormat = responseData.responses[2].options.find(
       (option) => option.opt === event.target.name
     );

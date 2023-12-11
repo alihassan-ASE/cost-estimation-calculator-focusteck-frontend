@@ -1,4 +1,4 @@
-// TODO: unexpected behaviour, need to fix
+// TODO: Styling => need to fix
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -44,21 +44,33 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
-    ].join(","),
-    "&:hover": {
-      backgroundColor: "#0069d9",
-      borderColor: "#0062cc",
-      boxShadow: "none",
-      color: "white",
-    },
-    "&:focus": {
-      backgroundColor: "#0069d9",
-      borderColor: "#0062cc",
-      boxShadow: "none",
-      color: "white",
-    },
+    ],
   },
 }));
+
+const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: "#0069d9",
+    borderColor: "#0062cc",
+    boxShadow: "none",
+    color: "white",
+  },
+  "&:focus": {
+    backgroundColor: "#0069d9",
+    borderColor: "#0062cc",
+    boxShadow: "none",
+    color: "white",
+  },
+  "&.Mui-selected": {
+    backgroundColor: "#0062cc",
+    color: "white",
+  },
+  "&.Mui-selected:hover": {
+    backgroundColor: "#0069d9",
+    color: "white",
+  },
+}));
+
 const MultipleComponent = ({ responseData, selectedOptionFromChild }) => {
   const [selectedFormats, setSelectedFormats] = useState([]);
 
@@ -67,24 +79,10 @@ const MultipleComponent = ({ responseData, selectedOptionFromChild }) => {
   }, [responseData]);
 
   const handleFormat = (event, newFormats) => {
-    const valueToAdd = newFormats[newFormats.length - 1];
-    const isSelected = selectedFormats.some(
-      (selected) =>
-        selected.opt === valueToAdd.opt && selected.price === valueToAdd.price
-    );
+    console.log("New Formats: ", newFormats);
 
-    let updatedSelection = [];
-    if (isSelected) {
-      updatedSelection = selectedFormats.filter(
-        (selected) =>
-          selected.opt !== valueToAdd.opt && selected.price !== valueToAdd.price
-      );
-    } else {
-      updatedSelection = [...newFormats];
-    }
-
-    setSelectedFormats(updatedSelection);
-    selectedOptionFromChild(updatedSelection);
+    setSelectedFormats(newFormats);
+    selectedOptionFromChild(newFormats);
   };
 
   const checkSelectedOption = (value, price) => {
@@ -95,45 +93,47 @@ const MultipleComponent = ({ responseData, selectedOptionFromChild }) => {
 
   return (
     <Box>
-      {/* <Typography variant="h4">Tiles Multi Select</Typography> */}
+      <Typography variant="h6">Tiles Multi Select</Typography>
       <StyledToggleButtonGroup
         value={selectedFormats}
-        onChange={handleFormat}
+        // onChange={handleFormat}
         sx={{ display: "flex", flexWrap: "wrap" }}
       >
         {responseData.responses[1].options.map((data, index) => (
-          <ToggleButton
+          <StyleToggleButton
             key={index}
             value={data}
             selected={checkSelectedOption(data.opt, data.price)}
-            onClick={(event) => {
-              const valueToAdd = event.currentTarget.value;
+            onClick={() => {
               const isSelected = checkSelectedOption(data.opt, data.price);
-
               let updatedSelection = [];
+
               if (isSelected) {
+                console.log("In if => Selected Formats: ", selectedFormats);
                 updatedSelection = selectedFormats.filter(
                   (selected) =>
-                    selected.opt !== valueToAdd.opt ||
-                    selected.price !== valueToAdd.price
+                    selected.opt !== data.opt || selected.price !== data.price
                 );
               } else {
-                updatedSelection = [...selectedFormats, valueToAdd];
+                console.log("In else");
+                updatedSelection = [...selectedFormats, data];
               }
 
-              setSelectedFormats(updatedSelection);
-              selectedOptionFromChild(updatedSelection);
+              console.log("Updated Selection: ", updatedSelection);
+              handleFormat(null, updatedSelection);
             }}
             sx={{
               m: 1.5,
               backgroundColor: checkSelectedOption(data.opt, data.price)
-                ? { backgroundColor: "#0062cc", color: "white" }
-                : null,
-              color: checkSelectedOption(data.opt, data.price) ? "white" : null,
+                ? "#0069d9"
+                : "none",
+              color: checkSelectedOption(data.opt, data.price)
+                ? "white"
+                : "black",
             }}
           >
             {data.opt} ({data.price} $)
-          </ToggleButton>
+          </StyleToggleButton>
         ))}
       </StyledToggleButtonGroup>
     </Box>
