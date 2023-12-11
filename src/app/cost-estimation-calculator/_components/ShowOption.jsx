@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import responsesData from "../../../data/responsesData.json";
+import React from "react";
 import { Button, Box, Typography } from "@mui/material";
 
 import TilesComponent from "./TilesOptions";
@@ -10,62 +9,61 @@ import DropDownComponent from "./DropDownOptions";
 import RadioButtonComponent from "./RadioButtonOptions";
 
 // Show Options will get options Array, selected option Array, and the Style of the Component
-const ShowOption = () => {
-  const [options, setOptions] = useState([]);
-
-  const selectedOptionFromChild = (data) => {
-    setOptions([data]);
-  };
-
-  console.log("Selected Option State Val: ", options);
-  let style = "Tiles";
+const ShowOption = ({
+  options,
+  selectedOption,
+  selectedOptionPassToParent,
+}) => {
+  let style = "DropDown";
   return (
     <Box>
-      <Typography variant="body1" style={{ fontSize: 15 }}>
+      <Typography variant="body1" style={{ fontSize: 15, margin: "2em 0" }}>
         Please choose one from the options below
       </Typography>
+
       {style === "Tiles" ? (
         <>
           <TilesComponent
-            responseData={responsesData}
-            selectedOptionFromChild={selectedOptionFromChild}
+            options={options}
+            selectedOption={selectedOption}
+            selectedOptionPassToParent={selectedOptionPassToParent}
           />
-          <MultipleComponent
+          {/* <MultipleComponent
             responseData={responsesData}
-            selectedOptionFromChild={selectedOptionFromChild}
+            selectedOptionPassToParent={selectedOptionPassToParent}
           />
           <DropDownComponent
             responseData={responsesData}
-            selectedOptionFromChild={selectedOptionFromChild}
+            selectedOptionPassToParent={selectedOptionPassToParent}
           />
           <CheckBoxComponent
             responseData={responsesData}
-            selectedOptionFromChild={selectedOptionFromChild}
+            selectedOptionPassToParent={selectedOptionPassToParent}
           />
           <RadioButtonComponent
             responseData={responsesData}
-            selectedOptionFromChild={selectedOptionFromChild}
-          />
+            selectedOptionPassToParent={selectedOptionPassToParent}
+          /> */}
         </>
       ) : style === "MultipleSelectTiles" ? (
         <MultipleComponent
           responseData={responsesData}
-          selectedOptionFromChild={selectedOptionFromChild}
+          selectedOptionPassToParent={selectedOptionPassToParent}
         />
       ) : style === "DropDown" ? (
         <DropDownComponent
           responseData={responsesData}
-          selectedOptionFromChild={selectedOptionFromChild}
+          selectedOptionPassToParent={selectedOptionPassToParent}
         />
       ) : style === "CheckBox" ? (
         <CheckBoxComponent
           responseData={responsesData}
-          selectedOptionFromChild={selectedOptionFromChild}
+          selectedOptionPassToParent={selectedOptionPassToParent}
         />
       ) : style === "Radio" ? (
         <RadioButtonComponent
           responseData={responsesData}
-          selectedOptionFromChild={selectedOptionFromChild}
+          selectedOptionPassToParent={selectedOptionPassToParent}
         />
       ) : null}
     </Box>

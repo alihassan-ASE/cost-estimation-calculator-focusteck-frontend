@@ -39,9 +39,9 @@ const CustomButton = styled(Button)({
   },
 });
 
-const TilesComponent = ({ responseData, selectedOptionFromChild }) => {
+const TilesComponent = ({ selectedOption, selectedOptionPassToParent }) => {
   const checkSelectedOption = (value, price) => {
-    const res = responseData.responses[0].selectedOption.find(
+    const res = selectedOption.find(
       (data) => data.opt === value && data.price === price
     );
     return !!res;
@@ -54,8 +54,8 @@ const TilesComponent = ({ responseData, selectedOptionFromChild }) => {
         <Box sx={{ display: "inline-block", m: 1.5 }} key={index}>
           <CustomButton
             onClick={() => {
-              selectedOptionFromChild(data);
-              responseData.responses[0].selectedOption[0] = data;
+              selectedOptionPassToParent(data);
+              selectedOption[0] = data;
             }}
             sx={
               checkSelectedOption(data.opt, data.price)

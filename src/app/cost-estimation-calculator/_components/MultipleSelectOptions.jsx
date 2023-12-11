@@ -54,12 +54,8 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
     borderColor: "#0062cc",
     boxShadow: "none",
     color: "white",
-  },
-  "&:focus": {
-    backgroundColor: "#0069d9",
-    borderColor: "#0062cc",
-    boxShadow: "none",
-    color: "white",
+    transition:
+      "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
   },
   "&.Mui-selected": {
     backgroundColor: "#0062cc",
@@ -71,7 +67,7 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
 }));
 
-const MultipleComponent = ({ responseData, selectedOptionFromChild }) => {
+const MultipleComponent = ({ responseData, selectedOptionPassToParent }) => {
   const [selectedFormats, setSelectedFormats] = useState([]);
 
   useEffect(() => {
@@ -79,10 +75,10 @@ const MultipleComponent = ({ responseData, selectedOptionFromChild }) => {
   }, [responseData]);
 
   const handleFormat = (event, newFormats) => {
-    console.log("New Formats: ", newFormats);
+    // console.log("New Formats: ", newFormats);
 
     setSelectedFormats(newFormats);
-    selectedOptionFromChild(newFormats);
+    selectedOptionPassToParent(newFormats);
   };
 
   const checkSelectedOption = (value, price) => {
@@ -109,28 +105,28 @@ const MultipleComponent = ({ responseData, selectedOptionFromChild }) => {
               let updatedSelection = [];
 
               if (isSelected) {
-                console.log("In if => Selected Formats: ", selectedFormats);
+                // console.log("In if => Selected Formats: ", selectedFormats);
                 updatedSelection = selectedFormats.filter(
                   (selected) =>
                     selected.opt !== data.opt || selected.price !== data.price
                 );
               } else {
-                console.log("In else");
+                // console.log("In else");
                 updatedSelection = [...selectedFormats, data];
               }
 
-              console.log("Updated Selection: ", updatedSelection);
+              // console.log("Updated Selection: ", updatedSelection);
               handleFormat(null, updatedSelection);
             }}
-            sx={{
-              m: 1.5,
-              backgroundColor: checkSelectedOption(data.opt, data.price)
-                ? "#0069d9"
-                : "none",
-              color: checkSelectedOption(data.opt, data.price)
-                ? "white"
-                : "black",
-            }}
+            // sx={{
+            //   m: 1.5,
+            //   backgroundColor: checkSelectedOption(data.opt, data.price)
+            //     ? "#0069d9"
+            //     : "none",
+            //   color: checkSelectedOption(data.opt, data.price)
+            //     ? "white"
+            //     : "black",
+            // }}
           >
             {data.opt} ({data.price} $)
           </StyleToggleButton>

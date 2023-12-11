@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const RadioButtonComponent = ({ responseData, selectedOptionFromChild }) => {
+const RadioButtonComponent = ({ responseData, selectedOptionPassToParent }) => {
   const [selectedFormat, setSelectedFormat] = useState("");
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const RadioButtonComponent = ({ responseData, selectedOptionFromChild }) => {
       (data) => data.opt === selectedOpt
     );
     setSelectedFormat(selectedData);
-    selectedOptionFromChild([selectedData]);
+    selectedOptionPassToParent([selectedData]);
   };
 
   const checkSelectedOption = (value) => {

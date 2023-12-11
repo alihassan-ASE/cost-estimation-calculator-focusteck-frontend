@@ -9,7 +9,7 @@ import {
   FormGroup,
 } from "@mui/material";
 
-const CheckBoxComponent = ({ responseData, selectedOptionFromChild }) => {
+const CheckBoxComponent = ({ responseData, selectedOptionPassToParent }) => {
   const [selectedFormats, setSelectedFormats] = useState([]);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const CheckBoxComponent = ({ responseData, selectedOptionFromChild }) => {
     }
 
     setSelectedFormats(updatedFormats);
-    selectedOptionFromChild(updatedFormats);
+    selectedOptionPassToParent(updatedFormats);
   };
 
   const isChecked = (opt, price) => {
