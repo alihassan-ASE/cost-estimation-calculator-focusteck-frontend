@@ -1,7 +1,7 @@
 'use client'
 // last code
 import Stepper from '../Components/Stepper/page';
-import Responses from '../../jsonData/responses';
+// import Responses from '../../jsonData/responses';
 import Question from '../Components/Question/page';
 import { getQuestions, getDynamicQuestion } from '@/app/lib/api/getProjectQuestions';
 import { useState, useEffect } from 'react';
@@ -11,12 +11,17 @@ const page = () => {
   const [fetchQuestions, setFetchQuestions] = useState(null);
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [dynamicQuestion, setDynamicQuestion] = useState([]);
-  const [dynamicQuestionIds, setDynamicQuestionIds] = useState([]);
-  const [currentDynamicQuestionIndex, setCurrentDynamicQuestionIndex] = useState(0);
+  const [dynamicQuestionId, setDynamicQuestionId] = useState();
   const [postProjectQuestions, setPostQuestion] = useState([]);
-  const [actualResponses, setActualResponses] = useState(Responses);
+  const [actualResponses, setActualResponses] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [dynamicQuestionsIterated, setDynamicQuestionsIterated] = useState(false);
+  const [postQuestionIndex, setPostQuestionIndex] = useState(0);
   const [question, setQuestion] = useState(null);
+
+  const [handleButton, setHandleButton] = useState(false)
+
+
 
 
   useEffect(() => {
@@ -26,6 +31,7 @@ const page = () => {
           setFetchQuestions(data);
           setPreQuestion(data.preProjectQuestion);
           setPostQuestion(data.postProjectQuestion);
+          setQuestion(data.preProjectQuestion[currentQuestionIndex]);
         })
         .catch(error => {
           console.error('Error fetching questions:', error);
@@ -39,57 +45,145 @@ const page = () => {
 
   useEffect(() => {
     const fetchDynamicQuestion = async () => {
-      const dynamic = await getDynamicQuestion();
-      setDynamicQuestion(dynamic)
-    }
+
+      try {
+        const dynamic = await getDynamicQuestion(dynamicQuestionId);
+        setDynamicQuestion(dynamic);
+        // Rest of your logic based on dynamic question data
+      } catch (error) {
+        console.error('Error fetching dynamic question:', error);
+        // Handle errors here (e.g., set an error state)
+      }
+
+    };
+
     fetchDynamicQuestion();
-  }, [dynamicQuestionIds, currentDynamicQuestionIndex]);
+  }, [dynamicQuestionId]);
 
 
 
-  // setting first pre question to Question state
-  if (fetchQuestions !== null && currentQuestionIndex == 0) {
+  const changeActiveQuestion = (obj) => {
 
-    setQuestion(preProjectQuestions[currentQuestionIndex]);
-    setCurrentQuestionIndex(1)
+    const { index, step } = obj;
+    let Index;
+    let postQuestion;
+
+    postProjectQuestions.map((ques, i) => {
+
+      if (ques.question === step.question) {
+        Index = i;
+        postQuestion = ques;
+
+      }
+    })
+
+    if (index <= preProjectQuestions.length) {
+      setCurrentQuestionIndex(index - 1);
+      setQuestion(step);
+    }
+    else if (postQuestion !== undefined) {
+      console.log("Post Question", postQuestion)
+      setQuestion(postQuestion);
+      setPostQuestionIndex(Index + 1);
+
+    }
+    else {
+      setPostQuestionIndex(0)
+      setQuestion(step)
+    }
+    actualResponses.splice(index - 1);
+  }
+
+  // Getting Id of Dynamic Question from child
+  const getDynamicQuestionId = async (id) => {
+    
+    setDynamicQuestionId(id);
 
 
   }
 
-  const addQestion = () => {
-    setActualResponses((prevResponses) => [...prevResponses, quest]);
-  }
+  const getResponsesData = (obj) => {
+    if (obj.length > 0) {
+      question.selectedOption = obj;
+      setHandleButton(true)
+    }
 
-  const changeActiveQuestion = (index) => {
-    actualResponses.splice(index);
-  }
-
-  const getDynamicQuestionId = (id) => {
-    console.log("first")
   }
 
   const handleNextQuestion = () => {
 
-    if (currentQuestionIndex < preProjectQuestions.length) {
+    setActualResponses((prev) => [...prev, question]);
+    setHandleButton(false);
+
+    if (currentQuestionIndex < preProjectQuestions.length - 1) {
       // Send preProjectQuestions one by one
-      setQuestion(preProjectQuestions[currentQuestionIndex]);
-    } else if (
-      currentQuestionIndex >= preProjectQuestions.length
-    ) {
-      // Send dynamicQuestions one by one  
-      setQuestion(dynamicQuestion);
-      console.log("Dynamic", dynamicQuestion._id)
+      setQuestion(preProjectQuestions[currentQuestionIndex + 1]);
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+
+      if (currentQuestionIndex == preProjectQuestions.length - 1) {
+        setDynamicQuestionsIterated(true);
+      }
     }
     else if (
-      currentQuestionIndex >= preProjectQuestions.length + dynamicQuestion.length &&
-      currentQuestionIndex < preProjectQuestions.length + dynamicQuestion.length + postProjectQuestions.length
+      currentQuestionIndex >= preProjectQuestions.length - 1
     ) {
-      // Send postProjectQuestions one by one
-      const postIndex = currentQuestionIndex - preProjectQuestions.length - dynamicQuestion.length;
-      setQuestion(postProjectQuestions[postIndex]);
-    }
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+      console.log(currentQuestionIndex)
+      console.log(dynamicQuestion)
+      setQuestion(dynamicQuestion);
 
+      if (actualResponses.length > preProjectQuestions.length && dynamicQuestionId == "") {
+
+        setQuestion(postProjectQuestions[postQuestionIndex]);
+        setPostQuestionIndex(postQuestionIndex + 1);
+
+      }
+
+    }
+
+  };
+
+  const handleBackQuestion = () => {
+
+
+    if (currentQuestionIndex > 0) {
+
+      if (currentQuestionIndex < preProjectQuestions.length && actualResponses.length <= preProjectQuestions.length) {
+
+        if (actualResponses.length == preProjectQuestions.length) {
+          const prevQuestion = preProjectQuestions[currentQuestionIndex]
+          setCurrentQuestionIndex(currentQuestionIndex)
+          setQuestion(prevQuestion);
+          setDynamicQuestionsIterated(false)
+        }
+        else {
+
+          const prevQuestion = preProjectQuestions[currentQuestionIndex - 1]
+          setCurrentQuestionIndex(currentQuestionIndex - 1)
+          setQuestion(prevQuestion);
+        }
+        actualResponses.pop();
+
+
+      } else if (actualResponses.length > preProjectQuestions.length && dynamicQuestionsIterated == true) {
+
+        const prevDynamic = actualResponses.pop();
+        setQuestion(prevDynamic)
+        if (actualResponses.length == preProjectQuestions.length) {
+          setDynamicQuestionsIterated(false);
+        }
+      }
+      else if (postQuestionIndex > 0) {
+        const prevPostQuestion = actualResponses.pop();
+        setQuestion(prevPostQuestion);
+        setPostQuestionIndex(postQuestionIndex - 1);
+
+      }
+      else if (postQuestionIndex === 0 && dynamicQuestionsIterated == false) {
+        const prevPostQuestion = actualResponses.pop();
+        setQuestion(prevPostQuestion);
+        setDynamicQuestionsIterated(true)
+      }
+    }
   };
 
 
@@ -100,21 +194,19 @@ const page = () => {
           <div>
             <div className='flex w-full h-screen justify-between items-center'>
               <div>
-                <Question question={question} questionId={getDynamicQuestionId} />
+                <Question question={question} questionId={getDynamicQuestionId} responsesData={getResponsesData} />
               </div>
               <div>
                 <Stepper responses={actualResponses} changeActiveQuestion={changeActiveQuestion} />
               </div>
             </div>
             <div>
-              <button>Back</button>
-              <button onClick={handleNextQuestion}>Next</button>
+              <button onClick={handleBackQuestion}>Back</button>
+              <button disabled={!handleButton} onClick={handleNextQuestion}>Next</button>
             </div>
           </div> :
           <div>Loading .....</div>
       }
-      <button onClick={addQestion}>Add Question</button>
-
     </>
   )
 }

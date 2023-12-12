@@ -13,22 +13,24 @@ export default function VerticalLinearStepper(props) {
   const { responses, changeActiveQuestion } = props;
   const leng = responses.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
+
   const handleStep = (step, index) => {
-    changeActiveQuestion(index)
+    changeActiveQuestion({step , index})
     setActiveStep(index - 1);
     console.log({ step, index })
   };
 
-  useEffect(() => { setActiveStep(responses.length - 1); }, [responses.length]);
+  useEffect(() => { setActiveStep(responses.length + 1); }, [responses.length]);
   return (
     <Box sx={{ maxWidth: 800 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {responses.map((step, index) => (
           <Step key={step._id}>
-            <StepLabel cursor="pointer" onClick={() => handleStep(step, index + 1)}>{step.label.toUpperCase()} <Typography fontSize={"12px"} color={"gray"}> {step.selectedOption.opt}  (${step.selectedOption.price})</Typography></StepLabel>
-            <StepContent>
-              <Typography></Typography>
-            </StepContent>
+           {
+            step.selectedOption.map((selected , key)=>(
+              <StepLabel key={key} cursor="pointer" onClick={() => handleStep(step, index + 1)}>{step.label.toUpperCase()} <Typography fontSize={"12px"} color={"gray"}> {selected.opt}  (${selected.price})</Typography></StepLabel>
+            ))
+           }
           </Step>
         ))}
       </Stepper>

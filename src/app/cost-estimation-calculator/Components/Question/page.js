@@ -1,14 +1,45 @@
-import React from 'react'
-import Option from "../Options/page";
+import React, { useEffect, useState } from 'react'
+import ShowOptions from "../ShowOption";
 const page = (props) => {
+  let { question, questionId, responsesData } = props;
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
 
-  let {question} = props;
-  console.log("Fetched Questions" , question)
+  console.log("Question", question)
+  const [selectedData, setSelectedData] = useState([]);
+  const selectedOptionPassToParent = (data) => {
+    setSelectedData([data]);
+  };
+
+
+
+  useEffect(() => {
+    if (selectedData) {
+      responsesData(selectedData);
+    }
+  }, [selectedData])
+
+
+  selectedData.forEach(data => {
+    const { nextQuestion } = data;
+    console.log(data)
+    if (nextQuestion) {
+      questionId(nextQuestion);
+    }
+    else if (question.nextQuestion) {
+      questionId(question.nextQuestion)
+    }
+    else {
+      questionId("")
+    }
+
+  });
+
   return (
     <div>
       <h1>{question.question}</h1>
-      <Option options = {question.options}/>
-    
+      <ShowOptions options={question.options} selectedOptionPassToParent={selectedOptionPassToParent} selectedOption={selectedOption} />
+
     </div>
   )
 }
