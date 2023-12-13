@@ -9,16 +9,20 @@ import {
   FormGroup,
 } from "@mui/material";
 
-const CheckBoxComponent = ({ responseData, selectedOptionPassToParent }) => {
+const CheckBoxComponent = ({
+  options,
+  selectedOption,
+  selectedOptionPassToParent,
+}) => {
   const [selectedFormats, setSelectedFormats] = useState([]);
 
   useEffect(() => {
-    setSelectedFormats(responseData.responses[2].selectedOption || []);
+    setSelectedFormats(selectedOption || []);
   }, [responseData]);
 
   const handleFormat = (event) => {
     // console.log("Event: ", event);
-    const selectedFormat = responseData.responses[2].options.find(
+    const selectedFormat = options.find(
       (option) => option.opt === event.target.name
     );
 
@@ -50,7 +54,7 @@ const CheckBoxComponent = ({ responseData, selectedOptionPassToParent }) => {
       <FormControl>
         <FormLabel id="demo-radio-buttons-group-label">CheckBoxes</FormLabel>
         <FormGroup>
-          {responseData.responses[2].options.map((data, index) => (
+          {options.map((data, index) => (
             <FormControlLabel
               key={index}
               control={

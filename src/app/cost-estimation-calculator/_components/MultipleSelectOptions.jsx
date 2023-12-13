@@ -67,11 +67,15 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
 }));
 
-const MultipleComponent = ({ responseData, selectedOptionPassToParent }) => {
+const MultipleComponent = ({
+  options,
+  selectedOption,
+  selectedOptionPassToParent,
+}) => {
   const [selectedFormats, setSelectedFormats] = useState([]);
 
   useEffect(() => {
-    setSelectedFormats(responseData.responses[1].selectedOption || []);
+    setSelectedFormats(selectedOption || []);
   }, [responseData]);
 
   const handleFormat = (event, newFormats) => {
@@ -95,7 +99,7 @@ const MultipleComponent = ({ responseData, selectedOptionPassToParent }) => {
         // onChange={handleFormat}
         sx={{ display: "flex", flexWrap: "wrap" }}
       >
-        {responseData.responses[1].options.map((data, index) => (
+        {options.map((data, index) => (
           <StyleToggleButton
             key={index}
             value={data}

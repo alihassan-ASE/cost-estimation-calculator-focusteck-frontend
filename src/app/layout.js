@@ -1,14 +1,17 @@
 "use client";
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import {
+  BottomNavigation,
+  InputBase,
+  Typography,
+  Toolbar,
+  Box,
+  Button,
+  AppBar,
+} from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -55,64 +58,106 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        {/* <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
+      <body style={{ margin: "0" }}>
+        <Box
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <AppBar
+            position="static"
+            sx={{ color: "#000", backgroundColor: "#fff" }}
+          >
             <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                sx={{ mr: 2 }}
-              >
-                <MenuIcon />
-              </IconButton>
               <Typography
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+                sx={{ flexGrow: 1, color: "#0069d9", fontWeight: 500 }}
               >
                 Cost Estimation Calculator
               </Typography>
-
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              <Button
+                sx={{
+                  flexGrow: 1,
+                  fontSize: 13,
+                  display: { xs: "none", md: "none", lg: "block" },
+                  my: 2,
+                  color: "#000",
+                  display: "block",
+                }}
               >
                 About Us
-              </Typography>
-
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              </Button>
+              <Button
+                sx={{
+                  flexGrow: 1,
+                  fontSize: 13,
+                  display: { xs: "none", md: "none", lg: "block" },
+                  my: 2,
+                  color: "#000",
+                  display: "block",
+                }}
               >
                 Services
-              </Typography>
-
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              </Button>
+              <Button
+                sx={{
+                  flexGrow: 1,
+                  fontSize: 13,
+                  display: { xs: "none", md: "none", lg: "block" },
+                  my: 2,
+                  color: "#000",
+                  display: "block",
+                }}
               >
-                Industries and Expertise
-              </Typography>
-
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+                Industries & Expertise
+              </Button>
+              <Button
+                sx={{
+                  flexGrow: 1,
+                  fontSize: 13,
+                  display: { xs: "none", md: "none", lg: "block" },
+                  my: 2,
+                  color: "#000",
+                  display: "block",
+                }}
               >
                 Clients
-              </Typography>
-              <Search>
+              </Button>
+              <Button
+                sx={{
+                  flexGrow: 1,
+                  fontSize: 13,
+                  display: { xs: "none", md: "none", lg: "block" },
+                  my: 2,
+                  color: "#000",
+                  display: "block",
+                }}
+              >
+                Blog
+              </Button>
+              <Button
+                sx={{
+                  flexGrow: 1,
+                  fontSize: 13,
+                  display: { xs: "none", md: "none", lg: "block" },
+                  my: 2,
+                  color: "#000",
+                  display: "block",
+                }}
+              >
+                Pricing
+              </Button>
+              <Search
+                sx={{
+                  display: { xs: "none", sm: "block" },
+                  backgroundColor: "#dfdfdf",
+                  border: "1px solid #dfdfdf",
+                }}
+              >
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
@@ -123,8 +168,38 @@ export default function RootLayout({ children }) {
               </Search>
             </Toolbar>
           </AppBar>
-        </Box> */}
-        {children}
+          <Box sx={{ flexGrow: 1, padding: "0 1em" }}>{children}</Box>
+          <BottomNavigation
+            sx={{
+              flexShrink: 0,
+              padding: ".5em 2em",
+              boxShadow: "-3px -3px 9px rgba(0, 0, 0, 0.2)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="body1" sx={{ fontSize: 13 }}>
+              © Focusteck, All rights reserved
+            </Typography>
+            <Box
+              sx={{
+                gap: "2em",
+                display: { xs: "none", sm: "flex" },
+              }}
+            >
+              <Typography variant="body1" sx={{ fontSize: 13 }}>
+                Privacy Policy
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: 13 }}>
+                Terms of use
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: 13 }}>
+                Site Map
+              </Typography>
+            </Box>
+          </BottomNavigation>
+        </Box>
       </body>
     </html>
   );

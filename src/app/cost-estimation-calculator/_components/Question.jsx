@@ -7,18 +7,20 @@ import ShowOption from "@/app/cost-estimation-calculator/_components/ShowOption"
 const QuestionsComponent = ({
   question,
   options,
+  label,
   selectedOption,
-  selectedOptionPassToParent,
+  getData,
 }) => {
   return (
     <Box>
-      <Typography variant="h4" mb={2}>
+      {/* <Typography variant="h4" mb={2}>
         {question}
-      </Typography>
+      </Typography> */}
       <ShowOption
         options={options}
         selectedOption={selectedOption}
-        selectedOptionPassToParent={selectedOptionPassToParent}
+        getData={getData}
+        label={label}
       />
     </Box>
   );

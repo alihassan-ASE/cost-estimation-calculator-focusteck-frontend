@@ -9,20 +9,22 @@ import {
   Typography,
 } from "@mui/material";
 
-const RadioButtonComponent = ({ responseData, selectedOptionPassToParent }) => {
+const RadioButtonComponent = ({
+  options,
+  selectedOption,
+  selectedOptionPassToParent,
+}) => {
   const [selectedFormat, setSelectedFormat] = useState("");
 
   useEffect(() => {
-    if (responseData.responses[3].selectedOption.length > 0) {
-      setSelectedFormat(responseData.responses[3].selectedOption[0]);
+    if (selectedOption.length > 0) {
+      setSelectedFormat(selectedOption[0]);
     }
   }, [responseData]);
 
   const handleFormat = (event) => {
     const selectedOpt = event.target.value;
-    const selectedData = responseData.responses[3].options.find(
-      (data) => data.opt === selectedOpt
-    );
+    const selectedData = options.find((data) => data.opt === selectedOpt);
     setSelectedFormat(selectedData);
     selectedOptionPassToParent([selectedData]);
   };
@@ -46,7 +48,7 @@ const RadioButtonComponent = ({ responseData, selectedOptionPassToParent }) => {
           onChange={handleFormat}
           name="radio-buttons-group"
         >
-          {responseData.responses[3].options.map((data, index) => (
+          {options.map((data, index) => (
             <FormControlLabel
               key={index}
               value={data.opt}
