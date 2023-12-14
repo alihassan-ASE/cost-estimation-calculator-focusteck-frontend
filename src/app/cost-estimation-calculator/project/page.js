@@ -1,25 +1,28 @@
 'use client'
-// last code
 import Stepper from '../Components/Stepper/page';
-// import Responses from '../../jsonData/responses';
 import Question from '../Components/Question/page';
 import { getQuestions, getDynamicQuestion } from '@/app/lib/api/getProjectQuestions';
 import { useState, useEffect } from 'react';
+import { ClickAwayListener } from '@mui/material';
 
 const page = () => {
 
-  const [fetchQuestions, setFetchQuestions] = useState(null);
   const [preProjectQuestions, setPreQuestion] = useState([]);
-  const [dynamicQuestion, setDynamicQuestion] = useState([]);
-  const [dynamicQuestionId, setDynamicQuestionId] = useState();
   const [postProjectQuestions, setPostQuestion] = useState([]);
-  const [actualResponses, setActualResponses] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [dynamicQuestionsIterated, setDynamicQuestionsIterated] = useState(false);
-  const [postQuestionIndex, setPostQuestionIndex] = useState(0);
-  const [question, setQuestion] = useState(null);
 
-  const [handleButton, setHandleButton] = useState(false)
+  const [currentState, setCurrentState] = useState("pre");
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  const [selectedOption, setSelectedOption] = useState();
+  const [selectedData, setSelectedData] = useState();
+  const [fetchQuesitons, setFetchQuestions] = useState(null);
+  const [actualResponses, setActualResponses] = useState([]);
+  const [questionsToShow, setQuestionsToShow] = useState([]);
+
+  const [totalCost, setTotalCost] = useState(0);
+
+
 
 
 
@@ -30,8 +33,9 @@ const page = () => {
         .then(data => {
           setFetchQuestions(data);
           setPreQuestion(data.preProjectQuestion);
+          setCurrentQuestion(data.preProjectQuestion[currentQuestionIndex]);
           setPostQuestion(data.postProjectQuestion);
-          setQuestion(data.preProjectQuestion[currentQuestionIndex]);
+          // setQuestion(data.preProjectQuestion[currentQuestionIndex]);
         })
         .catch(error => {
           console.error('Error fetching questions:', error);
@@ -43,166 +47,188 @@ const page = () => {
   }, []);
 
 
-  useEffect(() => {
-    const fetchDynamicQuestion = async () => {
 
-      try {
-        const dynamic = await getDynamicQuestion(dynamicQuestionId);
-        setDynamicQuestion(dynamic);
-        // Rest of your logic based on dynamic question data
-      } catch (error) {
-        console.error('Error fetching dynamic question:', error);
-        // Handle errors here (e.g., set an error state)
-      }
+  // getting Response from child Component
+  const getResponsesData = (resp) => {
 
-    };
-
-    fetchDynamicQuestion();
-  }, [dynamicQuestionId]);
+    setSelectedData(resp.selectedData)
+    setSelectedOption(resp.nextQuestion);
+  }
 
 
+  // setting Response in actual Array
+  const setResponseData = () => {
 
-  const changeActiveQuestion = (obj) => {
+    const dataObj = {}
+    dataObj.selectedOption = selectedData;
+    dataObj.question = currentQuestion;
+    dataObj.state = currentState
+    dataObj.index = currentQuestionIndex
+    setActualResponses((prev) => [...prev, dataObj]);
+  }
 
-    const { index, step } = obj;
-    let Index;
-    let postQuestion;
 
-    postProjectQuestions.map((ques, i) => {
+  // Handling Back Quesiton Functionality
+  const backQuestion = () => {
+    let cost = 0;
+    let newResponse = [...actualResponses];
+    let lastQuestion = newResponse.pop();
+    console.log("Last Question", lastQuestion);
+    setCurrentQuestion(lastQuestion.question);
+    setCurrentState(lastQuestion.state);
+    setActualResponses(newResponse);
+    setCurrentQuestionIndex(lastQuestion.index)
 
-      if (ques.question === step.question) {
-        Index = i;
-        postQuestion = ques;
-
-      }
+    lastQuestion.selectedOption.map((op) => {
+      cost = op.price;
     })
-
-    if (index <= preProjectQuestions.length) {
-      setCurrentQuestionIndex(index - 1);
-      setQuestion(step);
-    }
-    else if (postQuestion !== undefined) {
-      console.log("Post Question", postQuestion)
-      setQuestion(postQuestion);
-      setPostQuestionIndex(Index + 1);
-
-    }
-    else {
-      setPostQuestionIndex(0)
-      setQuestion(step)
-    }
-    actualResponses.splice(index - 1);
-  }
-
-  // Getting Id of Dynamic Question from child
-  const getDynamicQuestionId = async (id) => {
-    
-    setDynamicQuestionId(id);
-
+    handlePrice("back", cost)
 
   }
 
-  const getResponsesData = (obj) => {
-    if (obj.length > 0) {
-      question.selectedOption = obj;
-      setHandleButton(true)
-    }
 
-  }
+  // Handling Next Question
+  const nextQuestion = async () => {
 
-  const handleNextQuestion = () => {
+    let currentStateLocal = currentState;
+    let currentQuestionLocal = currentQuestion;
+    let currentQuestionIndexLocal = currentQuestionIndex;
+    let questionsToShowLocal = questionsToShow;
+    let cost = 0;
 
-    setActualResponses((prev) => [...prev, question]);
-    setHandleButton(false);
+    switch (currentStateLocal) {
+      case "pre": {
 
-    if (currentQuestionIndex < preProjectQuestions.length - 1) {
-      // Send preProjectQuestions one by one
-      setQuestion(preProjectQuestions[currentQuestionIndex + 1]);
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-
-      if (currentQuestionIndex == preProjectQuestions.length - 1) {
-        setDynamicQuestionsIterated(true);
-      }
-    }
-    else if (
-      currentQuestionIndex >= preProjectQuestions.length - 1
-    ) {
-      console.log(currentQuestionIndex)
-      console.log(dynamicQuestion)
-      setQuestion(dynamicQuestion);
-
-      if (actualResponses.length > preProjectQuestions.length && dynamicQuestionId == "") {
-
-        setQuestion(postProjectQuestions[postQuestionIndex]);
-        setPostQuestionIndex(postQuestionIndex + 1);
-
-      }
-
-    }
-
-  };
-
-  const handleBackQuestion = () => {
-
-
-    if (currentQuestionIndex > 0) {
-
-      if (currentQuestionIndex < preProjectQuestions.length && actualResponses.length <= preProjectQuestions.length) {
-
-        if (actualResponses.length == preProjectQuestions.length) {
-          const prevQuestion = preProjectQuestions[currentQuestionIndex]
-          setCurrentQuestionIndex(currentQuestionIndex)
-          setQuestion(prevQuestion);
-          setDynamicQuestionsIterated(false)
+        if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
+          currentStateLocal = "dynamic";
+          currentQuestionLocal = null;
+          currentQuestionIndexLocal = 0;
         }
         else {
-
-          const prevQuestion = preProjectQuestions[currentQuestionIndex - 1]
-          setCurrentQuestionIndex(currentQuestionIndex - 1)
-          setQuestion(prevQuestion);
+          currentQuestionLocal = preProjectQuestions[currentQuestionIndexLocal + 1];
+          currentQuestionIndexLocal++;
         }
-        actualResponses.pop();
-
-
-      } else if (actualResponses.length > preProjectQuestions.length && dynamicQuestionsIterated == true) {
-
-        const prevDynamic = actualResponses.pop();
-        setQuestion(prevDynamic)
-        if (actualResponses.length == preProjectQuestions.length) {
-          setDynamicQuestionsIterated(false);
+        if (currentQuestionLocal) {
+          break;
         }
       }
-      else if (postQuestionIndex > 0) {
-        const prevPostQuestion = actualResponses.pop();
-        setQuestion(prevPostQuestion);
-        setPostQuestionIndex(postQuestionIndex - 1);
-
+      case "dynamic": {
+        if (!currentQuestionLocal) {
+          currentQuestionLocal = await getDynamicQuestion();
+        }
+        else if (currentQuestionLocal) {
+          if (Array.isArray(selectedOption)) {
+            questionsToShowLocal.push(...selectedOption);
+          }
+          else {
+            if (selectedOption) {
+              questionsToShowLocal.push(selectedOption);
+            }
+          }
+          if (questionsToShowLocal.length) {
+            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
+          }
+          else {
+            currentStateLocal = 'post';
+            currentQuestionLocal = null;
+            currentQuestionIndexLocal = 0;
+          }
+        }
+        if (currentQuestionLocal) {
+          break;
+        }
       }
-      else if (postQuestionIndex === 0 && dynamicQuestionsIterated == false) {
-        const prevPostQuestion = actualResponses.pop();
-        setQuestion(prevPostQuestion);
-        setDynamicQuestionsIterated(true)
+
+      case "post": {
+        if (currentQuestionIndexLocal < postProjectQuestions.length) {
+          currentQuestionLocal = postProjectQuestions[currentQuestionIndexLocal];
+          currentQuestionIndexLocal++;
+        }
+        else {
+          // TODO: move to form
+        }
+        console.log("Post")
+      }
+
+      default: {
+        null;
+      }
+
+    }
+    setCurrentState(currentStateLocal);
+    setCurrentQuestion(currentQuestionLocal);
+    setCurrentQuestionIndex(currentQuestionIndexLocal);
+    setQuestionsToShow(questionsToShowLocal);
+    setResponseData();
+
+    selectedData.map((op) => {
+      cost = cost + op.price;
+    });
+    handlePrice("next", cost);
+
+  }
+
+
+  // Handling Stepper and Active Question
+  const changeActiveQuestion = (obj) => {
+    const { index, step } = obj;
+
+    setCurrentQuestionIndex(step.index);
+    setCurrentQuestion(step.question);
+    setCurrentState(step.state)
+    actualResponses.splice(index - 1);
+
+    handlePrice("stepper");
+  }
+
+
+  
+  const handlePrice = (type, price) => {
+
+    let cost = 0;
+    switch (type) {
+      case "next": {
+        setTotalCost((prev) => prev + price);
+        break;
+      }
+      case "back": {
+        setTotalCost((prev) => prev - price);
+        break;
+      }
+      case "stepper": {
+        actualResponses.map((obj) => {
+          console.log(obj.selectedOption[0].price);
+
+          obj.selectedOption.map((selected) => {
+            cost = selected.price - cost;
+          })
+        });
+        setTotalCost((prev)=>prev - cost);
+        console.log("cost", totalCost);
+        break;
       }
     }
-  };
 
+
+  }
+  console.log("Price", totalCost)
 
   return (
     <>
       {
-        fetchQuestions !== null ?
+        fetchQuesitons !== null ?
           <div>
             <div className='flex w-full h-screen justify-between items-center'>
               <div>
-                <Question question={question} questionId={getDynamicQuestionId} responsesData={getResponsesData} />
+                <Question currentQuestion={currentQuestion} getResponsesData={getResponsesData} />
               </div>
               <div>
                 <Stepper responses={actualResponses} changeActiveQuestion={changeActiveQuestion} />
               </div>
             </div>
             <div>
-              <button onClick={handleBackQuestion}>Back</button>
-              <button disabled={!handleButton} onClick={handleNextQuestion}>Next</button>
+              <button onClick={backQuestion}>Back</button>
+              <button onClick={nextQuestion}>Next</button>
             </div>
           </div> :
           <div>Loading .....</div>
@@ -213,39 +239,3 @@ const page = () => {
 
 export default page;
 
-
-
-
-// import projectBase from "../../jsonData/responses";
-
-// const usePreQuestions = () => {
-//   const [fetchQuestions, setFetchQuestions] = useState(null);
-//   useEffect(() => {
-//     const fetchData = () => {
-//       getQuestions()
-//         .then(data => {
-//           setFetchQuestions(data);
-//         })
-//         .catch(error => {
-//           console.error('Error fetching questions:', error);
-//           // Handle errors here (e.g., set an error state)
-//         });
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   const getSingleQuestion = (index) => {
-//     if (projectBase.length > 0) {
-//       console.log(index)
-//       let quest = projectBase.find((item)=>  item._id == index );
-//       return quest;
-//       // console.log(quest)
-//       // return fetchQuestions.Resources[index];
-//     }
-//   };
-
-//   return { fetchQuestions, getSingleQuestion }; // Return fetched questions or null if loading
-// };
-
-// export default usePreQuestions;
