@@ -55,32 +55,37 @@ const MenuProps = {
   },
 };
 
-const DropDownComponent = ({ options, label, selectedOption, getData }) => {
+const DropDownComponent = ({
+  options,
+  label,
+  disable,
+  selectedOption,
+  getData,
+}) => {
   const [selectedValue, setSelectedValue] = useState(selectedOption || "");
-  // console.log("Selected Value: ", selectedValue);
+  // console.log("Selected Value: ", selectedOption);
 
   return (
     <Box
       style={{
         borderRadius: ".5em",
         margin: ".5em 0",
-        // maxWidth: 300,
         display: "flex",
         flexWrap: "wrap",
+        flexGrow: 1,
       }}
     >
-      <FormControl sx={{ maxWidth: 300, minWidth: 270 }}>
+      <FormControl sx={{ width: 270, maxWidth: 300 }}>
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           autoFocus={false}
-          value={selectedValue || ""}
+          value={disable ? null : selectedValue}
           onChange={(e) => {
             const selectedObject = e.target.value;
-            console.log("Selected Object: ", selectedObject);
-
             setSelectedValue(selectedObject);
             getData(selectedObject, label);
           }}
+          disabled={disable ? true : false}
           input={<OutlinedInput id="select-multiple-chip" label={label} />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -98,6 +103,12 @@ const DropDownComponent = ({ options, label, selectedOption, getData }) => {
         >
           {options?.map((data, index) => (
             <StyledMenuItem
+              // sx={{
+              //   MaxWidth: 270,
+              //   wordWrap: "break-word",
+              //   display: "flex",
+              //   flexWrap: "wrap",
+              // }}
               key={index}
               value={
                 data.opt && data.price

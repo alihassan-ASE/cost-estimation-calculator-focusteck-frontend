@@ -86,7 +86,6 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
-                  display: "block",
                 }}
               >
                 About Us
@@ -98,7 +97,6 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
-                  display: "block",
                 }}
               >
                 Services
@@ -110,7 +108,6 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
-                  display: "block",
                 }}
               >
                 Industries & Expertise
@@ -122,7 +119,6 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
-                  display: "block",
                 }}
               >
                 Clients
@@ -134,7 +130,6 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
-                  display: "block",
                 }}
               >
                 Blog
@@ -146,7 +141,6 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
-                  display: "block",
                 }}
               >
                 Pricing

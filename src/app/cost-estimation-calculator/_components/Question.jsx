@@ -8,6 +8,7 @@ const QuestionsComponent = ({
   question,
   options,
   label,
+  disable,
   selectedOption,
   getData,
 }) => {
@@ -21,6 +22,7 @@ const QuestionsComponent = ({
         selectedOption={selectedOption}
         getData={getData}
         label={label}
+        disable={disable}
       />
     </Box>
   );

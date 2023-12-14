@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Box, Typography, Button, Card } from "@mui/material";
+import { Box, Typography, Button, Card, Grid } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { styled } from "@mui/material/styles";
 
@@ -27,7 +27,7 @@ const StaffComponent = () => {
     setAddMore(!boolVal);
   };
   console.log("In Staff Parent => ", values);
-  
+
   const resources = selectedOption.resources;
 
   const returnResources = () => {
@@ -40,10 +40,6 @@ const StaffComponent = () => {
             marginBottom: "3em",
             padding: "2em 1.5em",
             borderRadius: ".5em",
-            // MaxWidth: 300,
-            // minWidth: 300,
-            display: "flex",
-            flexWrap: "wrap",
           }}
         >
           <StaffResource
@@ -76,7 +72,10 @@ const StaffComponent = () => {
           alignItems: "center",
         }}
       >
-        {returnResources()}
+        {resources[0]
+          ? resources?.map((data) => returnResources())
+          : returnResources()}
+
         <Box>
           {addMore && (
             <CustomButton
@@ -90,12 +89,17 @@ const StaffComponent = () => {
                 padding: "3em",
                 borderRadius: ".5em",
                 minWidth: 100,
+                height: 410,
+                width: 340,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <ControlPointIcon onClick={() => setAddMore(false)} />
+              <ControlPointIcon
+                sx={{ fontSize: "2em" }}
+                onClick={() => setAddMore(false)}
+              />
             </CustomButton>
           )}
         </Box>

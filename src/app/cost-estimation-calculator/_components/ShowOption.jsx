@@ -9,7 +9,7 @@ import DropDownComponent from "./DropDownOptions";
 import RadioButtonComponent from "./RadioButtonOptions";
 
 // Show Options will get options Array, selected option Array, and the Style of the Component
-const ShowOption = ({ options,label, selectedOption, getData }) => {
+const ShowOption = ({ options, label, disable, selectedOption, getData }) => {
   let style = "DropDown";
   return (
     <Box>
@@ -55,6 +55,7 @@ const ShowOption = ({ options,label, selectedOption, getData }) => {
         <DropDownComponent
           options={options}
           label={label}
+          disable={disable}
           selectedOption={selectedOption}
           getData={getData}
         />
