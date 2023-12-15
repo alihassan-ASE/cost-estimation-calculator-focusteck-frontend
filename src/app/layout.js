@@ -3,6 +3,8 @@ import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import Link from "next/link";
+import images from "../images/header-image.jpg";
 import {
   BottomNavigation,
   InputBase,
@@ -64,11 +66,18 @@ export default function RootLayout({ children }) {
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
+            scrollBehavior: "smooth",
           }}
         >
           <AppBar
             position="static"
-            sx={{ color: "#000", backgroundColor: "#fff" }}
+            sx={{
+              color: "#000",
+              backgroundColor: "#fff",
+              minHeight: 80,
+              display: "flex",
+              justifyContent: "center",
+            }}
           >
             <Toolbar>
               <Typography
@@ -162,7 +171,42 @@ export default function RootLayout({ children }) {
               </Search>
             </Toolbar>
           </AppBar>
-          <Box sx={{ flexGrow: 1, padding: "0 1em" }}>{children}</Box>
+
+          {/* <Box
+            sx={{
+              padding: "6em 3em",
+              display: "flex",
+              flexDirection: "column",
+              gap: "2em",
+              backgroundImage: `url('https://eleks.com/wp-content/uploads/calculator-header-300x100.jpg')`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              color: "white",
+            }}
+          >
+            <Typography variant="h3" sx={{ maxWidth: 800 }}>
+              Estimate the cost of your Software Project
+            </Typography>
+            <Typography sx={{ maxWidth: 600 }}>
+              Answer five simple questions, and you’ll receive an instant cost
+              estimation to help you get your project moving. Don't let cost
+              uncertainties hold you back. Define your budget effortlessly with
+              just a few clicks.
+            </Typography>
+            <Button sx={{ width: "max-content" }}>
+              <Link
+                style={{ textDecoration: "none", color: "#fff" }}
+                href="#scroll-down"
+              >
+                Take the next Step for your Project
+              </Link>
+            </Button>
+          </Box> */}
+
+          <Box id="scroll-down" sx={{ flexGrow: 1, padding: "0 1em" }}>
+            {children}
+          </Box>
           <BottomNavigation
             sx={{
               flexShrink: 0,

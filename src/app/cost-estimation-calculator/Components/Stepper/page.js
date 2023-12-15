@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 export default function VerticalLinearStepper(props) {
 
   const { responses , changeActiveQuestion} = props;
-    
+    // console.log("response in Stepper",responses)
   const leng = responses.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
 
@@ -25,11 +25,10 @@ export default function VerticalLinearStepper(props) {
     <Box sx={{ maxWidth: 800 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {responses.map((step, index) => (
-  // console.log("Step2",step.resources)
         
           <Step key={index}>
           {
-            step.resourses? (<Typography>{"RESOURCES"}</Typography>):
+            // step.resourses && index == 0 ?<h1>Hello</h1>:
              ((step.selectedOption || step.selectedData) && (step.selectedOption||step.selectedData).map((selected , key)=>(
               // console.log("Helo in", selected)
               <StepLabel key={key} cursor="pointer" onClick={() => handleStep(step, index + 1)}>{step.question.label?step.question.label.toUpperCase(): step.label.toUpperCase()} <Typography fontSize={"12px"} color={"gray"}> {selected.opt}  (${selected.price})</Typography></StepLabel>

@@ -3,6 +3,7 @@ import Stepper from '../Components/Stepper/page';
 import Question from '../Components/Question/page';
 import { getQuestions, getDynamicQuestion } from '@/app/lib/api/getProjectQuestions';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
 
@@ -20,6 +21,8 @@ const page = () => {
   const [questionsToShow, setQuestionsToShow] = useState([]);
 
   const [totalCost, setTotalCost] = useState(0);
+
+  const route = useRouter();
 
 
 
@@ -81,6 +84,17 @@ const page = () => {
   }
 
 
+  const goToForm = () => {
+    try {
+      let data = JSON.stringify(actualResponses);
+      localStorage.setItem("Response", data);
+      // console.log("Moving to Form....................")
+      route.push('/cost-estimation-calculator/submit');
+    } catch (error) {
+      // console.log("Data is not set", error)
+    }
+  };
+
   // Handling Next Question
   const nextQuestion = async () => {
 
@@ -139,9 +153,8 @@ const page = () => {
           currentQuestionIndexLocal++;
         }
         else {
-          // TODO: move to form
+          goToForm();
         }
-        console.log("Post")
       }
 
       default: {

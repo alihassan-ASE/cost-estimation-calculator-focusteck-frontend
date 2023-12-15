@@ -1,5 +1,20 @@
 {
   "resources": [
+<<<<<<< HEAD
     
+=======
+    {
+      "resource": "Quality Assurance",
+      "resourceOption": { "opt": "Automation", "price": 20 },
+      "seniorityLevel": "Mid Level",
+      "numOfResources": 1
+    },
+    {
+      "resource": "Back End",
+      "resourceOption": { "opt": "Automation", "price": 20 },
+      "seniorityLevel": "Mid Level",
+      "numOfResources": 1
+    }
+>>>>>>> 620c81f16813667a53dc86a7b4f11cc1b49c288e
   ]
 }
