@@ -83,10 +83,13 @@ const page = () => {
 
   }
 
+  
 
   const goToForm = () => {
     try {
-      let data = JSON.stringify(actualResponses);
+      
+      let data = JSON.stringify({responses:actualResponses,totalCost:totalCost});
+      // debugger;
       localStorage.setItem("Response", data);
       // console.log("Moving to Form....................")
       route.push('/cost-estimation-calculator/submit');
@@ -108,7 +111,7 @@ const page = () => {
       case "pre": {
 
         if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
-          currentStateLocal = "dynamic";
+          currentStateLocal = "post";
           currentQuestionLocal = null;
           currentQuestionIndexLocal = 0;
         }
@@ -120,32 +123,32 @@ const page = () => {
           break;
         }
       }
-      case "dynamic": {
-        if (!currentQuestionLocal) {
-          currentQuestionLocal = await getDynamicQuestion();
-        }
-        else if (currentQuestionLocal) {
-          if (Array.isArray(selectedOption)) {
-            questionsToShowLocal.push(...selectedOption);
-          }
-          else {
-            if (selectedOption) {
-              questionsToShowLocal.push(selectedOption);
-            }
-          }
-          if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
-          }
-          else {
-            currentStateLocal = 'post';
-            currentQuestionLocal = null;
-            currentQuestionIndexLocal = 0;
-          }
-        }
-        if (currentQuestionLocal) {
-          break;
-        }
-      }
+      // case "dynamic": {
+      //   if (!currentQuestionLocal) {
+      //     currentQuestionLocal = await getDynamicQuestion();
+      //   }
+      //   else if (currentQuestionLocal) {
+      //     if (Array.isArray(selectedOption)) {
+      //       questionsToShowLocal.push(...selectedOption);
+      //     }
+      //     else {
+      //       if (selectedOption) {
+      //         questionsToShowLocal.push(selectedOption);
+      //       }
+      //     }
+      //     if (questionsToShowLocal.length) {
+      //       currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
+      //     }
+      //     else {
+      //       currentStateLocal = 'post';
+      //       currentQuestionLocal = null;
+      //       currentQuestionIndexLocal = 0;
+      //     }
+      //   }
+      //   if (currentQuestionLocal) {
+      //     break;
+      //   }
+      // }
 
       case "post": {
         if (currentQuestionIndexLocal < postProjectQuestions.length) {
@@ -231,6 +234,7 @@ const page = () => {
               </div>
             </div>
             <div>
+              {/* <button onClick={()=>(route.push('/cost-estimation-calculator/submit'))}>Go To Form</button> */}
               <button onClick={backQuestion}>Back</button>
               <button onClick={nextQuestion}>Next</button>
             </div>

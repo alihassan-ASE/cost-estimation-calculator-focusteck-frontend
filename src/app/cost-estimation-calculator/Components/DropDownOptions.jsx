@@ -92,7 +92,7 @@ const DropDownComponent = ({
               {selected.opt ? (
                 <Chip
                   key={selected.opt}
-                  label={`${selected.opt} (${selected.price} $)`}
+                  label={`${selected.opt} ($${selected.price})`}
                 />
               ) : (
                 <Chip key={selected} label={selected} />
@@ -117,7 +117,7 @@ const DropDownComponent = ({
               }
             >
               {data.opt ? data.opt : data}{" "}
-              {data.price ? `(${data.price} $)` : null}
+              {data.price ? `($${data.price})` : null}
             </StyledMenuItem>
           ))}
         </Select>

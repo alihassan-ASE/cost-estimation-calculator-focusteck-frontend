@@ -67,7 +67,7 @@ const TilesComponent = ({options , selectedOption, selectedOptionPassToParent })
                 : {}
             }
           >
-            {data.opt} ({data.price} $)
+            {data.opt} (${data.price})
           </CustomButton>
         </Box>
       ))}

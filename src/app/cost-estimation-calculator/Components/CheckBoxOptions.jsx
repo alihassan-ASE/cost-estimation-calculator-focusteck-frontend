@@ -64,7 +64,7 @@ const CheckBoxComponent = ({
                   name={data.opt}
                 />
               }
-              label={`${data.opt} (${data.price} $)`}
+              label={`${data.opt} ($${data.price} )`}
             />
           ))}
         </FormGroup>

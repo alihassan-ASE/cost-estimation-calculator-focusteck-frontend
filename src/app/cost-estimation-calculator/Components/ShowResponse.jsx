@@ -19,7 +19,7 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
-  
+  debugger;
   return (
     <Box
       sx={{
@@ -53,7 +53,7 @@ const ShowResponse = ({ response }) => {
 
                 <Chip
                   key="Resource Option"
-                  label={`${data.resourceOption.opt} (${data.resourceOption.price} $)`}
+                  label={`${data.resourceOption.opt} ($${data.resourceOption.price})`}
                 />
               </CustomButton>
               <CustomButton>
@@ -76,27 +76,37 @@ const ShowResponse = ({ response }) => {
               {data.selectedData.map((eachOption) => (
                 <Chip
                   key="Resource"
-                  label={`${eachOption.opt} (${eachOption.price} $)`}
+                  label={`${eachOption.opt} ($${eachOption.price})`}
                 />
               ))}
             </CustomButton>
-          ))}
+          ))
+
+          }
+
         </Box>
       ) : (
         <Box>
           <CustomTypography variant="h6">Queries</CustomTypography>
-          {response.responses.map((data) => (
-            <CustomButton sx={{ gap: "1em" }}>
-              <Typography>{data.label}</Typography>
 
-              {data.selectedData.map((eachOption) => (
-                <Chip
-                  key="Resource"
-                  label={`${eachOption.opt} (${eachOption.price} $)`}
-                />
-              ))}
-            </CustomButton>
+          {response.responses.map((data) => (
+            <>
+              <CustomButton sx={{ gap: "1em" }}>
+                <Typography>{data.question.label}</Typography>
+
+                {data.selectedOption.map((eachOption) => (
+                  <Chip
+                    key="Resource"
+                    label={`${eachOption.opt} ($${eachOption.price})`}
+                  />
+                ))}
+              </CustomButton>
+            </>
           ))}
+          <CustomButton sx={{ gap: "1em" }}>
+            <Typography> Total Cost</Typography>
+            <Chip key="Resource" label={`$${response.totalCost}`}/>
+          </CustomButton>
         </Box>
       )}
     </Box>

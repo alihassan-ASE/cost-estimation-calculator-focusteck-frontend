@@ -193,8 +193,8 @@ const StaffResource = ({
                 }}
                 key="Resource Option"
                 label={
-                  `${selectedResource[index]?.resourceOption.opt} (${selectedResource[index]?.resourceOption.price} $)` ||
-                  `${currentResource.resourceOption?.opt} (${currentResource.resourceOption?.price} $)`
+                  `${selectedResource[index]?.resourceOption.opt} ($${selectedResource[index]?.resourceOption.price})` ||
+                  `${currentResource.resourceOption?.opt} ($${currentResource.resourceOption?.price})`
                 }
               />
             </Button>
