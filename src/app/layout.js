@@ -172,20 +172,28 @@ export default function RootLayout({ children }) {
             </Toolbar>
           </AppBar>
 
-          {/* <Box
+          <Box
             sx={{
               padding: "6em 3em",
               display: "flex",
               flexDirection: "column",
               gap: "2em",
-              backgroundImage: `url('https://eleks.com/wp-content/uploads/calculator-header-300x100.jpg')`,
+              backgroundImage: `url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
               backgroundPosition: "center",
               color: "white",
             }}
           >
-            <Typography variant="h3" sx={{ maxWidth: 800 }}>
+            <Typography
+              variant="h3"
+              style={{
+                maxWidth: 800,
+                '@media (max-width: 600px)': {
+                  fontSize: "1em"
+                }
+              }}
+            >
               Estimate the cost of your Software Project
             </Typography>
             <Typography sx={{ maxWidth: 600 }}>
@@ -194,7 +202,7 @@ export default function RootLayout({ children }) {
               uncertainties hold you back. Define your budget effortlessly with
               just a few clicks.
             </Typography>
-            <Button sx={{ width: "max-content" }}>
+            <Button>
               <Link
                 style={{ textDecoration: "none", color: "#fff" }}
                 href="#scroll-down"
@@ -202,7 +210,7 @@ export default function RootLayout({ children }) {
                 Take the next Step for your Project
               </Link>
             </Button>
-          </Box> */}
+          </Box>
 
           <Box id="scroll-down" sx={{ flexGrow: 1, padding: "0 1em" }}>
             {children}

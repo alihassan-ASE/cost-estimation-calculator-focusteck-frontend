@@ -79,7 +79,6 @@ const MultipleComponent = ({
   }, [responseData]);
 
   const handleFormat = (event, newFormats) => {
-    // console.log("New Formats: ", newFormats);
 
     setSelectedFormats(newFormats);
     selectedOptionPassToParent(newFormats);
@@ -96,7 +95,6 @@ const MultipleComponent = ({
       <Typography variant="h6">Tiles Multi Select</Typography>
       <StyledToggleButtonGroup
         value={selectedFormats}
-        // onChange={handleFormat}
         sx={{ display: "flex", flexWrap: "wrap" }}
       >
         {options.map((data, index) => (
@@ -109,28 +107,15 @@ const MultipleComponent = ({
               let updatedSelection = [];
 
               if (isSelected) {
-                // console.log("In if => Selected Formats: ", selectedFormats);
                 updatedSelection = selectedFormats.filter(
                   (selected) =>
                     selected.opt !== data.opt || selected.price !== data.price
                 );
               } else {
-                // console.log("In else");
                 updatedSelection = [...selectedFormats, data];
               }
-
-              // console.log("Updated Selection: ", updatedSelection);
               handleFormat(null, updatedSelection);
             }}
-            // sx={{
-            //   m: 1.5,
-            //   backgroundColor: checkSelectedOption(data.opt, data.price)
-            //     ? "#0069d9"
-            //     : "none",
-            //   color: checkSelectedOption(data.opt, data.price)
-            //     ? "white"
-            //     : "black",
-            // }}
           >
             {data.opt} (${data.price})
           </StyleToggleButton>

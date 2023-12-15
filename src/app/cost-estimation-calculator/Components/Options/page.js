@@ -6,7 +6,7 @@ const page = (props) => {
   return (
     <div>
       {
-        options.map((opt ,key )=> <p key={key}>{opt.opt} ${opt.price}</p>)
+        options?.map((opt ,key )=> <p key={key}>{opt.opt} ${opt.price}</p>)
       }
     </div>
   )

@@ -21,7 +21,6 @@ const CheckBoxComponent = ({
   }, [responseData]);
 
   const handleFormat = (event) => {
-    // console.log("Event: ", event);
     const selectedFormat = options.find(
       (option) => option.opt === event.target.name
     );

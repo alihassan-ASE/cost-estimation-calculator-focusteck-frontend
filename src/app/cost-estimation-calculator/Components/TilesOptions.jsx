@@ -39,8 +39,11 @@ const CustomButton = styled(Button)({
   },
 });
 
-const TilesComponent = ({options , selectedOption, selectedOptionPassToParent }) => {
-
+const TilesComponent = ({
+  options,
+  selectedOption,
+  selectedOptionPassToParent,
+}) => {
   const checkSelectedOption = (value, price) => {
     const res = selectedOption?.find(
       (data) => data.opt === value && data.price === price
@@ -50,8 +53,7 @@ const TilesComponent = ({options , selectedOption, selectedOptionPassToParent })
 
   return (
     <Box>
-      <Typography variant="h6">Single Select Tiles</Typography>
-      {options.map((data, index) => (
+      {options?.map((data, index) => (
         <Box sx={{ display: "inline-block", m: 1.5 }} key={index}>
           <CustomButton
             onClick={() => {
@@ -67,7 +69,7 @@ const TilesComponent = ({options , selectedOption, selectedOptionPassToParent })
                 : {}
             }
           >
-            {data.opt} (${data.price})
+            {data.opt} ($ {data.price})
           </CustomButton>
         </Box>
       ))}

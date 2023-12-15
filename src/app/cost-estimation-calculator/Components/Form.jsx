@@ -42,7 +42,7 @@ const Form = ({ response, getActualResponse }) => {
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Box>
       <Box
         sx={{
           display: submitted ? "none" : "block",
@@ -52,6 +52,7 @@ const Form = ({ response, getActualResponse }) => {
           width: "min-content",
           borderRadius: ".5em",
           justifyContent: "center",
+          margin: "auto",
         }}
       >
         <form>
