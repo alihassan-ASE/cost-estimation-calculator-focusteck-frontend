@@ -285,9 +285,8 @@ const StaffComponent = () => {
           style={{
             padding: "2em 1.5em",
             borderRadius: ".5em",
-            "@media (max-width: 600px)": {
-              padding: "0", // Adjust padding for 'xs' breakpoint
-            },
+            display: "flex",
+            justifyContent: "center",
           }}
         >
           <StaffResource

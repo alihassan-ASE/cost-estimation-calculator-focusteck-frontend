@@ -70,11 +70,11 @@ const DropDownComponent = ({
         borderRadius: ".5em",
         margin: ".5em 0",
         display: "flex",
-        flexWrap: "wrap",
-        flexGrow: 1,
+        // flexWrap: "wrap",
+        // flexGrow: 1,
       }}
     >
-      <FormControl xs={{ padding: 0 }} sx={{ minWidth: 240, maxWidth: 300 }}>
+      <FormControl xs={{ padding: 0 }}>
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           autoFocus={false}

@@ -189,9 +189,9 @@ export default function RootLayout({ children }) {
               variant="h3"
               style={{
                 maxWidth: 800,
-                '@media (max-width: 600px)': {
-                  fontSize: "1em"
-                }
+                "@media (max-width: 600px)": {
+                  padding: "0",
+                },
               }}
             >
               Estimate the cost of your Software Project

@@ -74,8 +74,12 @@ const StaffResource = ({
   console.log("new option: ", newOption);
   console.log("current resource: ", currentResource);
   return (
-    <Grid container spacing={2} sx={{ height: 360, alignItems: "center" }}>
-      <Grid item lg={4} sx={{ minWidth: 300, maxWidth: 300 }}>
+    <Grid
+      container
+      spacing={2}
+      sx={{ minWidth: 240, maxWidth: 300, height: 360, alignItems: "center" }}
+    >
+      <Grid item lg={4} sx={{ width: 300, maxWidth: 300 }}>
         <Box>
           {showDropdown && (
             <QuestionsComponent
@@ -260,10 +264,9 @@ const StaffResource = ({
               <Chip
                 key="Seniority Level"
                 label={
-                  selectedResource?.length ?
-                  selectedResource[index]?.seniorityLevel :
-                  currentResource.seniorityLevel ||
-                  null
+                  selectedResource?.length
+                    ? selectedResource[index]?.seniorityLevel
+                    : currentResource.seniorityLevel || null
                 }
               />
             </Button>
@@ -326,10 +329,9 @@ const StaffResource = ({
               <Chip
                 key="Number of Resources"
                 label={
-                  selectedResource?.length ?
-                  selectedResource[index]?.numOfResources :
-                  currentResource.numOfResources ||
-                  null
+                  selectedResource?.length
+                    ? selectedResource[index]?.numOfResources
+                    : currentResource.numOfResources || null
                 }
               />
             </Button>
