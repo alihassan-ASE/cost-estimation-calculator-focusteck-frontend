@@ -1,11 +1,14 @@
-'use client'
-import Stepper from '../Components/Stepper/page';
-import Question from '../Components/Question/page';
-import { getQuestions, getDynamicQuestion } from '@/app/lib/api/getProjectQuestions';
-import { useState, useEffect } from 'react';
+"use client";
+import Stepper from "../Components/Stepper/page";
+import Question from "../Components/Question/page";
+import {
+  getQuestions,
+  getDynamicQuestion,
+} from "@/app/lib/api/getProjectQuestions";
+import { useState, useEffect } from "react";
+import { Button, Box, Typography } from "@mui/material";
 
 const page = () => {
-
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
 
@@ -21,20 +24,18 @@ const page = () => {
 
   const [totalCost, setTotalCost] = useState(0);
 
-
-
   useEffect(() => {
     const fetchData = () => {
       getQuestions()
-        .then(data => {
+        .then((data) => {
           setFetchQuestions(data);
           setPreQuestion(data.preProjectQuestion);
           setCurrentQuestion(data.preProjectQuestion[currentQuestionIndex]);
           setPostQuestion(data.postProjectQuestion);
           // setQuestion(data.preProjectQuestion[currentQuestionIndex]);
         })
-        .catch(error => {
-          console.error('Error fetching questions:', error);
+        .catch((error) => {
+          console.error("Error fetching questions:", error);
           // Handle errors here (e.g., set an error state)
         });
     };
@@ -42,26 +43,21 @@ const page = () => {
     fetchData();
   }, []);
 
-
   // getting Response from child Component
   const getResponsesData = (resp) => {
-
-    setSelectedData(resp.selectedData)
+    setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
-  }
-
+  };
 
   // setting Response in actual Array
   const setResponseData = () => {
-
-    const dataObj = {}
+    const dataObj = {};
     dataObj.selectedOption = selectedData;
     dataObj.question = currentQuestion;
-    dataObj.state = currentState
-    dataObj.index = currentQuestionIndex
+    dataObj.state = currentState;
+    dataObj.index = currentQuestionIndex;
     setActualResponses((prev) => [...prev, dataObj]);
-  }
-
+  };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
@@ -71,19 +67,16 @@ const page = () => {
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
-    setCurrentQuestionIndex(lastQuestion.index)
+    setCurrentQuestionIndex(lastQuestion.index);
 
     lastQuestion.selectedOption.map((op) => {
       cost = op.price;
-    })
-    handlePrice("back", cost)
-
-  }
-
+    });
+    handlePrice("back", cost);
+  };
 
   // Handling Next Question
   const nextQuestion = async () => {
-
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -92,14 +85,13 @@ const page = () => {
 
     switch (currentStateLocal) {
       case "pre": {
-
         if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
           currentStateLocal = "dynamic";
           currentQuestionLocal = null;
           currentQuestionIndexLocal = 0;
-        }
-        else {
-          currentQuestionLocal = preProjectQuestions[currentQuestionIndexLocal + 1];
+        } else {
+          currentQuestionLocal =
+            preProjectQuestions[currentQuestionIndexLocal + 1];
           currentQuestionIndexLocal++;
         }
         if (currentQuestionLocal) {
@@ -109,21 +101,20 @@ const page = () => {
       case "dynamic": {
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
-        }
-        else if (currentQuestionLocal) {
+        } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
-          }
-          else {
+          } else {
             if (selectedOption) {
               questionsToShowLocal.push(selectedOption);
             }
           }
           if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
-          }
-          else {
-            currentStateLocal = 'post';
+            currentQuestionLocal = await getDynamicQuestion(
+              questionsToShowLocal.pop()
+            );
+          } else {
+            currentStateLocal = "post";
             currentQuestionLocal = null;
             currentQuestionIndexLocal = 0;
           }
@@ -135,19 +126,17 @@ const page = () => {
 
       case "post": {
         if (currentQuestionIndexLocal < postProjectQuestions.length) {
-          currentQuestionLocal = postProjectQuestions[currentQuestionIndexLocal];
+          currentQuestionLocal =
+            postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
-        }
-        else {
+        } else {
           // TODO: move to form
         }
-        console.log("Post")
       }
 
       default: {
         null;
       }
-
     }
     setCurrentState(currentStateLocal);
     setCurrentQuestion(currentQuestionLocal);
@@ -159,9 +148,7 @@ const page = () => {
       cost = cost + op.price;
     });
     handlePrice("next", cost);
-
-  }
-
+  };
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
@@ -169,16 +156,13 @@ const page = () => {
 
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
-    setCurrentState(step.state)
+    setCurrentState(step.state);
     actualResponses.splice(index - 1);
 
     handlePrice("stepper");
-  }
+  };
 
-
-  
   const handlePrice = (type, price) => {
-
     let cost = 0;
     switch (type) {
       case "next": {
@@ -190,7 +174,6 @@ const page = () => {
         break;
       }
       case "stepper": {
-
         actualResponses.map((obj) => {
           obj.selectedOption.map((selected) => {
             cost = selected.price + cost;
@@ -200,33 +183,63 @@ const page = () => {
         break;
       }
     }
-
-  }
+  };
 
   return (
     <>
-      {
-        fetchQuesitons !== null ?
-          <div>
-            <h1>{totalCost}</h1>
-            <div className='flex w-full h-screen justify-between items-center'>
-              <div>
-                <Question currentQuestion={currentQuestion} getResponsesData={getResponsesData} />
-              </div>
-              <div>
-                <Stepper responses={actualResponses} changeActiveQuestion={changeActiveQuestion} />
-              </div>
-            </div>
-            <div>
-              <button onClick={backQuestion}>Back</button>
-              <button onClick={nextQuestion}>Next</button>
-            </div>
-          </div> :
-          <div>Loading .....</div>
-      }
+      {fetchQuesitons !== null ? (
+        <Box sx={{ margin: "1em 2em" }}>
+          <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+          <Box
+            className="flex w-full h-screen justify-between items-center"
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Box>
+              <Question
+                currentQuestion={currentQuestion}
+                getResponsesData={getResponsesData}
+              />
+              <Box sx={{ display: "flex", gap: "2em", margin: "3em 1em " }}>
+                <Button
+                  size="medium"
+                  variant="contained"
+                  sx={{ width: 150 }}
+                  vairant="contained"
+                  onClick={backQuestion}
+                >
+                  Back
+                </Button>
+                <Button
+                  size="medium"
+                  variant="contained"
+                  sx={{ width: 150 }}
+                  vairant="contained"
+                  onClick={nextQuestion}
+                >
+                  Next
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                margin: "2em 3em 2em 5em",
+                minWidth: "300px",
+              }}
+            >
+              <Stepper
+                responses={actualResponses}
+                changeActiveQuestion={changeActiveQuestion}
+              />
+            </Box>
+          </Box>
+        </Box>
+      ) : (
+        <div>Loading .....</div>
+      )}
     </>
-  )
-}
+  );
+};
 
 export default page;
-

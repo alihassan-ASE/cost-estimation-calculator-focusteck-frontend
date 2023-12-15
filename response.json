@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "65707529dd68fc0f0b4b8fd0"
   },
-  "userName": "Ali Hasan",
+  "userName": "Ali Hassan",
   "email": "ali.hassan@focusteck.com",
   "totalCost": 365,
   "postTime": {
@@ -44,8 +44,8 @@
       "label": "engagement period",
       "selectedOption": [
         {
-          "opt": "3-6 Months",
-          "price": 50
+          "opt": "Long Term",
+          "price": 150
         }
       ]
     },

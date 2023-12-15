@@ -1,14 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Select,
-  typographyClasses,
-  Chip,
-  Grid,
-} from "@mui/material";
+import { Box, Typography, Button, Chip, Grid } from "@mui/material";
 
 import QuestionsComponent from "./Questions";
 
@@ -35,13 +27,15 @@ const StaffResource = ({
 
   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
   useEffect(() => {
-    setCurrentResource({
-      resource: selectedResource[index]?.resource,
-      resourceOption: selectedResource[index]?.resourceOption,
-      seniorityLevel: selectedResource[index]?.seniorityLevel,
-      numOfResources: selectedResource[index]?.numOfResources,
-    });
-    setShowDropdown(false);
+    if (selectedResource?.length ? selectedResource[index] : null) {
+      setCurrentResource({
+        resource: selectedResource[index]?.resource,
+        resourceOption: selectedResource[index]?.resourceOption,
+        seniorityLevel: selectedResource[index]?.seniorityLevel,
+        numOfResources: selectedResource[index]?.numOfResources,
+      });
+      setShowDropdown(false);
+    }
   }, []);
 
   const numOfResourcesOptions = {
@@ -75,10 +69,11 @@ const StaffResource = ({
     setLabel(label);
   };
 
-    newOption = useMemo(() => {
-      return options.map((item) => item.typeOfResource);
-    }, [options]);
-  
+  newOption = useMemo(() => {
+    return options.map((item) => item.typeOfResource);
+  }, [options]);
+  console.log("new option: ", newOption);
+  console.log("current resource: ", currentResource);
   return (
     <Grid container spacing={2} sx={{ height: 360, alignItems: "center" }}>
       <Grid item lg={4} sx={{ minWidth: 300, maxWidth: 300 }}>
@@ -91,7 +86,9 @@ const StaffResource = ({
               label={label ? label : "Resources"}
               disable={false}
               selectedResource={
-                selectedResource[index]?.resource || currentResource.resource
+                selectedResource?.length
+                  ? selectedResource[index]?.resource
+                  : currentResource?.resource || null
               }
               getData={getData}
             />
@@ -126,7 +123,9 @@ const StaffResource = ({
               <Chip
                 key="Resources"
                 label={
-                  selectedOption[index]?.resource || currentResource.resource
+                  selectedResource?.length
+                    ? selectedResource[index]?.resource
+                    : currentResource.resource || null
                 }
               />
             </Button>
@@ -143,11 +142,13 @@ const StaffResource = ({
                 question={question}
                 options={resourceData}
                 label={label ? label : "Resource Option"}
-                disable={
-                  currentResource.resource || selectedResource[index]?.resource
-                    ? false
-                    : true
-                }
+                // disable={
+                //   !selectedResource?.length
+                //     ? currentResource.resource
+                //     : selectedResource[index]?.resource
+                //     ? false
+                //     : true
+                // }
                 styleVal={"DropDown"}
                 selectedResource={
                   currentResource.resource &&
@@ -155,7 +156,9 @@ const StaffResource = ({
                     ? null
                     : currentResource?.resourceOption?.opt
                     ? currentResource?.resourceOption?.opt
-                    : selectedResource[index]?.resourceOption?.opt
+                    : selectedResource?.length
+                    ? selectedResource[index]?.resourceOption?.opt
+                    : null
                 }
                 getData={getData}
               />
@@ -194,8 +197,10 @@ const StaffResource = ({
                 }}
                 key="Resource Option"
                 label={
-                  `${selectedOption[index]?.resourceOption.opt} (${selectedOption[index]?.resourceOption.price} $)` ||
-                  `${currentResource.resourceOption?.opt} (${currentResource.resourceOption?.price} $)`
+                  selectedResource?.length
+                    ? `${selectedResource[index]?.resourceOption.opt} ($ ${selectedResource[index]?.resourceOption.price} )`
+                    : `${currentResource.resourceOption?.opt} ($ ${currentResource.resourceOption?.price})` ||
+                      null
                 }
               />
             </Button>
@@ -206,20 +211,22 @@ const StaffResource = ({
               question={question}
               options={seniorityLevelOptions}
               label={label ? label : "Seniority Level"}
-              disable={
-                currentResource.resourceOption ||
-                selectedResource[index]?.resourceOption
-                  ? false
-                  : true
-              }
+              // disable={
+              //   !selectedResource?.length
+              //     ? currentResource.resourceOption
+              //     : selectedResource[index]?.resourceOption
+              //     ? false
+              //     : true
+              // }
               styleVal={"DropDown"}
-
               selectedResource={
                 currentResource.resource && !currentResource.seniorityLevel
                   ? null
                   : currentResource.seniorityLevel
                   ? currentResource.seniorityLevel
-                  : selectedResource[index]?.seniorityLevel
+                  : selectedResource?.length
+                  ? selectedResource[index]?.seniorityLevel
+                  : null
               }
               getData={getData}
             />
@@ -254,8 +261,10 @@ const StaffResource = ({
               <Chip
                 key="Seniority Level"
                 label={
-                  selectedOption[index]?.seniorityLevel ||
-                  currentResource.seniorityLevel
+                  selectedResource?.length ?
+                  selectedResource[index]?.seniorityLevel :
+                  currentResource.seniorityLevel ||
+                  null
                 }
               />
             </Button>
@@ -267,19 +276,22 @@ const StaffResource = ({
                 question={question}
                 options={numOfResourcesOptions[currentResource.seniorityLevel]}
                 label={label ? label : "Number of Resources"}
-                disable={
-                  currentResource.seniorityLevel ||
-                  selectedResource[index]?.seniorityLevel
-                    ? false
-                    : true
-                }
+                // disable={
+                //   !selectedResource?.length
+                //     ? currentResource.seniorityLevel
+                //     : selectedResource[index]?.seniorityLevel
+                //     ? false
+                //     : true
+                // }
                 styleVal={"DropDown"}
                 selectedResource={
                   currentResource.resource && !currentResource.numOfResources
                     ? null
                     : currentResource.numOfResources
                     ? currentResource.numOfResources
-                    : selectedResource[index]?.numOfResources
+                    : selectedResource?.length
+                    ? selectedResource[index]?.numOfResources
+                    : null
                 }
                 getData={getData}
               />
@@ -315,8 +327,10 @@ const StaffResource = ({
               <Chip
                 key="Number of Resources"
                 label={
-                  selectedOption[index]?.numOfResources ||
-                  currentResource.numOfResources
+                  selectedResource?.length ?
+                  selectedResource[index]?.numOfResources :
+                  currentResource.numOfResources ||
+                  null
                 }
               />
             </Button>
@@ -345,7 +359,6 @@ const StaffResource = ({
                   currentResource.numOfResources
                 ) {
                   const existingResource = values[index];
-                  console.log("In IF");
                   if (
                     existingResource?.resource !== currentResource.resource ||
                     existingResource?.resourceOption !==
@@ -355,7 +368,6 @@ const StaffResource = ({
                     existingResource?.numOfResources !==
                       currentResource.numOfResources
                   ) {
-                    console.log("Updating The Value");
                     const updatedValues = [...values];
                     updatedValues[index] = {
                       ...existingResource,
@@ -367,7 +379,9 @@ const StaffResource = ({
                     setValues(updatedValues);
                     setShowDropdown(false);
                   }
-                } else if (selectedResource[index]) {
+                } else if (
+                  selectedResource?.length ? selectedResource[index] : null
+                ) {
                   selectedOptionPassToParent(
                     {
                       resource: selectedResource[index].resource,

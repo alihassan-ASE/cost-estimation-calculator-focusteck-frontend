@@ -4,7 +4,6 @@ import { Box, Typography } from "@mui/material";
 
 import StaffComponent from "../Components/StaffComponent";
 
-
 import QuestionsComponent from "@/app/cost-estimation-calculator/Components/Questions";
 
 const page = () => {
@@ -15,7 +14,7 @@ const page = () => {
   // };
   // console.log("Selected Option: ", selectedData);
   return (
-    <Box sx={{ margin: "2em" }}>
+    <Box md={{ margin: "2em" }}>
       <StaffComponent />
     </Box>
   );

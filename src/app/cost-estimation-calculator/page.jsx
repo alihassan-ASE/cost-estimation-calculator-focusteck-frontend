@@ -24,8 +24,7 @@ const LINKS = [
 
 const page = () => {
   return (
-    <Box style={{ backgroundColor: "white" }}>
-      <Typography variant="h3">COST ESTIMATION CALCULATOR</Typography>
+    <Box>
       <Stack pt={5}>
         {LINKS.map(({ text, href, icon: Icon }) => (
           <ListItem key={href} style={{ width: 300 }}>

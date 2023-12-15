@@ -2,10 +2,8 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 
-import Form from "../_components/Form";
-import ShowResponse from "../_components/ShowResponse";
-
-import response from "../../../../data/actualResponse.json";
+import response from "../../../../response.json";
+import Form from "../Components/Form";
 
 const page = () => {
   const [actualResponse, setActualResponse] = useState();
@@ -14,9 +12,8 @@ const page = () => {
     setActualResponse(formData);
   };
 
-  console.log("Actual Response: ", actualResponse);
   return (
-    <Box>
+    <Box sx={{ margin: "3em" }}>
       <Form response={response} getActualResponse={getActualResponse} />
     </Box>
   );

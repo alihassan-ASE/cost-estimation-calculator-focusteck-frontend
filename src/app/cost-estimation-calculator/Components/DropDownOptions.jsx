@@ -63,7 +63,6 @@ const DropDownComponent = ({
   getData,
 }) => {
   const [selectedValue, setSelectedValue] = useState(selectedResource || "");
-  // console.log("Selected Value: ", selectedResource);
 
   return (
     <Box
@@ -75,7 +74,7 @@ const DropDownComponent = ({
         flexGrow: 1,
       }}
     >
-      <FormControl sx={{ width: 270, maxWidth: 300 }}>
+      <FormControl xs={{ padding: 0 }} sx={{ minWidth: 240, maxWidth: 300 }}>
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           autoFocus={false}
@@ -85,7 +84,7 @@ const DropDownComponent = ({
             setSelectedValue(selectedObject);
             getData(selectedObject, label);
           }}
-          disabled={disable ? true : false}
+          // disabled={disable ? true : false}
           input={<OutlinedInput id="select-multiple-chip" label={label} />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
