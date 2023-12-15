@@ -83,7 +83,10 @@ const ShowResponse = ({ response }) => {
           ))
 
           }
-
+          <CustomButton sx={{ gap: "1em" }}>
+            <Typography> Total Cost</Typography>
+            <Chip key="Resource" label={`$${response.totalCost}`} />
+          </CustomButton>
         </Box>
       ) : (
         <Box>

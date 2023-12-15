@@ -173,6 +173,10 @@ const StaffComponent = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setResponseData();
     setIsNextClicked(true);
+    if (currentQuestionIndex >= additionalQuesiton.length) {
+      actualResponses.totalCost = totalCost;
+      goToForm();
+    }
   };
 
   // Handling Back Question and Calculating Price on Back Button
