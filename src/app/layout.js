@@ -172,7 +172,7 @@ export default function RootLayout({ children }) {
             </Toolbar>
           </AppBar>
 
-          <Box
+          {/* <Box
             sx={{
               padding: "6em 3em",
               display: "flex",
@@ -202,7 +202,7 @@ export default function RootLayout({ children }) {
                 Take the next Step for your Project
               </Link>
             </Button>
-          </Box>
+          </Box> */}
 
           <Box id="scroll-down" sx={{ flexGrow: 1, padding: "0 1em" }}>
             {children}
