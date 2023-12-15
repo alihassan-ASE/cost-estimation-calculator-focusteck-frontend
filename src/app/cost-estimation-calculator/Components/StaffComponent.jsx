@@ -40,12 +40,11 @@ const StaffComponent = () => {
   const [totalCost, setTotalCost] = useState(0);
 
   useEffect(() => {
-      getQuestions().then((resp)=>{
+    getQuestions().then((resp) => {
       const { Resources, additionalQuestions } = resp;
       setAdditionalQuesiton(additionalQuestions);
       setStaffBaseResources(Resources);
     });
-
   }, []);
 
   useEffect(() => {
@@ -71,9 +70,9 @@ const StaffComponent = () => {
     try {
       let data = JSON.stringify(actualResponses);
       localStorage.setItem("Response", data);
-      route.push('/cost-estimation-calculator/submit');
+      route.push("/cost-estimation-calculator/submit");
     } catch (error) {
-      console.log("Data is not set", error)
+      console.log("Data is not set", error);
     }
   };
 
@@ -125,11 +124,9 @@ const StaffComponent = () => {
     setCurrentQuestionIndex(index);
     setCurrentQuestion(step);
     actualResponses.responses.splice(index - 1);
-    setIsStepperClicked(true)
-
-  }
+    setIsStepperClicked(true);
+  };
   const selectedOptionPassToParent = (data, boolVal, label) => {
-
     setValues((prev) => [...prev, data]);
     setButtonState(true);
     setAddMore(!boolVal);
@@ -140,14 +137,17 @@ const StaffComponent = () => {
   const setResponseData = () => {
     const dataObj = {};
     dataObj.resources = values;
-    currentState ? setActualResponses({ responses: [dataObj] })
-      :
-      setActualResponses((prev) => {
-        return {
-          responses: [...prev.responses, { ...currentQuestion, ...addedOption }],
-        };
-      });
-  }
+    currentState
+      ? setActualResponses({ responses: [dataObj] })
+      : setActualResponses((prev) => {
+          return {
+            responses: [
+              ...prev.responses,
+              { ...currentQuestion, ...addedOption },
+            ],
+          };
+        });
+  };
 
   const getResponsesData = (resp) => {
     setAddedOption(resp);
@@ -228,50 +228,51 @@ const StaffComponent = () => {
         }
       }
     }
-  };
 
-  // const resources = selectedResource.resources;
-      if (lastQuestion) {
-        setCurrentQuestion(lastQuestion);
-        setActualResponses({ responses: newArray });
-        setCurrentQuestionIndex(currentQuestionIndex - 1);
-      }
-
-
-      // Check if there's at least one response
-      if (actualResponses.responses.length > 0) {
-        let totalPriceToSubtract = 0;
-
-        // For the popped response object
-        if (lastQuestion) {
-          // For the first response object (index 0)
-          if (actualResponses.responses.length === 0) {
-            // Calculate the total price from resources array in the first object and subtract it
-            if (lastQuestion.resources && lastQuestion.resources.length > 0) {
-              lastQuestion.resources.forEach((resource) => {
-                if (resource.resourceOption && resource.resourceOption.price) {
-                  totalPriceToSubtract += resource.resourceOption.price;
-                }
-              });
-            }
-          } else {
-            // For subsequent response objects (index > 0)
-            if (lastQuestion.selectedData && lastQuestion.selectedData.length > 0) {
-              lastQuestion.selectedData.forEach((select) => {
-                if (select.price) {
-                  totalPriceToSubtract += select.price;
-                }
-              });
-            }
-          }
-
-          // Subtract the price of the popped response from the total cost
-          setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract)); // Ensure the totalCost doesn't go below 0
-        }
-      }
+    // const resources = selectedResource.resources;
+    if (lastQuestion) {
+      setCurrentQuestion(lastQuestion);
+      setActualResponses({ responses: newArray });
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
 
-  }
+    // Check if there's at least one response
+    if (actualResponses.responses.length > 0) {
+      let totalPriceToSubtract = 0;
+
+      // For the popped response object
+      if (lastQuestion) {
+        // For the first response object (index 0)
+        if (actualResponses.responses.length === 0) {
+          // Calculate the total price from resources array in the first object and subtract it
+          if (lastQuestion.resources && lastQuestion.resources.length > 0) {
+            lastQuestion.resources.forEach((resource) => {
+              if (resource.resourceOption && resource.resourceOption.price) {
+                totalPriceToSubtract += resource.resourceOption.price;
+              }
+            });
+          }
+        } else {
+          // For subsequent response objects (index > 0)
+          if (
+            lastQuestion.selectedData &&
+            lastQuestion.selectedData.length > 0
+          ) {
+            lastQuestion.selectedData.forEach((select) => {
+              if (select.price) {
+                totalPriceToSubtract += select.price;
+              }
+            });
+          }
+        }
+
+        // Subtract the price of the popped response from the total cost
+        setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract)); // Ensure the totalCost doesn't go below 0
+      }
+    }
+  };
+
+  // }
 
   // const resources = selectedResource.resources;
 
@@ -351,13 +352,29 @@ const StaffComponent = () => {
           </Box>
         </Box>
       ) : (
-        <div>
-          <Question
-            currentQuestion={currentQuestion}
-            getResponsesData={getResponsesData}
-            styleVal={"Tiles"}
-          />
-        </div>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box>
+            <Question
+              currentQuestion={currentQuestion}
+              getResponsesData={getResponsesData}
+              styleVal={"Tiles"}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              margin: "1em 3em",
+            }}
+          >
+            {actualResponses.length || actualResponses.responses ? (
+              <Stepper
+                responses={actualResponses.responses}
+                changeActiveQuestion={changeActiveQuestion}
+              />
+            ) : null}
+          </Box>
+        </Box>
       )}
       <Box sx={{ display: "flex", gap: "2em", margin: "1em 0 3em 0" }}>
         {currentQuestionIndex > 0 ? (
@@ -397,13 +414,6 @@ const StaffComponent = () => {
           </Button>
         )}
       </Box>
-
-      {actualResponses.length || actualResponses.responses ? (
-        <Stepper
-          responses={actualResponses.responses}
-          changeActiveQuestion={changeActiveQuestion}
-        />
-      ) : null}
     </Box>
   );
 };

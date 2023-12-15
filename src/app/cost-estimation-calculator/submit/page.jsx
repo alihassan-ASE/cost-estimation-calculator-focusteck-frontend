@@ -7,14 +7,14 @@ import Form from "../Components/Form";
 const page = () => {
   const [actualResponse, setActualResponse] = useState({});
 
-   let response = window.localStorage.getItem('Response');
+  let response = window.localStorage.getItem("Response");
 
   if (response) {
     try {
       response = JSON.parse(response);
     } catch (error) {
-      console.error('Error parsing JSON:', error);
-      response = {}; 
+      console.error("Error parsing JSON:", error);
+      response = {};
     }
   }
 
@@ -30,5 +30,3 @@ const page = () => {
 };
 
 export default page;
-
-
