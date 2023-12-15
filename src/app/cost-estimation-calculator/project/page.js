@@ -3,7 +3,6 @@ import Stepper from '../Components/Stepper/page';
 import Question from '../Components/Question/page';
 import { getQuestions, getDynamicQuestion } from '@/app/lib/api/getProjectQuestions';
 import { useState, useEffect } from 'react';
-import { ClickAwayListener } from '@mui/material';
 
 const page = () => {
 
@@ -21,9 +20,6 @@ const page = () => {
   const [questionsToShow, setQuestionsToShow] = useState([]);
 
   const [totalCost, setTotalCost] = useState(0);
-
-
-
 
 
 
@@ -45,7 +41,6 @@ const page = () => {
 
     fetchData();
   }, []);
-
 
 
   // getting Response from child Component
@@ -73,7 +68,6 @@ const page = () => {
     let cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
-    console.log("Last Question", lastQuestion);
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
@@ -196,28 +190,25 @@ const page = () => {
         break;
       }
       case "stepper": {
-        actualResponses.map((obj) => {
-          console.log(obj.selectedOption[0].price);
 
+        actualResponses.map((obj) => {
           obj.selectedOption.map((selected) => {
-            cost = selected.price - cost;
-          })
+            cost = selected.price + cost;
+          });
         });
-        setTotalCost((prev)=>prev - cost);
-        console.log("cost", totalCost);
+        setTotalCost(cost);
         break;
       }
     }
 
-
   }
-  console.log("Price", totalCost)
 
   return (
     <>
       {
         fetchQuesitons !== null ?
           <div>
+            <h1>{totalCost}</h1>
             <div className='flex w-full h-screen justify-between items-center'>
               <div>
                 <Question currentQuestion={currentQuestion} getResponsesData={getResponsesData} />

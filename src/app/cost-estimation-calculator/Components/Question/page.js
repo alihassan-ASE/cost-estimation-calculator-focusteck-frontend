@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ShowOptions from "../ShowOption";
 const page = (props) => {
+
   let { currentQuestion, getResponsesData } = props;
   const [selectedOption, setSelectedOption] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
@@ -10,6 +11,7 @@ const page = (props) => {
     setSelectedData([data]);
   };
 
+  console.log()
 
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
@@ -18,7 +20,7 @@ const page = (props) => {
 
         if (nextQuestion == undefined) {
 
-          getResponsesData({ selectedData });
+          getResponsesData( {selectedData} );
         }
          else if (nextQuestion !== '') {
           getResponsesData({ selectedData, nextQuestion})

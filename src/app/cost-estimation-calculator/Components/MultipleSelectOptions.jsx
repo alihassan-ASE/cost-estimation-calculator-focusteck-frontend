@@ -67,7 +67,11 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
 }));
 
-const MultipleComponent = ({ responseData, selectedOptionPassToParent }) => {
+const MultipleComponent = ({
+  options,
+  selectedOption,
+  selectedOptionPassToParent,
+}) => {
   const [selectedFormats, setSelectedFormats] = useState([]);
 
   useEffect(() => {

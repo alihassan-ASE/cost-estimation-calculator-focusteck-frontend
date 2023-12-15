@@ -11,7 +11,6 @@ import {
   Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   "&:hover": {
@@ -56,124 +55,75 @@ const MenuProps = {
   },
 };
 
-const DropDownComponent = ({ responseData, selectedOptionPassToParent }) => {
-  const [count, setCount] = useState(1);
-  const [selectedValue, setSelectedValue] = useState(
-    responseData.responses[0].selectedOption[0] || null
-  );
+const DropDownComponent = ({
+  options,
+  label,
+  disable,
+  selectedResource,
+  getData,
+}) => {
+  const [selectedValue, setSelectedValue] = useState(selectedResource || "");
+  // console.log("Selected Value: ", selectedResource);
 
-  const [data, getData] = useState();
-  const [getButton, setGetButton] = useState(false);
-
-  const checkSelectedOption = (data) => {
-    return (
-      selectedValue &&
-      data.opt === selectedValue.opt &&
-      data.price === selectedValue.price
-    );
-  };
-
-  const returnDropDown = () => {
-    for (let i = 0; i < count; i++) {
-      return (
-        <Box
-          style={{
-            marginBottom: "3em",
-            border: "1px solid gray",
-            padding: "3em",
-            borderRadius: ".5em",
-            maxWidth: 400,
-            display: "flex",
-            flexWrap: "wrap",
+  return (
+    <Box
+      style={{
+        borderRadius: ".5em",
+        margin: ".5em 0",
+        display: "flex",
+        flexWrap: "wrap",
+        flexGrow: 1,
+      }}
+    >
+      <FormControl sx={{ width: 270, maxWidth: 300 }}>
+        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+        <Select
+          autoFocus={false}
+          value={disable ? null : selectedValue}
+          onChange={(e) => {
+            const selectedObject = e.target.value;
+            setSelectedValue(selectedObject);
+            getData(selectedObject, label);
           }}
-        >
-          <FormControl sx={{ width: 400 }}>
-            <InputLabel id="demo-simple-select-label">
-              Drop Down Options
-            </InputLabel>
-            <Select
-              autoFocus={false}
-              value={selectedValue || ""}
-              onChange={(e) => {
-                const selectedObject = e.target.value;
-                setSelectedValue(selectedObject);
-                selectedOptionPassToParent(selectedObject);
-                getData(selectedObject);
-              }}
-              input={
-                <OutlinedInput id="select-multiple-chip" label="Questions" />
-              }
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  <Chip
-                    key={selected.opt}
-                    label={`${selected.opt} (${selected.price} $)`}
-                  />
-                </Box>
+          disabled={disable ? true : false}
+          input={<OutlinedInput id="select-multiple-chip" label={label} />}
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.opt ? (
+                <Chip
+                  key={selected.opt}
+                  label={`${selected.opt} (${selected.price} $)`}
+                />
+              ) : (
+                <Chip key={selected} label={selected} />
               )}
-              MenuProps={MenuProps}
-            >
-              {responseData.responses[0].options.map((data, index) => (
-                <StyledMenuItem
-                  key={index}
-                  value={data}
-                  sx={
-                    checkSelectedOption(data)
-                      ? {
-                          backgroundColor: "#0062cc",
-                          color: "white",
-                        }
-                      : {}
-                  }
-                >
-                  {data.opt} ({data.price} $)
-                </StyledMenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {data || selectedValue ? (
-            <Box sx={{ margin: "1em 0" }}>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setGetButton(true);
-                  setCount(count + 1);
-                }}
-              >
-                Save
-              </Button>
-              {getButton ? (
-                <Box
-                  style={{
-                    marginBottom: "3em",
-                    border: "1px solid gray",
-                    padding: "3em",
-                    borderRadius: ".5em",
-                    maxWidth: 400,
-                  }}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button>
-                    <ControlPointIcon
-                      onClick={() => {
-                        setGetButton(true);
-                      }}
-                    ></ControlPointIcon>
-                  </Button>
-                </Box>
-              ) : null}
             </Box>
-          ) : null}
-        </Box>
-      );
-    }
-  };
-
-  return returnDropDown();
+          )}
+          MenuProps={MenuProps}
+        >
+          {options?.map((data, index) => (
+            <StyledMenuItem
+              // sx={{
+              //   MaxWidth: 270,
+              //   wordWrap: "break-word",
+              //   display: "flex",
+              //   flexWrap: "wrap",
+              // }}
+              key={index}
+              value={
+                data.opt && data.price
+                  ? { opt: data.opt, price: data.price }
+                  : data
+              }
+            >
+              {data.opt ? data.opt : data}{" "}
+              {data.price ? `(${data.price} $)` : null}
+            </StyledMenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+  );
 };
 
 export default DropDownComponent;
