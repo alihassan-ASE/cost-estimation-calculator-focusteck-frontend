@@ -29,18 +29,17 @@ const Form = ({ response, getActualResponse }) => {
       setSubmitted(false);
     }
     if (formInput.userName && formInput.email) {
-      //   setResourcesList({
-      //     totalCost: totalPrice,
-      //     ...formInput,
-      //     ...resourcesList,
-      //   });
-      getActualResponse(formInput);
+     
       setErrorMessage({ usernameError: null, emailError: null });
       setCheckInputVal(false);
       setSubmitted(true);
+      
+      getActualResponse({
+        ...formInput,
+        ...response,
+      });
     }
   };
-  console.log("Form Input: ", formInput);
 
   return (
     <Box>
@@ -103,7 +102,7 @@ const Form = ({ response, getActualResponse }) => {
           </Box>
         </form>
       </Box>
-      {submitted ? <ShowResponse response={response} /> : null}
+      {submitted ? <ShowResponse response={{...response,...formInput}} /> : null}
     </Box>
   );
 };

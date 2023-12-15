@@ -47,7 +47,6 @@ const StaffResource = ({
   const [showDropdown, setShowDropdown] = useState(true);
 
   const getData = (data, label) => {
-    console.count("Triggered getData");
     if (label === "Resources") {
       setCurrentResource({ resource: data });
     } else if (label === "Resource Option") {

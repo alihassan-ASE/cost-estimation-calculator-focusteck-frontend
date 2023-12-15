@@ -24,6 +24,10 @@ const page = () => {
 
   const [totalCost, setTotalCost] = useState(0);
 
+  const route = useRouter();
+
+
+
   useEffect(() => {
     const fetchData = () => {
       getQuestions()
@@ -71,8 +75,21 @@ const page = () => {
 
     lastQuestion.selectedOption.map((op) => {
       cost = op.price;
-    });
-    handlePrice("back", cost);
+    })
+    handlePrice("back", cost)
+
+  }
+
+
+  const goToForm = () => {
+    try {
+      let data = JSON.stringify(actualResponses);
+      localStorage.setItem("Response", data);
+      // console.log("Moving to Form....................")
+      route.push('/cost-estimation-calculator/submit');
+    } catch (error) {
+      // console.log("Data is not set", error)
+    }
   };
 
   // Handling Next Question
@@ -129,8 +146,9 @@ const page = () => {
           currentQuestionLocal =
             postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
-        } else {
-          // TODO: move to form
+        }
+        else {
+          goToForm();
         }
       }
 

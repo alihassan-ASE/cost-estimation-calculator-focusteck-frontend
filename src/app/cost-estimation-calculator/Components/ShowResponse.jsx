@@ -19,7 +19,7 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
-  console.log("response Here: ", response);
+  
   return (
     <Box
       sx={{
@@ -73,7 +73,7 @@ const ShowResponse = ({ response }) => {
             <CustomButton sx={{ gap: "1em" }}>
               <Typography>{data.label}</Typography>
 
-              {data.selectedOption.map((eachOption) => (
+              {data.selectedData.map((eachOption) => (
                 <Chip
                   key="Resource"
                   label={`${eachOption.opt} (${eachOption.price} $)`}
@@ -89,7 +89,7 @@ const ShowResponse = ({ response }) => {
             <CustomButton sx={{ gap: "1em" }}>
               <Typography>{data.label}</Typography>
 
-              {data.selectedOption.map((eachOption) => (
+              {data.selectedData.map((eachOption) => (
                 <Chip
                   key="Resource"
                   label={`${eachOption.opt} (${eachOption.price} $)`}

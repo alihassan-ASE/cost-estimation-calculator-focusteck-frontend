@@ -27,7 +27,7 @@ export default function VerticalLinearStepper(props) {
         {responses?.map((step, index) => (
           <Step key={index}>
           {
-            step.resourses? (<Typography>{"RESOURCES"}</Typography>):
+            // step.resourses && index == 0 ?<h1>Hello</h1>:
              ((step.selectedOption || step.selectedData) && (step.selectedOption||step.selectedData).map((selected , key)=>(
               <StepLabel key={key} cursor="pointer" onClick={() => handleStep(step, index + 1)}>{step.question.label?step.question.label.toUpperCase(): step.label.toUpperCase()} <Typography fontSize={"12px"} color={"gray"}> {selected.opt}  (${selected.price})</Typography></StepLabel>
             )))

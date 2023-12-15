@@ -2,11 +2,21 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 
-import response from "../../../../response.json";
 import Form from "../Components/Form";
 
 const page = () => {
-  const [actualResponse, setActualResponse] = useState();
+  const [actualResponse, setActualResponse] = useState({});
+
+   let response = window.localStorage.getItem('Response');
+
+  if (response) {
+    try {
+      response = JSON.parse(response);
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      response = {}; 
+    }
+  }
 
   const getActualResponse = (formData) => {
     setActualResponse(formData);
@@ -20,3 +30,5 @@ const page = () => {
 };
 
 export default page;
+
+
