@@ -59,11 +59,11 @@ const DropDownComponent = ({
   options,
   label,
   disable,
-  selectedOption,
+  selectedResource,
   getData,
 }) => {
-  const [selectedValue, setSelectedValue] = useState(selectedOption || "");
-  // console.log("Selected Value: ", selectedOption);
+  const [selectedValue, setSelectedValue] = useState(selectedResource || "");
+  // console.log("Selected Value: ", selectedResource);
 
   return (
     <Box

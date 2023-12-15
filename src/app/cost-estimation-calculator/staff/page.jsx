@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 
-import StaffComponent from "../_components/StaffComponent";
+import StaffComponent from "../Components/StaffComponent";
+
+
+import QuestionsComponent from "@/app/cost-estimation-calculator/Components/Questions";
 
 const page = () => {
   // const [selectedData, setSelectedData] = useState([]);

@@ -10,7 +10,7 @@ import {
   Grid,
 } from "@mui/material";
 
-import QuestionsComponent from "./Question";
+import QuestionsComponent from "./Questions";
 
 const StaffResource = ({
   question,
@@ -19,7 +19,7 @@ const StaffResource = ({
   index,
   setValues,
   values,
-  selectedOption,
+  selectedResource,
   selectedOptionPassToParent,
 }) => {
   let newOption;
@@ -36,10 +36,10 @@ const StaffResource = ({
   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
   useEffect(() => {
     setCurrentResource({
-      resource: selectedOption[index]?.resource,
-      resourceOption: selectedOption[index]?.resourceOption,
-      seniorityLevel: selectedOption[index]?.seniorityLevel,
-      numOfResources: selectedOption[index]?.numOfResources,
+      resource: selectedResource[index]?.resource,
+      resourceOption: selectedResource[index]?.resourceOption,
+      seniorityLevel: selectedResource[index]?.seniorityLevel,
+      numOfResources: selectedResource[index]?.numOfResources,
     });
     setShowDropdown(false);
   }, []);
@@ -74,14 +74,11 @@ const StaffResource = ({
 
     setLabel(label);
   };
-  console.log("Current Resource: ", currentResource);
-  // console.log("ShowDropDown: ", showDropdown);
 
-  if (options[0].typeOfResource) {
     newOption = useMemo(() => {
       return options.map((item) => item.typeOfResource);
     }, [options]);
-  }
+  
   return (
     <Grid container spacing={2} sx={{ height: 360, alignItems: "center" }}>
       <Grid item lg={4} sx={{ minWidth: 300, maxWidth: 300 }}>
@@ -90,10 +87,11 @@ const StaffResource = ({
             <QuestionsComponent
               question={question}
               options={newOption}
+              styleVal={"DropDown"}
               label={label ? label : "Resources"}
               disable={false}
-              selectedOption={
-                selectedOption[index]?.resource || currentResource.resource
+              selectedResource={
+                selectedResource[index]?.resource || currentResource.resource
               }
               getData={getData}
             />
@@ -146,17 +144,18 @@ const StaffResource = ({
                 options={resourceData}
                 label={label ? label : "Resource Option"}
                 disable={
-                  currentResource.resource || selectedOption[index]?.resource
+                  currentResource.resource || selectedResource[index]?.resource
                     ? false
                     : true
                 }
-                selectedOption={
+                styleVal={"DropDown"}
+                selectedResource={
                   currentResource.resource &&
                   !currentResource?.resourceOption?.opt
                     ? null
                     : currentResource?.resourceOption?.opt
                     ? currentResource?.resourceOption?.opt
-                    : selectedOption[index]?.resourceOption?.opt
+                    : selectedResource[index]?.resourceOption?.opt
                 }
                 getData={getData}
               />
@@ -209,16 +208,18 @@ const StaffResource = ({
               label={label ? label : "Seniority Level"}
               disable={
                 currentResource.resourceOption ||
-                selectedOption[index]?.resourceOption
+                selectedResource[index]?.resourceOption
                   ? false
                   : true
               }
-              selectedOption={
+              styleVal={"DropDown"}
+
+              selectedResource={
                 currentResource.resource && !currentResource.seniorityLevel
                   ? null
                   : currentResource.seniorityLevel
                   ? currentResource.seniorityLevel
-                  : selectedOption[index]?.seniorityLevel
+                  : selectedResource[index]?.seniorityLevel
               }
               getData={getData}
             />
@@ -268,16 +269,17 @@ const StaffResource = ({
                 label={label ? label : "Number of Resources"}
                 disable={
                   currentResource.seniorityLevel ||
-                  selectedOption[index]?.seniorityLevel
+                  selectedResource[index]?.seniorityLevel
                     ? false
                     : true
                 }
-                selectedOption={
+                styleVal={"DropDown"}
+                selectedResource={
                   currentResource.resource && !currentResource.numOfResources
                     ? null
                     : currentResource.numOfResources
                     ? currentResource.numOfResources
-                    : selectedOption[index]?.numOfResources
+                    : selectedResource[index]?.numOfResources
                 }
                 getData={getData}
               />
@@ -365,13 +367,13 @@ const StaffResource = ({
                     setValues(updatedValues);
                     setShowDropdown(false);
                   }
-                } else if (selectedOption[index]) {
+                } else if (selectedResource[index]) {
                   selectedOptionPassToParent(
                     {
-                      resource: selectedOption[index].resource,
-                      resourceOption: selectedOption[index].resourceOption,
-                      seniorityLevel: selectedOption[index].seniorityLevel,
-                      numOfResources: selectedOption[index].numOfResources,
+                      resource: selectedResource[index].resource,
+                      resourceOption: selectedResource[index].resourceOption,
+                      seniorityLevel: selectedResource[index].seniorityLevel,
+                      numOfResources: selectedResource[index].numOfResources,
                     },
                     false,
                     getLabel

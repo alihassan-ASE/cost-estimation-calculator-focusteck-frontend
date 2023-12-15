@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 
-import ShowOption from "@/app/cost-estimation-calculator/_components/ShowOption";
+import ShowOption from "@/app/cost-estimation-calculator/Components/ShowOption";
 
 const QuestionsComponent = ({
   question,
@@ -10,6 +10,8 @@ const QuestionsComponent = ({
   label,
   disable,
   selectedOption,
+  selectedResource,
+  styleVal,
   getData,
 }) => {
   return (
@@ -19,8 +21,9 @@ const QuestionsComponent = ({
       </Typography> */}
       <ShowOption
         options={options}
-        selectedOption={selectedOption}
+        selectedOption={selectedOption? selectedOption: selectedResource}
         getData={getData}
+        styleVal={styleVal}
         label={label}
         disable={disable}
       />

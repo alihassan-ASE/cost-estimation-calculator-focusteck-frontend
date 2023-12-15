@@ -1,10 +1,20 @@
-import { Typography, Box, Button } from "@mui/material";
-import Image from "next/image";
+"use client"
+import { useRouter } from 'next/navigation'
+import React from 'react'
+const Home = () => {
 
-export default function Home() {
-  return (
-    <Box>
-      <Typography variant="h3">Hello World</Typography>
-    </Box>
-  );
+  const route = useRouter();
+
+  const goToRoute = (param)=>{
+    route.push(param);
+  }
+
+
+    return (
+    <div>
+      <button onClick={()=>goToRoute('/cost-estimation-calculator')}>Start</button>
+    </div>
+  )
 }
+
+export default Home;
