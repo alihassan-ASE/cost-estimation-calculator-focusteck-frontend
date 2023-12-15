@@ -41,6 +41,7 @@ const StaffResource = ({
       seniorityLevel: selectedOption[index]?.seniorityLevel,
       numOfResources: selectedOption[index]?.numOfResources,
     });
+    setShowDropdown(false);
   }, []);
 
   const numOfResourcesOptions = {
@@ -98,7 +99,7 @@ const StaffResource = ({
             />
           )}
 
-          {!showDropdown && currentResource.resource && (
+          {!showDropdown && (
             <Button
               onClick={() => {
                 setShowDropdown(true);
@@ -124,7 +125,12 @@ const StaffResource = ({
               >
                 Resources
               </Typography>
-              <Chip key="Resources" label={currentResource.resource} />
+              <Chip
+                key="Resources"
+                label={
+                  selectedOption[index]?.resource || currentResource.resource
+                }
+              />
             </Button>
           )}
 
@@ -157,7 +163,7 @@ const StaffResource = ({
             </>
           )}
 
-          {!showDropdown && currentResource.resourceOption && (
+          {!showDropdown && (
             <Button
               onClick={() => {
                 setShowDropdown(true);
@@ -172,7 +178,6 @@ const StaffResource = ({
                 border: "1px solid #ebebeb",
                 padding: ".5em 1em",
                 borderRadius: "2px",
-
                 gap: ".5em",
               }}
             >
@@ -189,7 +194,10 @@ const StaffResource = ({
                   textOverflow: "ellipsis",
                 }}
                 key="Resource Option"
-                label={`${currentResource.resourceOption?.opt} (${currentResource.resourceOption?.price} $)`}
+                label={
+                  `${selectedOption[index]?.resourceOption.opt} (${selectedOption[index]?.resourceOption.price} $)` ||
+                  `${currentResource.resourceOption?.opt} (${currentResource.resourceOption?.price} $)`
+                }
               />
             </Button>
           )}
@@ -216,7 +224,7 @@ const StaffResource = ({
             />
           )}
 
-          {!showDropdown && currentResource.seniorityLevel && (
+          {!showDropdown && (
             <Button
               onClick={() => {
                 setShowDropdown(true);
@@ -244,7 +252,10 @@ const StaffResource = ({
               </Typography>
               <Chip
                 key="Seniority Level"
-                label={currentResource.seniorityLevel}
+                label={
+                  selectedOption[index]?.seniorityLevel ||
+                  currentResource.seniorityLevel
+                }
               />
             </Button>
           )}
@@ -273,7 +284,7 @@ const StaffResource = ({
             </>
           )}
 
-          {!showDropdown && currentResource.numOfResources && (
+          {!showDropdown && (
             <Button
               onClick={() => {
                 setShowDropdown(true);
@@ -301,7 +312,10 @@ const StaffResource = ({
               </Typography>
               <Chip
                 key="Number of Resources"
-                label={currentResource.numOfResources}
+                label={
+                  selectedOption[index]?.numOfResources ||
+                  currentResource.numOfResources
+                }
               />
             </Button>
           )}
@@ -312,7 +326,8 @@ const StaffResource = ({
         currentResource.resourceOption &&
         currentResource.seniorityLevel &&
         currentResource.numOfResources &&
-        saveButton ? (
+        saveButton &&
+        showDropdown ? (
           <Box sx={{ margin: "1em 0" }}>
             <Button
               variant="outlined"

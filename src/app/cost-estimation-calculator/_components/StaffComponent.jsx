@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Card, Grid } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { styled } from "@mui/material/styles";
@@ -10,6 +10,7 @@ import question from "../../../../data/question.json";
 import options from "../../../../data/options.json";
 import selectedOption from "../../../../data/selectedOption.json";
 import staffBase from "../../../../data/staffBase.json";
+import { ResetTvRounded } from "@mui/icons-material";
 
 const CustomButton = styled(Button)({
   "&:hover": {
@@ -21,17 +22,29 @@ const StaffComponent = () => {
   const [count, setCount] = useState(0);
   const [addMore, setAddMore] = useState(false);
   const [values, setValues] = useState([]);
+  const [checkResource, setCheckResource] = useState(true);
 
   const selectedOptionPassToParent = (data, boolVal, label) => {
     setValues((prev) => [...prev, data]);
     setAddMore(!boolVal);
   };
+  const resources = selectedOption.resources;
+  useEffect(() => {
+    if (selectedOption.resources.length > 0) {
+      setCount(selectedOption.resources.length - 1);
+      // ... other logic if needed
+    }
+  }, [selectedOption.resources]);
+
   console.log("In Staff Parent => ", values);
 
-  const resources = selectedOption.resources;
+  const resourcesLength = resources.length;
+
+  // console.log("Count: ", count);
 
   const returnResources = () => {
     const tags = [];
+
     for (let i = 0; i <= count; i++) {
       tags.push(
         <Card
@@ -49,7 +62,7 @@ const StaffComponent = () => {
             index={i}
             setValues={setValues}
             values={values}
-            selectedOption={resources}
+            selectedOption={selectedOption.resources}
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
         </Card>
@@ -59,7 +72,7 @@ const StaffComponent = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ scrollBehavior: "smooth" }}>
       <Typography variant="h5" pb={2}>
         Staff Questions
       </Typography>
@@ -72,19 +85,18 @@ const StaffComponent = () => {
           alignItems: "center",
         }}
       >
-        {resources[0]
-          ? resources?.map((data) => returnResources())
-          : returnResources()}
+        {returnResources()}
 
         <Box>
           {addMore && (
             <CustomButton
               onClick={() => {
                 setAddMore(false);
-                setCount(count + 1);
+                setCount((prevCount) => prevCount + 1);
                 returnResources();
               }}
               style={{
+                border: "1px solid #0069d9",
                 marginBottom: "3em",
                 padding: "3em",
                 borderRadius: ".5em",
@@ -105,11 +117,14 @@ const StaffComponent = () => {
         </Box>
       </Box>
 
-      {addMore && (
-        <Button size="medium" variant="contained" sx={{ width: 200 }}>
-          Next
-        </Button>
-      )}
+      <Button
+        size="medium"
+        variant="contained"
+        sx={{ width: 200 }}
+        disabled={values[0] ? false : true}
+      >
+        Next
+      </Button>
     </Box>
   );
 };
