@@ -16,9 +16,6 @@ const QuestionsComponent = ({
 }) => {
   return (
     <Box>
-      {/* <Typography variant="h4" mb={2}>
-        {question}
-      </Typography> */}
       <ShowOption
         options={options}
         selectedOption={selectedOption? selectedOption: selectedResource}

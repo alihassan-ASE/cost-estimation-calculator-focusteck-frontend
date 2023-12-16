@@ -117,6 +117,9 @@ const StaffComponent = () => {
     }
   };
 
+  // console.log("price: ", totalCost);
+  console.log("actual response: ", actualResponses);
+
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
     // console.log(obj)

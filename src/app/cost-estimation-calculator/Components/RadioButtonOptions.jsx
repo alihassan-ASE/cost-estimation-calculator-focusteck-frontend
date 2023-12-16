@@ -53,7 +53,7 @@ const RadioButtonComponent = ({
               key={index}
               value={data.opt}
               control={<Radio />}
-              label={`${data.opt} (${data.price} $)`}
+              label={`${data.opt} ($${data.price})`}
               checked={checkSelectedOption(data)}
             />
           ))}

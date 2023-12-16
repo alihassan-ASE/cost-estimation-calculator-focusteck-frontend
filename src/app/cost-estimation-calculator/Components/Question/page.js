@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ShowOptions from "../ShowOption";
+import { Typography } from "@mui/material";
 const page = (props) => {
   let { currentQuestion, getResponsesData } = props;
   const [selectedOption, setSelectedOption] = useState([]);
@@ -37,7 +38,9 @@ const page = (props) => {
 
   return (
     <div>
-      <h1>{currentQuestion?.question}</h1>
+      <Typography variant="h4" sx={{ marginX: "1em" }}>
+        {currentQuestion?.question}
+      </Typography>
       <ShowOptions
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}

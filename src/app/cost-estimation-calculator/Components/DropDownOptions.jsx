@@ -5,7 +5,6 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Typography,
   OutlinedInput,
   Chip,
   Button,
@@ -69,14 +68,12 @@ const DropDownComponent = ({
       style={{
         borderRadius: ".5em",
         margin: ".5em 0",
-        display: "flex",
-        // flexWrap: "wrap",
-        // flexGrow: 1,
       }}
     >
-      <FormControl xs={{ padding: 0 }}>
+      <FormControl>
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
+          sx={{ display: "flex", flexGrow: 1 }}
           autoFocus={false}
           value={disable ? null : selectedValue}
           onChange={(e) => {
@@ -91,7 +88,7 @@ const DropDownComponent = ({
               {selected.opt ? (
                 <Chip
                   key={selected.opt}
-                  label={`${selected.opt} (${selected.price} $)`}
+                  label={`${selected.opt} ($${selected.price})`}
                 />
               ) : (
                 <Chip key={selected} label={selected} />
@@ -102,12 +99,6 @@ const DropDownComponent = ({
         >
           {options?.map((data, index) => (
             <StyledMenuItem
-              // sx={{
-              //   MaxWidth: 270,
-              //   wordWrap: "break-word",
-              //   display: "flex",
-              //   flexWrap: "wrap",
-              // }}
               key={index}
               value={
                 data.opt && data.price
@@ -116,7 +107,7 @@ const DropDownComponent = ({
               }
             >
               {data.opt ? data.opt : data}{" "}
-              {data.price ? `(${data.price} $)` : null}
+              {data.price ? `($${data.price})` : null}
             </StyledMenuItem>
           ))}
         </Select>

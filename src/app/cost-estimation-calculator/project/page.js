@@ -1,13 +1,14 @@
 "use client";
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
-import { useRouter } from "next/router";
+
 import {
   getQuestions,
   getDynamicQuestion,
 } from "@/app/lib/api/getProjectQuestions";
 import { useState, useEffect } from "react";
 import { Button, Box, Typography } from "@mui/material";
+import { useRouter } from 'next/navigation';
 
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -80,7 +81,9 @@ const page = () => {
 
   const goToForm = () => {
     try {
-      let data = JSON.stringify(actualResponses);
+      
+      let data = JSON.stringify({responses:actualResponses,totalCost:totalCost});
+      // debugger;
       localStorage.setItem("Response", data);
       // console.log("Moving to Form....................")
       route.push("/cost-estimation-calculator/submit");
@@ -100,7 +103,7 @@ const page = () => {
     switch (currentStateLocal) {
       case "pre": {
         if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
-          currentStateLocal = "dynamic";
+          currentStateLocal = "post";
           currentQuestionLocal = null;
           currentQuestionIndexLocal = 0;
         } else {

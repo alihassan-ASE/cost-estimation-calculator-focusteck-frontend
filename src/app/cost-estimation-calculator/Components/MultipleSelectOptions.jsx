@@ -117,7 +117,7 @@ const MultipleComponent = ({
               handleFormat(null, updatedSelection);
             }}
           >
-            {data.opt} ({data.price} $)
+            {data.opt} (${data.price})
           </StyleToggleButton>
         ))}
       </StyledToggleButtonGroup>
