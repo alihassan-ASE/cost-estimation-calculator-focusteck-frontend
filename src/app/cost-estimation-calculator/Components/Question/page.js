@@ -1,11 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ShowOptions from "../ShowOption";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  fontSize: "2em",
+  display: "flex",
+  flexWrap: "wrap",
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.5em",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1em",
+  },
+}));
+
 const page = (props) => {
   let { currentQuestion, getResponsesData } = props;
   const [selectedOption, setSelectedOption] = useState([]);
-  const [totalCost, setTotalCost] = useState(0);
 
   const [selectedData, setSelectedData] = useState([]);
   const selectedOptionPassToParent = (data) => {
@@ -37,16 +50,16 @@ const page = (props) => {
   }, [selectedData, currentQuestion]);
 
   return (
-    <div>
-      <Typography variant="h4" sx={{ marginX: "1em" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
+      <CustomTypography variant="h4">
         {currentQuestion?.question}
-      </Typography>
+      </CustomTypography>
       <ShowOptions
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}
         selectedOption={selectedOption}
       />
-    </div>
+    </Box>
   );
 };
 

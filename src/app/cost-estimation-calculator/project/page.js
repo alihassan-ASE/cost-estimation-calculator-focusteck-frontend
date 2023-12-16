@@ -7,8 +7,8 @@ import {
   getDynamicQuestion,
 } from "@/app/lib/api/getProjectQuestions";
 import { useState, useEffect } from "react";
-import { Button, Box, Typography } from "@mui/material";
-import { useRouter } from 'next/navigation';
+import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -23,6 +23,16 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
+  const [orientation, setOrientation] = useState("horizontal");
+  const isNarrowScreen = useMediaQuery("(max-width:600px)");
+
+  useEffect(() => {
+    if (isNarrowScreen) {
+      setOrientation("horizontal");
+    } else {
+      setOrientation("vertical");
+    }
+  }, [isNarrowScreen]);
 
   const [totalCost, setTotalCost] = useState(0);
 
@@ -81,8 +91,10 @@ const page = () => {
 
   const goToForm = () => {
     try {
-      
-      let data = JSON.stringify({responses:actualResponses,totalCost:totalCost});
+      let data = JSON.stringify({
+        responses: actualResponses,
+        totalCost: totalCost,
+      });
       // debugger;
       localStorage.setItem("Response", data);
       // console.log("Moving to Form....................")
@@ -103,7 +115,7 @@ const page = () => {
     switch (currentStateLocal) {
       case "pre": {
         if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
-          currentStateLocal = "post";
+          currentStateLocal = "dynamic";
           currentQuestionLocal = null;
           currentQuestionIndexLocal = 0;
         } else {
@@ -207,53 +219,83 @@ const page = () => {
       {fetchQuesitons !== null ? (
         <Box sx={{ margin: "1em 2em" }}>
           <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
-          <Box
-            className="flex w-full h-screen justify-between items-center"
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Box>
-              <Question
-                currentQuestion={currentQuestion}
-                getResponsesData={getResponsesData}
-              />
-              <Box sx={{ display: "flex", gap: "2em", margin: "3em 1em " }}>
-                <Button
-                  size="medium"
-                  variant="contained"
-                  sx={{ width: 150 }}
-                  vairant="contained"
-                  onClick={backQuestion}
-                >
-                  Back
-                </Button>
-                <Button
-                  size="medium"
-                  variant="contained"
-                  sx={{ width: 150 }}
-                  vairant="contained"
-                  onClick={nextQuestion}
-                >
-                  Next
-                </Button>
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                margin: "2em 3em 2em 5em",
-                minWidth: "300px",
-              }}
-            >
-              <Stepper
-                responses={actualResponses}
-                changeActiveQuestion={changeActiveQuestion}
-              />
-            </Box>
-          </Box>
+
+          {isNarrowScreen ? (
+            <Grid container spacing={{ xs: 5, sm: 2, md: 5, lg: 4, xl: 5 }}>
+              <Grid item lg={4} md={3} sm={4} xs={12}>
+                <Stepper
+                  responses={actualResponses}
+                  changeActiveQuestion={changeActiveQuestion}
+                  orientation={orientation}
+                />
+              </Grid>
+              <Grid item lg={8} md={9} sm={8} xs={12}>
+                <Question
+                  currentQuestion={currentQuestion}
+                  getResponsesData={getResponsesData}
+                />
+                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0 " }}>
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    vairant="contained"
+                    onClick={backQuestion}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    vairant="contained"
+                    onClick={nextQuestion}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+              <Grid item lg={8} md={9} sm={8} xs={12}>
+                <Question
+                  currentQuestion={currentQuestion}
+                  getResponsesData={getResponsesData}
+                />
+                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    vairant="contained"
+                    onClick={backQuestion}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    vairant="contained"
+                    onClick={nextQuestion}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              </Grid>
+              <Grid item lg={4} md={3} sm={4} xs={12}>
+                <Stepper
+                  responses={actualResponses}
+                  changeActiveQuestion={changeActiveQuestion}
+                  orientation={orientation}
+                />
+              </Grid>
+            </Grid>
+          )}
         </Box>
       ) : (
-        <div>Loading .....</div>
+        <Box sx={{ margin: "2em 0" }}>Loading .....</Box>
       )}
     </>
   );

@@ -17,10 +17,10 @@ const RadioButtonComponent = ({
   const [selectedFormat, setSelectedFormat] = useState("");
 
   useEffect(() => {
-    if (selectedOption.length > 0) {
+    if (selectedOption?.length > 0) {
       setSelectedFormat(selectedOption[0]);
     }
-  }, [responseData]);
+  }, [selectedOption]);
 
   const handleFormat = (event) => {
     const selectedOpt = event.target.value;

@@ -18,7 +18,7 @@ const CheckBoxComponent = ({
 
   useEffect(() => {
     setSelectedFormats(selectedOption || []);
-  }, [responseData]);
+  }, [selectedOption]);
 
   const handleFormat = (event) => {
     const selectedFormat = options.find(

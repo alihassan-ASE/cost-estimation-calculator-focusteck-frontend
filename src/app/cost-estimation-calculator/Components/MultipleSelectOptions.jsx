@@ -76,20 +76,19 @@ const MultipleComponent = ({
 
   useEffect(() => {
     setSelectedFormats(selectedOption || []);
-  }, [responseData]);
+  }, [selectedOption]);
 
   const handleFormat = (event, newFormats) => {
-
     setSelectedFormats(newFormats);
     selectedOptionPassToParent(newFormats);
   };
 
   const checkSelectedOption = (value, price) => {
-    return selectedFormats.some(
+    return selectedFormats?.some(
       (selected) => selected.opt === value && selected.price === price
     );
   };
-
+  console.log("Selected Formats: ", selectedFormats);
   return (
     <Box>
       <Typography variant="h6">Tiles Multi Select</Typography>

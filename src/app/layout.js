@@ -5,6 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import images from "../images/header-image.jpg";
+// import { useRouter } from "next/navigation";
 import {
   BottomNavigation,
   InputBase,
@@ -14,6 +15,32 @@ import {
   Button,
   AppBar,
 } from "@mui/material";
+
+const CustomBox = styled(Box)(({ theme }) => ({
+  margin: "0 2em",
+  [theme.breakpoints.down("sm")]: {
+    margin: "0",
+  },
+}));
+
+const CustomBannerBox = styled(Box)(({ theme }) => ({
+  color: "white",
+  padding: "6em 3em",
+  display: "flex",
+  flexDirection: "column",
+  gap: "2em",
+  [theme.breakpoints.down("sm")]: {
+    padding: "4em 1em",
+  },
+}));
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    fontSize: "3em",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "2em",
+  },
+}));
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -58,6 +85,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function RootLayout({ children }) {
+  // const route = useRouter();
+  // if (!route) {
+  //   return null;
+  // }
+
+  // const specificURL = "/cost-estimation-calculator/submit";
+  // const isSpecificURL = route.pathname === specificURL;
+  // console.log("URL: ", isSpecificURL);
+
   return (
     <html lang="en">
       <body style={{ margin: "0" }}>
@@ -172,20 +208,15 @@ export default function RootLayout({ children }) {
             </Toolbar>
           </AppBar>
 
-          {/* <Box
+          <CustomBannerBox
             sx={{
-              padding: "6em 3em",
-              display: "flex",
-              flexDirection: "column",
-              gap: "2em",
               backgroundImage: `url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              color: "white",
             }}
           >
-            <Typography
+            <CustomTypography
               variant="h3"
               style={{
                 maxWidth: 800,
@@ -195,26 +226,39 @@ export default function RootLayout({ children }) {
               }}
             >
               Estimate the cost of your Software Project
-            </Typography>
+            </CustomTypography>
             <Typography sx={{ maxWidth: 600 }}>
               Answer five simple questions, and you’ll receive an instant cost
               estimation to help you get your project moving. Don't let cost
               uncertainties hold you back. Define your budget effortlessly with
               just a few clicks.
             </Typography>
-            <Button>
+            <Typography
+              sx={{
+                backgroundColor: "hsla(3, 1%, 0%, 0.1)",
+                padding: "1em .5em",
+              }}
+            >
               <Link
                 style={{ textDecoration: "none", color: "#fff" }}
                 href="#scroll-down"
               >
                 Take the next Step for your Project
               </Link>
-            </Button>
-          </Box> */}
+            </Typography>
+          </CustomBannerBox>
 
-          <Box id="scroll-down" sx={{ flexGrow: 1, padding: "0 1em" }}>
+          <CustomBox
+            id="scroll-down"
+            sx={{
+              flexGrow: 1,
+              // background: isSpecificURL
+              //   ? "linear-gradient(225deg, rgba(134,40,191,1) 0%, rgba(194,106,240,1) 44%, rgba(80,113,233,1) 80%, rgba(51,144,255,1) 100%)"
+              //   : null,
+            }}
+          >
             {children}
-          </Box>
+          </CustomBox>
           <BottomNavigation
             sx={{
               flexShrink: 0,

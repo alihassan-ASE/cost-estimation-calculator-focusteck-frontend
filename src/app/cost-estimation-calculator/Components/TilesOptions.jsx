@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const CustomButton = styled(Button)({
+const CustomButton = styled(Button)(({ theme }) => ({
   color: "#000000",
   boxShadow: "none",
   textTransform: "none",
@@ -11,6 +11,9 @@ const CustomButton = styled(Button)({
   lineHeight: 1.5,
   backgroundColor: "#F8F8F9",
   borderRadius: "3em",
+  minwidth: "140px",
+  display: "flex",
+  flexWrap: "wrap",
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -37,7 +40,16 @@ const CustomButton = styled(Button)({
     boxShadow: "none",
     color: "white",
   },
-});
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+    padding: ".7em 1.3em",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: 11,
+    padding: ".7em 1.7em",
+    width: "140px",
+  },
+}));
 
 const TilesComponent = ({
   options,
@@ -52,9 +64,9 @@ const TilesComponent = ({
   };
 
   return (
-    <Box>
+    <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
       {options?.map((data, index) => (
-        <Box sx={{ display: "inline-block", m: 1.5 }} key={index}>
+        <Box sx={{ display: "inline-block" }} key={index}>
           <CustomButton
             onClick={() => {
               selectedOptionPassToParent(data);

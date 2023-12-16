@@ -26,7 +26,12 @@ const page = () => {
   };
 
   return (
-    <Box sx={{ margin: "3em" }}>
+    <Box
+      sx={{
+        maxWidth: 700,
+        margin: "auto",
+      }}
+    >
       <Form response={response} getActualResponse={getActualResponse} />
     </Box>
   );

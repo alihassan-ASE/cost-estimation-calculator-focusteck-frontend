@@ -19,24 +19,42 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
-  debugger;
   return (
     <Box
       sx={{
-        margin: "3em 4em",
         border: "1px solid #cfcfcf",
-        padding: "2em 3em",
+        padding: "1em 1em",
+        // width: "100%",
+        margin: "3em 0.5em",
       }}
     >
       <Box>
         <CustomTypography variant="h6">User Details</CustomTypography>
         <CustomButton sx={{ display: "flex", gap: "1em" }}>
           <Typography variant="body1">Name</Typography>
-          <Chip key="Name" label={response.userName} />
+          <Chip
+            sx={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "normal",
+            }}
+            key="Name"
+            label={response.userName}
+          />
         </CustomButton>
         <CustomButton sx={{ display: "flex", gap: "1em" }}>
           <Typography variant="body1"> Email</Typography>
-          <Chip key="Name" label={response.email} />{" "}
+          <Chip
+            sx={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "normal",
+            }}
+            key="Name"
+            label={response.email}
+          />{" "}
         </CustomButton>
       </Box>
       {response.responses[0].resources ? (
@@ -46,7 +64,16 @@ const ShowResponse = ({ response }) => {
             <Box sx={{ gap: "1em" }}>
               <CustomButton>
                 <Typography>Resource</Typography>
-                <Chip key="Resource" label={data.resource} />
+                <Chip
+                  sx={{
+                    maxWidth: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                  key="Resource"
+                  label={data.resource}
+                />
               </CustomButton>
               <CustomButton>
                 <Typography>Resource Option</Typography>
@@ -59,7 +86,15 @@ const ShowResponse = ({ response }) => {
               <CustomButton>
                 <Typography>Seniority Level</Typography>
 
-                <Chip key="Resource" label={data.seniorityLevel} />
+                <Chip
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                  key="Resource"
+                  label={data.seniorityLevel}
+                />
               </CustomButton>
               <CustomButton>
                 <Typography> Number of Resources</Typography>
@@ -75,14 +110,17 @@ const ShowResponse = ({ response }) => {
 
               {data.selectedData.map((eachOption) => (
                 <Chip
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
                   key="Resource"
                   label={`${eachOption.opt} ($${eachOption.price})`}
                 />
               ))}
             </CustomButton>
-          ))
-
-          }
+          ))}
           <CustomButton sx={{ gap: "1em" }}>
             <Typography> Total Cost</Typography>
             <Chip key="Resource" label={`$${response.totalCost}`} />
@@ -99,6 +137,11 @@ const ShowResponse = ({ response }) => {
 
                 {data.selectedOption.map((eachOption) => (
                   <Chip
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
                     key="Resource"
                     label={`${eachOption.opt} ($${eachOption.price})`}
                   />
@@ -108,7 +151,15 @@ const ShowResponse = ({ response }) => {
           ))}
           <CustomButton sx={{ gap: "1em" }}>
             <Typography> Total Cost</Typography>
-            <Chip key="Resource" label={`$${response.totalCost}`}/>
+            <Chip
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+              key="Resource"
+              label={`$${response.totalCost}`}
+            />
           </CustomButton>
         </Box>
       )}

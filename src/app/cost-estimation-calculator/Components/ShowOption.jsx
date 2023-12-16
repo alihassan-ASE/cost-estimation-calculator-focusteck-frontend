@@ -18,7 +18,6 @@ const ShowOption = ({
   selectedResource,
   styleVal,
   selectedOption,
-  getData,
   selectedOptionPassToParent,
 }) => {
   // let style = "Tile";
@@ -30,7 +29,7 @@ const ShowOption = ({
           label={label}
           disable={disable}
           selectedOption={selectedOption}
-          getData={getData}
+          selectedOptionPassToParent={selectedOptionPassToParent}
         />
       ) : (
         <TilesComponent
@@ -38,6 +37,28 @@ const ShowOption = ({
           selectedResource={selectedResource}
           selectedOptionPassToParent={selectedOptionPassToParent}
         />
+        // <RadioButtonComponent
+        //   options={options}
+        //   selectedResource={selectedResource}
+        //   selectedOptionPassToParent={selectedOptionPassToParent}
+        // />
+        // <MultipleComponent
+        //   options={options}
+        //   selectedOptionPassToParent={selectedOptionPassToParent}
+        //   selectedOption={selectedOption}
+        // />
+        // <CheckBoxComponent
+        //   options={options}
+        //   selectedOptionPassToParent={selectedOptionPassToParent}
+        //   selectedOption={selectedOption}
+        // />
+        // <DropDownComponent
+        //   options={options}
+        //   label={label}
+        //   disable={disable}
+        //   selectedOption={selectedOption}
+        //   selectedOptionPassToParent={selectedOptionPassToParent}
+        // />
       )}
     </Box>
   );

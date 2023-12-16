@@ -12,14 +12,14 @@ const QuestionsComponent = ({
   selectedOption,
   selectedResource,
   styleVal,
-  getData,
+  selectedOptionPassToParent,
 }) => {
   return (
     <Box>
       <ShowOption
         options={options}
-        selectedOption={selectedOption? selectedOption: selectedResource}
-        getData={getData}
+        selectedOption={selectedOption ? selectedOption : selectedResource}
+        selectedOptionPassToParent={selectedOptionPassToParent}
         styleVal={styleVal}
         label={label}
         disable={disable}
