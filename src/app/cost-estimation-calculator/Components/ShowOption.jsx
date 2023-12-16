@@ -29,13 +29,15 @@ const ShowOption = ({
           options={options}
           label={label}
           disable={disable}
-          selectedOption={selectedOption}
           getData={getData}
+          selectedResource={selectedResource}
+
         />
       ) : (
         <TilesComponent
           options={options}
-          selectedResource={selectedResource}
+          selectedOption={selectedOption}
+
           selectedOptionPassToParent={selectedOptionPassToParent}
         />
       )}

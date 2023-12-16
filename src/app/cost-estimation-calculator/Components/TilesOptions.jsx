@@ -51,6 +51,7 @@ const TilesComponent = ({
     return !!res;
   };
 
+
   return (
     <Box>
       {options?.map((data, index) => (

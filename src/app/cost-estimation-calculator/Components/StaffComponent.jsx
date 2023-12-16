@@ -28,13 +28,18 @@ const StaffComponent = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [actualResponses, setActualResponses] = useState({});
 
+  const [isOptionSelected, setIsOptionSelected] = useState(true);
+
   const [addedOption, setAddedOption] = useState([]);
 
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
+  const [resource, setResource] = useState([]);
 
   const route = useRouter();
+  const dataObj = {};
+
 
 
 
@@ -126,43 +131,35 @@ const StaffComponent = () => {
   };
 
 
+
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
-    // console.log(obj)
+
+    if (index == 1) {
+      setCurrentState(true)
+    }
 
     setCurrentQuestionIndex(index - 1);
     setCurrentQuestion(step);
-    actualResponses.responses.splice(index - 1);
+    actualResponses.responses.splice(index - 1)
     setIsStepperClicked(true);
   };
 
-
   const selectedOptionPassToParent = (data, boolVal, label) => {
+    setResource();
     setValues((prev) => [...prev, data]);
+    
     setButtonState(true);
     setAddMore(!boolVal);
-    // setResources((prev) => {
-    //   // Find the index of the item to be updated
-    //   const index = prev.findIndex((item) => item.resource === data.resource);
-
-    //   if (index !== -1) {
-    //     // If the item exists, replace it with the updated data
-    //     const updatedResources = [...prev];
-    //     updatedResources[index] = data;
-    //     return updatedResources;
-    //   } else {
-    //     // If the item doesn't exist, add it to the resources
-    //     return [...prev, data];
-    //   }
-    // });
+    setIsOptionSelected(false);
   };
 
 
   // setting Response in actual Array
   const setResponseData = () => {
 
-    const dataObj = {};
     dataObj.resources = values;
+    setResource(dataObj.resources);
 
     currentState
       ? setActualResponses({ responses: [dataObj] })
@@ -177,7 +174,10 @@ const StaffComponent = () => {
   };
 
 
+
   const getResponsesData = (resp) => {
+
+    setIsOptionSelected(false);
     setAddedOption(resp);
   };
 
@@ -186,6 +186,7 @@ const StaffComponent = () => {
 
     setCurrentState(false);
     setButtonState(true);
+    setIsOptionSelected((prev) => !prev)
 
 
     let currentQuestionLocal = currentQuestion;
@@ -204,8 +205,10 @@ const StaffComponent = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setResponseData();
     setIsNextClicked(true);
+    // setIsOptionSelected((prev)=>{!prev})
   };
 
+  console.log("Actual",resource)
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
 
@@ -301,7 +304,6 @@ const StaffComponent = () => {
 
   // }
 
-
   const returnResources = () => {
     const tags = [];
     for (let i = 0; i <= count; i++) {
@@ -324,7 +326,7 @@ const StaffComponent = () => {
             index={i}
             setValues={setValues}
             values={values}
-            selectedResource={[]}
+            selectedResource={resource}
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
 
@@ -391,6 +393,7 @@ const StaffComponent = () => {
             <Question
               currentQuestion={currentQuestion}
               getResponsesData={getResponsesData}
+              selectedOption = {[]}
               styleVal={"Tiles"}
             />
           </Box>
@@ -424,20 +427,20 @@ const StaffComponent = () => {
         ) : null}
         {additionalQuesiton.length >= currentQuestionIndex ? (
           <Button
-            disabled={!buttonState}
+
             size="medium"
             variant="contained"
             sx={{ width: 150 }}
             onClick={() => {
               nextQuestion();
             }}
-            disable={values[0] ? false : true}
+            disabled={isOptionSelected}
           >
             Next
           </Button>
         ) : (
           <Button
-            disabled={!buttonState}
+
             size="medium"
             variant="contained"
             sx={{ width: 150 }}

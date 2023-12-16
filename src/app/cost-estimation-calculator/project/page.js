@@ -1,4 +1,5 @@
 "use client";
+// final code
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
 import {
@@ -22,6 +23,9 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
+
+  const [isOptionSelected, setIsOptionSelected] = useState(true);
+
 
   const [totalCost, setTotalCost] = useState(0);
 
@@ -52,6 +56,8 @@ const page = () => {
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
+    setIsOptionSelected(false)
+
   };
 
   // setting Response in actual Array
@@ -81,11 +87,11 @@ const page = () => {
 
   }
 
-  
+
   const goToForm = () => {
     try {
-      
-      let data = JSON.stringify({responses:actualResponses,totalCost:totalCost});
+
+      let data = JSON.stringify({ responses: actualResponses, totalCost: totalCost });
       // debugger;
       localStorage.setItem("Response", data);
       // console.log("Moving to Form....................")
@@ -95,6 +101,8 @@ const page = () => {
     }
   };
 
+
+
   // Handling Next Question
   const nextQuestion = async () => {
     let currentStateLocal = currentState;
@@ -103,6 +111,8 @@ const page = () => {
     let questionsToShowLocal = questionsToShow;
     let cost = 0;
 
+    setIsOptionSelected(true);
+
     switch (currentStateLocal) {
       case "pre": {
         if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
@@ -110,8 +120,7 @@ const page = () => {
           currentQuestionLocal = null;
           currentQuestionIndexLocal = 0;
         } else {
-          currentQuestionLocal =
-            preProjectQuestions[currentQuestionIndexLocal + 1];
+          currentQuestionLocal = preProjectQuestions[currentQuestionIndexLocal + 1];
           currentQuestionIndexLocal++;
         }
         if (currentQuestionLocal) {
@@ -130,9 +139,7 @@ const page = () => {
             }
           }
           if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(
-              questionsToShowLocal.pop()
-            );
+            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
           } else {
             currentStateLocal = "post";
             currentQuestionLocal = null;
@@ -205,6 +212,7 @@ const page = () => {
     }
   };
 
+  console.log("actualResponse", actualResponses)
   return (
     <>
       {fetchQuesitons !== null ? (
@@ -220,7 +228,7 @@ const page = () => {
                 getResponsesData={getResponsesData}
               />
               <Box sx={{ display: "flex", gap: "2em", margin: "3em 1em " }}>
-                <Button
+                {actualResponses.length > 0 ? <Button
                   size="medium"
                   variant="contained"
                   sx={{ width: 150 }}
@@ -228,8 +236,9 @@ const page = () => {
                   onClick={backQuestion}
                 >
                   Back
-                </Button>
+                </Button> : null}
                 <Button
+                  disabled={isOptionSelected}
                   size="medium"
                   variant="contained"
                   sx={{ width: 150 }}
