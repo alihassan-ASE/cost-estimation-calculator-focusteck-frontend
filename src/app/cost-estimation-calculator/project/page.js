@@ -106,7 +106,7 @@ const page = () => {
     switch (currentStateLocal) {
       case "pre": {
         if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
-          currentStateLocal = "post";
+          currentStateLocal = "dynamic";
           currentQuestionLocal = null;
           currentQuestionIndexLocal = 0;
         } else {
@@ -146,8 +146,7 @@ const page = () => {
 
       case "post": {
         if (currentQuestionIndexLocal < postProjectQuestions.length) {
-          currentQuestionLocal =
-            postProjectQuestions[currentQuestionIndexLocal];
+          currentQuestionLocal = postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
         }
         else {

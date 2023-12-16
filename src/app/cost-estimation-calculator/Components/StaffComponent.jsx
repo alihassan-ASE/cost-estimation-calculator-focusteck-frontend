@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Box, Typography, Button, Card, Grid } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { styled } from "@mui/material/styles";
@@ -26,18 +26,18 @@ const StaffComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [currentState, setCurrentState] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [actualResponses, setActualResponses] = useState([]);
+  const [actualResponses, setActualResponses] = useState({});
 
   const [addedOption, setAddedOption] = useState([]);
 
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
+  const [totalCost, setTotalCost] = useState(0);
 
   const route = useRouter();
 
-  // const [resourcesPrice, setResourcesPrice] = useState(0);
-  // const [optionPrice, setOptionPrice] = useState(0);
-  const [totalCost, setTotalCost] = useState(0);
+
+
 
   useEffect(() => {
     getQuestions().then((resp) => {
@@ -46,6 +46,7 @@ const StaffComponent = () => {
       setStaffBaseResources(Resources);
     });
   }, []);
+
 
   useEffect(() => {
     if (actualResponses !== null) {
@@ -59,7 +60,8 @@ const StaffComponent = () => {
     }
   }, [actualResponses, isNextClicked, isStepperClicked]);
 
-  const resources = actualResponses[0]?.resources;
+
+  // const resources = actualResponses[0]?.resources;
   useEffect(() => {
     if (actualResponses[0]?.resources.length > 0) {
       setCount(actualResponses[0]?.resources.length - 1);
@@ -67,6 +69,9 @@ const StaffComponent = () => {
   }, [actualResponses[0]?.resources]);
 
   const goToForm = () => {
+
+    actualResponses.totalCost = totalCost;
+
     try {
       let data = JSON.stringify(actualResponses);
       localStorage.setItem("Response", data);
@@ -82,7 +87,7 @@ const StaffComponent = () => {
       case "next": {
         let totalPrice = 0;
 
-        if (actualResponses.responses.length > 0) {
+        if (actualResponses.responses.length >= 0) {
           actualResponses.responses.forEach((response, index) => {
             // For the first response object (index 0)
             if (index === 0) {
@@ -94,6 +99,8 @@ const StaffComponent = () => {
                     resource.resourceOption.price
                   ) {
                     totalPrice += resource.resourceOption.price;
+                    console.log("price in resources", totalPrice);
+
                   }
                 });
               }
@@ -103,6 +110,7 @@ const StaffComponent = () => {
                 response.selectedData.forEach((select) => {
                   if (select.price) {
                     totalPrice += select.price;
+                    console.log("price in additional", totalPrice);
                   }
                 });
               }
@@ -117,46 +125,69 @@ const StaffComponent = () => {
     }
   };
 
+
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
     // console.log(obj)
 
-    setCurrentQuestionIndex(index);
+    setCurrentQuestionIndex(index - 1);
     setCurrentQuestion(step);
     actualResponses.responses.splice(index - 1);
     setIsStepperClicked(true);
   };
+
+
   const selectedOptionPassToParent = (data, boolVal, label) => {
     setValues((prev) => [...prev, data]);
     setButtonState(true);
     setAddMore(!boolVal);
+    // setResources((prev) => {
+    //   // Find the index of the item to be updated
+    //   const index = prev.findIndex((item) => item.resource === data.resource);
+
+    //   if (index !== -1) {
+    //     // If the item exists, replace it with the updated data
+    //     const updatedResources = [...prev];
+    //     updatedResources[index] = data;
+    //     return updatedResources;
+    //   } else {
+    //     // If the item doesn't exist, add it to the resources
+    //     return [...prev, data];
+    //   }
+    // });
   };
 
-  // console.log("actual", actualResponses)
+
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
     dataObj.resources = values;
+
     currentState
       ? setActualResponses({ responses: [dataObj] })
       : setActualResponses((prev) => {
-          return {
-            responses: [
-              ...prev.responses,
-              { ...currentQuestion, ...addedOption },
-            ],
-          };
-        });
+        return {
+          responses: [
+            ...prev.responses,
+            { ...currentQuestion, ...addedOption },
+          ],
+        };
+      });
   };
+
 
   const getResponsesData = (resp) => {
     setAddedOption(resp);
   };
 
-  // Handling next Question
+
   const nextQuestion = () => {
+
     setCurrentState(false);
     setButtonState(true);
+
+
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
     if (!currentQuestion) {
@@ -173,22 +204,19 @@ const StaffComponent = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setResponseData();
     setIsNextClicked(true);
-    if (currentQuestionIndex >= additionalQuesiton.length) {
-      actualResponses.totalCost = totalCost;
-      goToForm();
-    }
   };
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
+
     let lastQuestion;
+
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
     }
 
     if (currentQuestionIndex > 0) {
       let newArray = [...actualResponses.responses];
-      lastQuestion = newArray.pop();
       lastQuestion = newArray.pop();
 
       if (lastQuestion) {
@@ -197,10 +225,10 @@ const StaffComponent = () => {
         setCurrentQuestionIndex(currentQuestionIndex - 1);
       }
 
-      // Check if there's at least one response
+      // Check if there's at least one response and Handling Price on Back Click
       if (actualResponses.responses.length > 0) {
-        let totalPriceToSubtract = 0;
 
+        let totalPriceToSubtract = 0;
         // For the popped response object
         if (lastQuestion) {
           // For the first response object (index 0)
@@ -233,57 +261,52 @@ const StaffComponent = () => {
       }
     }
 
-    // const resources = selectedResource.resources;
-    if (lastQuestion) {
-      setCurrentQuestion(lastQuestion);
-      setActualResponses({ responses: newArray });
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
 
     // Check if there's at least one response
-    if (actualResponses.responses.length > 0) {
-      let totalPriceToSubtract = 0;
+    // if (actualResponses.responses.length > 0) {
+    //   let totalPriceToSubtract = 0;
 
-      // For the popped response object
-      if (lastQuestion) {
-        // For the first response object (index 0)
-        if (actualResponses.responses.length === 0) {
-          // Calculate the total price from resources array in the first object and subtract it
-          if (lastQuestion.resources && lastQuestion.resources.length > 0) {
-            lastQuestion.resources.forEach((resource) => {
-              if (resource.resourceOption && resource.resourceOption.price) {
-                totalPriceToSubtract += resource.resourceOption.price;
-              }
-            });
-          }
-        } else {
-          // For subsequent response objects (index > 0)
-          if (
-            lastQuestion.selectedData &&
-            lastQuestion.selectedData.length > 0
-          ) {
-            lastQuestion.selectedData.forEach((select) => {
-              if (select.price) {
-                totalPriceToSubtract += select.price;
-              }
-            });
-          }
-        }
+    //   // For the popped response object
+    //   if (lastQuestion) {
+    //     // For the first response object (index 0)
+    //     if (actualResponses.responses.length === 0) {
+    //       // Calculate the total price from resources array in the first object and subtract it
+    //       if (lastQuestion.resources && lastQuestion.resources.length > 0) {
+    //         lastQuestion.resources.forEach((resource) => {
+    //           if (resource.resourceOption && resource.resourceOption.price) {
+    //             totalPriceToSubtract += resource.resourceOption.price;
+    //           }
+    //         });
+    //       }
+    //     } else {
+    //       // For subsequent response objects (index > 0)
+    //       if (
+    //         lastQuestion.selectedData &&
+    //         lastQuestion.selectedData.length > 0
+    //       ) {
+    //         lastQuestion.selectedData.forEach((select) => {
+    //           if (select.price) {
+    //             totalPriceToSubtract += select.price;
+    //           }
+    //         });
+    //       }
+    //     }
 
-        // Subtract the price of the popped response from the total cost
-        setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract)); // Ensure the totalCost doesn't go below 0
-      }
-    }
+    //     // Subtract the price of the popped response from the total cost
+    //     setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract)); // Ensure the totalCost doesn't go below 0
+    //   }
+    // }
+
   };
 
   // }
 
-  // const resources = selectedResource.resources;
 
   const returnResources = () => {
     const tags = [];
     for (let i = 0; i <= count; i++) {
       tags.push(
+
         <Card
           key={i}
           style={{
@@ -304,11 +327,18 @@ const StaffComponent = () => {
             selectedResource={[]}
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
+
         </Card>
+
       );
     }
     return tags;
   };
+
+
+  if (currentQuestionIndex > additionalQuesiton.length) {
+    goToForm();
+  }
 
   return (
     <Box>

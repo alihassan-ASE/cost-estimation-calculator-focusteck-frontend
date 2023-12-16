@@ -6,9 +6,9 @@ import Form from "../Components/Form";
 
 const page = () => {
   const [actualResponse, setActualResponse] = useState({});
-
-  let response = window.localStorage.getItem("Response");
-
+  
+  let response = typeof window !== "undefined" ? window.localStorage.getItem('Response') : false;
+  
   if (response) {
     try {
       response = JSON.parse(response);

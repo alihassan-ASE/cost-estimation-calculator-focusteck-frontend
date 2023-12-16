@@ -71,8 +71,6 @@ const StaffResource = ({
   newOption = useMemo(() => {
     return options.map((item) => item.typeOfResource);
   }, [options]);
-  console.log("new option: ", newOption);
-  console.log("current resource: ", currentResource);
   return (
     <Grid container spacing={2} sx={{ height: 360, alignItems: "center" }}>
       <Grid item lg={4} sx={{ minWidth: 300, maxWidth: 300 }}>

@@ -19,7 +19,6 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
-  debugger;
   return (
     <Box
       sx={{

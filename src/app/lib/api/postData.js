@@ -4,6 +4,7 @@ import { baseUrl } from "../../../config/constants";
 export const postData = async (data) => {
   try {
 
+    console.log("Data in Post", data)
     if (data.responses && data.responses.length > 0) {
       await fetch(`${baseUrl}/postdata`, {
         method: "POST",

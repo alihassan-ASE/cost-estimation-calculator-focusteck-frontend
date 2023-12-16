@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Box, TextField, Button, InputLabel } from "@mui/material";
-
+import { postData } from '../../lib/api/postData';
 import ShowResponse from "./ShowResponse";
 
 const Form = ({ response, getActualResponse }) => {
@@ -10,6 +10,8 @@ const Form = ({ response, getActualResponse }) => {
     userName: "",
     email: "",
   });
+
+  console.log("Response in Form" , response)
 
   const [errorMessage, setErrorMessage] = useState({
     usernameError: null,
@@ -29,11 +31,11 @@ const Form = ({ response, getActualResponse }) => {
       setSubmitted(false);
     }
     if (formInput.userName && formInput.email) {
-     
+
       setErrorMessage({ usernameError: null, emailError: null });
       setCheckInputVal(false);
       setSubmitted(true);
-      
+
       getActualResponse({
         ...formInput,
         ...response,
@@ -95,6 +97,7 @@ const Form = ({ response, getActualResponse }) => {
               variant="contained"
               onClick={() => {
                 submitForm(formInput);
+                postData({ ...response, ...formInput })
               }}
             >
               Submit
@@ -102,7 +105,7 @@ const Form = ({ response, getActualResponse }) => {
           </Box>
         </form>
       </Box>
-      {submitted ? <ShowResponse response={{...response,...formInput}} /> : null}
+      {submitted ? <ShowResponse response={{ ...response, ...formInput }} /> : null}
     </Box>
   );
 };
