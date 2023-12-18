@@ -86,7 +86,7 @@ const TilesComponent = ({
         const isSelectedOptAvailable = options.some(
           (option) => option.opt === selectedOption[0].opt
         );
-        if (!isSelectedOptAvailable && selectedOption[0].opt !== "Other (Specify)" || "Other") {
+        if (!isSelectedOptAvailable && (selectedOption[0].opt !== "Other (Specify)" || selectedOption[0].opt !== "Other")) {
           setOtherVal(selectedOption[0].opt);
           selectedOption.length = 0;
         }
