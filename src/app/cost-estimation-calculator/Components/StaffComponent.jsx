@@ -96,10 +96,10 @@ const StaffComponent = () => {
   }, [actualResponses, isNextClicked, isStepperClicked]);
 
   useEffect(() => {
-    if (actualResponses[0]?.resources.length > 0) {
-      setCount(actualResponses[0]?.resources.length - 1);
+    if (values?.length > 0) {
+      setCount(values?.length - 1);
     }
-  }, [actualResponses[0]?.resources]);
+  }, [values?.length]);
 
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
@@ -288,7 +288,8 @@ const StaffComponent = () => {
   if (currentQuestionIndex > additionalQuesiton.length) {
     goToForm();
   }
-  // console.log("values", values);
+  console.log("resource", resource);
+  console.log("actualResponses", actualResponses);
 
   return (
     <Box sx={{ margin: "3em 1em 1em 1em" }}>

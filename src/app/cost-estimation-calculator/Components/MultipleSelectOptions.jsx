@@ -92,7 +92,6 @@ const MultipleComponent = ({
   // console.log("Selected Formats: ", selectedFormats);
   return (
     <Box>
-      <Typography variant="h6">Tiles Multi Select</Typography>
       <StyledToggleButtonGroup
         value={selectedFormats}
         sx={{ display: "flex", flexWrap: "wrap" }}

@@ -57,8 +57,10 @@ const StaffResource = ({
     "Senior Level": [1, 2, 3, 4, 5],
     "Team Lead": [1, 2],
   };
-  const [saveButton, setSaveButton] = useState(true);
+  const [saveButton, setSaveButton] = useState(false);
   const [showDropdown, setShowDropdown] = useState(true);
+
+  // console.log("save Buttom : ", saveButton);
 
   const getData = (data, label) => {
     if (label === "Resources") {
@@ -69,6 +71,7 @@ const StaffResource = ({
       setCurrentResource({ ...currentResource, seniorityLevel: data });
     } else if (label === "Number of Resources") {
       setCurrentResource({ ...currentResource, numOfResources: data });
+      setSaveButton(true);
     }
     if (
       currentResource.resourceOption &&
@@ -85,6 +88,9 @@ const StaffResource = ({
   newOption = useMemo(() => {
     return options.map((item) => item.typeOfResource);
   }, [options]);
+
+  console.log("index ", index);
+  console.log("selectedOption ", selectedOption);
   return (
     <Box
       sx={{
@@ -148,11 +154,7 @@ const StaffResource = ({
               question={question}
               options={resourceData}
               label={label ? label : "Resource Option"}
-              disable={
-                currentResource.resource || selectedOption[index]?.resource
-                  ? false
-                  : true
-              }
+              disable={currentResource.resource ? false : true}
               styleVal={"DropDown"}
               selectedOption={
                 currentResource.resource &&
@@ -204,12 +206,7 @@ const StaffResource = ({
             question={question}
             options={seniorityLevelOptions}
             label={label ? label : "Seniority Level"}
-            disable={
-              currentResource.resourceOption ||
-              selectedOption[index]?.resourceOption
-                ? false
-                : true
-            }
+            disable={currentResource.resourceOption ? false : true}
             styleVal={"DropDown"}
             selectedOption={
               currentResource.resource && !currentResource.seniorityLevel
@@ -254,12 +251,7 @@ const StaffResource = ({
               question={question}
               options={numOfResourcesOptions[currentResource.seniorityLevel]}
               label={label ? label : "Number of Resources"}
-              disable={
-                currentResource.seniorityLevel ||
-                selectedOption[index]?.seniorityLevel
-                  ? false
-                  : true
-              }
+              disable={currentResource.seniorityLevel ? false : true}
               styleVal={"DropDown"}
               selectedOption={
                 currentResource.resource && !currentResource.numOfResources
@@ -301,70 +293,63 @@ const StaffResource = ({
       </Box>
 
       {/* Save Button */}
-      {currentResource.resource &&
-      currentResource.resourceOption &&
-      currentResource.seniorityLevel &&
-      currentResource.numOfResources &&
-      saveButton &&
-      showDropdown ? (
-        <Box sx={{ margin: "1em 0" }}>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setSaveButton(false);
 
+      <Box sx={{ margin: "1em 0" }}>
+        <Button
+          disabled={saveButton ? false : true}
+          variant="contained"
+          onClick={() => {
+            setSaveButton(false);
+
+            if (
+              index !== undefined &&
+              values.length > index &&
+              currentResource.resource &&
+              currentResource.resourceOption &&
+              currentResource.seniorityLevel &&
+              currentResource.numOfResources
+            ) {
+              const existingResource = values[index];
               if (
-                index !== undefined &&
-                values.length > index &&
-                currentResource.resource &&
-                currentResource.resourceOption &&
-                currentResource.seniorityLevel &&
-                currentResource.numOfResources
+                existingResource?.resource !== currentResource.resource ||
+                existingResource?.resourceOption !==
+                  currentResource.resourceOption ||
+                existingResource?.seniorityLevel !==
+                  currentResource.seniorityLevel ||
+                existingResource?.numOfResources !==
+                  currentResource.numOfResources
               ) {
-                const existingResource = values[index];
-                if (
-                  existingResource?.resource !== currentResource.resource ||
-                  existingResource?.resourceOption !==
-                    currentResource.resourceOption ||
-                  existingResource?.seniorityLevel !==
-                    currentResource.seniorityLevel ||
-                  existingResource?.numOfResources !==
-                    currentResource.numOfResources
-                ) {
-                  const updatedValues = [...values];
-                  updatedValues[index] = {
-                    ...existingResource,
-                    resource: currentResource.resource,
-                    resourceOption: currentResource.resourceOption,
-                    seniorityLevel: currentResource.seniorityLevel,
-                    numOfResources: currentResource.numOfResources,
-                  };
-                  setValues(updatedValues);
-                  setShowDropdown(false);
-                }
-              } else if (
-                selectedOption?.length ? selectedOption[index] : null
-              ) {
-                selectedOptionPassToParent(
-                  {
-                    resource: selectedOption[index].resource,
-                    resourceOption: selectedOption[index].resourceOption,
-                    seniorityLevel: selectedOption[index].seniorityLevel,
-                    numOfResources: selectedOption[index].numOfResources,
-                  },
-                  false,
-                  getLabel
-                );
-              } else {
-                selectedOptionPassToParent(currentResource, false, getLabel);
+                const updatedValues = [...values];
+                updatedValues[index] = {
+                  ...existingResource,
+                  resource: currentResource.resource,
+                  resourceOption: currentResource.resourceOption,
+                  seniorityLevel: currentResource.seniorityLevel,
+                  numOfResources: currentResource.numOfResources,
+                };
+                setValues(updatedValues);
+                setShowDropdown(false);
               }
-              setShowDropdown(false);
-            }}
-          >
-            Save
-          </Button>
-        </Box>
-      ) : null}
+            } else if (selectedOption?.length ? selectedOption[index] : null) {
+              selectedOptionPassToParent(
+                {
+                  resource: selectedOption[index].resource,
+                  resourceOption: selectedOption[index].resourceOption,
+                  seniorityLevel: selectedOption[index].seniorityLevel,
+                  numOfResources: selectedOption[index].numOfResources,
+                },
+                false,
+                getLabel
+              );
+            } else {
+              selectedOptionPassToParent(currentResource, false, getLabel);
+            }
+            setShowDropdown(false);
+          }}
+        >
+          Save
+        </Button>
+      </Box>
     </Box>
   );
 };

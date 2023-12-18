@@ -82,6 +82,12 @@ const ShowResponse = ({ response }) => {
                 <Typography>Resource Option</Typography>
 
                 <Chip
+                  sx={{
+                    maxWidth: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
                   key="Resource Option"
                   label={`${data.resourceOption.opt} ($${data.resourceOption.price})`}
                 />

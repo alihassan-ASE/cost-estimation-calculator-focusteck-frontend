@@ -99,6 +99,7 @@ const DropDownComponent = ({
       >
         {options?.map((data, index) => (
           <StyledMenuItem
+            sx={{ width: 270, wordWrap: "break-word", whiteSpace: "normal" }}
             key={index}
             value={
               data.opt && data.price
