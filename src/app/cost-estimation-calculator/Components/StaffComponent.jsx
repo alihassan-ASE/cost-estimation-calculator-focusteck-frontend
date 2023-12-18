@@ -40,10 +40,7 @@ const StaffComponent = () => {
   const route = useRouter();
   const dataObj = {};
 
-
-
-
-
+  // Setting Staff Resources and Questions
   useEffect(() => {
     getQuestions().then((resp) => {
       const { Resources, additionalQuestions } = resp;
@@ -53,6 +50,7 @@ const StaffComponent = () => {
   }, []);
 
 
+  //calling Handle Price function on next button click and on stepper
   useEffect(() => {
     if (actualResponses !== null) {
       if (isNextClicked) {
@@ -66,13 +64,13 @@ const StaffComponent = () => {
   }, [actualResponses, isNextClicked, isStepperClicked]);
 
 
-  // const resources = actualResponses[0]?.resources;
   useEffect(() => {
     if (actualResponses[0]?.resources.length > 0) {
       setCount(actualResponses[0]?.resources.length - 1);
     }
   }, [actualResponses[0]?.resources]);
 
+// Function to navigate on Form Page
   const goToForm = () => {
 
     actualResponses.totalCost = totalCost;
@@ -82,10 +80,11 @@ const StaffComponent = () => {
       localStorage.setItem("Response", data);
       route.push("/cost-estimation-calculator/submit");
     } catch (error) {
-      console.log("Data is not set", error);
+      console.log("Error", error);
     }
   };
 
+// Function To Handling Price
   const handlePrice = (type) => {
     switch (type) {
       case "stepper":
@@ -104,7 +103,6 @@ const StaffComponent = () => {
                     resource.resourceOption.price
                   ) {
                     totalPrice += resource.resourceOption.price;
-                    console.log("price in resources", totalPrice);
 
                   }
                 });
@@ -115,7 +113,6 @@ const StaffComponent = () => {
                 response.selectedData.forEach((select) => {
                   if (select.price) {
                     totalPrice += select.price;
-                    console.log("price in additional", totalPrice);
                   }
                 });
               }
@@ -125,13 +122,13 @@ const StaffComponent = () => {
 
         // Update the total cost by adding the calculated totalPrice to the previous total cost
         setTotalCost(totalPrice);
+
         break;
       }
     }
   };
 
-
-
+// Changing active question on stepper
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
 
@@ -145,15 +142,15 @@ const StaffComponent = () => {
     setIsStepperClicked(true);
   };
 
+  // receiving selected option from child Component
   const selectedOptionPassToParent = (data, boolVal, label) => {
     setResource();
     setValues((prev) => [...prev, data]);
-    
+
     setButtonState(true);
     setAddMore(!boolVal);
     setIsOptionSelected(false);
   };
-
 
   // setting Response in actual Array
   const setResponseData = () => {
@@ -174,14 +171,14 @@ const StaffComponent = () => {
   };
 
 
-
+  // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
 
     setIsOptionSelected(false);
     setAddedOption(resp);
   };
 
-
+  // Handling Next Quesiton 
   const nextQuestion = () => {
 
     setCurrentState(false);
@@ -208,7 +205,6 @@ const StaffComponent = () => {
     // setIsOptionSelected((prev)=>{!prev})
   };
 
-  console.log("Actual",resource)
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
 
@@ -302,8 +298,8 @@ const StaffComponent = () => {
 
   };
 
-  // }
 
+  // Returning selected Resources
   const returnResources = () => {
     const tags = [];
     for (let i = 0; i <= count; i++) {
@@ -337,9 +333,11 @@ const StaffComponent = () => {
     return tags;
   };
 
-
+// calling goToForm Function after selecting last question
   if (currentQuestionIndex > additionalQuesiton.length) {
-    goToForm();
+    setTimeout(()=>{
+      goToForm();
+    },100);
   }
 
   return (
@@ -393,7 +391,7 @@ const StaffComponent = () => {
             <Question
               currentQuestion={currentQuestion}
               getResponsesData={getResponsesData}
-              selectedOption = {[]}
+              selectedOption={[]}
               styleVal={"Tiles"}
             />
           </Box>
@@ -425,7 +423,6 @@ const StaffComponent = () => {
             Back
           </Button>
         ) : null}
-        {additionalQuesiton.length >= currentQuestionIndex ? (
           <Button
 
             size="medium"
@@ -438,18 +435,7 @@ const StaffComponent = () => {
           >
             Next
           </Button>
-        ) : (
-          <Button
-
-            size="medium"
-            variant="contained"
-            sx={{ width: 150 }}
-            onClick={() => goToForm()}
-            disable={values[0] ? false : true}
-          >
-            Enter More Details
-          </Button>
-        )}
+        
       </Box>
     </Box>
   );

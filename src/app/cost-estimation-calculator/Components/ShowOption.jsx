@@ -20,9 +20,12 @@ const ShowOption = ({
   selectedOption,
   getData,
   selectedOptionPassToParent,
+  lastQuestionSelected
 }) => {
+
   // let style = "Tile";
   return (
+    
     <Box>
       {styleVal === "DropDown" ? (
         <DropDownComponent
@@ -36,8 +39,7 @@ const ShowOption = ({
       ) : (
         <TilesComponent
           options={options}
-          selectedOption={selectedOption}
-
+          selectedOption={lastQuestionSelected}
           selectedOptionPassToParent={selectedOptionPassToParent}
         />
       )}

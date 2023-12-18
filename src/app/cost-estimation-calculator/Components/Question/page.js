@@ -2,14 +2,12 @@
 import React, { useEffect, useState } from "react";
 import ShowOptions from "../ShowOption";
 const page = (props) => {
-  let { currentQuestion, getResponsesData  } = props;
-  const [selectedOption, setSelectedOption] = useState([]);
+  let { currentQuestion, getResponsesData, lastQuestionSelected } = props;
 
   const [selectedData, setSelectedData] = useState([]);
   const selectedOptionPassToParent = (data) => {
     setSelectedData([data]);
   };
-
 
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
@@ -33,8 +31,6 @@ const page = (props) => {
         }
       });
     }
-    
-setSelectedOption(selectedData)
 
   }, [selectedData]);
 
@@ -45,7 +41,7 @@ setSelectedOption(selectedData)
       <ShowOptions
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}
-        selectedOption={selectedOption}
+        lastQuestionSelected={lastQuestionSelected}
       />
     </div>
   );

@@ -11,7 +11,6 @@ const Form = ({ response, getActualResponse }) => {
     email: "",
   });
 
-  console.log("Response in Form" , response)
 
   const [errorMessage, setErrorMessage] = useState({
     usernameError: null,
