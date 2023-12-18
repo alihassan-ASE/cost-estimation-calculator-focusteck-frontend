@@ -29,6 +29,13 @@ const page = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState();
+  const [isOptionSelected, setIsOptionSelected] = useState(true);
+  const [totalCost, setTotalCost] = useState(0);
+
+  const route = useRouter();
+  let cost;
+
   useEffect(() => {
     if (isNarrowScreen) {
       setOrientation("horizontal");
@@ -36,13 +43,6 @@ const page = () => {
       setOrientation("vertical");
     }
   }, [isNarrowScreen]);
-
-  const [isOptionSelected, setIsOptionSelected] = useState(true);
-
-  const [totalCost, setTotalCost] = useState(0);
-
-  const route = useRouter();
-  let cost;
 
   useEffect(() => {
     const fetchData = () => {
@@ -89,7 +89,9 @@ const page = () => {
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
+    if(resp.selectedData || resp.selectedData.length>3){
     setIsOptionSelected(false);
+    }
   };
 
   // setting Response in actual Array
@@ -113,24 +115,16 @@ const page = () => {
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelected(lastQuestion.selectedOption);
 
+    console.log("Last Question",lastQuestion)
     lastQuestion.selectedOption.map((op) => {
-      cost = op.price;
-    });
-    handlePrice("back", cost);
-  };
+      setTotalCost((prev)=> prev - op.price);
+    })
+  }
 
   // Handling Next Question
   const nextQuestion = async () => {
     cost = 0;
 
-    selectedData.map((op) => {
-      cost = cost + op.price;
-    });
-
-    setTotalCost((prev) => prev + cost);
-
-    // handlePrice("next", cost);
-    setIsOptionSelected(true);
 
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
@@ -183,7 +177,8 @@ const page = () => {
           currentQuestionLocal =
             postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
-        } else {
+        }
+        else {
           break;
         }
       }
@@ -197,17 +192,30 @@ const page = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
+
+    selectedData.map((op) => {
+      cost = cost + op.price;
+    });
+
+    handlePrice("next", cost);
+    setIsOptionSelected(true);
+
+
   };
+
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
 
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
     setCurrentState(step.state);
-    actualResponses.splice(index - 1);
+    actualResponses.splice(index - 1)
+    setLastQuestionSelectedOption(step.selectedOption)
     handlePrice("stepper");
+
   };
 
   const goToForm = () => {
@@ -219,14 +227,11 @@ const page = () => {
       localStorage.setItem("Response", data);
       route.push("/cost-estimation-calculator/submit");
     } catch (error) {
-      console.log("Error", error);
+      console.log("Error", error)
     }
   };
 
-  if (
-    currentState === "post" &&
-    currentQuestionIndex >= postProjectQuestions.length
-  ) {
+  if (currentState === 'post' && currentQuestionIndex >= postProjectQuestions.length) {
     goToForm();
   }
 

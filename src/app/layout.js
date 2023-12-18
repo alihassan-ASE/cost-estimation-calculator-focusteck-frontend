@@ -5,6 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import images from "../images/header-image.jpg";
+import { useRouter } from "next/navigation";
 
 import {
   BottomNavigation,
@@ -85,6 +86,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function RootLayout({ children }) {
+  const route = useRouter();
   return (
     <html lang="en">
       <body style={{ margin: "0" }}>
@@ -115,6 +117,19 @@ export default function RootLayout({ children }) {
               >
                 Cost Estimation Calculator
               </Typography>
+
+              <Button
+              onClick={()=>route.push('/cost-estimation-calculator')}
+                sx={{
+                  flexGrow: 1,
+                  fontSize: 13,
+                  display: { xs: "none", md: "none", lg: "block" },
+                  my: 2,
+                  color: "#000",
+                }}
+              >
+                Home
+              </Button>
               <Button
                 sx={{
                   flexGrow: 1,

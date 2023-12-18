@@ -75,11 +75,13 @@ const StaffComponent = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
   const [resource, setResource] = useState([]);
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState()
 
   const route = useRouter();
   const dataObj = {};
 
   // Setting Staff Resources and Questions
+
   useEffect(() => {
     getQuestions().then((resp) => {
       const { Resources, additionalQuestions } = resp;
@@ -87,6 +89,14 @@ const StaffComponent = () => {
       setStaffBaseResources(Resources);
     });
   }, []);
+
+  useEffect(() => {
+    if (isNarrowScreen) {
+      setOrientation("horizontal");
+    } else {
+      setOrientation("vertical");
+    }
+  }, [isNarrowScreen]);
 
   //calling Handle Price function on next button click and on stepper
   useEffect(() => {
@@ -108,6 +118,7 @@ const StaffComponent = () => {
   }, [values?.length]);
 
   // Function to navigate on Form Page
+  // Function to navigate on Form Page
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
 
@@ -120,6 +131,7 @@ const StaffComponent = () => {
     }
   };
 
+  // Function To Handling Price
   // Function To Handling Price
   const handlePrice = (type) => {
     switch (type) {
@@ -170,34 +182,35 @@ const StaffComponent = () => {
     setCurrentQuestionIndex(index - 1);
     setCurrentQuestion(step);
     actualResponses.responses.splice(index - 1);
+    setLastQuestionSelectedOption(step.selectedData)
     setIsStepperClicked(true);
   };
+
 
   // receiving selected option from child Component
   const selectedOptionPassToParent = (data, boolVal, label) => {
     setResource();
     setValues((prev) => [...prev, data]);
-
     setButtonState(true);
     setAddMore(!boolVal);
     setIsOptionSelected(false);
   };
 
+
   // setting Response in actual Array
   const setResponseData = () => {
     dataObj.resources = values;
     setResource(dataObj.resources);
-
     currentState
       ? setActualResponses({ responses: [dataObj] })
       : setActualResponses((prev) => {
-          return {
-            responses: [
-              ...prev.responses,
-              { ...currentQuestion, ...addedOption },
-            ],
-          };
-        });
+        return {
+          responses: [
+            ...prev.responses,
+            { ...currentQuestion, ...addedOption },
+          ],
+        };
+      });
   };
 
   // Getting Response from child Component(Question Component)
@@ -232,8 +245,8 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
-    let lastQuestion;
 
+    let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
     }
@@ -241,11 +254,12 @@ const StaffComponent = () => {
     if (currentQuestionIndex > 0) {
       let newArray = [...actualResponses.responses];
       lastQuestion = newArray.pop();
-
       if (lastQuestion) {
         setCurrentQuestion(lastQuestion);
         setActualResponses({ responses: newArray });
         setCurrentQuestionIndex(currentQuestionIndex - 1);
+        setLastQuestionSelectedOption(lastQuestion.selectedData);
+
       }
 
       if (actualResponses.responses.length > 0) {
@@ -320,7 +334,9 @@ const StaffComponent = () => {
 
   return (
     <Box sx={{ margin: "3em 1em 1em 1em" }}>
-      <Box>
+      {
+        additionalQuesiton && staffBase ?
+        <Box>
         {currentQuestionIndex > 0 && (
           <KeyboardBackspaceIcon
             sx={{
@@ -400,7 +416,7 @@ const StaffComponent = () => {
               <Question
                 currentQuestion={currentQuestion}
                 getResponsesData={getResponsesData}
-                selectedOption={[]}
+                selectedOption={lastQuestionSelectedOption}
                 styleVal={"Tiles"}
               />
 
@@ -431,7 +447,7 @@ const StaffComponent = () => {
               <Question
                 currentQuestion={currentQuestion}
                 getResponsesData={getResponsesData}
-                selectedOption={[]}
+                selectedOption={lastQuestionSelectedOption}
                 styleVal={"Tiles"}
               />
               {additionalQuesiton.length >= currentQuestionIndex && (
@@ -466,6 +482,8 @@ const StaffComponent = () => {
           </Grid>
         )}
       </Box>
+      : <h3>Loading.............</h3>
+      }
     </Box>
   );
 };
