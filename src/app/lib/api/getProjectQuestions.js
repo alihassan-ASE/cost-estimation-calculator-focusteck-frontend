@@ -48,7 +48,6 @@ export const postData = async (data) => {
         body: JSON.stringify(data),
       });
     } else {
-      console.log("Data Not Found", data);
     }
   } catch (error) {
     console.log("Error", error);

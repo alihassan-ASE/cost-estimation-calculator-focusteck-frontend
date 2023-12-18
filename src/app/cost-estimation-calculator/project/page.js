@@ -25,6 +25,7 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
+  const [lastQuestionSelected, setLastQuestionSelected] = useState();
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
@@ -41,6 +42,7 @@ const page = () => {
   const [totalCost, setTotalCost] = useState(0);
 
   const route = useRouter();
+  let cost;
 
   useEffect(() => {
     const fetchData = () => {
@@ -50,7 +52,6 @@ const page = () => {
           setPreQuestion(data.preProjectQuestion);
           setCurrentQuestion(data.preProjectQuestion[currentQuestionIndex]);
           setPostQuestion(data.postProjectQuestion);
-          // setQuestion(data.preProjectQuestion[currentQuestionIndex]);
         })
         .catch((error) => {
           console.error("Error fetching questions:", error);
@@ -60,6 +61,29 @@ const page = () => {
 
     fetchData();
   }, []);
+
+  const handlePrice = (type, price) => {
+    cost = 0;
+    switch (type) {
+      case "next": {
+        setTotalCost((prev) => prev + price);
+        break;
+      }
+      case "back": {
+        setTotalCost((prev) => prev - price);
+        break;
+      }
+      case "stepper": {
+        actualResponses.map((obj) => {
+          obj.selectedOption.map((selected) => {
+            cost = selected.price + cost;
+          });
+        });
+        setTotalCost(cost);
+        break;
+      }
+    }
+  };
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
@@ -80,13 +104,14 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
-    let cost = 0;
+    cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
+    setLastQuestionSelected(lastQuestion.selectedOption);
 
     lastQuestion.selectedOption.map((op) => {
       cost = op.price;
@@ -94,30 +119,23 @@ const page = () => {
     handlePrice("back", cost);
   };
 
-  const goToForm = () => {
-    try {
-      let data = JSON.stringify({
-        responses: actualResponses,
-        totalCost: totalCost,
-      });
-      // debugger;
-      localStorage.setItem("Response", data);
-      // console.log("Moving to Form....................")
-      route.push("/cost-estimation-calculator/submit");
-    } catch (error) {
-      // console.log("Data is not set", error)
-    }
-  };
-
   // Handling Next Question
   const nextQuestion = async () => {
+    cost = 0;
+
+    selectedData.map((op) => {
+      cost = cost + op.price;
+    });
+
+    setTotalCost((prev) => prev + cost);
+
+    // handlePrice("next", cost);
+    setIsOptionSelected(true);
+
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
     let questionsToShowLocal = questionsToShow;
-    let cost = 0;
-
-    setIsOptionSelected(true);
 
     switch (currentStateLocal) {
       case "pre": {
@@ -166,7 +184,7 @@ const page = () => {
             postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
         } else {
-          goToForm();
+          break;
         }
       }
 
@@ -179,11 +197,6 @@ const page = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
-
-    selectedData.map((op) => {
-      cost = cost + op.price;
-    });
-    handlePrice("next", cost);
   };
 
   // Handling Stepper and Active Question
@@ -194,32 +207,28 @@ const page = () => {
     setCurrentQuestion(step.question);
     setCurrentState(step.state);
     actualResponses.splice(index - 1);
-
     handlePrice("stepper");
   };
 
-  const handlePrice = (type, price) => {
-    let cost = 0;
-    switch (type) {
-      case "next": {
-        setTotalCost((prev) => prev + price);
-        break;
-      }
-      case "back": {
-        setTotalCost((prev) => prev - price);
-        break;
-      }
-      case "stepper": {
-        actualResponses.map((obj) => {
-          obj.selectedOption.map((selected) => {
-            cost = selected.price + cost;
-          });
-        });
-        setTotalCost(cost);
-        break;
-      }
+  const goToForm = () => {
+    try {
+      let data = JSON.stringify({
+        responses: actualResponses,
+        totalCost: totalCost,
+      });
+      localStorage.setItem("Response", data);
+      route.push("/cost-estimation-calculator/submit");
+    } catch (error) {
+      console.log("Error", error);
     }
   };
+
+  if (
+    currentState === "post" &&
+    currentQuestionIndex >= postProjectQuestions.length
+  ) {
+    goToForm();
+  }
 
   return (
     <>
@@ -252,6 +261,7 @@ const page = () => {
                 <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
+                  selectedOption={lastQuestionSelected}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
@@ -273,6 +283,7 @@ const page = () => {
                 <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
+                  selectedOption={lastQuestionSelected}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
