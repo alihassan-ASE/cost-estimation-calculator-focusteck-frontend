@@ -60,7 +60,6 @@ const StaffResource = ({
   const [saveButton, setSaveButton] = useState(false);
   const [showDropdown, setShowDropdown] = useState(true);
 
-  // console.log("save Buttom : ", saveButton);
 
   const getData = (data, label) => {
     if (label === "Resources") {
@@ -89,8 +88,7 @@ const StaffResource = ({
     return options.map((item) => item.typeOfResource);
   }, [options]);
 
-  // console.log("index ", index);
-  // console.log("selectedOption ", selectedOption);
+
   return (
     <Box
       sx={{

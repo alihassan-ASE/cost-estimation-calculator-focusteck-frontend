@@ -26,10 +26,6 @@ const RadioButtonComponent = ({
     setSelectedFormat(selectedData);
     selectedOptionPassToParent(selectedData);
   };
-
-  // console.log("Selected Option: ", selectedOption[0]);
-  // console.log("Selected Fomrat: ", selectedFormat);
-
   return (
     <Box>
       <FormControl>

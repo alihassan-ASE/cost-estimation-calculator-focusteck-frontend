@@ -10,7 +10,7 @@ const Home = () => {
   };
 
   return (
-    <Box sx={{ margin: "3em" }}>
+    <Box sx={{ display: "flex", justifyContent: "center", padding: "3em 0" }}>
       <Button
         sx={{ width: "300px" }}
         variant="contained"

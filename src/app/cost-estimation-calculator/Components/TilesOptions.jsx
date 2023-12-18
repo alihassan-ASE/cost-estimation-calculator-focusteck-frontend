@@ -60,6 +60,8 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+
+
 const TilesComponent = ({
   options,
   selectedOption,
@@ -75,20 +77,30 @@ const TilesComponent = ({
   const [checkInputVal, setCheckInputVal] = useState(false);
   const [selectedFormats, setSelectedFormats] = useState("");
 
-  useEffect(() => {
-    if (selectedOption?.length) {
-      setSelectedFormats(selectedOption[0] || []);
-    }
-  }, [selectedOption]);
 
+  useEffect(() => {
+    if (selectedOption && selectedOption.length > 0) {
+      setSelectedFormats(selectedOption[0] || []);
+  
+      if (selectedOption[0]?.opt) {
+        const isSelectedOptAvailable = options.some(
+          (option) => option.opt === selectedOption[0].opt
+        );
+        if (!isSelectedOptAvailable && selectedOption[0].opt !== "Other (Specify)" || "Other") {
+          setOtherVal(selectedOption[0].opt);
+          selectedOption.length = 0;
+        }
+      }
+    }
+  }, [selectedOption, options]);
+
+  
   const checkSelectedOption = (value, price) => {
     const res = selectedFormats?.opt === value && selectedFormats?.price === price
     
     return !!res;
   };
 
-  // console.log("selectedOption: ", selectedOption);
-  // console.log("selectedFormats: ", selectedFormats);
 
   const submitOtherVal = () => {
     if (!otherVal) {
@@ -96,6 +108,7 @@ const TilesComponent = ({
       setCheckInputVal(true);
     }
     if (otherVal) {
+      setOtherVal("");
       setErrorMessage(null);
       setInputField(false);
       setCheckInputVal(false);
@@ -109,7 +122,7 @@ const TilesComponent = ({
           <CustomButton
             value={selectedFormats}
             onClick={() => {
-              if (data.opt === "Other (Specify)") {
+              if (data.opt === "Other (Specify)" || data.opt === "Other") {
                 setInputField(!inputField);
               } else {
                 setSelectedFormats(data);
@@ -133,7 +146,7 @@ const TilesComponent = ({
             <span>{data.opt}</span>&nbsp;
             <span className="price">($ {data.price})</span>
           </CustomButton>
-          {data.opt === "Other (Specify)"
+          {(data.opt === "Other (Specify)" || data.opt === "Other")
             ? inputField && (
                 <Box
                   sx={{
@@ -166,11 +179,11 @@ const TilesComponent = ({
                         setSelectedFormats(otherData);
                         selectedOptionPassToParent(otherData);
                         setInputField(false);
-                        setOtherVal("");
+                        setOtherVal(otherVal);
                         setErrorMessage(null);
-                      } else {
+                      } 
                         submitOtherVal();
-                      }
+                      
                     }}
                   >
                     Enter

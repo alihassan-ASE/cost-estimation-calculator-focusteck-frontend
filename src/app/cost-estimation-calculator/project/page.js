@@ -28,7 +28,8 @@ const page = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
-  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState();
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] =
+    useState();
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
 
@@ -93,7 +94,6 @@ const page = () => {
       localStorage.setItem("Response", data);
       route.push('/cost-estimation-calculator/submit');
     } catch (error) {
-      console.log("Error", error)
     }
   };
 
@@ -104,9 +104,10 @@ const page = () => {
     setSelectedOption(resp.nextQuestion);
     if (resp.selectedData || resp.selectedData.length > 3) {
       setIsOptionSelected(false);
-
     }
   };
+
+
 
   // setting Response in actual Array
   const setResponseData = () => {
@@ -136,11 +137,11 @@ const page = () => {
 
   }
 
+
   // Handling Next Question
   const nextQuestion = async () => {
 
     cost = 0;
-
 
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
@@ -213,6 +214,7 @@ const page = () => {
     handlePrice("next", cost);
     setIsOptionSelected(true);
 
+
   };
   if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
     goToForm();
@@ -220,35 +222,52 @@ const page = () => {
   
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
-
     const { index, step } = obj;
 
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
     setCurrentState(step.state);
-    actualResponses.splice(index - 1)
-    setLastQuestionSelectedOption(step.selectedOption)
+    actualResponses.splice(index - 1);
+    setLastQuestionSelectedOption(step.selectedOption);
     handlePrice("stepper");
-
   };
+
+  if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
+    goToForm();
+  }
 
   return (
     <>
       {fetchQuesitons !== null ? (
         <Box sx={{ margin: "1em 2em" }}>
-          {actualResponses.length > 0 && (
-            <KeyboardBackspaceIcon
-              sx={{
-                color: "#ACACAC",
-                border: "2px solid #ACACAC",
-                padding: ".2em",
-                borderRadius: "50%",
-                margin: "0 0 1em 0",
-              }}
-              onClick={backQuestion}
-            />
-          )}
-          <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "1em",
+              alignItems: "center",
+              margin: "1em 0",
+            }}
+          >
+            {actualResponses.length > 0 && (
+              <KeyboardBackspaceIcon
+                sx={{
+                  color: "#ACACAC",
+                  border: "2px solid #ACACAC",
+                  borderRadius: "50%",
+                  padding: ".3em",
+                  borderRadius: "50%",
+                  ":hover": {
+                    cursor: "pointer",
+                    backgroundColor: "#0069d9",
+                    border: "2px solid #fff",
+                    color: "#fff",
+                  },
+                }}
+                onClick={backQuestion}
+              />
+            )}
+            <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+          </Box>
 
           {isNarrowScreen ? (
             <Grid container spacing={{ xs: 5, sm: 2, md: 5, lg: 4, xl: 5 }}>
@@ -301,7 +320,13 @@ const page = () => {
                   </Button>
                 </Box>
               </Grid>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
+              <Grid
+                item
+                lg={4}
+                md={3}
+                sm={4}
+                xs={12}
+              >
                 <Stepper
                   responses={actualResponses}
                   changeActiveQuestion={changeActiveQuestion}
