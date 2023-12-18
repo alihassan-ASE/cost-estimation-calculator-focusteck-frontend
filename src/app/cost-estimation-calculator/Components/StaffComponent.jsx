@@ -15,6 +15,8 @@ import { useRouter } from "next/navigation";
 import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { NEXT_BODY_SUFFIX } from "next/dist/lib/constants";
 
 const CustomButton = styled(Button)({
   border: "1px solid #0069d9",
@@ -24,16 +26,17 @@ const CustomCard = styled(Card)(({ theme }) => ({
   height: 340,
   width: "294px",
   padding: "2em 1.5em",
-  margin: "3em 1em",
+  margin: "2em 1em",
   borderRadius: ".5em",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   [theme.breakpoints.down("md")]: {
-    margin: "3em 0",
+    margin: "2em 0 ",
   },
   [theme.breakpoints.down("sm")]: {
-    margin: "2em 0",
+    margin: "1em 0",
+    padding: "2em 1em",
   },
 }));
 
@@ -50,15 +53,19 @@ const StaffComponent = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [actualResponses, setActualResponses] = useState({});
 
+  const [isOptionSelected, setIsOptionSelected] = useState(true);
+
   const [addedOption, setAddedOption] = useState([]);
 
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [orientation, setOrientation] = useState("horizontal");
-  const isNarrowScreen = useMediaQuery("(max-width:600px)"); // Adjust the width breakpoint
+  const isNarrowScreen = useMediaQuery("(max-width:600px)");
+  const [resource, setResource] = useState([]);
 
   const route = useRouter();
+  const dataObj = {};
 
   useEffect(() => {
     getQuestions().then((resp) => {
@@ -114,9 +121,7 @@ const StaffComponent = () => {
 
         if (actualResponses.responses.length >= 0) {
           actualResponses.responses.forEach((response, index) => {
-            // For the first response object (index 0)
             if (index === 0) {
-              // Calculate the total price from resources array in the first object
               if (response.resources && response.resources.length > 0) {
                 response.resources.forEach((resource) => {
                   if (
@@ -124,17 +129,14 @@ const StaffComponent = () => {
                     resource.resourceOption.price
                   ) {
                     totalPrice += resource.resourceOption.price;
-                    console.log("price in resources", totalPrice);
                   }
                 });
               }
             } else {
-              // For subsequent response objects (index > 0)
               if (response.selectedData && response.selectedData.length > 0) {
                 response.selectedData.forEach((select) => {
                   if (select.price) {
                     totalPrice += select.price;
-                    console.log("price in additional", totalPrice);
                   }
                 });
               }
@@ -142,7 +144,6 @@ const StaffComponent = () => {
           });
         }
 
-        // Update the total cost by adding the calculated totalPrice to the previous total cost
         setTotalCost(totalPrice);
         break;
       }
@@ -151,6 +152,11 @@ const StaffComponent = () => {
 
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
+
+    if (index == 1) {
+      setCurrentState(true);
+    }
+
     setCurrentQuestionIndex(index - 1);
     setCurrentQuestion(step);
     actualResponses.responses.splice(index - 1);
@@ -158,15 +164,18 @@ const StaffComponent = () => {
   };
 
   const selectedOptionPassToParent = (data, boolVal, label) => {
+    setResource();
     setValues((prev) => [...prev, data]);
+
     setButtonState(true);
     setAddMore(!boolVal);
+    setIsOptionSelected(false);
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
-    const dataObj = {};
     dataObj.resources = values;
+    setResource(dataObj.resources);
 
     currentState
       ? setActualResponses({ responses: [dataObj] })
@@ -181,12 +190,14 @@ const StaffComponent = () => {
   };
 
   const getResponsesData = (resp) => {
+    setIsOptionSelected(false);
     setAddedOption(resp);
   };
 
   const nextQuestion = () => {
     setCurrentState(false);
     setButtonState(true);
+    setIsOptionSelected((prev) => !prev);
 
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -206,7 +217,6 @@ const StaffComponent = () => {
     setIsNextClicked(true);
   };
 
-  // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
     let lastQuestion;
 
@@ -224,14 +234,10 @@ const StaffComponent = () => {
         setCurrentQuestionIndex(currentQuestionIndex - 1);
       }
 
-      // Check if there's at least one response and Handling Price on Back Click
       if (actualResponses.responses.length > 0) {
         let totalPriceToSubtract = 0;
-        // For the popped response object
         if (lastQuestion) {
-          // For the first response object (index 0)
           if (actualResponses.responses.length === 0) {
-            // Calculate the total price from resources array in the first object and subtract it
             if (lastQuestion.resources && lastQuestion.resources.length > 0) {
               lastQuestion.resources.forEach((resource) => {
                 if (resource.resourceOption && resource.resourceOption.price) {
@@ -240,7 +246,6 @@ const StaffComponent = () => {
               });
             }
           } else {
-            // For subsequent response objects (index > 0)
             if (
               lastQuestion.selectedData &&
               lastQuestion.selectedData.length > 0
@@ -253,8 +258,7 @@ const StaffComponent = () => {
             }
           }
 
-          // Subtract the price of the popped response from the total cost
-          setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract)); // Ensure the totalCost doesn't go below 0
+          setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract));
         }
       }
     }
@@ -272,7 +276,7 @@ const StaffComponent = () => {
             index={i}
             setValues={setValues}
             values={values}
-            selectedResource={[]}
+            selectedOption={resource}
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
         </CustomCard>
@@ -284,48 +288,85 @@ const StaffComponent = () => {
   if (currentQuestionIndex > additionalQuesiton.length) {
     goToForm();
   }
+  // console.log("values", values);
 
   return (
     <Box sx={{ margin: "3em 1em 1em 1em" }}>
       <Box>
+        {currentQuestionIndex > 0 && (
+          <KeyboardBackspaceIcon
+            sx={{
+              color: "#ACACAC",
+              border: "2px solid #ACACAC",
+              padding: ".2em",
+              borderRadius: "50%",
+              margin: "0 0 1em 0",
+            }}
+            onClick={backQuestion}
+            disable={values[0] ? false : true}
+          />
+        )}
         <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
         {currentState ? (
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "center",
-            }}
-          >
-            {returnResources()}
+          <>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                gap: "1em",
+              }}
+            >
+              {returnResources()}
 
-            <Box>
-              {addMore && (
-                <CustomButton
-                  onClick={() => {
-                    setAddMore(false);
-                    setCount(count + 1);
-                    returnResources();
-                  }}
-                  style={{
-                    padding: "3em",
-                    borderRadius: ".5em",
-                    minWidth: 100,
-                    height: 405,
-                    width: 294,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ControlPointIcon
-                    sx={{ fontSize: "2em" }}
-                    onClick={() => setAddMore(false)}
-                  />
-                </CustomButton>
-              )}
+              <Box>
+                {addMore && (
+                  <CustomButton
+                    onClick={() => {
+                      setAddMore(false);
+                      setCount(count + 1);
+                      returnResources();
+                    }}
+                    style={{
+                      padding: "3em",
+                      borderRadius: ".5em",
+                      minWidth: 100,
+                      height: 405,
+                      width: 290,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ControlPointIcon
+                      sx={{ fontSize: "2em" }}
+                      onClick={() => setAddMore(false)}
+                    />
+                  </CustomButton>
+                )}
+              </Box>
             </Box>
-          </Box>
+            {values[0] && (
+              <Box
+                sx={{
+                  margin: "2em 1em",
+                }}
+              >
+                <Button
+                  disabled={!buttonState}
+                  size="medium"
+                  variant="contained"
+                  sx={{ width: 150 }}
+                  onClick={() => {
+                    nextQuestion();
+                  }}
+                  disable={values[0] ? false : true}
+                >
+                  Next
+                </Button>
+              </Box>
+            )}
+          </>
         ) : isNarrowScreen ? (
           <Grid container spacing={{ xs: 5, sm: 2, md: 3, lg: 4, xl: 5 }}>
             <Grid item lg={4} md={3} sm={4} xs={12}>
@@ -341,8 +382,29 @@ const StaffComponent = () => {
               <Question
                 currentQuestion={currentQuestion}
                 getResponsesData={getResponsesData}
+                selectedOption={[]}
                 styleVal={"Tiles"}
               />
+
+              {additionalQuesiton.length >= currentQuestionIndex && (
+                <Box
+                  sx={{
+                    margin: "2em 0",
+                  }}
+                >
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    onClick={() => {
+                      nextQuestion();
+                    }}
+                    disabled={isOptionSelected}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              )}
             </Grid>
           </Grid>
         ) : (
@@ -351,8 +413,28 @@ const StaffComponent = () => {
               <Question
                 currentQuestion={currentQuestion}
                 getResponsesData={getResponsesData}
+                selectedOption={[]}
                 styleVal={"Tiles"}
               />
+              {additionalQuesiton.length >= currentQuestionIndex && (
+                <Box
+                  sx={{
+                    margin: "2em 0",
+                  }}
+                >
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    onClick={() => {
+                      nextQuestion();
+                    }}
+                    disabled={isOptionSelected}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              )}
             </Grid>
             <Grid item lg={4} md={3} sm={4} xs={12}>
               {actualResponses.length || actualResponses.responses ? (
@@ -365,50 +447,6 @@ const StaffComponent = () => {
             </Grid>
           </Grid>
         )}
-        <Box
-          sx={{
-            display: "flex",
-            gap: "2em",
-            margin: "2em 0",
-          }}
-        >
-          {currentQuestionIndex > 0 ? (
-            <Button
-              size="medium"
-              variant="contained"
-              sx={{ width: 150 }}
-              onClick={backQuestion}
-              disable={values[0] ? false : true}
-            >
-              Back
-            </Button>
-          ) : null}
-          {additionalQuesiton.length >= currentQuestionIndex ? (
-            <Button
-              disabled={!buttonState}
-              size="medium"
-              variant="contained"
-              sx={{ width: 150 }}
-              onClick={() => {
-                nextQuestion();
-              }}
-              disable={values[0] ? false : true}
-            >
-              Next
-            </Button>
-          ) : (
-            <Button
-              disabled={!buttonState}
-              size="medium"
-              variant="contained"
-              sx={{ width: 150 }}
-              onClick={() => goToForm()}
-              disable={values[0] ? false : true}
-            >
-              Enter More Details
-            </Button>
-          )}
-        </Box>
       </Box>
     </Box>
   );

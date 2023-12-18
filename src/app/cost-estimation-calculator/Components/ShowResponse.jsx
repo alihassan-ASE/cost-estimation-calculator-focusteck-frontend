@@ -1,6 +1,8 @@
 import { Box, Typography, Chip, Button } from "@mui/material";
 import React from "react";
+import { useRouter } from "next/navigation";
 import { styled } from "@mui/material/styles";
+
 const CustomButton = styled(Button)({
   "&:hover": {
     cursor: "auto",
@@ -19,6 +21,7 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
+  const route = useRouter();
   return (
     <Box
       sx={{
@@ -92,14 +95,14 @@ const ShowResponse = ({ response }) => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
-                  key="Resource"
+                  key="Seniority Level"
                   label={data.seniorityLevel}
                 />
               </CustomButton>
               <CustomButton>
-                <Typography> Number of Resources</Typography>
+                <Typography>Number of Resources</Typography>
 
-                <Chip key="Resource" label={data.numOfResources} />
+                <Chip key="Number of Resources" label={data.numOfResources} />
               </CustomButton>
             </Box>
           ))}
@@ -115,7 +118,7 @@ const ShowResponse = ({ response }) => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
-                  key="Resource"
+                  key="Questions"
                   label={`${eachOption.opt} ($${eachOption.price})`}
                 />
               ))}
@@ -123,7 +126,7 @@ const ShowResponse = ({ response }) => {
           ))}
           <CustomButton sx={{ gap: "1em" }}>
             <Typography> Total Cost</Typography>
-            <Chip key="Resource" label={`$${response.totalCost}`} />
+            <Chip key="Cost" label={`$${response.totalCost}`} />
           </CustomButton>
         </Box>
       ) : (
@@ -142,7 +145,7 @@ const ShowResponse = ({ response }) => {
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                     }}
-                    key="Resource"
+                    key="Questions"
                     label={`${eachOption.opt} ($${eachOption.price})`}
                   />
                 ))}
@@ -157,7 +160,7 @@ const ShowResponse = ({ response }) => {
                 overflow: "hidden",
                 textOverflow: "ellipsis",
               }}
-              key="Resource"
+              key="Cost"
               label={`$${response.totalCost}`}
             />
           </CustomButton>

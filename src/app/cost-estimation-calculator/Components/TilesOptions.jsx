@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Box, Typography, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)(({ theme }) => ({
@@ -45,9 +45,18 @@ const CustomButton = styled(Button)(({ theme }) => ({
     padding: ".7em 1.3em",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: 11,
+    fontSize: 10,
     padding: ".7em 1.7em",
-    width: "140px",
+    width: "160px",
+  },
+  "& span.price": {
+    color: "#3f37c9",
+  },
+  "&:hover span.price": {
+    color: "white",
+  },
+  "&:focus span.price": {
+    color: "white",
   },
 }));
 
@@ -56,11 +65,32 @@ const TilesComponent = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
+  let otherData = {
+    opt: null,
+    price: null,
+  };
+  const [otherVal, setOtherVal] = useState("");
+  const [inputField, setInputField] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [checkInputVal, setCheckInputVal] = useState(false);
+
   const checkSelectedOption = (value, price) => {
     const res = selectedOption?.find(
       (data) => data.opt === value && data.price === price
     );
     return !!res;
+  };
+
+  const submitOtherVal = () => {
+    if (!otherVal) {
+      setErrorMessage("Field cannot be empty");
+      setCheckInputVal(true);
+    }
+    if (otherVal) {
+      setErrorMessage(null);
+      setInputField(false);
+      setCheckInputVal(false);
+    }
   };
 
   return (
@@ -69,7 +99,12 @@ const TilesComponent = ({
         <Box sx={{ display: "inline-block" }} key={index}>
           <CustomButton
             onClick={() => {
-              selectedOptionPassToParent(data);
+              if (data.opt === "Other (Specify)") {
+                setInputField(!inputField);
+              } else {
+                selectedOptionPassToParent(data);
+                setInputField(false);
+              }
               // selectedOption[0] = data;
             }}
             sx={
@@ -77,12 +112,60 @@ const TilesComponent = ({
                 ? {
                     backgroundColor: "#0062cc",
                     color: "white",
+                    "& span.price": {
+                      color: "white",
+                    },
                   }
                 : {}
             }
           >
-            {data.opt} ($ {data.price})
+            <span>{data.opt}</span>&nbsp;
+            <span className="price">($ {data.price})</span>
           </CustomButton>
+          {data.opt === "Other (Specify)"
+            ? inputField && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: "1em",
+                    flexWrap: "wrap",
+                    margin: ".5em 0",
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="fullWidth"
+                    label="Other"
+                    variant="outlined"
+                    sx={{ width: "90%" }}
+                    value={otherVal}
+                    onChange={(e) => {
+                      setOtherVal(e.target.value);
+                    }}
+                    error={checkInputVal}
+                    helperText={errorMessage}
+                  />
+                  <Button
+                    variant="contained"
+                    sx={{ width: "100px" }}
+                    onClick={() => {
+                      otherData.price = data.price;
+                      otherData.opt = otherVal;
+                      if (otherVal !== "") {
+                        selectedOptionPassToParent(otherData);
+                        setInputField(false);
+                        setOtherVal("");
+                        setErrorMessage(null);
+                      } else {
+                        submitOtherVal();
+                      }
+                    }}
+                  >
+                    Enter
+                  </Button>
+                </Box>
+              )
+            : null}
         </Box>
       ))}
     </Box>

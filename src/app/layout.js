@@ -5,7 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import images from "../images/header-image.jpg";
-// import { useRouter } from "next/navigation";
+
 import {
   BottomNavigation,
   InputBase,
@@ -85,15 +85,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function RootLayout({ children }) {
-  // const route = useRouter();
-  // if (!route) {
-  //   return null;
-  // }
-
-  // const specificURL = "/cost-estimation-calculator/submit";
-  // const isSpecificURL = route.pathname === specificURL;
-  // console.log("URL: ", isSpecificURL);
-
   return (
     <html lang="en">
       <body style={{ margin: "0" }}>
@@ -252,9 +243,7 @@ export default function RootLayout({ children }) {
             id="scroll-down"
             sx={{
               flexGrow: 1,
-              // background: isSpecificURL
-              //   ? "linear-gradient(225deg, rgba(134,40,191,1) 0%, rgba(194,106,240,1) 44%, rgba(80,113,233,1) 80%, rgba(51,144,255,1) 100%)"
-              //   : null,
+              minHeight: "100vh",
             }}
           >
             {children}

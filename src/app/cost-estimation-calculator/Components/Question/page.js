@@ -22,7 +22,11 @@ const page = (props) => {
 
   const [selectedData, setSelectedData] = useState([]);
   const selectedOptionPassToParent = (data) => {
-    setSelectedData([data]);
+    if (Array.isArray(data)) {
+      setSelectedData([...data]);
+    } else {
+      setSelectedData([data]);
+    }
   };
 
   useEffect(() => {
@@ -47,14 +51,22 @@ const page = (props) => {
         }
       });
     }
-  }, [selectedData, currentQuestion]);
 
+    setSelectedOption(selectedData);
+  }, [selectedData]);
+
+  useEffect(() => {
+    setSelectedData([]);
+  }, [currentQuestion]);
+
+  // console.log("Selected Data: ", selectedData);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
       <CustomTypography variant="h4">
         {currentQuestion?.question}
       </CustomTypography>
       <ShowOptions
+        typeOfSelection={currentQuestion?.typeofselection}
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}
         selectedOption={selectedOption}

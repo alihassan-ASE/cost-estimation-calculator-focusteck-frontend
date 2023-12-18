@@ -79,6 +79,7 @@ const MultipleComponent = ({
   }, [selectedOption]);
 
   const handleFormat = (event, newFormats) => {
+    // console.log("New Formats: ", newFormats);
     setSelectedFormats(newFormats);
     selectedOptionPassToParent(newFormats);
   };
@@ -88,7 +89,7 @@ const MultipleComponent = ({
       (selected) => selected.opt === value && selected.price === price
     );
   };
-  console.log("Selected Formats: ", selectedFormats);
+  // console.log("Selected Formats: ", selectedFormats);
   return (
     <Box>
       <Typography variant="h6">Tiles Multi Select</Typography>
@@ -96,7 +97,7 @@ const MultipleComponent = ({
         value={selectedFormats}
         sx={{ display: "flex", flexWrap: "wrap" }}
       >
-        {options.map((data, index) => (
+        {options?.map((data, index) => (
           <StyleToggleButton
             key={index}
             value={data}

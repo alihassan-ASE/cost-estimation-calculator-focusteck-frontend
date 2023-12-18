@@ -1,4 +1,5 @@
 "use client";
+// final code
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
 
@@ -9,6 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -33,6 +35,8 @@ const page = () => {
       setOrientation("vertical");
     }
   }, [isNarrowScreen]);
+
+  const [isOptionSelected, setIsOptionSelected] = useState(true);
 
   const [totalCost, setTotalCost] = useState(0);
 
@@ -61,6 +65,7 @@ const page = () => {
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
+    setIsOptionSelected(false);
   };
 
   // setting Response in actual Array
@@ -111,6 +116,8 @@ const page = () => {
     let currentQuestionIndexLocal = currentQuestionIndex;
     let questionsToShowLocal = questionsToShow;
     let cost = 0;
+
+    setIsOptionSelected(true);
 
     switch (currentStateLocal) {
       case "pre": {
@@ -218,6 +225,18 @@ const page = () => {
     <>
       {fetchQuesitons !== null ? (
         <Box sx={{ margin: "1em 2em" }}>
+          {actualResponses.length > 0 && (
+            <KeyboardBackspaceIcon
+              sx={{
+                color: "#ACACAC",
+                border: "2px solid #ACACAC",
+                padding: ".2em",
+                borderRadius: "50%",
+                margin: "0 0 1em 0",
+              }}
+              onClick={backQuestion}
+            />
+          )}
           <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
 
           {isNarrowScreen ? (
@@ -234,17 +253,9 @@ const page = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                 />
-                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0 " }}>
+                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
-                    size="medium"
-                    variant="contained"
-                    sx={{ width: 150 }}
-                    vairant="contained"
-                    onClick={backQuestion}
-                  >
-                    Back
-                  </Button>
-                  <Button
+                    disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
                     sx={{ width: 150 }}
@@ -265,15 +276,7 @@ const page = () => {
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
-                    size="medium"
-                    variant="contained"
-                    sx={{ width: 150 }}
-                    vairant="contained"
-                    onClick={backQuestion}
-                  >
-                    Back
-                  </Button>
-                  <Button
+                    disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
                     sx={{ width: 150 }}

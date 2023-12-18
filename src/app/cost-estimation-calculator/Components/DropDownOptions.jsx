@@ -65,14 +65,15 @@ const DropDownComponent = ({
   options,
   label,
   disable,
-  selectedResource,
+  selectedOption,
   selectedOptionPassToParent,
 }) => {
-  const [selectedValue, setSelectedValue] = useState(selectedResource || "");
+  const [selectedValue, setSelectedValue] = useState(selectedOption || "");
   return (
     <StyledFormControl>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
+        sx={{ height: "65px", width: "270px" }}
         autoFocus={false}
         value={disable ? null : selectedValue}
         onChange={(e) => {
@@ -80,7 +81,7 @@ const DropDownComponent = ({
           setSelectedValue(selectedObject);
           selectedOptionPassToParent(selectedObject, label);
         }}
-        // disabled={disable ? true : false}
+        disabled={disable ? true : false}
         input={<OutlinedInput id="select-multiple-chip" label={label} />}
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>

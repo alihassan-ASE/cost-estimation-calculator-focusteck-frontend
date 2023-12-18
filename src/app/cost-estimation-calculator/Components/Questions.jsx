@@ -1,6 +1,5 @@
-"use client";
-import React, { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import React from "react";
+import { Box } from "@mui/material";
 
 import ShowOption from "@/app/cost-estimation-calculator/Components/ShowOption";
 
@@ -10,7 +9,6 @@ const QuestionsComponent = ({
   label,
   disable,
   selectedOption,
-  selectedResource,
   styleVal,
   selectedOptionPassToParent,
 }) => {
@@ -18,7 +16,7 @@ const QuestionsComponent = ({
     <Box>
       <ShowOption
         options={options}
-        selectedOption={selectedOption ? selectedOption : selectedResource}
+        selectedOption={selectedOption}
         selectedOptionPassToParent={selectedOptionPassToParent}
         styleVal={styleVal}
         label={label}

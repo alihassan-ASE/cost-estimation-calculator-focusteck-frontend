@@ -29,7 +29,7 @@ const Form = ({ response, getActualResponse }) => {
     email: "",
   });
 
-  console.log("Response in Form", response);
+  // console.log("Response in Form", response);
 
   const [errorMessage, setErrorMessage] = useState({
     usernameError: null,
@@ -71,8 +71,10 @@ const Form = ({ response, getActualResponse }) => {
           <Box>
             <InputLabel>Enter Your Name</InputLabel>
             <TextField
-              sx={{ mb: 3 }}
-              style={{ width: "100%" }}
+              sx={{ mb: 3, borderRadius: "2em" }}
+              style={{
+                width: "100%",
+              }}
               id="outlined-basic, user-name"
               variant="outlined"
               value={formInput.userName}

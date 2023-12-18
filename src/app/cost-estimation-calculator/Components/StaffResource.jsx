@@ -25,7 +25,7 @@ const StaffResource = ({
   index,
   setValues,
   values,
-  selectedResource,
+  selectedOption,
   selectedOptionPassToParent,
 }) => {
   let newOption;
@@ -41,12 +41,12 @@ const StaffResource = ({
 
   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
   useEffect(() => {
-    if (selectedResource?.length ? selectedResource[index] : null) {
+    if (selectedOption?.length ? selectedOption[index] : null) {
       setCurrentResource({
-        resource: selectedResource[index]?.resource,
-        resourceOption: selectedResource[index]?.resourceOption,
-        seniorityLevel: selectedResource[index]?.seniorityLevel,
-        numOfResources: selectedResource[index]?.numOfResources,
+        resource: selectedOption[index]?.resource,
+        resourceOption: selectedOption[index]?.resourceOption,
+        seniorityLevel: selectedOption[index]?.seniorityLevel,
+        numOfResources: selectedOption[index]?.numOfResources,
       });
       setShowDropdown(false);
     }
@@ -99,9 +99,9 @@ const StaffResource = ({
             styleVal={"DropDown"}
             label={label ? label : "Resources"}
             disable={false}
-            selectedResource={
-              selectedResource?.length
-                ? selectedResource[index]?.resource
+            selectedOption={
+              selectedOption?.length
+                ? selectedOption[index]?.resource
                 : currentResource?.resource || null
             }
             selectedOptionPassToParent={getData}
@@ -129,8 +129,8 @@ const StaffResource = ({
               }}
               key="Resources"
               label={
-                selectedResource?.length
-                  ? selectedResource[index]?.resource
+                selectedOption?.length
+                  ? selectedOption[index]?.resource
                   : currentResource.resource || null
               }
             />
@@ -148,22 +148,20 @@ const StaffResource = ({
               question={question}
               options={resourceData}
               label={label ? label : "Resource Option"}
-              // disable={
-              //   !selectedResource?.length
-              //     ? currentResource.resource
-              //     : selectedResource[index]?.resource
-              //     ? false
-              //     : true
-              // }
+              disable={
+                currentResource.resource || selectedOption[index]?.resource
+                  ? false
+                  : true
+              }
               styleVal={"DropDown"}
-              selectedResource={
+              selectedOption={
                 currentResource.resource &&
                 !currentResource?.resourceOption?.opt
                   ? null
                   : currentResource?.resourceOption?.opt
                   ? currentResource?.resourceOption?.opt
-                  : selectedResource?.length
-                  ? selectedResource[index]?.resourceOption?.opt
+                  : selectedOption?.length
+                  ? selectedOption[index]?.resourceOption?.opt
                   : null
               }
               selectedOptionPassToParent={getData}
@@ -192,8 +190,8 @@ const StaffResource = ({
               }}
               key="Resource Option"
               label={
-                selectedResource?.length
-                  ? `${selectedResource[index]?.resourceOption.opt} ($ ${selectedResource[index]?.resourceOption.price} )`
+                selectedOption?.length
+                  ? `${selectedOption[index]?.resourceOption.opt} ($ ${selectedOption[index]?.resourceOption.price} )`
                   : `${currentResource.resourceOption?.opt} ($ ${currentResource.resourceOption?.price})` ||
                     null
               }
@@ -206,21 +204,20 @@ const StaffResource = ({
             question={question}
             options={seniorityLevelOptions}
             label={label ? label : "Seniority Level"}
-            // disable={
-            //   !selectedResource?.length
-            //     ? currentResource.resourceOption
-            //     : selectedResource[index]?.resourceOption
-            //     ? false
-            //     : true
-            // }
+            disable={
+              currentResource.resourceOption ||
+              selectedOption[index]?.resourceOption
+                ? false
+                : true
+            }
             styleVal={"DropDown"}
-            selectedResource={
+            selectedOption={
               currentResource.resource && !currentResource.seniorityLevel
                 ? null
                 : currentResource.seniorityLevel
                 ? currentResource.seniorityLevel
-                : selectedResource?.length
-                ? selectedResource[index]?.seniorityLevel
+                : selectedOption?.length
+                ? selectedOption[index]?.seniorityLevel
                 : null
             }
             selectedOptionPassToParent={getData}
@@ -243,8 +240,8 @@ const StaffResource = ({
             <Chip
               key="Seniority Level"
               label={
-                selectedResource?.length
-                  ? selectedResource[index]?.seniorityLevel
+                selectedOption?.length
+                  ? selectedOption[index]?.seniorityLevel
                   : currentResource.seniorityLevel || null
               }
             />
@@ -257,21 +254,20 @@ const StaffResource = ({
               question={question}
               options={numOfResourcesOptions[currentResource.seniorityLevel]}
               label={label ? label : "Number of Resources"}
-              // disable={
-              //   !selectedResource?.length
-              //     ? currentResource.seniorityLevel
-              //     : selectedResource[index]?.seniorityLevel
-              //     ? false
-              //     : true
-              // }
+              disable={
+                currentResource.seniorityLevel ||
+                selectedOption[index]?.seniorityLevel
+                  ? false
+                  : true
+              }
               styleVal={"DropDown"}
-              selectedResource={
+              selectedOption={
                 currentResource.resource && !currentResource.numOfResources
                   ? null
                   : currentResource.numOfResources
                   ? currentResource.numOfResources
-                  : selectedResource?.length
-                  ? selectedResource[index]?.numOfResources
+                  : selectedOption?.length
+                  ? selectedOption[index]?.numOfResources
                   : null
               }
               selectedOptionPassToParent={getData}
@@ -295,8 +291,8 @@ const StaffResource = ({
             <Chip
               key="Number of Resources"
               label={
-                selectedResource?.length
-                  ? selectedResource[index]?.numOfResources
+                selectedOption?.length
+                  ? selectedOption[index]?.numOfResources
                   : currentResource.numOfResources || null
               }
             />
@@ -347,14 +343,14 @@ const StaffResource = ({
                   setShowDropdown(false);
                 }
               } else if (
-                selectedResource?.length ? selectedResource[index] : null
+                selectedOption?.length ? selectedOption[index] : null
               ) {
                 selectedOptionPassToParent(
                   {
-                    resource: selectedResource[index].resource,
-                    resourceOption: selectedResource[index].resourceOption,
-                    seniorityLevel: selectedResource[index].seniorityLevel,
-                    numOfResources: selectedResource[index].numOfResources,
+                    resource: selectedOption[index].resource,
+                    resourceOption: selectedOption[index].resourceOption,
+                    seniorityLevel: selectedOption[index].seniorityLevel,
+                    numOfResources: selectedOption[index].numOfResources,
                   },
                   false,
                   getLabel
