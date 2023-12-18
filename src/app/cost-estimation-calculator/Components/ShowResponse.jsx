@@ -62,7 +62,7 @@ const ShowResponse = ({ response }) => {
           </CustomButton>
         </Box>
         {response.responses[0].resources ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "1em " }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: ".5em " }}>
             <CustomTypography variant="h6">Resources</CustomTypography>
             {response.responses[0].resources.map((data) => (
               <Box

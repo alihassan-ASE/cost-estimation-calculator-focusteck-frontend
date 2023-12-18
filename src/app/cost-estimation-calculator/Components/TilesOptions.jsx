@@ -82,12 +82,13 @@ const TilesComponent = ({
   }, [selectedOption]);
 
   const checkSelectedOption = (value, price) => {
-    const res = selectedFormats?.opt === value && selectedFormats?.price === price
-    
+    const res =
+      selectedFormats?.opt === value && selectedFormats?.price === price;
+
     return !!res;
   };
 
-  // console.log("selectedOption: ", selectedOption);
+  console.log("selectedOption: ", selectedOption);
   // console.log("selectedFormats: ", selectedFormats);
 
   const submitOtherVal = () => {
@@ -112,10 +113,13 @@ const TilesComponent = ({
               if (data.opt === "Other (Specify)") {
                 setInputField(!inputField);
               } else {
-                setSelectedFormats(data);
                 selectedOptionPassToParent(data);
                 setInputField(false);
+                setOtherVal("");
+                setErrorMessage(null);
+                setCheckInputVal(false);
               }
+              setSelectedFormats(data);
               // selectedOption[0] = data;
             }}
             sx={

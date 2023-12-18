@@ -4,8 +4,8 @@ import { styled, alpha } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
-import images from "../images/header-image.jpg";
 import { useRouter } from "next/navigation";
+import SouthIcon from "@mui/icons-material/South";
 
 import {
   BottomNavigation,
@@ -30,6 +30,10 @@ const CustomBannerBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   gap: "2em",
+  background: `linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5),rgba(0,0,0,.5)), url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
   [theme.breakpoints.down("sm")]: {
     padding: "4em 1em",
   },
@@ -119,13 +123,15 @@ export default function RootLayout({ children }) {
               </Typography>
 
               <Button
-              onClick={()=>route.push('/cost-estimation-calculator')}
+                onClick={() => route.push("/cost-estimation-calculator")}
                 sx={{
                   flexGrow: 1,
                   fontSize: 13,
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
+                  textTransform: "capitalize",
+                  fontWeight: 500,
                 }}
               >
                 Home
@@ -137,6 +143,8 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
+                  textTransform: "capitalize",
+                  fontWeight: 500,
                 }}
               >
                 About Us
@@ -148,6 +156,8 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
+                  textTransform: "capitalize",
+                  fontWeight: 500,
                 }}
               >
                 Services
@@ -159,6 +169,8 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
+                  textTransform: "capitalize",
+                  fontWeight: 500,
                 }}
               >
                 Industries & Expertise
@@ -170,6 +182,8 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
+                  textTransform: "capitalize",
+                  fontWeight: 500,
                 }}
               >
                 Clients
@@ -181,6 +195,8 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
+                  textTransform: "capitalize",
+                  fontWeight: 500,
                 }}
               >
                 Blog
@@ -192,6 +208,8 @@ export default function RootLayout({ children }) {
                   display: { xs: "none", md: "none", lg: "block" },
                   my: 2,
                   color: "#000",
+                  textTransform: "capitalize",
+                  fontWeight: 500,
                 }}
               >
                 Pricing
@@ -199,8 +217,8 @@ export default function RootLayout({ children }) {
               <Search
                 sx={{
                   display: { xs: "none", sm: "block" },
-                  backgroundColor: "#dfdfdf",
                   border: "1px solid #dfdfdf",
+                  borderRadius: "2em",
                 }}
               >
                 <SearchIconWrapper>
@@ -214,14 +232,7 @@ export default function RootLayout({ children }) {
             </Toolbar>
           </AppBar>
 
-          <CustomBannerBox
-            sx={{
-              backgroundImage: `url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
+          <CustomBannerBox>
             <CustomTypography
               variant="h3"
               style={{
@@ -239,19 +250,39 @@ export default function RootLayout({ children }) {
               uncertainties hold you back. Define your budget effortlessly with
               just a few clicks.
             </Typography>
-            <Typography
-              sx={{
-                backgroundColor: "hsla(3, 1%, 0%, 0.1)",
-                padding: "1em .5em",
+
+            <Link
+              style={{
+                textDecoration: "none",
+                color: "#fff",
+                display: "flex",
+                gap: "1em",
+                alignItems: "center",
               }}
+              href="#scroll-down"
             >
-              <Link
-                style={{ textDecoration: "none", color: "#fff" }}
-                href="#scroll-down"
+              <Typography
+                sx={{
+                  backgroundColor: "hsla(3, 1%, 0%, 0.1)",
+                  padding: "1em .5em",
+                }}
               >
                 Take the next Step for your Project
-              </Link>
-            </Typography>
+              </Typography>
+              <SouthIcon
+                sx={{
+                  fontSize: 20,
+                  borderRadius: "50%",
+                  padding: ".3em",
+                  backgroundColor: "rgb(0, 69, 230)",
+                  ":hover": {
+                    cursor: "pointer",
+                    backgroundColor: "#fff",
+                    color: "#000",
+                  },
+                }}
+              />
+            </Link>
           </CustomBannerBox>
 
           <CustomBox

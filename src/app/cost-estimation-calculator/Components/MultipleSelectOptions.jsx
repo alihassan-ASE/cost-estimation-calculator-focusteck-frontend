@@ -65,6 +65,15 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
     backgroundColor: "#0069d9",
     color: "white",
   },
+  "& span.price": {
+    color: "#3f37c9",
+  },
+  "&:hover span.price": {
+    color: "white",
+  },
+  "&:focus span.price": {
+    color: "white",
+  },
 }));
 
 const MultipleComponent = ({
@@ -116,7 +125,8 @@ const MultipleComponent = ({
               handleFormat(null, updatedSelection);
             }}
           >
-            {data.opt} (${data.price})
+            <span>{data.opt}</span>&nbsp;
+            <span className="price">($ {data.price})</span>
           </StyleToggleButton>
         ))}
       </StyledToggleButtonGroup>

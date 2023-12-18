@@ -45,7 +45,7 @@ export default function VerticalLinearStepper(props) {
   });
 
   useEffect(() => {
-    setActiveStep(responses?.length - 1);
+    setActiveStep(responses?.length + 1);
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
