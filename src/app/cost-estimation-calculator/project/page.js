@@ -117,7 +117,6 @@ const page = () => {
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption)
 
-    console.log("Last Question",lastQuestion)
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev)=> prev - op.price);
     })
