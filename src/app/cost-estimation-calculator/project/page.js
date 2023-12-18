@@ -25,7 +25,6 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
-  const [lastQuestionSelected, setLastQuestionSelected] = useState();
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
@@ -43,6 +42,7 @@ const page = () => {
       setOrientation("vertical");
     }
   }, [isNarrowScreen]);
+
 
   useEffect(() => {
     const fetchData = () => {
@@ -62,7 +62,9 @@ const page = () => {
     fetchData();
   }, []);
 
+
   const handlePrice = (type, price) => {
+
     cost = 0;
     switch (type) {
       case "next": {
@@ -85,12 +87,24 @@ const page = () => {
     }
   };
 
+  const goToForm = () => {
+    try {
+      let data = JSON.stringify({ responses: actualResponses, totalCost: totalCost });
+      localStorage.setItem("Response", data);
+      route.push('/cost-estimation-calculator/submit');
+    } catch (error) {
+      console.log("Error", error)
+    }
+  };
+
+
   // getting Response from child Component
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
-    if(resp.selectedData || resp.selectedData.length>3){
-    setIsOptionSelected(false);
+    if (resp.selectedData || resp.selectedData.length > 3) {
+      setIsOptionSelected(false);
+
     }
   };
 
@@ -106,6 +120,7 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -113,15 +128,17 @@ const page = () => {
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
-    setLastQuestionSelected(lastQuestion.selectedOption);
+    setLastQuestionSelectedOption(lastQuestion.selectedOption)
 
     lastQuestion.selectedOption.map((op) => {
-      setTotalCost((prev)=> prev - op.price);
-    })
+      setTotalCost((prev) => prev - op.price);
+    });
+
   }
 
   // Handling Next Question
   const nextQuestion = async () => {
+
     cost = 0;
 
 
@@ -157,9 +174,7 @@ const page = () => {
             }
           }
           if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(
-              questionsToShowLocal.pop()
-            );
+            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
           } else {
             currentStateLocal = "post";
             currentQuestionLocal = null;
@@ -173,15 +188,14 @@ const page = () => {
 
       case "post": {
         if (currentQuestionIndexLocal < postProjectQuestions.length) {
-          currentQuestionLocal =
-            postProjectQuestions[currentQuestionIndexLocal];
+          currentQuestionLocal = postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
         }
         else {
+          currentQuestionIndexLocal++;
           break;
         }
       }
-
       default: {
         null;
       }
@@ -199,9 +213,11 @@ const page = () => {
     handlePrice("next", cost);
     setIsOptionSelected(true);
 
-
   };
-
+  if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
+    goToForm();
+  }
+  
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
@@ -216,23 +232,6 @@ const page = () => {
     handlePrice("stepper");
 
   };
-
-  const goToForm = () => {
-    try {
-      let data = JSON.stringify({
-        responses: actualResponses,
-        totalCost: totalCost,
-      });
-      localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/submit");
-    } catch (error) {
-      console.log("Error", error)
-    }
-  };
-
-  if (currentState === 'post' && currentQuestionIndex >= postProjectQuestions.length) {
-    goToForm();
-  }
 
   return (
     <>
@@ -265,7 +264,8 @@ const page = () => {
                 <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelected}
+                  selectedOption={lastQuestionSelectedOption}
+
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
@@ -287,7 +287,7 @@ const page = () => {
                 <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelected}
+                  selectedOption={lastQuestionSelectedOption}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
