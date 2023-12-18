@@ -54,6 +54,7 @@ const page = (props) => {
     }
   }, [selectedData]);
 
+
   useEffect(() => {
     setSelectedData([]);
   }, [currentQuestion]);

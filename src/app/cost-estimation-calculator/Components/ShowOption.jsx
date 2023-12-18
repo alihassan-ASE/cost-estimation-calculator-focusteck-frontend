@@ -20,7 +20,6 @@ const ShowOption = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
-  // let style = "Tile";
   return (
     <Box>
       {

@@ -218,7 +218,6 @@ const page = () => {
     goToForm();
   }
   
-
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
 
