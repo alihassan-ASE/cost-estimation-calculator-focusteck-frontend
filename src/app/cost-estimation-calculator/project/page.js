@@ -25,6 +25,7 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
+  const [lastQuestionSelected, setLastQuestionSelected] = useState();
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
@@ -42,7 +43,6 @@ const page = () => {
       setOrientation("vertical");
     }
   }, [isNarrowScreen]);
-
 
   useEffect(() => {
     const fetchData = () => {
@@ -62,9 +62,7 @@ const page = () => {
     fetchData();
   }, []);
 
-
   const handlePrice = (type, price) => {
-
     cost = 0;
     switch (type) {
       case "next": {
@@ -115,7 +113,7 @@ const page = () => {
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
-    setLastQuestionSelectedOption(lastQuestion.selectedOption)
+    setLastQuestionSelected(lastQuestion.selectedOption);
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev)=> prev - op.price);
@@ -124,7 +122,6 @@ const page = () => {
 
   // Handling Next Question
   const nextQuestion = async () => {
-
     cost = 0;
 
 
@@ -150,7 +147,6 @@ const page = () => {
       }
       case "dynamic": {
         if (!currentQuestionLocal) {
-
           currentQuestionLocal = await getDynamicQuestion();
         } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
@@ -206,6 +202,7 @@ const page = () => {
 
   };
 
+
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
 
@@ -220,12 +217,14 @@ const page = () => {
 
   };
 
-
   const goToForm = () => {
     try {
-      let data = JSON.stringify({ responses: actualResponses, totalCost: totalCost });
+      let data = JSON.stringify({
+        responses: actualResponses,
+        totalCost: totalCost,
+      });
       localStorage.setItem("Response", data);
-      route.push('/cost-estimation-calculator/submit');
+      route.push("/cost-estimation-calculator/submit");
     } catch (error) {
       console.log("Error", error)
     }
@@ -234,7 +233,6 @@ const page = () => {
   if (currentState === 'post' && currentQuestionIndex >= postProjectQuestions.length) {
     goToForm();
   }
-
 
   return (
     <>
@@ -267,8 +265,7 @@ const page = () => {
                 <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelectedOption}
-
+                  selectedOption={lastQuestionSelected}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
@@ -290,7 +287,7 @@ const page = () => {
                 <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelectedOption}
+                  selectedOption={lastQuestionSelected}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button

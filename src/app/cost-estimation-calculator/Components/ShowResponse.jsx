@@ -23,129 +23,108 @@ const CustomTypography = styled(Typography)({
 const ShowResponse = ({ response }) => {
   const route = useRouter();
   return (
-<>
-<Box
-      sx={{
-        border: "1px solid #cfcfcf",
-        padding: "1em 1em",
-        // width: "100%",
-        margin: "3em 0.5em",
-      }}
-    >
-      <Box>
-        <CustomTypography variant="h6">User Details</CustomTypography>
-        <CustomButton sx={{ display: "flex", gap: "1em" }}>
-          <Typography variant="body1">Name</Typography>
-          <Chip
-            sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "normal",
-            }}
-            key="Name"
-            label={response.userName}
-          />
-        </CustomButton>
-        <CustomButton sx={{ display: "flex", gap: "1em" }}>
-          <Typography variant="body1"> Email</Typography>
-          <Chip
-            sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "normal",
-            }}
-            key="Name"
-            label={response.email}
-          />{" "}
-        </CustomButton>
-      </Box>
-      {response.responses[0].resources ? (
-        <Box sx={{ gap: "1em " }}>
-          <CustomTypography variant="h6">Resources</CustomTypography>
-          {response.responses[0].resources.map((data) => (
-            <Box sx={{ gap: "1em" }}>
-              <CustomButton>
-                <Typography>Resource</Typography>
-                <Chip
-                  sx={{
-                    maxWidth: "100%",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                  key="Resource"
-                  label={data.resource}
-                />
-              </CustomButton>
-              <CustomButton>
-                <Typography>Resource Option</Typography>
-
-                <Chip
-                  sx={{
-                    maxWidth: "100%",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                  key="Resource Option"
-                  label={`${data.resourceOption.opt} ($${data.resourceOption.price})`}
-                />
-              </CustomButton>
-              <CustomButton>
-                <Typography>Seniority Level</Typography>
-
-                <Chip
-                  sx={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                  key="Seniority Level"
-                  label={data.seniorityLevel}
-                />
-              </CustomButton>
-              <CustomButton>
-                <Typography>Number of Resources</Typography>
-
-                <Chip key="Number of Resources" label={data.numOfResources} />
-              </CustomButton>
-            </Box>
-          ))}
-          <CustomTypography variant="h6">Queries</CustomTypography>
-          {response.responses.slice(1).map((data) => (
-            <CustomButton sx={{ gap: "1em" }}>
-              <Typography>{data.label}</Typography>
-
-              {data.selectedData.map((eachOption) => (
-                <Chip
-                  sx={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                  key="Questions"
-                  label={`${eachOption.opt} ($${eachOption.price})`}
-                />
-              ))}
-            </CustomButton>
-          ))}
-          <CustomButton sx={{ gap: "1em" }}>
-            <Typography> Total Cost</Typography>
-            <Chip key="Cost" label={`$${response.totalCost}`} />
+    <>
+      <Box
+        sx={{
+          border: "1px solid #cfcfcf",
+          padding: "1em 1em",
+          // width: "100%",
+          margin: "3em 0.5em",
+        }}
+      >
+        <Box>
+          <CustomTypography variant="h6">User Details</CustomTypography>
+          <CustomButton sx={{ display: "flex", gap: "1em" }}>
+            <Typography variant="body1">Name</Typography>
+            <Chip
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+              }}
+              key="Name"
+              label={response.userName}
+            />
+          </CustomButton>
+          <CustomButton sx={{ display: "flex", gap: "1em" }}>
+            <Typography variant="body1"> Email</Typography>
+            <Chip
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+              }}
+              key="Name"
+              label={response.email}
+            />{" "}
           </CustomButton>
         </Box>
-      ) : (
-        <Box>
-          <CustomTypography variant="h6">Queries</CustomTypography>
+        {response.responses[0].resources ? (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "1em " }}>
+            <CustomTypography variant="h6">Resources</CustomTypography>
+            {response.responses[0].resources.map((data) => (
+              <Box
+                sx={{
+                  gap: "1em",
+                  backgroundColor: "hsla(0, 0%, 0%, 0.03)",
+                  padding: ".5em",
+                }}
+              >
+                <CustomButton>
+                  <Typography>Resource</Typography>
+                  <Chip
+                    sx={{
+                      maxWidth: "100%",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                    key="Resource"
+                    label={data.resource}
+                  />
+                </CustomButton>
+                <CustomButton>
+                  <Typography>Resource Option</Typography>
 
-          {response.responses.map((data) => (
-            <>
+                  <Chip
+                    sx={{
+                      maxWidth: "100%",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                    key="Resource Option"
+                    label={`${data.resourceOption.opt} ($${data.resourceOption.price})`}
+                  />
+                </CustomButton>
+                <CustomButton>
+                  <Typography>Seniority Level</Typography>
+
+                  <Chip
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                    key="Seniority Level"
+                    label={data.seniorityLevel}
+                  />
+                </CustomButton>
+                <CustomButton>
+                  <Typography>Number of Resources</Typography>
+
+                  <Chip key="Number of Resources" label={data.numOfResources} />
+                </CustomButton>
+              </Box>
+            ))}
+            <CustomTypography variant="h6">Queries</CustomTypography>
+            {response.responses.slice(1).map((data) => (
               <CustomButton sx={{ gap: "1em" }}>
-                <Typography>{data.question.label}</Typography>
+                <Typography>{data.label}</Typography>
 
-                {data.selectedOption.map((eachOption) => (
+                {data.selectedData.map((eachOption) => (
                   <Chip
                     sx={{
                       whiteSpace: "nowrap",
@@ -157,24 +136,51 @@ const ShowResponse = ({ response }) => {
                   />
                 ))}
               </CustomButton>
-            </>
-          ))}
-          <CustomButton sx={{ gap: "1em" }}>
-            <Typography> Total Cost</Typography>
-            <Chip
-              sx={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-              key="Cost"
-              label={`$${response.totalCost}`}
-            />
-          </CustomButton>
-        </Box>
-      )}
-    </Box>
-</>
+            ))}
+            <CustomButton sx={{ gap: "1em" }}>
+              <Typography> Total Cost</Typography>
+              <Chip key="Cost" label={`$${response.totalCost}`} />
+            </CustomButton>
+          </Box>
+        ) : (
+          <Box>
+            <CustomTypography variant="h6">Queries</CustomTypography>
+
+            {response.responses.map((data) => (
+              <>
+                <CustomButton sx={{ gap: "1em" }}>
+                  <Typography>{data.question.label}</Typography>
+
+                  {data.selectedOption.map((eachOption) => (
+                    <Chip
+                      sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      key="Questions"
+                      label={`${eachOption.opt} ($${eachOption.price})`}
+                    />
+                  ))}
+                </CustomButton>
+              </>
+            ))}
+            <CustomButton sx={{ gap: "1em" }}>
+              <Typography> Total Cost</Typography>
+              <Chip
+                sx={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+                key="Cost"
+                label={`$${response.totalCost}`}
+              />
+            </CustomButton>
+          </Box>
+        )}
+      </Box>
+    </>
   );
 };
 

@@ -1,24 +1,25 @@
 "use client";
 import React, { useState } from "react";
-import { Box, TextField, Button, InputLabel } from "@mui/material";
+import { Box, TextField, Button, InputLabel, Typography } from "@mui/material";
 import { postData } from "../../lib/api/postData";
 import { styled } from "@mui/material/styles";
 import ShowResponse from "./ShowResponse";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "3em auto",
-  padding: "5em 3em",
+  padding: "3em",
   borderRadius: ".5em",
-  boxShadow: "4px 4px 10px 1px rgba(173,173,173,0.75)",
+  boxShadow:
+    "4px 4px 10px 1px rgba(0,105,217,0.27), -5px -5px 14px 2px rgba(189,189,189,1)",
   justifyContent: "center",
 
   [theme.breakpoints.down("md")]: {
     margin: "3em auto",
-    padding: "3em 2em",
+    padding: "2em",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "2em 0.5em",
-    padding: "4em 1em",
+    padding: "1em",
   },
 }));
 
@@ -28,7 +29,6 @@ const Form = ({ response, getActualResponse }) => {
     userName: "",
     email: "",
   });
-
 
   const [errorMessage, setErrorMessage] = useState({
     usernameError: null,
@@ -59,6 +59,8 @@ const Form = ({ response, getActualResponse }) => {
     }
   };
 
+  // console.log("Actual Response: ", response);
+
   return (
     <Box>
       <CustomBox
@@ -66,6 +68,9 @@ const Form = ({ response, getActualResponse }) => {
           display: submitted ? "none" : "block",
         }}
       >
+        <Typography variant="h5" sx={{ margin: "1em 0", color: "#0069d9" }}>
+          Leave us your contact information
+        </Typography>
         <form>
           <Box>
             <InputLabel>Enter Your Name</InputLabel>

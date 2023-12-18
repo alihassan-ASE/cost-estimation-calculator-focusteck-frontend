@@ -16,11 +16,23 @@ import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { NEXT_BODY_SUFFIX } from "next/dist/lib/constants";
 
-const CustomButton = styled(Button)({
+const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
-});
+  padding: "3em",
+  borderRadius: ".5em",
+  height: 405,
+  width: "362px",
+  // display: "flex",
+  // justifyContent: "center",
+  // alignItems: "center",
+  [theme.breakpoints.down("md")]: {
+    width: "335px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "290px",
+  },
+}));
 
 const CustomCard = styled(Card)(({ theme }) => ({
   height: 340,
@@ -78,6 +90,13 @@ const StaffComponent = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (isNarrowScreen) {
+      setOrientation("horizontal");
+    } else {
+      setOrientation("vertical");
+    }
+  }, [isNarrowScreen]);
 
   //calling Handle Price function on next button click and on stepper
   useEffect(() => {
@@ -99,6 +118,7 @@ const StaffComponent = () => {
   }, [values?.length]);
 
   // Function to navigate on Form Page
+  // Function to navigate on Form Page
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
 
@@ -111,6 +131,7 @@ const StaffComponent = () => {
     }
   };
 
+  // Function To Handling Price
   // Function To Handling Price
   const handlePrice = (type) => {
     switch (type) {
@@ -128,7 +149,6 @@ const StaffComponent = () => {
                     resource.resourceOption.price
                   ) {
                     totalPrice += resource.resourceOption.price;
-
                   }
                 });
               }
@@ -193,16 +213,13 @@ const StaffComponent = () => {
       });
   };
 
-
   // Getting Response from child Component(Question Component)
-
   const getResponsesData = (resp) => {
     setIsOptionSelected(false);
     setAddedOption(resp);
   };
 
-  // Handling Next Quesiton 
-
+  // Handling Next Quesiton
   const nextQuestion = () => {
     setCurrentState(false);
     setButtonState(true);
@@ -275,6 +292,14 @@ const StaffComponent = () => {
     }
   };
 
+  useEffect(() => {
+    if (isNarrowScreen) {
+      setOrientation("horizontal");
+    } else {
+      setOrientation("vertical");
+    }
+  }, [isNarrowScreen]);
+
   // Returning selected Resources
   const returnResources = () => {
     const tags = [];
@@ -298,12 +323,14 @@ const StaffComponent = () => {
   };
 
   // calling goToForm Function after selecting last question
-
   if (currentQuestionIndex > additionalQuesiton.length) {
     setTimeout(() => {
       goToForm();
     }, 100);
   }
+  // console.log("resource", resource);
+  // console.log("actualResponses", actualResponses);
+  // console.log("values", values);
 
   return (
     <Box sx={{ margin: "3em 1em 1em 1em" }}>
@@ -344,16 +371,6 @@ const StaffComponent = () => {
                       setCount(count + 1);
                       returnResources();
                     }}
-                    style={{
-                      padding: "3em",
-                      borderRadius: ".5em",
-                      minWidth: 100,
-                      height: 405,
-                      width: 290,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
                   >
                     <ControlPointIcon
                       sx={{ fontSize: "2em" }}
@@ -363,26 +380,26 @@ const StaffComponent = () => {
                 )}
               </Box>
             </Box>
-            {values[0] && (
-              <Box
-                sx={{
-                  margin: "2em 1em",
+            {/* {values[0] && ( */}
+            <Box
+              sx={{
+                margin: "2em 1em",
+              }}
+            >
+              <Button
+                // disabled={!buttonState}
+                size="medium"
+                variant="contained"
+                sx={{ width: 150 }}
+                onClick={() => {
+                  nextQuestion();
                 }}
+                disabled={values[0] ? false : true}
               >
-                <Button
-                  disabled={!buttonState}
-                  size="medium"
-                  variant="contained"
-                  sx={{ width: 150 }}
-                  onClick={() => {
-                    nextQuestion();
-                  }}
-                  disable={values[0] ? false : true}
-                >
-                  Next
-                </Button>
-              </Box>
-            )}
+                Next
+              </Button>
+            </Box>
+            {/* )} */}
           </>
         ) : isNarrowScreen ? (
           <Grid container spacing={{ xs: 5, sm: 2, md: 3, lg: 4, xl: 5 }}>

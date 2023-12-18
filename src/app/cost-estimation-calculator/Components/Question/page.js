@@ -29,6 +29,7 @@ const page = (props) => {
     }
   };
 
+  // console.log("selected Data: ", selectedData);
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
       selectedData?.forEach((data) => {

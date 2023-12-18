@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Box, Typography, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -73,12 +73,22 @@ const TilesComponent = ({
   const [inputField, setInputField] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [checkInputVal, setCheckInputVal] = useState(false);
+  const [selectedFormats, setSelectedFormats] = useState("");
+
+  useEffect(() => {
+    if (selectedOption?.length) {
+      setSelectedFormats(selectedOption[0] || []);
+    }
+  }, [selectedOption]);
+
   const checkSelectedOption = (value, price) => {
-    const res = selectedOption?.find(
-      (data) => data.opt === value && data.price === price
-    );
+    const res = selectedFormats?.opt === value && selectedFormats?.price === price
+    
     return !!res;
   };
+
+  // console.log("selectedOption: ", selectedOption);
+  // console.log("selectedFormats: ", selectedFormats);
 
   const submitOtherVal = () => {
     if (!otherVal) {
@@ -97,10 +107,12 @@ const TilesComponent = ({
       {options?.map((data, index) => (
         <Box sx={{ display: "inline-block" }} key={index}>
           <CustomButton
+            value={selectedFormats}
             onClick={() => {
               if (data.opt === "Other (Specify)") {
                 setInputField(!inputField);
               } else {
+                setSelectedFormats(data);
                 selectedOptionPassToParent(data);
                 setInputField(false);
               }
@@ -151,6 +163,7 @@ const TilesComponent = ({
                       otherData.price = data.price;
                       otherData.opt = otherVal;
                       if (otherVal !== "") {
+                        setSelectedFormats(otherData);
                         selectedOptionPassToParent(otherData);
                         setInputField(false);
                         setOtherVal("");

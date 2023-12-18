@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Grid, Stepper, Step, StepLabel, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
@@ -8,6 +8,7 @@ export default function VerticalLinearStepper(props) {
 
   const leng = responses?.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
+  const containerRef = useRef(null);
 
   const handleStep = (step, index) => {
     changeActiveQuestion({ step, index });
@@ -43,8 +44,14 @@ export default function VerticalLinearStepper(props) {
     },
   });
 
+  useEffect(() => {
+    setActiveStep(responses?.length - 1);
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [handleStep]);
   return (
-    <CustomScrollableContainer>
+    <CustomScrollableContainer ref={containerRef}>
       <Stepper activeStep={activeStep} orientation={orientation}>
         {responses?.map((step, index) => (
           <Step key={index}>
