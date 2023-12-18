@@ -12,17 +12,15 @@ import RadioButtonComponent from "./RadioButtonOptions";
 // Show Options will get options Array, selected option Array, and the Style of the Component
 // const [style, SetStyle] = useState("DropDown");
 const ShowOption = ({
+  typeOfSelection,
   options,
   label,
   disable,
-  selectedResource,
   styleVal,
   selectedOption,
-  getData,
   selectedOptionPassToParent,
-  lastQuestionSelected
 }) => {
-
+// console.log("Selected last",selectedOption)
   // let style = "Tile";
   return (
     
@@ -32,17 +30,46 @@ const ShowOption = ({
           options={options}
           label={label}
           disable={disable}
-          getData={getData}
-          selectedResource={selectedResource}
-
-        />
-      ) : (
-        <TilesComponent
-          options={options}
-          selectedOption={lastQuestionSelected}
+          selectedOption={selectedOption}
           selectedOptionPassToParent={selectedOptionPassToParent}
         />
-      )}
+      ) : typeOfSelection === "single" ? (
+        <TilesComponent
+          options={options}
+          selectedOption={selectedOption}
+          selectedOptionPassToParent={selectedOptionPassToParent}
+        />
+      ) : (
+        <MultipleComponent
+          options={options}
+          selectedOptionPassToParent={selectedOptionPassToParent}
+          selectedOption={selectedOption}
+        />
+      )
+
+      // <RadioButtonComponent
+      //   options={options}
+      //   selectedOption={selectedOption}
+      //   selectedOptionPassToParent={selectedOptionPassToParent}
+      // />
+      // <MultipleComponent
+      //   options={options}
+      //   selectedOptionPassToParent={selectedOptionPassToParent}
+      //   selectedOption={selectedOption}
+      // />
+      // <CheckBoxComponent
+      //   options={options}
+      //   selectedOptionPassToParent={selectedOptionPassToParent}
+      //   selectedOption={selectedOption}
+      // />
+      // <DropDownComponent
+      //   options={options}
+      //   label={label}
+      //   disable={disable}
+      //   selectedOption={selectedOption}
+      //   selectedOptionPassToParent={selectedOptionPassToParent}
+      // />
+      }
     </Box>
   );
 };

@@ -5,12 +5,18 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Typography,
   OutlinedInput,
   Chip,
   Button,
+  Grid,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  width: "100%",
+  borderRadius: ".5em",
+  margin: ".3em 0",
+}));
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   "&:hover": {
@@ -59,69 +65,54 @@ const DropDownComponent = ({
   options,
   label,
   disable,
-  selectedResource,
-  getData,
+  selectedOption,
+  selectedOptionPassToParent,
 }) => {
-  const [selectedValue, setSelectedValue] = useState(selectedResource || "");
-
+  const [selectedValue, setSelectedValue] = useState(selectedOption || "");
   return (
-    <Box
-      style={{
-        borderRadius: ".5em",
-        margin: ".5em 0",
-        display: "flex",
-        flexWrap: "wrap",
-        flexGrow: 1,
-      }}
-    >
-      <FormControl xs={{ padding: 0 }} sx={{ minWidth: 240, maxWidth: 300 }}>
-        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-        <Select
-          autoFocus={false}
-          value={disable ? null : selectedValue}
-          onChange={(e) => {
-            const selectedObject = e.target.value;
-            setSelectedValue(selectedObject);
-            getData(selectedObject, label);
-          }}
-          // disabled={disable ? true : false}
-          input={<OutlinedInput id="select-multiple-chip" label={label} />}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.opt ? (
-                <Chip
-                  key={selected.opt}
-                  label={`${selected.opt} ($${selected.price})`}
-                />
-              ) : (
-                <Chip key={selected} label={selected} />
-              )}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {options?.map((data, index) => (
-            <StyledMenuItem
-              // sx={{
-              //   MaxWidth: 270,
-              //   wordWrap: "break-word",
-              //   display: "flex",
-              //   flexWrap: "wrap",
-              // }}
-              key={index}
-              value={
-                data.opt && data.price
-                  ? { opt: data.opt, price: data.price }
-                  : data
-              }
-            >
-              {data.opt ? data.opt : data}{" "}
-              {data.price ? `($${data.price})` : null}
-            </StyledMenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+    <StyledFormControl>
+      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+      <Select
+        sx={{ height: "65px", width: "270px" }}
+        autoFocus={false}
+        value={disable ? null : selectedValue}
+        onChange={(e) => {
+          const selectedObject = e.target.value;
+          setSelectedValue(selectedObject);
+          selectedOptionPassToParent(selectedObject, label);
+        }}
+        disabled={disable ? true : false}
+        input={<OutlinedInput id="select-multiple-chip" label={label} />}
+        renderValue={(selected) => (
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {selected.opt ? (
+              <Chip
+                key={selected.opt}
+                label={`${selected.opt} ($${selected.price})`}
+              />
+            ) : (
+              <Chip key={selected} label={selected} />
+            )}
+          </Box>
+        )}
+        MenuProps={MenuProps}
+      >
+        {options?.map((data, index) => (
+          <StyledMenuItem
+            sx={{ width: 270, wordWrap: "break-word", whiteSpace: "normal" }}
+            key={index}
+            value={
+              data.opt && data.price
+                ? { opt: data.opt, price: data.price }
+                : data
+            }
+          >
+            {data.opt ? data.opt : data}{" "}
+            {data.price ? `($${data.price})` : null}
+          </StyledMenuItem>
+        ))}
+      </Select>
+    </StyledFormControl>
   );
 };
 

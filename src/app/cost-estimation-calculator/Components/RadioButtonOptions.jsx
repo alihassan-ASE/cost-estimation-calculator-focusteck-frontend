@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   FormControl,
-  FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
-  Typography,
 } from "@mui/material";
 
 const RadioButtonComponent = ({
@@ -14,37 +12,30 @@ const RadioButtonComponent = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
-  const [selectedFormat, setSelectedFormat] = useState("");
+  const [selectedFormat, setSelectedFormat] = useState(0);
 
   useEffect(() => {
-    if (selectedOption.length > 0) {
+    if (selectedOption?.length > 0) {
       setSelectedFormat(selectedOption[0]);
     }
-  }, [responseData]);
+  }, [selectedOption]);
 
   const handleFormat = (event) => {
     const selectedOpt = event.target.value;
     const selectedData = options.find((data) => data.opt === selectedOpt);
     setSelectedFormat(selectedData);
-    selectedOptionPassToParent([selectedData]);
+    selectedOptionPassToParent(selectedData);
   };
 
-  const checkSelectedOption = (value) => {
-    return (
-      selectedFormat &&
-      selectedFormat.opt === value.opt &&
-      selectedFormat.price === value.price
-    );
-  };
+  // console.log("Selected Option: ", selectedOption[0]);
+  // console.log("Selected Fomrat: ", selectedFormat);
 
   return (
     <Box>
-      {/* <Typography variant="h4">Radio Button Single Select</Typography> */}
       <FormControl>
-        <FormLabel id="demo-radio-buttons-group-label">RadioButtons</FormLabel>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          value={selectedFormat ? selectedFormat.opt : ""}
+          value={selectedFormat}
           onChange={handleFormat}
           name="radio-buttons-group"
         >
@@ -54,7 +45,7 @@ const RadioButtonComponent = ({
               value={data.opt}
               control={<Radio />}
               label={`${data.opt} ($${data.price})`}
-              checked={checkSelectedOption(data)}
+              checked={selectedOption[0]?.opt === data.opt}
             />
           ))}
         </RadioGroup>

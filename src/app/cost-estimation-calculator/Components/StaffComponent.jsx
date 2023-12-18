@@ -1,6 +1,13 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { Box, Typography, Button, Card, Grid } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Card,
+  Grid,
+  useMediaQuery,
+} from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { styled } from "@mui/material/styles";
 import Question from "../Components/Question/page";
@@ -8,12 +15,30 @@ import { useRouter } from "next/navigation";
 import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
-
-import Page from "../submit/page";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { NEXT_BODY_SUFFIX } from "next/dist/lib/constants";
 
 const CustomButton = styled(Button)({
   border: "1px solid #0069d9",
 });
+
+const CustomCard = styled(Card)(({ theme }) => ({
+  height: 340,
+  width: "294px",
+  padding: "2em 1.5em",
+  margin: "2em 1em",
+  borderRadius: ".5em",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  [theme.breakpoints.down("md")]: {
+    margin: "2em 0 ",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "1em 0",
+    padding: "2em 1em",
+  },
+}));
 
 const StaffComponent = () => {
   const [count, setCount] = useState(0);
@@ -35,12 +60,16 @@ const StaffComponent = () => {
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
+  const [orientation, setOrientation] = useState("horizontal");
+  const isNarrowScreen = useMediaQuery("(max-width:600px)");
   const [resource, setResource] = useState([]);
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState()
 
   const route = useRouter();
   const dataObj = {};
 
   // Setting Staff Resources and Questions
+
   useEffect(() => {
     getQuestions().then((resp) => {
       const { Resources, additionalQuestions } = resp;
@@ -63,16 +92,14 @@ const StaffComponent = () => {
     }
   }, [actualResponses, isNextClicked, isStepperClicked]);
 
-
   useEffect(() => {
-    if (actualResponses[0]?.resources.length > 0) {
-      setCount(actualResponses[0]?.resources.length - 1);
+    if (values?.length > 0) {
+      setCount(values?.length - 1);
     }
-  }, [actualResponses[0]?.resources]);
+  }, [values?.length]);
 
-// Function to navigate on Form Page
+  // Function to navigate on Form Page
   const goToForm = () => {
-
     actualResponses.totalCost = totalCost;
 
     try {
@@ -84,7 +111,7 @@ const StaffComponent = () => {
     }
   };
 
-// Function To Handling Price
+  // Function To Handling Price
   const handlePrice = (type) => {
     switch (type) {
       case "stepper":
@@ -93,9 +120,7 @@ const StaffComponent = () => {
 
         if (actualResponses.responses.length >= 0) {
           actualResponses.responses.forEach((response, index) => {
-            // For the first response object (index 0)
             if (index === 0) {
-              // Calculate the total price from resources array in the first object
               if (response.resources && response.resources.length > 0) {
                 response.resources.forEach((resource) => {
                   if (
@@ -108,7 +133,6 @@ const StaffComponent = () => {
                 });
               }
             } else {
-              // For subsequent response objects (index > 0)
               if (response.selectedData && response.selectedData.length > 0) {
                 response.selectedData.forEach((select) => {
                   if (select.price) {
@@ -120,7 +144,6 @@ const StaffComponent = () => {
           });
         }
 
-        // Update the total cost by adding the calculated totalPrice to the previous total cost
         setTotalCost(totalPrice);
 
         break;
@@ -128,36 +151,36 @@ const StaffComponent = () => {
     }
   };
 
-// Changing active question on stepper
+  // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
 
     if (index == 1) {
-      setCurrentState(true)
+      setCurrentState(true);
     }
 
     setCurrentQuestionIndex(index - 1);
     setCurrentQuestion(step);
-    actualResponses.responses.splice(index - 1)
+    actualResponses.responses.splice(index - 1);
+    setLastQuestionSelectedOption(step.selectedData)
     setIsStepperClicked(true);
   };
+
 
   // receiving selected option from child Component
   const selectedOptionPassToParent = (data, boolVal, label) => {
     setResource();
     setValues((prev) => [...prev, data]);
-
     setButtonState(true);
     setAddMore(!boolVal);
     setIsOptionSelected(false);
   };
 
+
   // setting Response in actual Array
   const setResponseData = () => {
-
     dataObj.resources = values;
     setResource(dataObj.resources);
-
     currentState
       ? setActualResponses({ responses: [dataObj] })
       : setActualResponses((prev) => {
@@ -172,19 +195,18 @@ const StaffComponent = () => {
 
 
   // Getting Response from child Component(Question Component)
-  const getResponsesData = (resp) => {
 
+  const getResponsesData = (resp) => {
     setIsOptionSelected(false);
     setAddedOption(resp);
   };
 
   // Handling Next Quesiton 
-  const nextQuestion = () => {
 
+  const nextQuestion = () => {
     setCurrentState(false);
     setButtonState(true);
-    setIsOptionSelected((prev) => !prev)
-
+    setIsOptionSelected((prev) => !prev);
 
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -202,14 +224,12 @@ const StaffComponent = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setResponseData();
     setIsNextClicked(true);
-    // setIsOptionSelected((prev)=>{!prev})
   };
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
 
     let lastQuestion;
-
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
     }
@@ -217,22 +237,18 @@ const StaffComponent = () => {
     if (currentQuestionIndex > 0) {
       let newArray = [...actualResponses.responses];
       lastQuestion = newArray.pop();
-
       if (lastQuestion) {
         setCurrentQuestion(lastQuestion);
         setActualResponses({ responses: newArray });
         setCurrentQuestionIndex(currentQuestionIndex - 1);
+        setLastQuestionSelectedOption(lastQuestion.selectedData);
+
       }
 
-      // Check if there's at least one response and Handling Price on Back Click
       if (actualResponses.responses.length > 0) {
-
         let totalPriceToSubtract = 0;
-        // For the popped response object
         if (lastQuestion) {
-          // For the first response object (index 0)
           if (actualResponses.responses.length === 0) {
-            // Calculate the total price from resources array in the first object and subtract it
             if (lastQuestion.resources && lastQuestion.resources.length > 0) {
               lastQuestion.resources.forEach((resource) => {
                 if (resource.resourceOption && resource.resourceOption.price) {
@@ -241,7 +257,6 @@ const StaffComponent = () => {
               });
             }
           } else {
-            // For subsequent response objects (index > 0)
             if (
               lastQuestion.selectedData &&
               lastQuestion.selectedData.length > 0
@@ -254,67 +269,18 @@ const StaffComponent = () => {
             }
           }
 
-          // Subtract the price of the popped response from the total cost
-          setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract)); // Ensure the totalCost doesn't go below 0
+          setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract));
         }
       }
     }
-
-
-    // Check if there's at least one response
-    // if (actualResponses.responses.length > 0) {
-    //   let totalPriceToSubtract = 0;
-
-    //   // For the popped response object
-    //   if (lastQuestion) {
-    //     // For the first response object (index 0)
-    //     if (actualResponses.responses.length === 0) {
-    //       // Calculate the total price from resources array in the first object and subtract it
-    //       if (lastQuestion.resources && lastQuestion.resources.length > 0) {
-    //         lastQuestion.resources.forEach((resource) => {
-    //           if (resource.resourceOption && resource.resourceOption.price) {
-    //             totalPriceToSubtract += resource.resourceOption.price;
-    //           }
-    //         });
-    //       }
-    //     } else {
-    //       // For subsequent response objects (index > 0)
-    //       if (
-    //         lastQuestion.selectedData &&
-    //         lastQuestion.selectedData.length > 0
-    //       ) {
-    //         lastQuestion.selectedData.forEach((select) => {
-    //           if (select.price) {
-    //             totalPriceToSubtract += select.price;
-    //           }
-    //         });
-    //       }
-    //     }
-
-    //     // Subtract the price of the popped response from the total cost
-    //     setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract)); // Ensure the totalCost doesn't go below 0
-    //   }
-    // }
-
   };
-
 
   // Returning selected Resources
   const returnResources = () => {
     const tags = [];
     for (let i = 0; i <= count; i++) {
       tags.push(
-
-        <Card
-          key={i}
-          style={{
-            padding: "2em 1.5em",
-            borderRadius: ".5em",
-            "@media (max-width: 600px)": {
-              padding: "0", // Adjust padding for 'xs' breakpoint
-            },
-          }}
-        >
+        <CustomCard key={i}>
           <StaffResource
             key={i}
             question={currentQuestion}
@@ -322,121 +288,185 @@ const StaffComponent = () => {
             index={i}
             setValues={setValues}
             values={values}
-            selectedResource={resource}
+            selectedOption={resource}
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
-
-        </Card>
-
+        </CustomCard>
       );
     }
     return tags;
   };
 
-// calling goToForm Function after selecting last question
+  // calling goToForm Function after selecting last question
+
   if (currentQuestionIndex > additionalQuesiton.length) {
-    setTimeout(()=>{
+    setTimeout(() => {
       goToForm();
-    },100);
+    }, 100);
   }
 
   return (
-    <Box>
-      <Typography variant="h5" p={2}>
-        Staff Questions
-      </Typography>
-
-      {currentState ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "2em",
-            alignItems: "center",
-          }}
-        >
-          {returnResources()}
-
-          <Box>
-            {addMore && (
-              <CustomButton
-                onClick={() => {
-                  setAddMore(false);
-                  setCount(count + 1);
-                  returnResources();
-                }}
-                style={{
-                  marginBottom: "3em",
-                  padding: "3em",
-                  borderRadius: ".5em",
-                  minWidth: 100,
-                  height: 410,
-                  width: 340,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ControlPointIcon
-                  sx={{ fontSize: "2em" }}
-                  onClick={() => setAddMore(false)}
-                />
-              </CustomButton>
-            )}
-          </Box>
-        </Box>
-      ) : (
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Box>
-            <Question
-              currentQuestion={currentQuestion}
-              getResponsesData={getResponsesData}
-              selectedOption={[]}
-              styleVal={"Tiles"}
-            />
-          </Box>
-          <Box
+    <Box sx={{ margin: "3em 1em 1em 1em" }}>
+      {
+        additionalQuesiton && staffBase ?
+        <Box>
+        {currentQuestionIndex > 0 && (
+          <KeyboardBackspaceIcon
             sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              margin: "1em 3em",
+              color: "#ACACAC",
+              border: "2px solid #ACACAC",
+              padding: ".2em",
+              borderRadius: "50%",
+              margin: "0 0 1em 0",
             }}
-          >
-            {actualResponses.length || actualResponses.responses ? (
-              <Stepper
-                responses={actualResponses.responses}
-                changeActiveQuestion={changeActiveQuestion}
-              />
-            ) : null}
-          </Box>
-        </Box>
-      )}
-      <Box sx={{ display: "flex", gap: "2em", margin: "1em 0 3em 0" }}>
-        {currentQuestionIndex > 0 ? (
-          <Button
-            size="medium"
-            variant="contained"
-            sx={{ width: 150 }}
             onClick={backQuestion}
             disable={values[0] ? false : true}
-          >
-            Back
-          </Button>
-        ) : null}
-          <Button
+          />
+        )}
+        <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+        {currentState ? (
+          <>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                gap: "1em",
+              }}
+            >
+              {returnResources()}
 
-            size="medium"
-            variant="contained"
-            sx={{ width: 150 }}
-            onClick={() => {
-              nextQuestion();
-            }}
-            disabled={isOptionSelected}
-          >
-            Next
-          </Button>
-        
+              <Box>
+                {addMore && (
+                  <CustomButton
+                    onClick={() => {
+                      setAddMore(false);
+                      setCount(count + 1);
+                      returnResources();
+                    }}
+                    style={{
+                      padding: "3em",
+                      borderRadius: ".5em",
+                      minWidth: 100,
+                      height: 405,
+                      width: 290,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ControlPointIcon
+                      sx={{ fontSize: "2em" }}
+                      onClick={() => setAddMore(false)}
+                    />
+                  </CustomButton>
+                )}
+              </Box>
+            </Box>
+            {values[0] && (
+              <Box
+                sx={{
+                  margin: "2em 1em",
+                }}
+              >
+                <Button
+                  disabled={!buttonState}
+                  size="medium"
+                  variant="contained"
+                  sx={{ width: 150 }}
+                  onClick={() => {
+                    nextQuestion();
+                  }}
+                  disable={values[0] ? false : true}
+                >
+                  Next
+                </Button>
+              </Box>
+            )}
+          </>
+        ) : isNarrowScreen ? (
+          <Grid container spacing={{ xs: 5, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid item lg={4} md={3} sm={4} xs={12}>
+              {actualResponses.length || actualResponses.responses ? (
+                <Stepper
+                  responses={actualResponses.responses}
+                  changeActiveQuestion={changeActiveQuestion}
+                  orientation={orientation}
+                />
+              ) : null}
+            </Grid>
+            <Grid item lg={8} md={9} sm={8} xs={12}>
+              <Question
+                currentQuestion={currentQuestion}
+                getResponsesData={getResponsesData}
+                selectedOption={lastQuestionSelectedOption}
+                styleVal={"Tiles"}
+              />
+
+              {additionalQuesiton.length >= currentQuestionIndex && (
+                <Box
+                  sx={{
+                    margin: "2em 0",
+                  }}
+                >
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    onClick={() => {
+                      nextQuestion();
+                    }}
+                    disabled={isOptionSelected}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              )}
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid item lg={8} md={9} sm={8} xs={12}>
+              <Question
+                currentQuestion={currentQuestion}
+                getResponsesData={getResponsesData}
+                selectedOption={lastQuestionSelectedOption}
+                styleVal={"Tiles"}
+              />
+              {additionalQuesiton.length >= currentQuestionIndex && (
+                <Box
+                  sx={{
+                    margin: "2em 0",
+                  }}
+                >
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    onClick={() => {
+                      nextQuestion();
+                    }}
+                    disabled={isOptionSelected}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              )}
+            </Grid>
+            <Grid item lg={4} md={3} sm={4} xs={12}>
+              {actualResponses.length || actualResponses.responses ? (
+                <Stepper
+                  responses={actualResponses.responses}
+                  changeActiveQuestion={changeActiveQuestion}
+                  orientation={orientation}
+                />
+              ) : null}
+            </Grid>
+          </Grid>
+        )}
       </Box>
+      : <h3>Loading.............</h3>
+      }
     </Box>
   );
 };

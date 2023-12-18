@@ -6,9 +6,12 @@ import Form from "../Components/Form";
 
 const page = () => {
   const [actualResponse, setActualResponse] = useState({});
-  
-  let response = typeof window !== "undefined" ? window.localStorage.getItem('Response') : false;
-  
+
+  let response =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("Response")
+      : false;
+
   if (response) {
     try {
       response = JSON.parse(response);
@@ -23,7 +26,12 @@ const page = () => {
   };
 
   return (
-    <Box sx={{ margin: "3em" }}>
+    <Box
+      sx={{
+        maxWidth: 700,
+        margin: "auto",
+      }}
+    >
       <Form response={response} getActualResponse={getActualResponse} />
     </Box>
   );

@@ -2,13 +2,15 @@
 // final code
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
+
 import {
   getQuestions,
   getDynamicQuestion,
 } from "@/app/lib/api/getProjectQuestions";
 import { useState, useEffect } from "react";
-import { Button, Box, Typography } from "@mui/material";
-import { useRouter } from 'next/navigation';
+import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
+import { useRouter } from "next/navigation";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -23,16 +25,23 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
-  const [lastQuestionSelected , setLastQuestionSelected] = useState();
+  const [orientation, setOrientation] = useState("horizontal");
+  const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState();
   const [isOptionSelected, setIsOptionSelected] = useState(true);
-
-
   const [totalCost, setTotalCost] = useState(0);
 
   const route = useRouter();
   let cost;
 
+  useEffect(() => {
+    if (isNarrowScreen) {
+      setOrientation("horizontal");
+    } else {
+      setOrientation("vertical");
+    }
+  }, [isNarrowScreen]);
 
 
   useEffect(() => {
@@ -82,8 +91,9 @@ const page = () => {
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
-    setIsOptionSelected(false)
-
+    if(resp.selectedData || resp.selectedData.length>3){
+    setIsOptionSelected(false);
+    }
   };
 
   // setting Response in actual Array
@@ -105,13 +115,12 @@ const page = () => {
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
-    setLastQuestionSelected(lastQuestion.selectedOption)
+    setLastQuestionSelectedOption(lastQuestion.selectedOption)
 
+    console.log("Last Question",lastQuestion)
     lastQuestion.selectedOption.map((op) => {
-      cost = op.price;
+      setTotalCost((prev)=> prev - op.price);
     })
-    handlePrice("back", cost)
-
   }
 
   // Handling Next Question
@@ -119,14 +128,6 @@ const page = () => {
 
     cost = 0;
 
-    selectedData.map((op) => {
-      cost = cost + op.price;
-    });
-
-    setTotalCost((prev) => prev + cost);
-
-    // handlePrice("next", cost);
-    setIsOptionSelected(true);
 
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
@@ -140,7 +141,8 @@ const page = () => {
           currentQuestionLocal = null;
           currentQuestionIndexLocal = 0;
         } else {
-          currentQuestionLocal = preProjectQuestions[currentQuestionIndexLocal + 1];
+          currentQuestionLocal =
+            preProjectQuestions[currentQuestionIndexLocal + 1];
           currentQuestionIndexLocal++;
         }
         if (currentQuestionLocal) {
@@ -160,7 +162,9 @@ const page = () => {
             }
           }
           if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
+            currentQuestionLocal = await getDynamicQuestion(
+              questionsToShowLocal.pop()
+            );
           } else {
             currentStateLocal = "post";
             currentQuestionLocal = null;
@@ -174,11 +178,12 @@ const page = () => {
 
       case "post": {
         if (currentQuestionIndexLocal < postProjectQuestions.length) {
-          currentQuestionLocal = postProjectQuestions[currentQuestionIndexLocal];
+          currentQuestionLocal =
+            postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
         }
         else {
-         break ;
+          break;
         }
       }
 
@@ -192,18 +197,28 @@ const page = () => {
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
 
+    selectedData.map((op) => {
+      cost = cost + op.price;
+    });
+
+    handlePrice("next", cost);
+    setIsOptionSelected(true);
+
 
   };
-  
+
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
 
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
     setCurrentState(step.state);
-    actualResponses.splice(index - 1);
+    actualResponses.splice(index - 1)
+    setLastQuestionSelectedOption(step.selectedOption)
     handlePrice("stepper");
+
   };
 
 
@@ -213,68 +228,96 @@ const page = () => {
       localStorage.setItem("Response", data);
       route.push('/cost-estimation-calculator/submit');
     } catch (error) {
-      console.log("Error",error)
+      console.log("Error", error)
     }
   };
 
-  if(currentState === 'post' && currentQuestionIndex >= postProjectQuestions.length){
-    goToForm(); 
+  if (currentState === 'post' && currentQuestionIndex >= postProjectQuestions.length) {
+    goToForm();
   }
+
 
   return (
     <>
       {fetchQuesitons !== null ? (
         <Box sx={{ margin: "1em 2em" }}>
-          <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
-          <Box
-            className="flex w-full h-screen justify-between items-center"
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Box>
-              <Question
-                currentQuestion={currentQuestion}
-                getResponsesData={getResponsesData}
-                lastQuestionSelected = {lastQuestionSelected}
-              />
-              <Box sx={{ display: "flex", gap: "2em", margin: "3em 1em " }}>
-                {actualResponses.length > 0 ? <Button
-                  size="medium"
-                  variant="contained"
-                  sx={{ width: 150 }}
-                  vairant="contained"
-                  onClick={backQuestion}
-                >
-                  Back
-                </Button> : null}
-                <Button
-                  disabled={isOptionSelected}
-                  size="medium"
-                  variant="contained"
-                  sx={{ width: 150 }}
-                  vairant="contained"
-                  onClick={nextQuestion}
-                >
-                  Next
-                </Button>
-              </Box>
-            </Box>
-            <Box
+          {actualResponses.length > 0 && (
+            <KeyboardBackspaceIcon
               sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                margin: "2em 3em 2em 5em",
-                minWidth: "300px",
+                color: "#ACACAC",
+                border: "2px solid #ACACAC",
+                padding: ".2em",
+                borderRadius: "50%",
+                margin: "0 0 1em 0",
               }}
-            >
-              <Stepper
-                responses={actualResponses}
-                changeActiveQuestion={changeActiveQuestion}
-              />
-            </Box>
-          </Box>
+              onClick={backQuestion}
+            />
+          )}
+          <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+
+          {isNarrowScreen ? (
+            <Grid container spacing={{ xs: 5, sm: 2, md: 5, lg: 4, xl: 5 }}>
+              <Grid item lg={4} md={3} sm={4} xs={12}>
+                <Stepper
+                  responses={actualResponses}
+                  changeActiveQuestion={changeActiveQuestion}
+                  orientation={orientation}
+                />
+              </Grid>
+              <Grid item lg={8} md={9} sm={8} xs={12}>
+                <Question
+                  currentQuestion={currentQuestion}
+                  getResponsesData={getResponsesData}
+                  selectedOption={lastQuestionSelectedOption}
+
+                />
+                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
+                  <Button
+                    disabled={isOptionSelected}
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    vairant="contained"
+                    onClick={nextQuestion}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+              <Grid item lg={8} md={9} sm={8} xs={12}>
+                <Question
+                  currentQuestion={currentQuestion}
+                  getResponsesData={getResponsesData}
+                  selectedOption={lastQuestionSelectedOption}
+                />
+                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
+                  <Button
+                    disabled={isOptionSelected}
+                    size="medium"
+                    variant="contained"
+                    sx={{ width: 150 }}
+                    vairant="contained"
+                    onClick={nextQuestion}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              </Grid>
+              <Grid item lg={4} md={3} sm={4} xs={12}>
+                <Stepper
+                  responses={actualResponses}
+                  changeActiveQuestion={changeActiveQuestion}
+                  orientation={orientation}
+                />
+              </Grid>
+            </Grid>
+          )}
         </Box>
       ) : (
-        <div>Loading .....</div>
+        <Box sx={{ margin: "2em 0" }}>Loading .....</Box>
       )}
     </>
   );

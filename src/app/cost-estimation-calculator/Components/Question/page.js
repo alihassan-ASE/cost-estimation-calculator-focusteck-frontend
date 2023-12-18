@@ -1,12 +1,32 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ShowOptions from "../ShowOption";
+import { Typography, Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  fontSize: "2em",
+  display: "flex",
+  flexWrap: "wrap",
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.5em",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1em",
+  },
+}));
+
 const page = (props) => {
-  let { currentQuestion, getResponsesData, lastQuestionSelected } = props;
+  // const [selectedOption, setSelectedOption] = useState([]);
+  let { currentQuestion, getResponsesData, selectedOption } = props;
 
   const [selectedData, setSelectedData] = useState([]);
   const selectedOptionPassToParent = (data) => {
-    setSelectedData([data]);
+    if (Array.isArray(data)) {
+      setSelectedData([...data]);
+    } else {
+      setSelectedData([data]);
+    }
   };
 
   useEffect(() => {
@@ -31,19 +51,24 @@ const page = (props) => {
         }
       });
     }
-
   }, [selectedData]);
 
+  useEffect(() => {
+    setSelectedData([]);
+  }, [currentQuestion]);
 
   return (
-    <div>
-      <h1>{currentQuestion?.question}</h1>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
+      <CustomTypography variant="h4">
+        {currentQuestion?.question}
+      </CustomTypography>
       <ShowOptions
+        typeOfSelection={currentQuestion?.typeofselection}
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}
-        lastQuestionSelected={lastQuestionSelected}
+        selectedOption={selectedOption}
       />
-    </div>
+    </Box>
   );
 };
 
