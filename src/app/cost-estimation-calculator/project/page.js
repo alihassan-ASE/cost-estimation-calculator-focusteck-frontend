@@ -11,7 +11,13 @@ import { useState, useEffect } from "react";
 import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { styled } from "@mui/material/styles";
 
+const CustomButton = styled(Button)(({ theme }) => ({
+"&:hover": {
+    backgroundColor: "#fff",
+  },
+}));
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
@@ -252,22 +258,25 @@ const page = () => {
             }}
           >
             {actualResponses.length > 0 && (
-              <KeyboardBackspaceIcon
-                sx={{
-                  color: "#ACACAC",
-                  border: "2px solid #ACACAC",
-                  borderRadius: "50%",
-                  padding: ".3em",
-                  borderRadius: "50%",
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#0069d9",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                  },
-                }}
-                onClick={backQuestion}
-              />
+             <CustomButton  sx={{
+              color: "#ACACAC",
+              borderRadius: "50%",
+              padding: ".3em",
+            }}
+            onClick={backQuestion}>
+               <KeyboardBackspaceIcon sx={{
+              color: "#ACACAC",
+              border: "2px solid #ACACAC",
+              borderRadius: "50%",
+              padding: ".3em",
+              ":hover": {
+                cursor: "pointer",
+                backgroundColor: "#0069d9",
+                border: "2px solid #fff",
+                color: "#fff",
+              },
+            }} onClick={backQuestion}/>
+             </CustomButton>
             )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
           </Box>

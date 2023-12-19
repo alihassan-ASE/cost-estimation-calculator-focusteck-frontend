@@ -24,6 +24,7 @@ const CustomBox = styled(Box)(({ theme }) => ({
 }));
 
 const Form = ({ response, getActualResponse }) => {
+
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
     userName: "",
@@ -56,6 +57,9 @@ const Form = ({ response, getActualResponse }) => {
         ...formInput,
         ...response,
       });
+
+      postData({ ...response, ...formInput });
+
     }
   };
 
@@ -112,7 +116,6 @@ const Form = ({ response, getActualResponse }) => {
               variant="contained"
               onClick={() => {
                 submitForm(formInput);
-                postData({ ...response, ...formInput });
               }}
             >
               Submit
