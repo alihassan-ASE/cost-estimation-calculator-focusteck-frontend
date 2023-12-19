@@ -26,10 +26,6 @@ const RadioButtonComponent = ({
     setSelectedFormat(selectedData);
     selectedOptionPassToParent(selectedData);
   };
-
-  // console.log("Selected Option: ", selectedOption[0]);
-  // console.log("Selected Fomrat: ", selectedFormat);
-
   return (
     <Box>
       <FormControl>
@@ -39,7 +35,7 @@ const RadioButtonComponent = ({
           onChange={handleFormat}
           name="radio-buttons-group"
         >
-          {options.map((data, index) => (
+          {options?.map((data, index) => (
             <FormControlLabel
               key={index}
               value={data.opt}

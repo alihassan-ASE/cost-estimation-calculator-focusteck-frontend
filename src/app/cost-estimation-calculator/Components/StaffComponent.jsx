@@ -325,9 +325,6 @@ const StaffComponent = () => {
       goToForm();
     }, 100);
   }
-  // console.log("resource", resource);
-  // console.log("actualResponses", actualResponses);
-  // console.log("values", values);
 
   return (
     <Box sx={{ margin: "3em 1em 1em 1em" }}>

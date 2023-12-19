@@ -76,10 +76,25 @@ const TilesComponent = ({
   const [selectedFormats, setSelectedFormats] = useState("");
 
   useEffect(() => {
-    if (selectedOption?.length) {
+    if (selectedOption && selectedOption.length > 0) {
       setSelectedFormats(selectedOption[0] || []);
+
+      if (selectedOption[0]?.opt) {
+        const isSelectedOptAvailable = options.some(
+          (option) => option.opt === selectedOption[0].opt
+        );
+        if (
+          !isSelectedOptAvailable &&
+          (selectedOption[0].opt !== "Other (Specify)" ||
+            selectedOption[0].opt !== "Other")
+        ) {
+          setOtherVal(selectedOption[0].opt);
+          selectedOption.length = 0;
+        }
+      }
     }
-  }, [selectedOption]);
+  }, [selectedOption, options]);
+
 
   const checkSelectedOption = (value, price) => {
     const res =
@@ -88,15 +103,13 @@ const TilesComponent = ({
     return !!res;
   };
 
-  console.log("selectedOption: ", selectedOption);
-  // console.log("selectedFormats: ", selectedFormats);
-
   const submitOtherVal = () => {
     if (!otherVal) {
       setErrorMessage("Field cannot be empty");
       setCheckInputVal(true);
     }
     if (otherVal) {
+      setOtherVal("");
       setErrorMessage(null);
       setInputField(false);
       setCheckInputVal(false);
@@ -108,22 +121,23 @@ const TilesComponent = ({
       {options?.map((data, index) => (
         <Box sx={{ display: "inline-block" }} key={index}>
           <CustomButton
-            value={selectedFormats}
+            value={
+              selectedFormats?.opt && selectedFormats?.price
+                ? { opt: selectedFormats.opt, price: selectedFormats.price }
+                : selectedFormats
+            }
             onClick={() => {
-              if (data.opt === "Other (Specify)") {
+              if (data.opt === "Other (Specify)" || data.opt === "Other") {
                 setInputField(!inputField);
               } else {
+                setSelectedFormats(data);
                 selectedOptionPassToParent(data);
                 setInputField(false);
-                setOtherVal("");
-                setErrorMessage(null);
-                setCheckInputVal(false);
               }
-              setSelectedFormats(data);
               // selectedOption[0] = data;
             }}
             sx={
-              checkSelectedOption(data.opt, data.price)
+              checkSelectedOption(data.opt , data.price)
                 ? {
                     backgroundColor: "#0062cc",
                     color: "white",
@@ -134,10 +148,10 @@ const TilesComponent = ({
                 : {}
             }
           >
-            <span>{data.opt}</span>&nbsp;
-            <span className="price">($ {data.price})</span>
+            {data.opt ? data.opt : data}{" "}
+            {data.price ? `($${data.price})` : null}
           </CustomButton>
-          {data.opt === "Other (Specify)"
+          {data.opt === "Other (Specify)" || data.opt === "Other"
             ? inputField && (
                 <Box
                   sx={{
@@ -170,11 +184,10 @@ const TilesComponent = ({
                         setSelectedFormats(otherData);
                         selectedOptionPassToParent(otherData);
                         setInputField(false);
-                        setOtherVal("");
+                        setOtherVal(otherVal);
                         setErrorMessage(null);
-                      } else {
-                        submitOtherVal();
                       }
+                      submitOtherVal();
                     }}
                   >
                     Enter

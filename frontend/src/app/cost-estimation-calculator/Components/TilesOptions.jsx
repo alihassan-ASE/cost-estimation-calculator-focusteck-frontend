@@ -88,9 +88,6 @@ const TilesComponent = ({
     return !!res;
   };
 
-  console.log("selectedOption: ", selectedOption);
-  // console.log("selectedFormats: ", selectedFormats);
-
   const submitOtherVal = () => {
     if (!otherVal) {
       setErrorMessage("Field cannot be empty");

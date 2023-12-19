@@ -50,6 +50,7 @@ export default function VerticalLinearStepper(props) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [handleStep]);
+  
   return (
     <CustomScrollableContainer ref={containerRef}>
       <Stepper activeStep={activeStep} orientation={orientation}>

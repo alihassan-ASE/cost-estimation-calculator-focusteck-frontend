@@ -20,6 +20,7 @@ const CheckBoxComponent = ({
     setSelectedFormats(selectedOption || []);
   }, [selectedOption]);
 
+
   const handleFormat = (event) => {
     const selectedFormat = options.find(
       (option) => option.opt === event.target.name
@@ -49,9 +50,7 @@ const CheckBoxComponent = ({
 
   return (
     <Box>
-      {/* <Typography variant="h4">CheckBox Multi Select</Typography> */}
       <FormControl>
-        <FormLabel id="demo-radio-buttons-group-label">CheckBoxes</FormLabel>
         <FormGroup>
           {options.map((data, index) => (
             <FormControlLabel

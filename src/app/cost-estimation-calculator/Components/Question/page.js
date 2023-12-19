@@ -29,14 +29,14 @@ const page = (props) => {
     }
   };
 
-  // console.log("selected Data: ", selectedData);
+
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
       selectedData?.forEach((data) => {
         const { nextQuestion } = data;
 
         if (nextQuestion == undefined) {
-          getResponsesData({ selectedData });
+          getResponsesData({ selectedData , nextQuestion: currentQuestion.nextQuestion });
         } else if (nextQuestion !== "") {
           getResponsesData({ selectedData, nextQuestion });
         } else if (currentQuestion.nextQuestion) {
@@ -54,11 +54,11 @@ const page = (props) => {
     }
   }, [selectedData]);
 
+
   useEffect(() => {
     setSelectedData([]);
   }, [currentQuestion]);
 
-  console.log("in question: ", selectedOption);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
       <CustomTypography variant="h4">

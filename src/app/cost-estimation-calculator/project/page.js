@@ -44,6 +44,7 @@ const page = () => {
     }
   }, [isNarrowScreen]);
 
+
   useEffect(() => {
     const fetchData = () => {
       getQuestions()
@@ -62,7 +63,9 @@ const page = () => {
     fetchData();
   }, []);
 
+
   const handlePrice = (type, price) => {
+
     cost = 0;
     switch (type) {
       case "next": {
@@ -85,6 +88,16 @@ const page = () => {
     }
   };
 
+  const goToForm = () => {
+    try {
+      let data = JSON.stringify({ responses: actualResponses, totalCost: totalCost });
+      localStorage.setItem("Response", data);
+      route.push('/cost-estimation-calculator/submit');
+    } catch (error) {
+    }
+  };
+
+
   // getting Response from child Component
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
@@ -93,6 +106,8 @@ const page = () => {
       setIsOptionSelected(false);
     }
   };
+
+
 
   // setting Response in actual Array
   const setResponseData = () => {
@@ -106,6 +121,7 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -113,19 +129,18 @@ const page = () => {
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
-    setLastQuestionSelectedOption(lastQuestion.selectedOption);
-    console.log("lastquestion",lastQuestion.selectedOption)
+    setLastQuestionSelectedOption(lastQuestion.selectedOption)
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
-  };
 
-  console.log("in Project", lastQuestionSelectedOption);
+  }
 
 
   // Handling Next Question
   const nextQuestion = async () => {
+
     cost = 0;
 
     let currentStateLocal = currentState;
@@ -160,9 +175,7 @@ const page = () => {
             }
           }
           if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(
-              questionsToShowLocal.pop()
-            );
+            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
           } else {
             currentStateLocal = "post";
             currentQuestionLocal = null;
@@ -176,14 +189,14 @@ const page = () => {
 
       case "post": {
         if (currentQuestionIndexLocal < postProjectQuestions.length) {
-          currentQuestionLocal =
-            postProjectQuestions[currentQuestionIndexLocal];
+          currentQuestionLocal = postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
-        } else {
+        }
+        else {
+          currentQuestionIndexLocal++;
           break;
         }
       }
-
       default: {
         null;
       }
@@ -200,8 +213,13 @@ const page = () => {
 
     handlePrice("next", cost);
     setIsOptionSelected(true);
-  };
 
+
+  };
+  if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
+    goToForm();
+  }
+  
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
@@ -213,23 +231,8 @@ const page = () => {
     setLastQuestionSelectedOption(step.selectedOption);
     handlePrice("stepper");
   };
-  const goToForm = () => {
-    try {
-      let data = JSON.stringify({
-        responses: actualResponses,
-        totalCost: totalCost,
-      });
-      localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/submit");
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
 
-  if (
-    currentState === "post" &&
-    currentQuestionIndex >= postProjectQuestions.length
-  ) {
+  if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
     goToForm();
   }
 
@@ -280,6 +283,7 @@ const page = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
+
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button

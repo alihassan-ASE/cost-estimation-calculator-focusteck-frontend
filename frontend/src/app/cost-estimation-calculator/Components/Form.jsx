@@ -59,7 +59,6 @@ const Form = ({ response, getActualResponse }) => {
     }
   };
 
-  // console.log("Actual Response: ", response);
 
   return (
     <Box>

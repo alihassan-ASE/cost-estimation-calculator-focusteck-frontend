@@ -88,7 +88,6 @@ const MultipleComponent = ({
   }, [selectedOption]);
 
   const handleFormat = (event, newFormats) => {
-    // console.log("New Formats: ", newFormats);
     setSelectedFormats(newFormats);
     selectedOptionPassToParent(newFormats);
   };
@@ -98,7 +97,7 @@ const MultipleComponent = ({
       (selected) => selected.opt === value && selected.price === price
     );
   };
-  // console.log("Selected Formats: ", selectedFormats);
+
   return (
     <Box>
       <StyledToggleButtonGroup
