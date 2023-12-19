@@ -65,6 +65,7 @@ const TilesComponent = ({
   options,
   selectedOption,
   selectedOptionPassToParent,
+  otherInput,
 }) => {
   let otherData = {
     opt: null,
@@ -94,6 +95,9 @@ const TilesComponent = ({
         }
       }
     }
+    if (otherInput === false) {
+      setOtherVal("");
+    }
   }, [selectedOption, options]);
 
   const checkSelectedOption = (value, price) => {
@@ -109,7 +113,6 @@ const TilesComponent = ({
       setCheckInputVal(true);
     }
     if (otherVal) {
-      // setOtherVal("");
       setErrorMessage(null);
       setInputField(false);
       setCheckInputVal(false);

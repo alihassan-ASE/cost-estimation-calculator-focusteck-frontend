@@ -48,17 +48,34 @@ const Form = ({ response, getActualResponse }) => {
       setSubmitted(false);
     }
     if (formInput.userName && formInput.email) {
-      setErrorMessage({ usernameError: null, emailError: null });
-      setCheckInputVal(false);
-      setSubmitted(true);
+      if (
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formInput.email) &&
+        /^(?!\s+$).*/.test(formInput.userName)
+      ) {
+        setErrorMessage({ usernameError: null, emailError: null });
+        setCheckInputVal(false);
+        setSubmitted(true);
 
-      getActualResponse({
-        ...formInput,
-        ...response,
-      });
+        getActualResponse({
+          ...formInput,
+          ...response,
+        });
+
+        postData({ ...response, ...formInput });
+      } else if (/(?!\s+$).*/.test(formInput.userName)) {
+        setErrorMessage({ usernameError: "Incorrect Name" });
+        setCheckInputVal(true);
+        setSubmitted(false);
+      } else if (
+        /\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formInput.email) ||
+        /(?!\s+$).*/.test(formInput.email)
+      ) {
+        setErrorMessage({ emailError: "Incorrect Email Format" });
+        setCheckInputVal(true);
+        setSubmitted(false);
+      }
     }
   };
-
 
   return (
     <Box>
@@ -86,6 +103,10 @@ const Form = ({ response, getActualResponse }) => {
                   userName: e.target.value,
                   email: formInput.email,
                 });
+                setErrorMessage({ usernameError: null, emailError: null });
+              }}
+              onClick={() => {
+                setCheckInputVal(false);
               }}
               error={checkInputVal}
               helperText={errorMessage.usernameError}
@@ -103,6 +124,7 @@ const Form = ({ response, getActualResponse }) => {
                   userName: formInput.userName,
                   email: e.target.value,
                 });
+                setErrorMessage({ usernameError: null, emailError: null });
               }}
               error={checkInputVal}
               helperText={errorMessage.emailError}
@@ -112,7 +134,6 @@ const Form = ({ response, getActualResponse }) => {
               variant="contained"
               onClick={() => {
                 submitForm(formInput);
-                postData({ ...response, ...formInput });
               }}
             >
               Submit

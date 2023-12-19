@@ -10,6 +10,7 @@ const QuestionsComponent = ({
   disable,
   selectedOption,
   selectedOptionPassToParent,
+  otherInput,
 }) => {
   return (
     <Box>
@@ -19,6 +20,7 @@ const QuestionsComponent = ({
         selectedOptionPassToParent={selectedOptionPassToParent}
         label={label}
         disable={disable}
+        otherInput={otherInput}
       />
     </Box>
   );

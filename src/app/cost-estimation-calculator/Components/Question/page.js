@@ -18,7 +18,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 
 const page = (props) => {
   // const [selectedOption, setSelectedOption] = useState([]);
-  let { currentQuestion, getResponsesData, selectedOption } = props;
+  let { currentQuestion, getResponsesData, selectedOption, otherInput } = props;
 
   const [selectedData, setSelectedData] = useState([]);
   const selectedOptionPassToParent = (data) => {
@@ -29,14 +29,16 @@ const page = (props) => {
     }
   };
 
-
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
       selectedData?.forEach((data) => {
         const { nextQuestion } = data;
 
         if (nextQuestion == undefined) {
-          getResponsesData({ selectedData , nextQuestion: currentQuestion.nextQuestion });
+          getResponsesData({
+            selectedData,
+            nextQuestion: currentQuestion.nextQuestion,
+          });
         } else if (nextQuestion !== "") {
           getResponsesData({ selectedData, nextQuestion });
         } else if (currentQuestion.nextQuestion) {
@@ -54,7 +56,6 @@ const page = (props) => {
     }
   }, [selectedData]);
 
-
   useEffect(() => {
     setSelectedData([]);
   }, [currentQuestion]);
@@ -70,6 +71,7 @@ const page = (props) => {
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}
         selectedOption={selectedOption}
+        otherInput={otherInput}
       />
     </Box>
   );

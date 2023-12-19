@@ -18,6 +18,7 @@ const ShowOption = ({
   selectedOption,
   typeOfUI,
   selectedOptionPassToParent,
+  otherInput,
 }) => {
   return (
     <Box>
@@ -34,6 +35,7 @@ const ShowOption = ({
         //       options={options}
         //       selectedOption={selectedOption}
         //       selectedOptionPassToParent={selectedOptionPassToParent}
+        //       otherInput
         //     />
         //   ) : typeOfUI === "DropDown" ? (
         //     <DropDownComponent
@@ -63,6 +65,7 @@ const ShowOption = ({
         //     options={options}
         //     selectedOption={selectedOption}
         //     selectedOptionPassToParent={selectedOptionPassToParent}
+        //     otherInput
         //   />
         // ) : (
         //   <DropDownComponent
@@ -85,6 +88,7 @@ const ShowOption = ({
             options={options}
             selectedOption={selectedOption}
             selectedOptionPassToParent={selectedOptionPassToParent}
+            otherInput={otherInput}
           />
         )
       }

@@ -11,7 +11,13 @@ import { useState, useEffect } from "react";
 import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { styled } from "@mui/material/styles";
 
+const CustomButton = styled(Button)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: "#fff",
+  },
+}));
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
@@ -33,6 +39,7 @@ const page = () => {
   );
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
+  const [otherInput, setOtherInput] = useState(true);
 
   const route = useRouter();
   let cost;
@@ -119,6 +126,7 @@ const page = () => {
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
     cost = 0;
+    setOtherInput(true);
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
     setCurrentQuestion(lastQuestion.question);
@@ -132,8 +140,8 @@ const page = () => {
   };
   // Handling Next Question
   const nextQuestion = async () => {
-
     cost = 0;
+    setOtherInput(false);
 
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
@@ -248,22 +256,30 @@ const page = () => {
             }}
           >
             {actualResponses.length > 0 && (
-              <KeyboardBackspaceIcon
+              <CustomButton
                 sx={{
                   color: "#ACACAC",
-                  border: "2px solid #ACACAC",
                   borderRadius: "50%",
                   padding: ".3em",
-                  borderRadius: "50%",
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#0069d9",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                  },
                 }}
                 onClick={backQuestion}
-              />
+              >
+                <KeyboardBackspaceIcon
+                  sx={{
+                    color: "#ACACAC",
+                    border: "2px solid #ACACAC",
+                    borderRadius: "50%",
+                    padding: ".3em",
+                    ":hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#0069d9",
+                      border: "2px solid #fff",
+                      color: "#fff",
+                    },
+                  }}
+                  onClick={backQuestion}
+                />
+              </CustomButton>
             )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
           </Box>
@@ -282,6 +298,7 @@ const page = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
+                  otherInput={otherInput}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
@@ -304,6 +321,7 @@ const page = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
+                  otherInput={otherInput}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button

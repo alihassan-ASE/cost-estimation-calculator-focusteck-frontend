@@ -17,6 +17,11 @@ import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
+const CustomBackButton = styled(Button)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: "#fff",
+  },
+}));
 const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
@@ -71,8 +76,10 @@ const StaffComponent = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
   const [resource, setResource] = useState([]);
-  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] =
-    useState();
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
+    []
+  );
+  const [setOtherInput, otherInput] = useState();
 
   const route = useRouter();
   const dataObj = {};
@@ -117,7 +124,6 @@ const StaffComponent = () => {
   // Function to navigate on Form Page
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
-
     try {
       let data = JSON.stringify(actualResponses);
       localStorage.setItem("Response", data);
@@ -234,6 +240,7 @@ const StaffComponent = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setResponseData();
     setIsNextClicked(true);
+    setLastQuestionSelectedOption([]);
   };
 
   // Handling Back Question and Calculating Price on Back Button
@@ -283,14 +290,6 @@ const StaffComponent = () => {
     }
   };
 
-  useEffect(() => {
-    if (isNarrowScreen) {
-      setOrientation("horizontal");
-    } else {
-      setOrientation("vertical");
-    }
-  }, [isNarrowScreen]);
-
   // Returning selected Resources
   const returnResources = () => {
     const tags = [];
@@ -333,23 +332,13 @@ const StaffComponent = () => {
             }}
           >
             {currentQuestionIndex > 0 && (
-              <Button
+              <CustomBackButton
                 sx={{
                   color: "#ACACAC",
-                  border: "2px solid #ACACAC",
                   borderRadius: "50%",
                   padding: ".3em",
-                  borderRadius: "50%",
-
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#0069d9",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                  },
                 }}
                 onClick={backQuestion}
-                disable={values[0] ? false : true}
               >
                 <KeyboardBackspaceIcon
                   sx={{
@@ -367,9 +356,8 @@ const StaffComponent = () => {
                     },
                   }}
                   onClick={backQuestion}
-                  disable={values[0] ? false : true}
                 />
-              </Button>
+              </CustomBackButton>
             )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
           </Box>
@@ -416,6 +404,7 @@ const StaffComponent = () => {
                   sx={{ width: 150 }}
                   onClick={() => {
                     nextQuestion();
+                    setOtherInput(false);
                   }}
                   disabled={values[0] ? false : true}
                 >
@@ -440,6 +429,7 @@ const StaffComponent = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
+                  otherInput={otherInput}
                 />
 
                 {additionalQuesiton.length >= currentQuestionIndex && (
@@ -454,6 +444,7 @@ const StaffComponent = () => {
                       sx={{ width: 150 }}
                       onClick={() => {
                         nextQuestion();
+                        setOtherInput(false);
                       }}
                       disabled={isOptionSelected}
                     >
@@ -470,6 +461,7 @@ const StaffComponent = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
+                  otherInput={otherInput}
                 />
                 {additionalQuesiton.length >= currentQuestionIndex && (
                   <Box
@@ -483,6 +475,7 @@ const StaffComponent = () => {
                       sx={{ width: 150 }}
                       onClick={() => {
                         nextQuestion();
+                        setOtherInput(false);
                       }}
                       disabled={isOptionSelected}
                     >
