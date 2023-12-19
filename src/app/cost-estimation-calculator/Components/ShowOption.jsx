@@ -16,14 +16,15 @@ const ShowOption = ({
   options,
   label,
   disable,
-  styleVal,
   selectedOption,
+  typofUI,
   selectedOptionPassToParent,
 }) => {
+  // let style = "Tile";
   return (
     <Box>
       {
-        styleVal === "DropDown" ? (
+        typofUI === "DropDown" ? (
           <DropDownComponent
             options={options}
             label={label}
@@ -32,38 +33,45 @@ const ShowOption = ({
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
         ) : typeOfSelection === "single" ? (
-          <TilesComponent
-            options={options}
-            selectedOption={selectedOption}
-            selectedOptionPassToParent={selectedOptionPassToParent}
-          />
+          typofUI === "Radio" ? (
+            <RadioButtonComponent
+              options={options}
+              selectedOption={selectedOption}
+              selectedOptionPassToParent={selectedOptionPassToParent}
+            />
+          ) : (
+            <TilesComponent
+              options={options}
+              selectedOption={selectedOption}
+              selectedOptionPassToParent={selectedOptionPassToParent}
+            />
+          )
         ) : (
-          <MultipleComponent
-            options={options}
-            selectedOptionPassToParent={selectedOptionPassToParent}
-            selectedOption={selectedOption}
-          />
+          typeOfSelection === "multiple" &&
+          typofUI === "CheckBox" && (
+            // <CheckBoxComponent
+            //   options={options}
+            //   selectedOptionPassToParent={selectedOptionPassToParent}
+            //   selectedOption={selectedOption}
+            // />
+
+            <MultipleComponent
+              options={options}
+              selectedOptionPassToParent={selectedOptionPassToParent}
+              selectedOption={selectedOption}
+            />
+          )
         )
 
-        // <RadioButtonComponent
-        //   options={options}
-        //   selectedOption={selectedOption}
-        //   selectedOptionPassToParent={selectedOptionPassToParent}
-        // />
-        // <MultipleComponent
-        //   options={options}
-        //   selectedOptionPassToParent={selectedOptionPassToParent}
-        //   selectedOption={selectedOption}
-        // />
-        // <CheckBoxComponent
-        //   options={options}
-        //   selectedOptionPassToParent={selectedOptionPassToParent}
-        //   selectedOption={selectedOption}
-        // />
         // <DropDownComponent
         //   options={options}
         //   label={label}
         //   disable={disable}
+        //   selectedOption={selectedOption}
+        //   selectedOptionPassToParent={selectedOptionPassToParent}
+        // />
+        // <TilesComponent
+        //   options={options}
         //   selectedOption={selectedOption}
         //   selectedOptionPassToParent={selectedOptionPassToParent}
         // />

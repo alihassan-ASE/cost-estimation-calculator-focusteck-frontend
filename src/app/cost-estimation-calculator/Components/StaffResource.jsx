@@ -60,7 +60,6 @@ const StaffResource = ({
   const [saveButton, setSaveButton] = useState(false);
   const [showDropdown, setShowDropdown] = useState(true);
 
-
   const getData = (data, label) => {
     if (label === "Resources") {
       setCurrentResource({ resource: data });
@@ -88,7 +87,6 @@ const StaffResource = ({
     return options.map((item) => item.typeOfResource);
   }, [options]);
 
-
   return (
     <Box
       sx={{
@@ -100,7 +98,6 @@ const StaffResource = ({
           <QuestionsComponent
             question={question}
             options={newOption}
-            styleVal={"DropDown"}
             label={label ? label : "Resources"}
             disable={false}
             selectedOption={
@@ -153,7 +150,6 @@ const StaffResource = ({
               options={resourceData}
               label={label ? label : "Resource Option"}
               disable={currentResource.resource ? false : true}
-              styleVal={"DropDown"}
               selectedOption={
                 currentResource.resource &&
                 !currentResource?.resourceOption?.opt
@@ -204,7 +200,6 @@ const StaffResource = ({
             options={seniorityLevelOptions}
             label={label ? label : "Seniority Level"}
             disable={currentResource.resourceOption ? false : true}
-            styleVal={"DropDown"}
             selectedOption={
               currentResource.resource && !currentResource.seniorityLevel
                 ? null
@@ -249,7 +244,6 @@ const StaffResource = ({
               options={numOfResourcesOptions[currentResource.seniorityLevel]}
               label={label ? label : "Number of Resources"}
               disable={currentResource.seniorityLevel ? false : true}
-              styleVal={"DropDown"}
               selectedOption={
                 currentResource.resource && !currentResource.numOfResources
                   ? null

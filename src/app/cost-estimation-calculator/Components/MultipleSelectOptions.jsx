@@ -97,6 +97,7 @@ const MultipleComponent = ({
       (selected) => selected.opt === value && selected.price === price
     );
   };
+
   return (
     <Box>
       <StyledToggleButtonGroup

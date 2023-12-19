@@ -65,6 +65,7 @@ const page = (props) => {
         {currentQuestion?.question}
       </CustomTypography>
       <ShowOptions
+        typofUI={currentQuestion?.typeOfUI}
         typeOfSelection={currentQuestion?.typeofselection}
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}

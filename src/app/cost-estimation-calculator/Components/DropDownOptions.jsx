@@ -68,17 +68,30 @@ const DropDownComponent = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
-  const [selectedValue, setSelectedValue] = useState(selectedOption || "");
+  const [selectedFormats, setSelectedFormats] = useState("");
+
+  useEffect(() => {
+    if (Array.isArray(selectedOption)) {
+      setSelectedFormats(selectedOption[0]);
+    } else {
+      setSelectedFormats(selectedOption);
+    }
+  }, [selectedOption]);
+
   return (
     <StyledFormControl>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
         sx={{ height: "65px", width: "270px" }}
         autoFocus={false}
-        value={disable ? null : selectedValue}
+        value={
+          disable
+            ? null
+            : selectedFormats
+        }
         onChange={(e) => {
           const selectedObject = e.target.value;
-          setSelectedValue(selectedObject);
+          setSelectedFormats(selectedObject);
           selectedOptionPassToParent(selectedObject, label);
         }}
         disabled={disable ? true : false}

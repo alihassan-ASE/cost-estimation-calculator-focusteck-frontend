@@ -60,8 +60,6 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-
-
 const TilesComponent = ({
   options,
   selectedOption,
@@ -77,16 +75,19 @@ const TilesComponent = ({
   const [checkInputVal, setCheckInputVal] = useState(false);
   const [selectedFormats, setSelectedFormats] = useState("");
 
-
   useEffect(() => {
     if (selectedOption && selectedOption.length > 0) {
       setSelectedFormats(selectedOption[0] || []);
-  
+
       if (selectedOption[0]?.opt) {
         const isSelectedOptAvailable = options.some(
           (option) => option.opt === selectedOption[0].opt
         );
-        if (!isSelectedOptAvailable && (selectedOption[0].opt !== "Other (Specify)" || selectedOption[0].opt !== "Other")) {
+        if (
+          !isSelectedOptAvailable &&
+          (selectedOption[0].opt !== "Other (Specify)" ||
+            selectedOption[0].opt !== "Other")
+        ) {
           setOtherVal(selectedOption[0].opt);
           selectedOption.length = 0;
         }
@@ -94,13 +95,12 @@ const TilesComponent = ({
     }
   }, [selectedOption, options]);
 
-  
   const checkSelectedOption = (value, price) => {
-    const res = selectedFormats?.opt === value && selectedFormats?.price === price
-    
+    const res =
+      selectedFormats?.opt === value && selectedFormats?.price === price;
+
     return !!res;
   };
-
 
   const submitOtherVal = () => {
     if (!otherVal) {
@@ -120,7 +120,11 @@ const TilesComponent = ({
       {options?.map((data, index) => (
         <Box sx={{ display: "inline-block" }} key={index}>
           <CustomButton
-            value={selectedFormats}
+            value={
+              selectedFormats?.opt && selectedFormats?.price
+                ? { opt: selectedFormats.opt, price: selectedFormats.price }
+                : selectedFormats
+            }
             onClick={() => {
               if (data.opt === "Other (Specify)" || data.opt === "Other") {
                 setInputField(!inputField);
@@ -142,10 +146,13 @@ const TilesComponent = ({
                 : {}
             }
           >
-            <span>{data.opt}</span>&nbsp;
-            <span className="price">($ {data.price})</span>
+            <span>{data.opt ? data.opt : data}</span>&nbsp;
+            <span className="price">
+              {" "}
+              {data.price ? `($${data.price})` : null}
+            </span>
           </CustomButton>
-          {(data.opt === "Other (Specify)" || data.opt === "Other")
+          {data.opt === "Other (Specify)" || data.opt === "Other"
             ? inputField && (
                 <Box
                   sx={{
@@ -180,9 +187,8 @@ const TilesComponent = ({
                         setInputField(false);
                         setOtherVal(otherVal);
                         setErrorMessage(null);
-                      } 
-                        submitOtherVal();
-                      
+                      }
+                      submitOtherVal();
                     }}
                   >
                     Enter

@@ -35,13 +35,13 @@ const RadioButtonComponent = ({
           onChange={handleFormat}
           name="radio-buttons-group"
         >
-          {options.map((data, index) => (
+          {options?.map((data, index) => (
             <FormControlLabel
               key={index}
               value={data.opt}
               control={<Radio />}
               label={`${data.opt} ($${data.price})`}
-              checked={selectedOption[0]?.opt === data.opt}
+              checked={selectedFormat?.opt === data.opt}
             />
           ))}
         </RadioGroup>

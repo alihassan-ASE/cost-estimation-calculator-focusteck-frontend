@@ -323,13 +323,7 @@ const page = () => {
                   </Button>
                 </Box>
               </Grid>
-              <Grid
-                item
-                lg={4}
-                md={3}
-                sm={4}
-                xs={12}
-              >
+              <Grid item lg={4} md={3} sm={4} xs={12}>
                 <Stepper
                   responses={actualResponses}
                   changeActiveQuestion={changeActiveQuestion}
