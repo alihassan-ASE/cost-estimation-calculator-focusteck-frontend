@@ -76,10 +76,6 @@ const page = () => {
         setTotalCost((prev) => prev + price);
         break;
       }
-      case "back": {
-        setTotalCost((prev) => prev - price);
-        break;
-      }
       case "stepper": {
         actualResponses.map((obj) => {
           obj.selectedOption.map((selected) => {
@@ -128,7 +124,7 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
-    // setOtherInput(false);
+    debugger;
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -137,14 +133,13 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
+
     lastQuestion.selectedOption.map((op) => {
+    console.log("Last Question",op) 
       setTotalCost((prev) => prev - op.price);
     });
+
   };
-
-  }
-
-  console.log("Actual",actualResponses)
 
   // Handling Next Question
   const nextQuestion = async () => {
@@ -242,9 +237,7 @@ const page = () => {
     handlePrice("stepper");
   };
 
-  console.log("Question to show",questionsToShow)
 
-  console.log("Question to show",questionsToShow)
 
   if (
     currentState === "post" &&
@@ -283,7 +276,7 @@ const page = () => {
                 border: "2px solid #fff",
                 color: "#fff",
               },
-            }} onClick={backQuestion}/>
+            }}/>
              </CustomButton>
             )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
