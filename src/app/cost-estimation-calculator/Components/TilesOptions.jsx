@@ -129,7 +129,6 @@ const TilesComponent = ({
                 selectedOptionPassToParent(data);
                 setInputField(false);
               }
-              // selectedOption[0] = data;
             }}
             sx={
               checkSelectedOption(data.opt, data.price)
