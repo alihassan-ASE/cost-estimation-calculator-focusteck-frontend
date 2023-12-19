@@ -45,7 +45,7 @@ const RadioButtonComponent = ({
               value={data.opt}
               control={<Radio />}
               label={`${data.opt} ($${data.price})`}
-              checked={selectedFormat?.opt === data.opt}
+              checked={selectedOption[0]?.opt === data.opt}
             />
           ))}
         </RadioGroup>

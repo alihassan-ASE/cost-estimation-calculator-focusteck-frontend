@@ -9,6 +9,7 @@ const QuestionsComponent = ({
   label,
   disable,
   selectedOption,
+  styleVal,
   selectedOptionPassToParent,
 }) => {
   return (
@@ -17,6 +18,7 @@ const QuestionsComponent = ({
         options={options}
         selectedOption={selectedOption}
         selectedOptionPassToParent={selectedOptionPassToParent}
+        styleVal={styleVal}
         label={label}
         disable={disable}
       />

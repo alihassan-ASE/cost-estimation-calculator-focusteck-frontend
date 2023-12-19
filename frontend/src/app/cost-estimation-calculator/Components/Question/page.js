@@ -58,14 +58,12 @@ const page = (props) => {
     setSelectedData([]);
   }, [currentQuestion]);
 
-  console.log("in question: ", selectedOption);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
       <CustomTypography variant="h4">
         {currentQuestion?.question}
       </CustomTypography>
       <ShowOptions
-        typofUI={currentQuestion?.typeOfUI}
         typeOfSelection={currentQuestion?.typeofselection}
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}

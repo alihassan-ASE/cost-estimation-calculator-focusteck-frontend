@@ -25,6 +25,7 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
+  const [lastQuestionSelected, setLastQuestionSelected] = useState();
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
@@ -113,16 +114,12 @@ const page = () => {
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
-    setLastQuestionSelectedOption(lastQuestion.selectedOption);
-    console.log("lastquestion",lastQuestion.selectedOption)
+    setLastQuestionSelected(lastQuestion.selectedOption);
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
   };
-
-  console.log("in Project", lastQuestionSelectedOption);
-
 
   // Handling Next Question
   const nextQuestion = async () => {
@@ -316,7 +313,13 @@ const page = () => {
                   </Button>
                 </Box>
               </Grid>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
+              <Grid
+                item
+                lg={4}
+                md={3}
+                sm={4}
+                xs={12}
+              >
                 <Stepper
                   responses={actualResponses}
                   changeActiveQuestion={changeActiveQuestion}

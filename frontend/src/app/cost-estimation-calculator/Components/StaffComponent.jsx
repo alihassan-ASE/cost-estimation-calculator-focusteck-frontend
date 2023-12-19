@@ -430,6 +430,7 @@ const StaffComponent = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
+                  styleVal={"Tiles"}
                 />
 
                 {additionalQuesiton.length >= currentQuestionIndex && (
@@ -460,6 +461,7 @@ const StaffComponent = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
+                  styleVal={"Tiles"}
                 />
                 {additionalQuesiton.length >= currentQuestionIndex && (
                   <Box
