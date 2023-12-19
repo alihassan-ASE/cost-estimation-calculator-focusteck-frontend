@@ -79,7 +79,7 @@ const StaffComponent = () => {
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
-  const [setOtherInput, otherInput] = useState();
+
 
   const route = useRouter();
   const dataObj = {};
@@ -404,7 +404,6 @@ const StaffComponent = () => {
                   sx={{ width: 150 }}
                   onClick={() => {
                     nextQuestion();
-                    setOtherInput(false);
                   }}
                   disabled={values[0] ? false : true}
                 >
@@ -429,7 +428,6 @@ const StaffComponent = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
-                  otherInput={otherInput}
                 />
 
                 {additionalQuesiton.length >= currentQuestionIndex && (
@@ -442,10 +440,7 @@ const StaffComponent = () => {
                       size="medium"
                       variant="contained"
                       sx={{ width: 150 }}
-                      onClick={() => {
-                        nextQuestion();
-                        setOtherInput(false);
-                      }}
+                      onClick={nextQuestion}
                       disabled={isOptionSelected}
                     >
                       Next
@@ -461,7 +456,6 @@ const StaffComponent = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
-                  otherInput={otherInput}
                 />
                 {additionalQuesiton.length >= currentQuestionIndex && (
                   <Box
@@ -473,10 +467,7 @@ const StaffComponent = () => {
                       size="medium"
                       variant="contained"
                       sx={{ width: 150 }}
-                      onClick={() => {
-                        nextQuestion();
-                        setOtherInput(false);
-                      }}
+                      onClick={nextQuestion}
                       disabled={isOptionSelected}
                     >
                       Next

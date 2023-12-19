@@ -18,7 +18,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 
 const page = (props) => {
   // const [selectedOption, setSelectedOption] = useState([]);
-  let { currentQuestion, getResponsesData, selectedOption, otherInput } = props;
+  let { currentQuestion, getResponsesData, selectedOption } = props;
 
   const [selectedData, setSelectedData] = useState([]);
   const selectedOptionPassToParent = (data) => {
@@ -59,19 +59,17 @@ const page = (props) => {
   useEffect(() => {
     setSelectedData([]);
   }, [currentQuestion]);
-
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
       <CustomTypography variant="h4">
         {currentQuestion?.question}
       </CustomTypography>
       <ShowOptions
-        typeOfUI={currentQuestion?.typeOfUI}
+        typeofUI={currentQuestion?.typeOfUI}
         typeOfSelection={currentQuestion?.typeofselection}
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}
         selectedOption={selectedOption}
-        otherInput={otherInput}
       />
     </Box>
   );

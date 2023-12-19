@@ -36,21 +36,26 @@ const Form = ({ response, getActualResponse }) => {
   });
 
   const [checkInputVal, setCheckInputVal] = useState(false);
+
   const submitForm = (formInput) => {
-    if (!formInput.userName) {
+    const trimmedUserName = formInput.userName.trim();
+    const trimmedEmail = formInput.email.trim();
+
+    if (!trimmedUserName) {
       setErrorMessage({ usernameError: "Incorrect Name" });
       setCheckInputVal(true);
       setSubmitted(false);
     }
-    if (!formInput.email) {
+    if (!trimmedEmail) {
       setErrorMessage({ emailError: "Incorrect Email" });
       setCheckInputVal(true);
       setSubmitted(false);
     }
-    if (formInput.userName && formInput.email) {
+
+    if (trimmedUserName && trimmedEmail) {
       if (
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formInput.email) &&
-        /^(?!\s+$).*/.test(formInput.userName)
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(trimmedEmail) &&
+        /^(?!\s+$).*/.test(trimmedUserName)
       ) {
         setErrorMessage({ usernameError: null, emailError: null });
         setCheckInputVal(false);
@@ -62,15 +67,14 @@ const Form = ({ response, getActualResponse }) => {
         });
 
         postData({ ...response, ...formInput });
-      } else if (/(?!\s+$).*/.test(formInput.userName)) {
-        setErrorMessage({ usernameError: "Incorrect Name" });
+      } else if (!/^(?!\s+$).*/.test(trimmedUserName)) {
+        setErrorMessage({ usernameError: "Incorrect Name", emailError: "" });
         setCheckInputVal(true);
         setSubmitted(false);
       } else if (
-        /\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formInput.email) ||
-        /(?!\s+$).*/.test(formInput.email)
+        !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(trimmedEmail)
       ) {
-        setErrorMessage({ emailError: "Incorrect Email Format" });
+        setErrorMessage({ usernameError: "", emailError: "Incorrect Email Format" });
         setCheckInputVal(true);
         setSubmitted(false);
       }
@@ -104,8 +108,6 @@ const Form = ({ response, getActualResponse }) => {
                   email: formInput.email,
                 });
                 setErrorMessage({ usernameError: null, emailError: null });
-              }}
-              onClick={() => {
                 setCheckInputVal(false);
               }}
               error={checkInputVal}
@@ -125,6 +127,7 @@ const Form = ({ response, getActualResponse }) => {
                   email: e.target.value,
                 });
                 setErrorMessage({ usernameError: null, emailError: null });
+                setCheckInputVal(false);
               }}
               error={checkInputVal}
               helperText={errorMessage.emailError}

@@ -31,6 +31,8 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
+
+  const [currentStack, setCurrentStack] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
@@ -39,7 +41,6 @@ const page = () => {
   );
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
-  const [otherInput, setOtherInput] = useState(true);
 
   const route = useRouter();
   let cost;
@@ -116,17 +117,20 @@ const page = () => {
   // setting Response in actual Array
   const setResponseData = () => {
     const dataObj = {};
+
     dataObj.selectedOption = selectedData;
     dataObj.question = currentQuestion;
     dataObj.state = currentState;
     dataObj.index = currentQuestionIndex;
+    dataObj.currentStack = currentStack;
+
     setActualResponses((prev) => [...prev, dataObj]);
   };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+    // setOtherInput(false);
     cost = 0;
-    setOtherInput(true);
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
     setCurrentQuestion(lastQuestion.question);
@@ -138,10 +142,10 @@ const page = () => {
       setTotalCost((prev) => prev - op.price);
     });
   };
+
   // Handling Next Question
   const nextQuestion = async () => {
     cost = 0;
-    setOtherInput(false);
 
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
@@ -172,6 +176,10 @@ const page = () => {
           } else {
             if (selectedOption) {
               questionsToShowLocal.push(selectedOption);
+            } else if (selectedOption === "" && questionsToShowLocal.length) {
+              currentQuestionLocal = await getDynamicQuestion(
+                questionsToShowLocal.pop()
+              );
             }
           }
           if (questionsToShowLocal.length) {
@@ -207,6 +215,7 @@ const page = () => {
     setCurrentQuestion(currentQuestionLocal);
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
+    setCurrentStack([...questionsToShowLocal]);
     setResponseData();
 
     selectedData.map((op) => {
@@ -298,7 +307,6 @@ const page = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
-                  otherInput={otherInput}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
@@ -321,7 +329,6 @@ const page = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
-                  otherInput={otherInput}
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button
