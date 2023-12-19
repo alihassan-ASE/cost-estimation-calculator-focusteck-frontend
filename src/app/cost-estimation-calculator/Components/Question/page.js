@@ -18,7 +18,13 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 
 const page = (props) => {
   // const [selectedOption, setSelectedOption] = useState([]);
-  let { currentQuestion, getResponsesData, selectedOption } = props;
+  let {
+    currentQuestion,
+    getResponsesData,
+    selectedOption,
+    typeofUI,
+    typeOfSelection,
+  } = props;
 
   const [selectedData, setSelectedData] = useState([]);
   const selectedOptionPassToParent = (data) => {
@@ -65,8 +71,8 @@ const page = (props) => {
         {currentQuestion?.question}
       </CustomTypography>
       <ShowOptions
-        typeofUI={currentQuestion?.typeOfUI}
-        typeOfSelection={currentQuestion?.typeofselection}
+        typeofUI={typeofUI || currentQuestion?.typeOfUI}
+        typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}
         selectedOption={selectedOption}

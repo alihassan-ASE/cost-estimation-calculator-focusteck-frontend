@@ -80,7 +80,6 @@ const StaffComponent = () => {
     []
   );
 
-
   const route = useRouter();
   const dataObj = {};
 
@@ -211,7 +210,6 @@ const StaffComponent = () => {
           };
         });
   };
-
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
     setIsOptionSelected(false);
@@ -321,7 +319,7 @@ const StaffComponent = () => {
 
   return (
     <Box sx={{ margin: "3em 1em 1em 1em" }}>
-      {additionalQuesiton && staffBase ? (
+      {additionalQuesiton.length && staffBase.length ? (
         <Box>
           <Box
             sx={{
@@ -355,7 +353,6 @@ const StaffComponent = () => {
                       color: "#fff",
                     },
                   }}
-                  onClick={backQuestion}
                 />
               </CustomBackButton>
             )}
@@ -488,7 +485,7 @@ const StaffComponent = () => {
           )}
         </Box>
       ) : (
-        <h3>Loading.............</h3>
+        <Box sx={{ margin: "2em 0" }}>Loading .....</Box>
       )}
     </Box>
   );

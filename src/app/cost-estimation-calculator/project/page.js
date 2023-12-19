@@ -286,7 +286,6 @@ const page = () => {
                       color: "#fff",
                     },
                   }}
-                  onClick={backQuestion}
                 />
               </CustomButton>
             )}

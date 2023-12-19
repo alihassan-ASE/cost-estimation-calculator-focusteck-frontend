@@ -11,10 +11,14 @@ const QuestionsComponent = ({
   selectedOption,
   selectedOptionPassToParent,
   otherInput,
+  typeofUI,
+  typeOfSelection,
 }) => {
   return (
     <Box>
       <ShowOption
+        typeofUI={typeofUI}
+        typeOfSelection={typeOfSelection}
         options={options}
         selectedOption={selectedOption}
         selectedOptionPassToParent={selectedOptionPassToParent}

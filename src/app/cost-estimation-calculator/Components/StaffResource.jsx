@@ -84,6 +84,14 @@ const StaffResource = ({
     return options.map((item) => item.typeOfResource);
   }, [options]);
 
+  const type = useMemo(() => {
+    return options[0]?.typeOfUI;
+  }, [options]);
+
+  const typeOfSelection = useMemo(() => {
+    return options[0]?.typeofselection;
+  }, [options]);
+
   return (
     <Box
       sx={{
@@ -93,7 +101,9 @@ const StaffResource = ({
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         {showDropdown && (
           <QuestionsComponent
+            typeOfSelection={typeOfSelection}
             question={question}
+            typeofUI={type}
             options={newOption}
             label={label ? label : "Resources"}
             disable={false}
@@ -143,8 +153,10 @@ const StaffResource = ({
               }
             })}
             <QuestionsComponent
+              typeOfSelection={typeOfSelection}
               question={question}
               options={resourceData}
+              typeofUI={type}
               label={label ? label : "Resource Option"}
               disable={currentResource.resource ? false : true}
               selectedOption={
@@ -193,7 +205,9 @@ const StaffResource = ({
 
         {showDropdown && (
           <QuestionsComponent
+            typeOfSelection={typeOfSelection}
             question={question}
+            typeofUI={"DropDown"}
             options={seniorityLevelOptions}
             label={label ? label : "Seniority Level"}
             disable={currentResource.resourceOption ? false : true}
@@ -237,7 +251,9 @@ const StaffResource = ({
         {showDropdown && (
           <>
             <QuestionsComponent
+              typeOfSelection={typeOfSelection}
               question={question}
+              typeofUI={"DropDown"}
               options={numOfResourcesOptions[currentResource.seniorityLevel]}
               label={label ? label : "Number of Resources"}
               disable={currentResource.seniorityLevel ? false : true}
