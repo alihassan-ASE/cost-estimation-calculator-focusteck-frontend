@@ -14,7 +14,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  "&:hover": {
+"&:hover": {
     backgroundColor: "#fff",
   },
 }));
@@ -31,8 +31,6 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
-
-  const [currentStack, setCurrentStack] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
@@ -126,10 +124,9 @@ const page = () => {
     dataObj.question = currentQuestion;
     dataObj.state = currentState;
     dataObj.index = currentQuestionIndex;
-    dataObj.currentStack = currentStack;
-
-    console.log("stack in setResponse",currentStack)
-
+    dataObj.stack = [...questionsToShow];
+    questionsToShow.pop();
+    setQuestionsToShow(questionsToShow)
     setActualResponses((prev) => [...prev, dataObj]);
 
   };
@@ -151,11 +148,13 @@ const page = () => {
 
   }
 
+  console.log("Actual",actualResponses)
+
   // Handling Next Question
   const nextQuestion = async () => {
 
     cost = 0;
-
+    let questionToShowArray = [];
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -177,7 +176,7 @@ const page = () => {
         }
       }
       case "dynamic": {
-
+        
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
         } else if (currentQuestionLocal) {
@@ -186,12 +185,10 @@ const page = () => {
           } else {
             if (selectedOption) {
               questionsToShowLocal.push(selectedOption);
-            } else if (selectedOption === "" && questionsToShowLocal.length) {
-              currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
             }
           }
           if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
+            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal[questionsToShowLocal.length-1]);
           } else {
             currentStateLocal = "post";
             currentQuestionLocal = null;
@@ -201,7 +198,6 @@ const page = () => {
         if (currentQuestionLocal) {
           break;
         }
-
       }
 
       case "post": {
@@ -222,9 +218,7 @@ const page = () => {
     setCurrentQuestion(currentQuestionLocal);
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
-    setCurrentStack([...questionsToShowLocal]);
     setResponseData();
-
 
     selectedData.map((op) => {
       cost = cost + op.price;
@@ -238,20 +232,20 @@ const page = () => {
   if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
     goToForm();
   }
-  console.log("Current Question Stack", currentStack)
-  console.log("actual array",actualResponses)
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
-
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
     setCurrentState(step.state);
+    setQuestionsToShow(step.stack);
     actualResponses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedOption);
     handlePrice("stepper");
   };
+
+  console.log("Question to show",questionsToShow)
 
   if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
     goToForm();
@@ -270,25 +264,25 @@ const page = () => {
             }}
           >
             {actualResponses.length > 0 && (
-              <CustomButton sx={{
-                color: "#ACACAC",
-                borderRadius: "50%",
-                padding: ".3em",
-              }}
-                onClick={backQuestion}>
-                <KeyboardBackspaceIcon sx={{
-                  color: "#ACACAC",
-                  border: "2px solid #ACACAC",
-                  borderRadius: "50%",
-                  padding: ".3em",
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#0069d9",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                  },
-                }} onClick={backQuestion} />
-              </CustomButton>
+             <CustomButton  sx={{
+              color: "#ACACAC",
+              borderRadius: "50%",
+              padding: ".3em",
+            }}
+            onClick={backQuestion}>
+               <KeyboardBackspaceIcon sx={{
+              color: "#ACACAC",
+              border: "2px solid #ACACAC",
+              borderRadius: "50%",
+              padding: ".3em",
+              ":hover": {
+                cursor: "pointer",
+                backgroundColor: "#0069d9",
+                border: "2px solid #fff",
+                color: "#fff",
+              },
+            }} onClick={backQuestion}/>
+             </CustomButton>
             )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
           </Box>
