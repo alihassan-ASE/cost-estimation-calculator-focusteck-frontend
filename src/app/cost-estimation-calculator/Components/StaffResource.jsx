@@ -6,16 +6,13 @@ import QuestionsComponent from "./Questions";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   flex: 1,
-  gap: 0.5,
-  margin: ".5em",
+  margin: " .5em",
   display: "flex",
   justifyContent: "space-between",
-  alignItems: "center",
   gap: "1em",
   border: "1px solid #ebebeb",
-  padding: ".5em 1em",
+  padding: "1em 1em",
   borderRadius: "2px",
-  gap: ".5em",
 }));
 
 const StaffResource = ({

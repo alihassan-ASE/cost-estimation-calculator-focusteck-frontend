@@ -10,6 +10,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   padding: "1em 2em",
   lineHeight: 1.5,
   backgroundColor: "#F8F8F9",
+  fontWeight: "normal",
   borderRadius: "3em",
   minwidth: "140px",
   display: "flex",
@@ -77,21 +78,23 @@ const TilesComponent = ({
 
   useEffect(() => {
     if (selectedOption && selectedOption.length > 0) {
-      setSelectedFormats(selectedOption[0] || []);
+      setSelectedFormats(selectedOption[0] || null);
 
-      if (selectedOption[0]?.opt) {
-        const isSelectedOptAvailable = options.some(
-          (option) => option.opt === selectedOption[0].opt
-        );
+      const isSelectedOptAvailable = options.some(
+        (option) => option.opt === selectedOption[0]?.opt
+      );
+
+      if (!isSelectedOptAvailable) {
         if (
-          !isSelectedOptAvailable &&
-          (selectedOption[0].opt !== "Other (Specify)" ||
-            selectedOption[0].opt !== "Other")
+          selectedOption[0]?.opt !== "Other (Specify)" &&
+          selectedOption[0]?.opt !== "Other"
         ) {
-          setOtherVal(selectedOption[0].opt);
+          setOtherVal(selectedOption[0]?.opt || null);
           selectedOption.length = 0;
         }
       }
+    } else {
+      setOtherVal("");
     }
   }, [selectedOption, options]);
 
@@ -103,15 +106,18 @@ const TilesComponent = ({
   };
 
   const submitOtherVal = () => {
-    if (!otherVal) {
+    const trimmedOtherVal = otherVal.trim();
+
+    if (!trimmedOtherVal) {
       setErrorMessage("Field cannot be empty");
       setCheckInputVal(true);
+      setInputField(true);
     }
-    if (otherVal) {
-      setOtherVal("");
+    if (trimmedOtherVal) {
       setErrorMessage(null);
       setInputField(false);
       setCheckInputVal(false);
+      setOtherVal(trimmedOtherVal);
     }
   };
 
@@ -171,6 +177,7 @@ const TilesComponent = ({
                     value={otherVal}
                     onChange={(e) => {
                       setOtherVal(e.target.value);
+                      setCheckInputVal(false);
                     }}
                     error={checkInputVal}
                     helperText={errorMessage}

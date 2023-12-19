@@ -29,14 +29,16 @@ const page = (props) => {
     }
   };
 
-
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
       selectedData?.forEach((data) => {
         const { nextQuestion } = data;
 
         if (nextQuestion == undefined) {
-          getResponsesData({ selectedData , nextQuestion: currentQuestion.nextQuestion });
+          getResponsesData({
+            selectedData,
+            nextQuestion: currentQuestion.nextQuestion,
+          });
         } else if (nextQuestion !== "") {
           getResponsesData({ selectedData, nextQuestion });
         } else if (currentQuestion.nextQuestion) {
@@ -54,18 +56,16 @@ const page = (props) => {
     }
   }, [selectedData]);
 
-
   useEffect(() => {
     setSelectedData([]);
   }, [currentQuestion]);
-
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
       <CustomTypography variant="h4">
         {currentQuestion?.question}
       </CustomTypography>
       <ShowOptions
-        typofUI={currentQuestion?.typeOfUI}
+        typeofUI={currentQuestion?.typeOfUI}
         typeOfSelection={currentQuestion?.typeofselection}
         options={currentQuestion?.options}
         selectedOptionPassToParent={selectedOptionPassToParent}

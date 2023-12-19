@@ -17,9 +17,8 @@ import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
-
 const CustomBackButton = styled(Button)(({ theme }) => ({
-"&:hover": {
+  "&:hover": {
     backgroundColor: "#fff",
   },
 }));
@@ -29,9 +28,6 @@ const CustomButton = styled(Button)(({ theme }) => ({
   borderRadius: ".5em",
   height: 405,
   width: "362px",
-  // display: "flex",
-  // justifyContent: "center",
-  // alignItems: "center",
   [theme.breakpoints.down("md")]: {
     width: "335px",
   },
@@ -48,7 +44,6 @@ const CustomCard = styled(Card)(({ theme }) => ({
   borderRadius: ".5em",
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
   [theme.breakpoints.down("md")]: {
     margin: "2em 0 ",
   },
@@ -81,7 +76,10 @@ const StaffComponent = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
   const [resource, setResource] = useState([]);
-  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState([]);
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
+    []
+  );
+
 
   const route = useRouter();
   const dataObj = {};
@@ -123,7 +121,6 @@ const StaffComponent = () => {
     }
   }, [values?.length]);
 
-  // Function to navigate on Form Page
   // Function to navigate on Form Page
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
@@ -335,30 +332,31 @@ const StaffComponent = () => {
             }}
           >
             {currentQuestionIndex > 0 && (
-              <CustomBackButton  sx={{
-                color: "#ACACAC",
-                borderRadius: "50%",
-                padding: ".3em",
-              }}              
-                 onClick={backQuestion}
-              >
-              <KeyboardBackspaceIcon
+              <CustomBackButton
                 sx={{
                   color: "#ACACAC",
-                  border: "2px solid #ACACAC",
                   borderRadius: "50%",
                   padding: ".3em",
-                  borderRadius: "50%",
-
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#0069d9",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                  },
                 }}
                 onClick={backQuestion}
-              />
+              >
+                <KeyboardBackspaceIcon
+                  sx={{
+                    color: "#ACACAC",
+                    border: "2px solid #ACACAC",
+                    borderRadius: "50%",
+                    padding: ".3em",
+                    borderRadius: "50%",
+
+                    ":hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#0069d9",
+                      border: "2px solid #fff",
+                      color: "#fff",
+                    },
+                  }}
+                  onClick={backQuestion}
+                />
               </CustomBackButton>
             )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
@@ -442,9 +440,7 @@ const StaffComponent = () => {
                       size="medium"
                       variant="contained"
                       sx={{ width: 150 }}
-                      onClick={() => {
-                        nextQuestion();
-                      }}
+                      onClick={nextQuestion}
                       disabled={isOptionSelected}
                     >
                       Next
@@ -471,9 +467,7 @@ const StaffComponent = () => {
                       size="medium"
                       variant="contained"
                       sx={{ width: 150 }}
-                      onClick={() => {
-                        nextQuestion();
-                      }}
+                      onClick={nextQuestion}
                       disabled={isOptionSelected}
                     >
                       Next
@@ -481,13 +475,7 @@ const StaffComponent = () => {
                   </Box>
                 )}
               </Grid>
-              <Grid
-                item
-                lg={4}
-                md={3}
-                sm={4}
-                xs={12}
-              >
+              <Grid item lg={4} md={3} sm={4} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
                   <Stepper
                     responses={actualResponses.responses}

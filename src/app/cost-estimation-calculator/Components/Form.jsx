@@ -24,7 +24,6 @@ const CustomBox = styled(Box)(({ theme }) => ({
 }));
 
 const Form = ({ response, getActualResponse }) => {
-
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
     userName: "",
@@ -37,32 +36,50 @@ const Form = ({ response, getActualResponse }) => {
   });
 
   const [checkInputVal, setCheckInputVal] = useState(false);
+
   const submitForm = (formInput) => {
-    if (!formInput.userName) {
+    const trimmedUserName = formInput.userName.trim();
+    const trimmedEmail = formInput.email.trim();
+
+    if (!trimmedUserName) {
       setErrorMessage({ usernameError: "Incorrect Name" });
       setCheckInputVal(true);
       setSubmitted(false);
     }
-    if (!formInput.email) {
+    if (!trimmedEmail) {
       setErrorMessage({ emailError: "Incorrect Email" });
       setCheckInputVal(true);
       setSubmitted(false);
     }
-    if (formInput.userName && formInput.email) {
-      setErrorMessage({ usernameError: null, emailError: null });
-      setCheckInputVal(false);
-      setSubmitted(true);
 
-      getActualResponse({
-        ...formInput,
-        ...response,
-      });
+    if (trimmedUserName && trimmedEmail) {
+      if (
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(trimmedEmail) &&
+        /^(?!\s+$).*/.test(trimmedUserName)
+      ) {
+        setErrorMessage({ usernameError: null, emailError: null });
+        setCheckInputVal(false);
+        setSubmitted(true);
 
-      postData({ ...response, ...formInput });
+        getActualResponse({
+          ...formInput,
+          ...response,
+        });
 
+        postData({ ...response, ...formInput });
+      } else if (!/^(?!\s+$).*/.test(trimmedUserName)) {
+        setErrorMessage({ usernameError: "Incorrect Name", emailError: "" });
+        setCheckInputVal(true);
+        setSubmitted(false);
+      } else if (
+        !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(trimmedEmail)
+      ) {
+        setErrorMessage({ usernameError: "", emailError: "Incorrect Email Format" });
+        setCheckInputVal(true);
+        setSubmitted(false);
+      }
     }
   };
-
 
   return (
     <Box>
@@ -90,6 +107,8 @@ const Form = ({ response, getActualResponse }) => {
                   userName: e.target.value,
                   email: formInput.email,
                 });
+                setErrorMessage({ usernameError: null, emailError: null });
+                setCheckInputVal(false);
               }}
               error={checkInputVal}
               helperText={errorMessage.usernameError}
@@ -107,6 +126,8 @@ const Form = ({ response, getActualResponse }) => {
                   userName: formInput.userName,
                   email: e.target.value,
                 });
+                setErrorMessage({ usernameError: null, emailError: null });
+                setCheckInputVal(false);
               }}
               error={checkInputVal}
               helperText={errorMessage.emailError}
