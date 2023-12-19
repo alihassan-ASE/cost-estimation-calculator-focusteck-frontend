@@ -28,8 +28,7 @@ const page = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
-  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] =
-    useState();
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState([]);
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
 
@@ -100,23 +99,27 @@ const page = () => {
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
+
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
     if (resp.selectedData || resp.selectedData.length > 3) {
       setIsOptionSelected(false);
     }
+
   };
 
 
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
     dataObj.selectedOption = selectedData;
     dataObj.question = currentQuestion;
     dataObj.state = currentState;
     dataObj.index = currentQuestionIndex;
     setActualResponses((prev) => [...prev, dataObj]);
+
   };
 
   // Handling Back Quesiton Functionality
@@ -130,7 +133,6 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption)
-
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
@@ -213,13 +215,13 @@ const page = () => {
 
     handlePrice("next", cost);
     setIsOptionSelected(true);
-
+    setLastQuestionSelectedOption([]);
 
   };
   if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
     goToForm();
   }
-  
+
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
@@ -232,6 +234,7 @@ const page = () => {
     handlePrice("stepper");
   };
 
+  console.log("Selected Option in Project",lastQuestionSelectedOption)
   if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
     goToForm();
   }
