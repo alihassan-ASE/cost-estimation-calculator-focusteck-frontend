@@ -95,7 +95,6 @@ const TilesComponent = ({
     }
   }, [selectedOption, options]);
 
-
   const checkSelectedOption = (value, price) => {
     const res =
       selectedFormats?.opt === value && selectedFormats?.price === price;
@@ -137,7 +136,7 @@ const TilesComponent = ({
               // selectedOption[0] = data;
             }}
             sx={
-              checkSelectedOption(data.opt , data.price)
+              checkSelectedOption(data.opt, data.price)
                 ? {
                     backgroundColor: "#0062cc",
                     color: "white",
@@ -148,8 +147,11 @@ const TilesComponent = ({
                 : {}
             }
           >
-            {data.opt ? data.opt : data}{" "}
-            {data.price ? `($${data.price})` : null}
+            <span>{data.opt ? data.opt : data}</span>&nbsp;
+            <span className="price">
+              {" "}
+              {data.price ? `($${data.price})` : null}
+            </span>
           </CustomButton>
           {data.opt === "Other (Specify)" || data.opt === "Other"
             ? inputField && (

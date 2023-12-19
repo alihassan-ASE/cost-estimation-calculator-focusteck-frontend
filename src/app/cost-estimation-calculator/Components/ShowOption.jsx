@@ -49,19 +49,19 @@ const ShowOption = ({
         ) : (
           typeOfSelection === "multiple" &&
           typofUI === "CheckBox" && (
-            <CheckBoxComponent
+            // <CheckBoxComponent
+            //   options={options}
+            //   selectedOptionPassToParent={selectedOptionPassToParent}
+            //   selectedOption={selectedOption}
+            // />
+
+            <MultipleComponent
               options={options}
               selectedOptionPassToParent={selectedOptionPassToParent}
               selectedOption={selectedOption}
             />
           )
         )
-
-        // <MultipleComponent
-        //   options={options}
-        //   selectedOptionPassToParent={selectedOptionPassToParent}
-        //   selectedOption={selectedOption}
-        // />
 
         // <DropDownComponent
         //   options={options}
