@@ -5,7 +5,34 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Typography
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  fontWeight: "normal",
+  fontFamily: [
+    "Proxima Nova",
+    "Poppins",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: 10,
+  },
+}));
 
 const RadioButtonComponent = ({
   options,
@@ -40,7 +67,10 @@ const RadioButtonComponent = ({
               key={index}
               value={data.opt}
               control={<Radio />}
-              label={`${data.opt} ($${data.price})`}
+              label=
+             { <CustomTypography variant="body1">
+              {`${data.opt} ($${data.price})`}
+            </CustomTypography>}
               checked={selectedFormat?.opt === data.opt}
             />
           ))}

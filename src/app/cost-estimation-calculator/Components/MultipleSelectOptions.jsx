@@ -14,6 +14,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     border: "none",
     minWidth: 200,
     padding: "1em 2em",
+    fontWeight: "normal",
     "&.Mui-disabled": {
       border: 0,
     },
@@ -31,6 +32,12 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     lineHeight: 1.5,
     backgroundColor: "#F8F8F9",
     borderRadius: "3em",
+    [theme.breakpoints.down("md")]: {
+      fontSize: 14,
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 10,
+    },
     fontFamily: [
       "Proxima Nova",
       "Poppins",
@@ -44,22 +51,40 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
-    ],
+    ].join(","),
   },
 }));
 
 const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
+  fontWeight: "normal",
   "&:hover": {
     backgroundColor: "#0069d9",
     borderColor: "#0062cc",
     boxShadow: "none",
     color: "white",
+    fontFamily: [
+      "Proxima Nova",
+      "Poppins",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
     transition:
       "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
   },
   "&.Mui-selected": {
     backgroundColor: "#0062cc",
     color: "white",
+    "& span.price": {
+      color: "#fff",
+    },
   },
   "&.Mui-selected:hover": {
     backgroundColor: "#0069d9",

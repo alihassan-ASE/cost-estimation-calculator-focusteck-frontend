@@ -23,9 +23,6 @@ const CustomButton = styled(Button)(({ theme }) => ({
   borderRadius: ".5em",
   height: 405,
   width: "362px",
-  // display: "flex",
-  // justifyContent: "center",
-  // alignItems: "center",
   [theme.breakpoints.down("md")]: {
     width: "335px",
   },
@@ -42,7 +39,6 @@ const CustomCard = styled(Card)(({ theme }) => ({
   borderRadius: ".5em",
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
   [theme.breakpoints.down("md")]: {
     margin: "2em 0 ",
   },
@@ -119,7 +115,6 @@ const StaffComponent = () => {
   }, [values?.length]);
 
   // Function to navigate on Form Page
-  // Function to navigate on Form Page
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
 
@@ -132,7 +127,6 @@ const StaffComponent = () => {
     }
   };
 
-  // Function To Handling Price
   // Function To Handling Price
   const handlePrice = (type) => {
     switch (type) {
@@ -339,7 +333,7 @@ const StaffComponent = () => {
             }}
           >
             {currentQuestionIndex > 0 && (
-              <KeyboardBackspaceIcon
+              <Button
                 sx={{
                   color: "#ACACAC",
                   border: "2px solid #ACACAC",
@@ -356,7 +350,26 @@ const StaffComponent = () => {
                 }}
                 onClick={backQuestion}
                 disable={values[0] ? false : true}
-              />
+              >
+                <KeyboardBackspaceIcon
+                  sx={{
+                    color: "#ACACAC",
+                    border: "2px solid #ACACAC",
+                    borderRadius: "50%",
+                    padding: ".3em",
+                    borderRadius: "50%",
+
+                    ":hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#0069d9",
+                      border: "2px solid #fff",
+                      color: "#fff",
+                    },
+                  }}
+                  onClick={backQuestion}
+                  disable={values[0] ? false : true}
+                />
+              </Button>
             )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
           </Box>
@@ -478,13 +491,7 @@ const StaffComponent = () => {
                   </Box>
                 )}
               </Grid>
-              <Grid
-                item
-                lg={4}
-                md={3}
-                sm={4}
-                xs={12}
-              >
+              <Grid item lg={4} md={3} sm={4} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
                   <Stepper
                     responses={actualResponses.responses}

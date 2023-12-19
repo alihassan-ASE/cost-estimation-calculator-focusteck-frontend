@@ -10,6 +10,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   padding: "1em 2em",
   lineHeight: 1.5,
   backgroundColor: "#F8F8F9",
+  fontWeight: "normal",
   borderRadius: "3em",
   minwidth: "140px",
   display: "flex",
@@ -108,7 +109,7 @@ const TilesComponent = ({
       setCheckInputVal(true);
     }
     if (otherVal) {
-      setOtherVal("");
+      // setOtherVal("");
       setErrorMessage(null);
       setInputField(false);
       setCheckInputVal(false);

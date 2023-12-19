@@ -28,7 +28,9 @@ const page = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
-  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState([]);
+  const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
+    []
+  );
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
 
@@ -42,7 +44,6 @@ const page = () => {
       setOrientation("vertical");
     }
   }, [isNarrowScreen]);
-
 
   useEffect(() => {
     const fetchData = () => {
@@ -62,9 +63,7 @@ const page = () => {
     fetchData();
   }, []);
 
-
   const handlePrice = (type, price) => {
-
     cost = 0;
     switch (type) {
       case "next": {
@@ -89,42 +88,36 @@ const page = () => {
 
   const goToForm = () => {
     try {
-      let data = JSON.stringify({ responses: actualResponses, totalCost: totalCost });
+      let data = JSON.stringify({
+        responses: actualResponses,
+        totalCost: totalCost,
+      });
       localStorage.setItem("Response", data);
-      route.push('/cost-estimation-calculator/submit');
-    } catch (error) {
-    }
+      route.push("/cost-estimation-calculator/submit");
+    } catch (error) {}
   };
-
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
-
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
     if (resp.selectedData || resp.selectedData.length > 3) {
       setIsOptionSelected(false);
     }
-
   };
-
-
 
   // setting Response in actual Array
   const setResponseData = () => {
-
     const dataObj = {};
     dataObj.selectedOption = selectedData;
     dataObj.question = currentQuestion;
     dataObj.state = currentState;
     dataObj.index = currentQuestionIndex;
     setActualResponses((prev) => [...prev, dataObj]);
-
   };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
-
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -132,14 +125,11 @@ const page = () => {
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
-    setLastQuestionSelectedOption(lastQuestion.selectedOption)
+    setLastQuestionSelectedOption(lastQuestion.selectedOption);
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
-
-  }
-
-
+  };
   // Handling Next Question
   const nextQuestion = async () => {
 
@@ -177,7 +167,9 @@ const page = () => {
             }
           }
           if (questionsToShowLocal.length) {
-            currentQuestionLocal = await getDynamicQuestion(questionsToShowLocal.pop());
+            currentQuestionLocal = await getDynamicQuestion(
+              questionsToShowLocal.pop()
+            );
           } else {
             currentStateLocal = "post";
             currentQuestionLocal = null;
@@ -191,10 +183,10 @@ const page = () => {
 
       case "post": {
         if (currentQuestionIndexLocal < postProjectQuestions.length) {
-          currentQuestionLocal = postProjectQuestions[currentQuestionIndexLocal];
+          currentQuestionLocal =
+            postProjectQuestions[currentQuestionIndexLocal];
           currentQuestionIndexLocal++;
-        }
-        else {
+        } else {
           currentQuestionIndexLocal++;
           break;
         }
@@ -216,9 +208,11 @@ const page = () => {
     handlePrice("next", cost);
     setIsOptionSelected(true);
     setLastQuestionSelectedOption([]);
-
   };
-  if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
+  if (
+    currentState === "post" &&
+    currentQuestionIndex > postProjectQuestions.length
+  ) {
     goToForm();
   }
 
@@ -234,8 +228,10 @@ const page = () => {
     handlePrice("stepper");
   };
 
-  console.log("Selected Option in Project",lastQuestionSelectedOption)
-  if (currentState === 'post' && currentQuestionIndex > postProjectQuestions.length) {
+  if (
+    currentState === "post" &&
+    currentQuestionIndex > postProjectQuestions.length
+  ) {
     goToForm();
   }
 
@@ -286,7 +282,6 @@ const page = () => {
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
-
                 />
                 <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
                   <Button

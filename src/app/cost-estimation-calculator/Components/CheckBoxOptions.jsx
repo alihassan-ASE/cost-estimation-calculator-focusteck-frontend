@@ -8,7 +8,32 @@ import {
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  fontWeight: "normal",
+  fontFamily: [
+    "Proxima Nova",
+    "Poppins",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: 10,
+  },
+}));
 const CheckBoxComponent = ({
   options,
   selectedOption,
@@ -19,7 +44,6 @@ const CheckBoxComponent = ({
   useEffect(() => {
     setSelectedFormats(selectedOption || []);
   }, [selectedOption]);
-
 
   const handleFormat = (event) => {
     const selectedFormat = options.find(
@@ -62,7 +86,11 @@ const CheckBoxComponent = ({
                   name={data.opt}
                 />
               }
-              label={`${data.opt} ($${data.price} )`}
+              label={
+                <CustomTypography variant="body1">
+                  {`${data.opt} ($${data.price})`}
+                </CustomTypography>
+              }
             />
           ))}
         </FormGroup>

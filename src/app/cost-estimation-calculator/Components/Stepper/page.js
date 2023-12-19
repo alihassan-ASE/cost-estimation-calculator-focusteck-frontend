@@ -45,12 +45,11 @@ export default function VerticalLinearStepper(props) {
   });
 
   useEffect(() => {
-    setActiveStep(responses?.length + 1);
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [handleStep]);
-  
+
   return (
     <CustomScrollableContainer ref={containerRef}>
       <Stepper activeStep={activeStep} orientation={orientation}>
@@ -75,7 +74,8 @@ export default function VerticalLinearStepper(props) {
                       cursor="pointer"
                       onClick={() => handleStep(step, index + 1)}
                     >
-                      <Typography>{resource.resource.toUpperCase()}</Typography>
+                      {resource.resource.toUpperCase()}
+
                       <Typography fontSize={"10px"} color={"gray"}>
                         {resource.resourceOption.opt} ($
                         {resource.resourceOption.price})
