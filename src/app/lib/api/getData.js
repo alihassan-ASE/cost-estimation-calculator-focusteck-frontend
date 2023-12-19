@@ -1,6 +1,5 @@
 import { baseUrl } from "../../../config/constants";
 
-
 export const getQuestions = async () => {
   try {
     const staffQuestion = await fetch(`${baseUrl}/resources`);
