@@ -199,7 +199,7 @@ const page = () => {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
           } else {
-            if (selectedOption) {
+            if (selectedOption && !questionsToShowLocal.includes(selectedOption)) {
               questionsToShowLocal.push(selectedOption);
             }
           }
