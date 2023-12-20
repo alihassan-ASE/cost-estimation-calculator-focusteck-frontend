@@ -124,7 +124,6 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
-    debugger;
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -135,7 +134,6 @@ const page = () => {
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
 
     lastQuestion.selectedOption.map((op) => {
-    console.log("Last Question",op) 
       setTotalCost((prev) => prev - op.price);
     });
 

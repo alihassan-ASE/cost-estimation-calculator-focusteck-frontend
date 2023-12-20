@@ -1,26 +1,16 @@
-
+"use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Stepper, Step, StepLabel, Typography } from "@mui/material";
+import { Box, Grid, Stepper, Step, StepLabel, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
 export default function VerticalLinearStepper(props) {
-  const { responses = [], changeActiveQuestion, orientation } = props;
+  const { responses, changeActiveQuestion, orientation } = props;
 
-  const activeStep = responses.length;
-
+  const leng = responses?.length;
+  const [activeStep, setActiveStep] = useState(leng - 1);
   const containerRef = useRef(null);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  }, [activeStep]);
-
-  const handleStep = (step, index) => {
-    changeActiveQuestion({ step, index });
-  };
-
-  const CustomScrollableContainer = styled("div")({
+  const [CustomScrollableContainer,SetCustomScrollableContainer] = useState(styled("div")({
     maxHeight: "60vh",
     maxWidth: "100%",
     minHeight: "50px",
@@ -43,37 +33,52 @@ export default function VerticalLinearStepper(props) {
     "&::-webkit-scrollbar-corner": {
       backgroundColor: "transparent",
     },
-  });
+  }));
 
-  const stepLabelStyles = {
-    "& .MuiStepIcon-root": {
-      width: "1.2rem",
-      height: "1.2rem",
-    },
-    "& .MuiStepLabel-label": {
-      fontSize: "0.7rem",
-    },
-    minWidth: "170px",
-    cursor: "pointer",
+  const handleStep = (step, index) => {
+    changeActiveQuestion({ step, index });
+    setActiveStep(index - 1);
   };
+
+  useEffect(() => {
+    setActiveStep(responses?.length + 1);
+  }, [responses?.length]);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [handleStep]);
 
   return (
     <CustomScrollableContainer ref={containerRef}>
       <Stepper activeStep={activeStep} orientation={orientation}>
-        {responses.map((step, index) => (
+        {responses?.map((step, index) => (
           <Step key={index}>
             {step.resources && index === 0 ? (
               <>
                 {step.resources.map((resource, resourceIndex) => (
                   <div key={resourceIndex}>
                     <StepLabel
-                      sx={stepLabelStyles}
+                      sx={{
+                        "& .MuiStepIcon-root": {
+                          width: "1.2rem",
+                          height: "1.2rem",
+                        },
+                        "& .MuiStepLabel-label": {
+                          fontSize: "0.7rem",
+                        },
+                        minWidth: "170px",
+                      }}
                       key={index}
+                      cursor="pointer"
                       onClick={() => handleStep(step, index + 1)}
                     >
                       {resource.resource.toUpperCase()}
+
                       <Typography fontSize={"10px"} color={"gray"}>
-                        {resource.resourceOption.opt} (${resource.resourceOption.price})
+                        {resource.resourceOption.opt} ($
+                        {resource.resourceOption.price})
                       </Typography>
                     </StepLabel>
                   </div>
@@ -81,20 +86,32 @@ export default function VerticalLinearStepper(props) {
               </>
             ) : (
               (step.selectedOption || step.selectedData) &&
-              (step.selectedOption || step.selectedData).map((selected, key) => (
-                <StepLabel
-                  sx={stepLabelStyles}
-                  key={key}
-                  onClick={() => handleStep(step, index + 1)}
-                >
-                  {step.question.label
-                    ? step.question.label.toUpperCase()
-                    : step.label.toUpperCase()}{" "}
-                  <Typography fontSize={"10px"} color={"gray"}>
-                    {selected.opt} (${selected.price})
-                  </Typography>
-                </StepLabel>
-              ))
+              (step.selectedOption || step.selectedData).map(
+                (selected, key) => (
+                  <StepLabel
+                    sx={{
+                      "& .MuiStepIcon-root": {
+                        width: "1.2rem",
+                        height: "1.2rem",
+                      },
+                      "& .MuiStepLabel-label": {
+                        fontSize: "0.7rem",
+                      },
+                      width: "170px",
+                    }}
+                    key={key}
+                    cursor="pointer"
+                    onClick={() => handleStep(step, index + 1)}
+                  >
+                    {step.question.label
+                      ? step.question.label.toUpperCase()
+                      : step.label.toUpperCase()}{" "}
+                    <Typography fontSize={"10px"} color={"gray"}>
+                      {selected.opt} (${selected.price})
+                    </Typography>
+                  </StepLabel>
+                )
+              )
             )}
           </Step>
         ))}
@@ -102,4 +119,3 @@ export default function VerticalLinearStepper(props) {
     </CustomScrollableContainer>
   );
 }
-
