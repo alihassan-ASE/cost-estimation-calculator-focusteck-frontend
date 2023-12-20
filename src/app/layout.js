@@ -92,10 +92,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function RootLayout({ children }) {
   const route = useRouter();
 
-  const scrollToChildren = () => {
-    const childrenSection = document.getElementById("scroll-down");
-    childrenSection.scrollIntoView({ behavior: "smooth" });
-  };
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <body style={{ margin: "0" }}>

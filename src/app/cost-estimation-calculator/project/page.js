@@ -123,8 +123,12 @@ const page = () => {
         responses: actualResponses,
         totalCost: totalCost,
       });
+     if(data){
       localStorage.setItem("Response", data);
       route.push("/cost-estimation-calculator/submit");
+     }else{
+      router.push('/cost-estimation-calculator')
+     }
     } catch (error) {}
   };
 
@@ -199,7 +203,7 @@ const page = () => {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
           } else {
-            if (selectedOption && !questionsToShowLocal.includes(selectedOption)) {
+            if (selectedOption && !questionsToShowLocal.includes(selectedOption) ) {
               questionsToShowLocal.push(selectedOption);
             }
           }

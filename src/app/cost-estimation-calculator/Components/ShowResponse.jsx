@@ -1,6 +1,5 @@
 import { Box, Typography, Chip, Button } from "@mui/material";
 import React from "react";
-import { useRouter } from "next/navigation";
 import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)({
@@ -21,7 +20,6 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
-  const route = useRouter();
   return (
     <>
       <Box
