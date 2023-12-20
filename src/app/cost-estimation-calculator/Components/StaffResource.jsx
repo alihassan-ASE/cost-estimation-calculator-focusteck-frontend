@@ -71,15 +71,6 @@ const StaffResource = ({
       });
     } else if (label === "Number of Resources") {
       setCurrentResource({ ...currentResource, numOfResources: data });
-      setSaveButton(true);
-    }
-    if (
-      currentResource.resourceOption &&
-      currentResource.resourceOption &&
-      currentResource.seniorityLevel &&
-      currentResource.numOfResources
-    ) {
-      setSaveButton(true);
     }
 
     setLabel(label);
@@ -97,6 +88,16 @@ const StaffResource = ({
     return options[0]?.typeofselection;
   }, [options]);
 
+  useEffect(() => {
+    if (
+      currentResource.resourceOption &&
+      currentResource.resourceOption &&
+      currentResource.seniorityLevel &&
+      currentResource.numOfResources
+    ) {
+      setSaveButton(true);
+    }
+  }, [currentResource]);
 
   return (
     <Box
@@ -306,7 +307,15 @@ const StaffResource = ({
       {showDropdown ? (
         <Box sx={{ margin: "1em 0" }}>
           <Button
-            disabled={saveButton ? false : true}
+            disabled={
+              currentResource.resource &&
+              currentResource.resourceOption &&
+              currentResource.seniorityLevel &&
+              currentResource.numOfResources &&
+              saveButton
+                ? false
+                : true
+            }
             variant="contained"
             onClick={() => {
               setSaveButton(false);
