@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, TextField, Button, InputLabel, Typography } from "@mui/material";
 import { postData } from "../../lib/api/postData";
 import { styled } from "@mui/material/styles";
 import ShowResponse from "./ShowResponse";
+import { useRouter } from "next/navigation";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "3em auto",
@@ -24,6 +25,18 @@ const CustomBox = styled(Box)(({ theme }) => ({
 }));
 
 const Form = ({ response, getActualResponse }) => {
+  const [auth , setAuth] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if responses exist, if not, redirect to '/cost-estimation-calculator'
+    if (!response?.responses.length) {
+      router.push('/');
+    } else {
+      setAuth(true); // Set authentication status
+    }
+  }, [ ]);
+
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
     userName: "",
@@ -83,7 +96,9 @@ const Form = ({ response, getActualResponse }) => {
 
   return (
     <Box>
-      <CustomBox
+      {
+        auth ?
+        <CustomBox
         sx={{
           display: submitted ? "none" : "block",
         }}
@@ -136,7 +151,9 @@ const Form = ({ response, getActualResponse }) => {
             <Button
               variant="contained"
               onClick={() => {
-                submitForm(formInput);
+          
+                  submitForm(formInput);
+               
               }}
             >
               Submit
@@ -144,6 +161,8 @@ const Form = ({ response, getActualResponse }) => {
           </Box>
         </form>
       </CustomBox>
+      :null
+      }
       {submitted ? (
         <ShowResponse response={{ ...response, ...formInput }} />
       ) : null}
@@ -151,4 +170,4 @@ const Form = ({ response, getActualResponse }) => {
   );
 };
 
-export default Form;
+export default Form; 

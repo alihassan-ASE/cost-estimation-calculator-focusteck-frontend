@@ -10,6 +10,8 @@ const Home = () => {
   };
 
   return (
+
+
     <Box sx={{ display: "flex", padding: "3em 0" }}>
       <Button
         sx={{ width: "300px", margin: "0 .5em" }}
@@ -19,6 +21,7 @@ const Home = () => {
         Start
       </Button>
     </Box>
+
   );
 };
 
