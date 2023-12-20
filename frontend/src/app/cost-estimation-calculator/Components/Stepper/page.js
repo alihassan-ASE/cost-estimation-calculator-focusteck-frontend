@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Grid, Stepper, Step, StepLabel, Typography } from "@mui/material";
+// import { styled } from "@mui/system";
 import styled from "styled-components";
 
 export default function VerticalLinearStepper(props) {
