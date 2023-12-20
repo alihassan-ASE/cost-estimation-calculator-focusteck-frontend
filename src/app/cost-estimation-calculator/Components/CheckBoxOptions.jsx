@@ -33,6 +33,12 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     fontSize: 10,
   },
+  "& span.price": {
+    color: "#3f37c9",
+  },
+  "&:focus span.price": {
+    color: "white",
+  },
 }));
 const CheckBoxComponent = ({
   options,
@@ -88,7 +94,11 @@ const CheckBoxComponent = ({
               }
               label={
                 <CustomTypography variant="body1">
-                  {`${data.opt} ($${data.price})`}
+                  <span>{data.opt ? data.opt : data}</span>&nbsp;
+                  <span className="price">
+                    {" "}
+                    {data.price ? `($${data.price})` : null}
+                  </span>
                 </CustomTypography>
               }
             />

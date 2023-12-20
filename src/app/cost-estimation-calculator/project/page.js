@@ -200,7 +200,9 @@ const page = () => {
             questionsToShowLocal.push(...selectedOption);
           } else {
             if (selectedOption) {
-              questionsToShowLocal.push(selectedOption);
+              
+                questionsToShowLocal.push(selectedOption);
+            
             }
           }
           if (questionsToShowLocal.length) {
@@ -232,6 +234,7 @@ const page = () => {
         null;
       }
     }
+
     setCurrentState(currentStateLocal);
     setCurrentQuestion(currentQuestionLocal);
     setCurrentQuestionIndex(currentQuestionIndexLocal);
@@ -271,7 +274,7 @@ const page = () => {
   ) {
     goToForm();
   }
-
+ 
   return (
     <>
       {fetchQuesitons !== null ? (

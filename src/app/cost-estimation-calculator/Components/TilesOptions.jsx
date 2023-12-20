@@ -91,6 +91,7 @@ const TilesComponent = ({
         ) {
           setOtherVal(selectedOption[0]?.opt || null);
           selectedOption.length = 0;
+          setInputField(true)
         }
       }
     } else {
