@@ -178,6 +178,7 @@ const TilesComponent = ({
                     onChange={(e) => {
                       setOtherVal(e.target.value);
                       setCheckInputVal(false);
+                      setErrorMessage(null);
                     }}
                     error={checkInputVal}
                     helperText={errorMessage}

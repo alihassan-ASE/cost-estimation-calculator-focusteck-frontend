@@ -74,9 +74,9 @@ const DropDownComponent = ({
     if (Array.isArray(selectedOption)) {
       setSelectedFormats(selectedOption[0]);
     } else {
-      setSelectedFormats(selectedOption);
+    setSelectedFormats(selectedOption);
     }
-  }, [selectedOption]);
+  }, [selectedOption])
 
   return (
     <StyledFormControl>
@@ -84,11 +84,7 @@ const DropDownComponent = ({
       <Select
         sx={{ height: "65px", width: "270px" }}
         autoFocus={false}
-        value={
-          disable
-            ? null
-            : selectedFormats
-        }
+        value={disable ? null : selectedFormats}
         onChange={(e) => {
           const selectedObject = e.target.value;
           setSelectedFormats(selectedObject);

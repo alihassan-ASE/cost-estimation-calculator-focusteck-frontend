@@ -10,9 +10,9 @@ const Home = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", padding: "3em 0" }}>
+    <Box sx={{ display: "flex", padding: "3em 0" }}>
       <Button
-        sx={{ width: "300px" }}
+        sx={{ width: "300px", margin: "0 .5em" }}
         variant="contained"
         onClick={() => goToRoute("/cost-estimation-calculator")}
       >

@@ -17,8 +17,43 @@ import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
+const CustomNextButton = styled(Button)(({ theme }) => ({
+  width: 150,
+  fontFamily: [
+    "Proxima Nova",
+    "Poppins",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+    padding: ".7em 1.3em",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: 100,
+    fontSize: 10,
+    padding: ".7em 1.7em",
+  },
+}));
 const CustomBackButton = styled(Button)(({ theme }) => ({
   "&:hover": {
+    backgroundColor: "#fff",
+  },
+  "&:selected": {
+    backgroundColor: "#fff",
+  },
+  "&:focus": {
+    backgroundColor: "#fff",
+  },
+  "&:active": {
     backgroundColor: "#fff",
   },
 }));
@@ -79,7 +114,7 @@ const StaffComponent = () => {
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
-
+  const [stepperState, setStepperState] = useState(false);
   const route = useRouter();
   const dataObj = {};
 
@@ -221,6 +256,7 @@ const StaffComponent = () => {
     setCurrentState(false);
     setButtonState(true);
     setIsOptionSelected((prev) => !prev);
+    setStepperState(true);
 
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -287,7 +323,6 @@ const StaffComponent = () => {
       }
     }
   };
-
   // Returning selected Resources
   const returnResources = () => {
     const tags = [];
@@ -388,38 +423,37 @@ const StaffComponent = () => {
                   )}
                 </Box>
               </Box>
-              {/* {values[0] && ( */}
               <Box
                 sx={{
                   margin: "2em 1em",
                 }}
               >
-                <Button
-                  // disabled={!buttonState}
+                <CustomNextButton
                   size="medium"
                   variant="contained"
-                  sx={{ width: 150 }}
                   onClick={() => {
                     nextQuestion();
                   }}
                   disabled={values[0] ? false : true}
                 >
                   Next
-                </Button>
+                </CustomNextButton>
               </Box>
               {/* )} */}
             </>
           ) : isNarrowScreen ? (
-            <Grid container spacing={{ xs: 5, sm: 2, md: 3, lg: 4, xl: 5 }}>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
-                {actualResponses.length || actualResponses.responses ? (
-                  <Stepper
-                    responses={actualResponses.responses}
-                    changeActiveQuestion={changeActiveQuestion}
-                    orientation={orientation}
-                  />
-                ) : null}
-              </Grid>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+              {stepperState && (
+                <Grid item lg={4} md={3} sm={4} xs={12}>
+                  {actualResponses.length || actualResponses.responses ? (
+                    <Stepper
+                      responses={actualResponses.responses}
+                      changeActiveQuestion={changeActiveQuestion}
+                      orientation={orientation}
+                    />
+                  ) : null}
+                </Grid>
+              )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
                 <Question
                   currentQuestion={currentQuestion}
@@ -433,7 +467,7 @@ const StaffComponent = () => {
                       margin: "2em 0",
                     }}
                   >
-                    <Button
+                    <CustomNextButton
                       size="medium"
                       variant="contained"
                       sx={{ width: 150 }}
@@ -441,7 +475,7 @@ const StaffComponent = () => {
                       disabled={isOptionSelected}
                     >
                       Next
-                    </Button>
+                    </CustomNextButton>
                   </Box>
                 )}
               </Grid>
@@ -460,7 +494,7 @@ const StaffComponent = () => {
                       margin: "2em 0",
                     }}
                   >
-                    <Button
+                    <CustomNextButton
                       size="medium"
                       variant="contained"
                       sx={{ width: 150 }}
@@ -468,7 +502,7 @@ const StaffComponent = () => {
                       disabled={isOptionSelected}
                     >
                       Next
-                    </Button>
+                    </CustomNextButton>
                   </Box>
                 )}
               </Grid>
@@ -485,7 +519,7 @@ const StaffComponent = () => {
           )}
         </Box>
       ) : (
-        <Box sx={{ margin: "2em 0" }}>Loading .....</Box>
+        <Box sx={{ margin: "2em 1em" }}>Loading .....</Box>
       )}
     </Box>
   );

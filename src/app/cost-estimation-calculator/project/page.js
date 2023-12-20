@@ -18,6 +18,33 @@ const CustomButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#fff",
   },
 }));
+
+const CustomNextButton = styled(Button)(({ theme }) => ({
+  width: 150,
+  fontFamily: [
+    "Proxima Nova",
+    "Poppins",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+    margin: "2em 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: 100,
+    fontSize: 10,
+    margin: "1.5em 0",
+  },
+}));
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
@@ -41,6 +68,7 @@ const page = () => {
   );
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
+  const [stepperState, setStepperState] = useState(false);
 
   const route = useRouter();
   let cost;
@@ -146,7 +174,7 @@ const page = () => {
   // Handling Next Question
   const nextQuestion = async () => {
     cost = 0;
-
+    setStepperState(true);
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -293,31 +321,32 @@ const page = () => {
           </Box>
 
           {isNarrowScreen ? (
-            <Grid container spacing={{ xs: 5, sm: 2, md: 5, lg: 4, xl: 5 }}>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
-                <Stepper
-                  responses={actualResponses}
-                  changeActiveQuestion={changeActiveQuestion}
-                  orientation={orientation}
-                />
-              </Grid>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 5, lg: 4, xl: 5 }}>
+              {actualResponses.length > 0 && stepperState && (
+                <Grid item lg={4} md={3} sm={4} xs={12}>
+                  <Stepper
+                    responses={actualResponses}
+                    changeActiveQuestion={changeActiveQuestion}
+                    orientation={orientation}
+                  />
+                </Grid>
+              )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
                 <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
                 />
-                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
-                  <Button
+                <Box sx={{ display: "flex", gap: "2em" }}>
+                  <CustomNextButton
                     disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
-                    sx={{ width: 150 }}
                     vairant="contained"
                     onClick={nextQuestion}
                   >
                     Next
-                  </Button>
+                  </CustomNextButton>
                 </Box>
               </Grid>
             </Grid>
@@ -329,8 +358,8 @@ const page = () => {
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
                 />
-                <Box sx={{ display: "flex", gap: "2em", margin: "3em 0" }}>
-                  <Button
+                <Box sx={{ display: "flex", gap: "2em", }}>
+                  <CustomNextButton
                     disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
@@ -339,7 +368,7 @@ const page = () => {
                     onClick={nextQuestion}
                   >
                     Next
-                  </Button>
+                  </CustomNextButton>
                 </Box>
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
@@ -353,7 +382,7 @@ const page = () => {
           )}
         </Box>
       ) : (
-        <Box sx={{ margin: "2em 0" }}>Loading .....</Box>
+        <Box sx={{ margin: "2em 1em" }}>Loading .....</Box>
       )}
     </>
   );

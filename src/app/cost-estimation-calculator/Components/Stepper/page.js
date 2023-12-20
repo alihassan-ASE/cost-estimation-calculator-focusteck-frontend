@@ -22,7 +22,7 @@ export default function VerticalLinearStepper(props) {
   const CustomScrollableContainer = styled("div")({
     maxHeight: "60vh",
     maxWidth: "100%",
-    minHeight: "50px",
+    minHeight: "70px",
     margin: "1em 0",
     overflow: "auto",
     "&::-webkit-scrollbar": {
@@ -45,8 +45,11 @@ export default function VerticalLinearStepper(props) {
   });
 
   useEffect(() => {
-    if (containerRef.current) {
+    if (containerRef.current && orientation === "vertical") {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+    if (containerRef.current && orientation === "horizontal") {
+      containerRef.current.scrollLeft = containerRef.current.scrollWidth;
     }
   }, [handleStep]);
 

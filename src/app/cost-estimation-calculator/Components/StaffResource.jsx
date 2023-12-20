@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, Typography, Button, Chip, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
 import QuestionsComponent from "./Questions";
 
 const CustomButton = styled(Button)(({ theme }) => ({
@@ -63,7 +64,11 @@ const StaffResource = ({
     } else if (label === "Resource Option") {
       setCurrentResource({ ...currentResource, resourceOption: data });
     } else if (label === "Seniority Level") {
-      setCurrentResource({ ...currentResource, seniorityLevel: data });
+      setCurrentResource({
+        ...currentResource,
+        seniorityLevel: data,
+        numOfResources: "",
+      });
     } else if (label === "Number of Resources") {
       setCurrentResource({ ...currentResource, numOfResources: data });
       setSaveButton(true);
@@ -91,6 +96,7 @@ const StaffResource = ({
   const typeOfSelection = useMemo(() => {
     return options[0]?.typeofselection;
   }, [options]);
+
 
   return (
     <Box
@@ -164,7 +170,7 @@ const StaffResource = ({
                 !currentResource?.resourceOption?.opt
                   ? null
                   : currentResource?.resourceOption?.opt
-                  ? currentResource?.resourceOption?.opt
+                  ? currentResource?.resourceOption
                   : selectedOption?.length
                   ? selectedOption[index]?.resourceOption?.opt
                   : null

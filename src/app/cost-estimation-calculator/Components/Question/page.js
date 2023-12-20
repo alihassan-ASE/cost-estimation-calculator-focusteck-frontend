@@ -17,7 +17,6 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const page = (props) => {
-  // const [selectedOption, setSelectedOption] = useState([]);
   let {
     currentQuestion,
     getResponsesData,
@@ -65,6 +64,7 @@ const page = (props) => {
   useEffect(() => {
     setSelectedData([]);
   }, [currentQuestion]);
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
       <CustomTypography variant="h4">

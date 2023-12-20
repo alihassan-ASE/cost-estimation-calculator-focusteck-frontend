@@ -10,7 +10,6 @@ const QuestionsComponent = ({
   disable,
   selectedOption,
   selectedOptionPassToParent,
-  otherInput,
   typeofUI,
   typeOfSelection,
 }) => {
@@ -24,7 +23,6 @@ const QuestionsComponent = ({
         selectedOptionPassToParent={selectedOptionPassToParent}
         label={label}
         disable={disable}
-        otherInput={otherInput}
       />
     </Box>
   );
