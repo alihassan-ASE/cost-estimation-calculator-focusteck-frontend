@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -91,8 +91,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function RootLayout({ children }) {
   const route = useRouter();
+
+  const scrollToChildren = () => {
+    const childrenSection = document.getElementById("scroll-down");
+    childrenSection.scrollIntoView({ behavior: "smooth" });
+  };
   return (
-    <html lang="en">
+    <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <body style={{ margin: "0" }}>
         <Box
           style={{

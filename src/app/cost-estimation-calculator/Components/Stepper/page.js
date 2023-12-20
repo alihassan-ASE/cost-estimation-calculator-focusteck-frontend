@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Grid, Stepper, Step, StepLabel, Typography } from "@mui/material";
-import { styled } from "@mui/system";
+// import { styled } from "@mui/system";
+import styled from "styled-components";
 
 export default function VerticalLinearStepper(props) {
   const { responses, changeActiveQuestion, orientation } = props;
@@ -9,6 +10,58 @@ export default function VerticalLinearStepper(props) {
   const leng = responses?.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
   const containerRef = useRef(null);
+
+  // const [CustomScrollableContainer,SetCustomScrollableContainer] = useState(styled("div")({
+  //   maxHeight: "60vh",
+  //   maxWidth: "100%",
+  //   minHeight: "70px",
+  //   margin: "1em 0",
+  //   overflow: "auto",
+  //   "&::-webkit-scrollbar": {
+  //     width: "5px",
+  //     height: "5px",
+  //   },
+  //   "&::-webkit-scrollbar-track": {
+  //     backgroundColor: "#f1f1f1",
+  //   },
+  //   "&::-webkit-scrollbar-thumb": {
+  //     backgroundColor: "#B1B1B1",
+  //     borderRadius: "5px",
+  //   },
+  //   "&::-webkit-scrollbar-thumb:hover": {
+  //     backgroundColor: "#7E7E7E",
+  //   },
+  //   "&::-webkit-scrollbar-corner": {
+  //     backgroundColor: "transparent",
+  //   },
+  // }));
+
+  const [CustomScrollableContainer] = useState(
+    styled.div({
+      maxHeight: "60vh",
+      maxWidth: "100%",
+      minHeight: "70px",
+      margin: "1em 0",
+      overflow: "auto",
+      "&::-webkit-scrollbar": {
+        width: "5px",
+        height: "5px",
+      },
+      "&::-webkit-scrollbar-track": {
+        backgroundColor: "#f1f1f1",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#B1B1B1",
+        borderRadius: "5px",
+      },
+      "&::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: "#7E7E7E",
+      },
+      "&::-webkit-scrollbar-corner": {
+        backgroundColor: "transparent",
+      },
+    })
+  );
 
   const handleStep = (step, index) => {
     changeActiveQuestion({ step, index });
@@ -18,31 +71,6 @@ export default function VerticalLinearStepper(props) {
   useEffect(() => {
     setActiveStep(responses?.length + 1);
   }, [responses?.length]);
-
-  const CustomScrollableContainer = styled("div")({
-    maxHeight: "60vh",
-    maxWidth: "100%",
-    minHeight: "70px",
-    margin: "1em 0",
-    overflow: "auto",
-    "&::-webkit-scrollbar": {
-      width: "5px",
-      height: "5px",
-    },
-    "&::-webkit-scrollbar-track": {
-      backgroundColor: "#f1f1f1",
-    },
-    "&::-webkit-scrollbar-thumb": {
-      backgroundColor: "#B1B1B1",
-      borderRadius: "5px",
-    },
-    "&::-webkit-scrollbar-thumb:hover": {
-      backgroundColor: "#7E7E7E",
-    },
-    "&::-webkit-scrollbar-corner": {
-      backgroundColor: "transparent",
-    },
-  });
 
   useEffect(() => {
     if (containerRef.current && orientation === "vertical") {

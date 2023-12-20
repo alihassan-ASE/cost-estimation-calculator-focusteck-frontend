@@ -19,6 +19,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
+  // margin: "2em 0",
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -75,7 +76,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
   height: 340,
   width: "294px",
   padding: "2em 1.5em",
-  margin: "2em 1em",
+  margin: "1em",
   borderRadius: ".5em",
   display: "flex",
   justifyContent: "center",

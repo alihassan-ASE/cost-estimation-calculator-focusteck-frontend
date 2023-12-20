@@ -21,6 +21,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
+  margin: "2em 0",
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -58,8 +59,6 @@ const page = () => {
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
-
-  const [currentStack, setCurrentStack] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
 
@@ -106,10 +105,6 @@ const page = () => {
         setTotalCost((prev) => prev + price);
         break;
       }
-      case "back": {
-        setTotalCost((prev) => prev - price);
-        break;
-      }
       case "stepper": {
         actualResponses.map((obj) => {
           obj.selectedOption.map((selected) => {
@@ -150,14 +145,14 @@ const page = () => {
     dataObj.question = currentQuestion;
     dataObj.state = currentState;
     dataObj.index = currentQuestionIndex;
-    dataObj.currentStack = currentStack;
-
+    dataObj.stack = [...questionsToShow];
+    questionsToShow.pop();
+    setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
   };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
-    // setOtherInput(false);
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -166,6 +161,7 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
+
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
@@ -174,6 +170,7 @@ const page = () => {
   // Handling Next Question
   const nextQuestion = async () => {
     cost = 0;
+    let questionToShowArray = [];
     setStepperState(true);
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
@@ -204,15 +201,11 @@ const page = () => {
           } else {
             if (selectedOption) {
               questionsToShowLocal.push(selectedOption);
-            } else if (selectedOption === "" && questionsToShowLocal.length) {
-              currentQuestionLocal = await getDynamicQuestion(
-                questionsToShowLocal.pop()
-              );
             }
           }
           if (questionsToShowLocal.length) {
             currentQuestionLocal = await getDynamicQuestion(
-              questionsToShowLocal.pop()
+              questionsToShowLocal[questionsToShowLocal.length - 1]
             );
           } else {
             currentStateLocal = "post";
@@ -243,7 +236,6 @@ const page = () => {
     setCurrentQuestion(currentQuestionLocal);
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
-    setCurrentStack([...questionsToShowLocal]);
     setResponseData();
 
     selectedData.map((op) => {
@@ -264,10 +256,10 @@ const page = () => {
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
-
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
     setCurrentState(step.state);
+    setQuestionsToShow(step.stack);
     actualResponses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedOption);
     handlePrice("stepper");
@@ -358,7 +350,7 @@ const page = () => {
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
                 />
-                <Box sx={{ display: "flex", gap: "2em", }}>
+                <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
                     size="medium"
