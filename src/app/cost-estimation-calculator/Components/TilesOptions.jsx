@@ -15,7 +15,20 @@ const CustomButton = styled(Button)(({ theme }) => ({
   minwidth: "140px",
   display: "flex",
   flexWrap: "wrap",
-  // fontFamily: ["Poppins"].join(","),
+  fontFamily: [
+    "Proxima Nova",
+    "Poppins",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
   "&:hover": {
     backgroundColor: "#0069d9",
     borderColor: "#0062cc",
@@ -112,11 +125,7 @@ const TilesComponent = ({
   return (
     <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
       {options?.map((data, index) => (
-        <ThemeProvider
-          sx={{ display: "inline-block" }}
-          key={index}
-          theme={buttonFont}
-        >
+        <Box sx={{ display: "inline-block" }} key={index} >
           <CustomButton
             value={
               selectedFormats?.opt && selectedFormats?.price
@@ -196,7 +205,7 @@ const TilesComponent = ({
                 </Box>
               )
             : null}
-        </ThemeProvider>
+        </Box>
       ))}
     </Box>
   );
