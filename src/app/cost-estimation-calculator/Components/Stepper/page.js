@@ -55,20 +55,16 @@ export default function VerticalLinearStepper(props) {
       containerRef.current.scrollLeft = containerRef.current.scrollWidth;
     }
   }, [handleStep]);
-  console.log("responses: ", responses);
 
   return (
     <Box
       sx={{
         padding: orientation === "vertical" ? "2em 1em" : ".5em 1em",
-        boxShadow:
-          responses.length <= 0 ? "none" : "0 0 5px 0 rgba(163,163,163,0.75)",
+        boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
         borderRadius: "5px",
       }}
     >
-      {responses.length ? (
         <Typography sx={{ textAlign: "center" }}>Summary</Typography>
-      ) : null}
       <Box
         sx={{
           maxHeight: orientation === "horizontal" ? "60vh" : "max-content",

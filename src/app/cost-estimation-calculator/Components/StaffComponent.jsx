@@ -64,7 +64,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
   borderRadius: ".5em",
-  height: 405,
+  height: 445,
   width: "362px",
   [theme.breakpoints.down("md")]: {
     width: "335px",
@@ -315,14 +315,18 @@ const StaffComponent = () => {
         setActualResponses({ responses: newArray });
         setCurrentQuestionIndex(currentQuestionIndex - 1);
         setLastQuestionSelectedOption(lastQuestion.selectedData);
+        setIsOptionSelected(false)
       }
 
-      if (actualResponses.responses.length > 0) {
+      
+
+      if (actualResponses.responses.length >= 0) {
         let totalPriceToSubtract = 0;
         if (lastQuestion) {
-          if (actualResponses.responses.length === 0) {
+          if (lastQuestion.resources?.length ) {
             if (lastQuestion.resources && lastQuestion.resources.length > 0) {
               lastQuestion.resources.forEach((resource) => {
+
                 if (resource.resourceOption && resource.resourceOption.price) {
                   totalPriceToSubtract += resource.resourceOption.price;
                 }
@@ -340,8 +344,7 @@ const StaffComponent = () => {
               });
             }
           }
-
-          setTotalCost((prev) => Math.max(0, prev - totalPriceToSubtract));
+          setTotalCost((prev) =>prev - totalPriceToSubtract);
         }
       }
     }

@@ -19,7 +19,6 @@ import {
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from '@mui/material/CircularProgress';
-
 import { styled } from "@mui/material/styles";
 
 
@@ -224,6 +223,7 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
+    setIsOptionSelected(false)
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
@@ -306,8 +306,9 @@ const page = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
+    // setTimeout(() => {
     setLoaderState((prev) => !prev)
-
+    // }, 500);
     selectedData.map((op) => {
       cost = cost + op.price;
     });
@@ -329,7 +330,6 @@ const page = () => {
     slideIn.current = true;
   }, [actualResponses.length]);
 
-  console.log("actual responses: ", actualResponses);
   const slider = function () {
     // setSlideIn(false);
     // setTimeout(() => {
@@ -391,15 +391,17 @@ const page = () => {
                 </Grid>
               )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                {!loaderState ? <Question
-                  currentQuestion={currentQuestion}
-                  getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelectedOption}
-                /> :
-                <Box sx={{ margin: "5em 2em",display:"flex",alignItems:"center" }}><CircularProgress />
-              </Box>
+                {!loaderState ?
+                  <Question
+                    currentQuestion={currentQuestion}
+                    getResponsesData={getResponsesData}
+                    selectedOption={lastQuestionSelectedOption}
+                  />
+                  :
+                  <Box sx={{ margin: "5em 2em", display: "flex", alignItems: "center" }}><CircularProgress />
+                  </Box>
                 }
-                
+
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}

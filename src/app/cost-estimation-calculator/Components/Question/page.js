@@ -1,16 +1,13 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import ShowOptions from "../ShowOption";
-import { Typography, Box, Slide, Grid } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
   fontSize: "2em",
   display: "flex",
   flexWrap: "wrap",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
   [theme.breakpoints.down("md")]: {
     fontSize: "1.5em",
   },
@@ -19,23 +16,22 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const page = ({
-  currentQuestion,
-  getResponsesData,
-  selectedOption,
-  typeofUI,
-  typeOfSelection,
-}) => {
+const page = (props) => {
+  let {
+    currentQuestion,
+    getResponsesData,
+    selectedOption,
+    typeofUI,
+    typeOfSelection,
+  } = props;
+
   const [selectedData, setSelectedData] = useState([]);
-
-  const linkRef = useRef(null);
-
   const selectedOptionPassToParent = (data) => {
     if (Array.isArray(data)) {
       setSelectedData([...data]);
     } else {
       setSelectedData([data]);
-    }    
+    }
   };
 
   useEffect(() => {
@@ -70,26 +66,19 @@ const page = ({
   }, [currentQuestion]);
 
   return (
-      <Box
-        ref={linkRef}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1em",
-        }}
-        key={currentQuestion?.question}
-      >
-        <CustomTypography variant="h4">
-          {currentQuestion?.question}
-        </CustomTypography>
-        <ShowOptions
-          typeofUI={typeofUI || currentQuestion?.typeOfUI}
-          typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}
-          options={currentQuestion?.options}
-          selectedOptionPassToParent={selectedOptionPassToParent}
-          selectedOption={selectedOption}
-        />
-      </Box>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
+      
+          <CustomTypography variant="h4">
+            {currentQuestion?.question}
+          </CustomTypography>
+      <ShowOptions
+        typeofUI={typeofUI || currentQuestion?.typeOfUI}
+        typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}
+        options={currentQuestion?.options}
+        selectedOptionPassToParent={selectedOptionPassToParent}
+        selectedOption={selectedOption}
+      />
+    </Box>
   );
 };
 
