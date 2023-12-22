@@ -20,6 +20,9 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 }));
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
   "&:hover": {
     backgroundColor: "#0069d9",
     borderColor: "#0062cc",
@@ -88,6 +91,7 @@ const DropDownComponent = ({
     if (Array.isArray(selectedOption)) {
       setSelectedFormats(selectedOption[0]);
     } else {
+      setSelectedFormats(selectedOption);
       setSelectedFormats(selectedOption);
     }
 

@@ -15,20 +15,9 @@ import { styled } from "@mui/material/styles";
 const CustomTypography = styled(Typography)(({ theme }) => ({
   fontSize: 16,
   fontWeight: "normal",
-  fontFamily: [
-    "Proxima Nova",
-    "Poppins",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(","),
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
   },

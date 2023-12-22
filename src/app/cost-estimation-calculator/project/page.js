@@ -7,8 +7,15 @@ import {
   getQuestions,
   getDynamicQuestion,
 } from "@/app/lib/api/getProjectQuestions";
-import { useState, useEffect } from "react";
-import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import {
+  Button,
+  Box,
+  Typography,
+  useMediaQuery,
+  Grid,
+  Slide,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -51,7 +58,6 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-
 const page = () => {
 
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -70,13 +76,31 @@ const page = () => {
   const [questionsToShow, setQuestionsToShow] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
+  // const [slideIn, setSlideIn] = useState(true);
+  const slideIn = useRef(true);
 
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
+
+  const CustomSlider = styled(Slide)(({ theme }) => ({
+    transform: "translateY(-12px)",
+    transition: slideIn
+      ? "transform 500ms cubic-bezier(0, 0, 0.2, 1) 200ms"
+      : null,
+  }));
+
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
   const [stepperState, setStepperState] = useState(false);
+
+  const projectPageRef = useRef(null);
+
+  useEffect(() => {
+    if (projectPageRef.current) {
+      projectPageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
 
   const route = useRouter();
   let cost;
@@ -290,6 +314,39 @@ const page = () => {
 
     handlePrice("next", cost);
     setLastQuestionSelectedOption([]);
+    slider();
+  };
+
+  if (
+    currentState === "post" &&
+    currentQuestionIndex > postProjectQuestions.length
+  ) {
+    goToForm();
+  }
+
+  useEffect(() => {
+    // setSlideIn(true);
+    slideIn.current = true;
+  }, [actualResponses.length]);
+
+  console.log("actual responses: ", actualResponses);
+  const slider = function () {
+    // setSlideIn(false);
+    // setTimeout(() => {
+    // setSlideIn(false);
+    slideIn.current = false;
+    // }, 1000);
+  };
+  // Handling Stepper and Active Question
+  const changeActiveQuestion = (obj) => {
+    const { index, step } = obj;
+    setCurrentQuestionIndex(step.index);
+    setCurrentQuestion(step.question);
+    setCurrentState(step.state);
+    setQuestionsToShow(step.stack);
+    actualResponses.splice(index - 1);
+    setLastQuestionSelectedOption(step.selectedOption);
+    handlePrice("stepper");
   };
 
   if (
@@ -301,7 +358,7 @@ const page = () => {
 
 
   return (
-    <>
+    <Box ref={projectPageRef} sx={{ padding: "1em 0" }}>
       {fetchQuesitons !== null ? (
         <Box sx={{ margin: "1em 2em" }}>
           <Box
@@ -360,13 +417,17 @@ const page = () => {
                 <Box sx={{ margin: "5em 2em",display:"flex",alignItems:"center" }}><CircularProgress />
               </Box>
                 }
+                
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
                     vairant="contained"
-                    onClick={nextQuestion}
+                    onClick={() => {
+                      nextQuestion();
+                      slideIn.current = false;
+                    }}
                   >
                     Next
                   </CustomNextButton>
@@ -384,6 +445,15 @@ const page = () => {
                   <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center" }}><CircularProgress />
                   </Box>
                 }
+                {/* <CustomSlider direction="down" in={slideIn}> */}
+                  {/* <div> */}
+                    <Question
+                      currentQuestion={currentQuestion}
+                      getResponsesData={getResponsesData}
+                      selectedOption={lastQuestionSelectedOption}
+                    />
+                  {/* </div> */}
+                {/* </CustomSlider> */}
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
@@ -391,7 +461,10 @@ const page = () => {
                     variant="contained"
                     sx={{ width: 150 }}
                     vairant="contained"
-                    onClick={nextQuestion}
+                    onClick={() => {
+                      nextQuestion();
+                      slideIn.current = false;
+                    }}
                   >
                     Next
                   </CustomNextButton>
@@ -411,7 +484,7 @@ const page = () => {
         <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}><CircularProgress />
         </Box>
       )}
-    </>
+    </Box>
   );
 };
 
