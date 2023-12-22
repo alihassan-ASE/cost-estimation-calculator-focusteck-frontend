@@ -26,12 +26,7 @@ const page = () => {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 700,
-        margin: "auto",
-      }}
-    >
+    <Box>
       <Form response={response} getActualResponse={getActualResponse} />
     </Box>
   );

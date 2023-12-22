@@ -17,10 +17,12 @@
     "@mui/material": "^5.14.20",
     "@mui/styled-engine-sc": "^6.0.0-alpha.7",
     "@mui/system": "^5.15.1",
+    "@syncfusion/ej2-react-navigations": "^24.1.41",
     "cors": "^2.8.5",
     "next": "14.0.3",
     "poppins": "^0.1.1",
     "react": "^18",
+    "react-animated-slider": "^1.1.2",
     "react-dom": "^18",
     "styled-components": "^6.1.1"
   },

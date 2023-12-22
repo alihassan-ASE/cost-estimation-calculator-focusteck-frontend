@@ -25,17 +25,17 @@ const CustomBox = styled(Box)(({ theme }) => ({
 }));
 
 const Form = ({ response, getActualResponse }) => {
-  const [auth , setAuth] = useState(false);
+  const [auth, setAuth] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     // Check if responses exist, if not, redirect to '/cost-estimation-calculator'
     if (!response?.responses.length) {
-      router.push('/');
+      router.push("/");
     } else {
       setAuth(true); // Set authentication status
     }
-  }, [ ]);
+  }, []);
 
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
@@ -87,7 +87,10 @@ const Form = ({ response, getActualResponse }) => {
       } else if (
         !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(trimmedEmail)
       ) {
-        setErrorMessage({ usernameError: "", emailError: "Incorrect Email Format" });
+        setErrorMessage({
+          usernameError: "",
+          emailError: "Incorrect Email Format",
+        });
         setCheckInputVal(true);
         setSubmitted(false);
       }
@@ -95,74 +98,70 @@ const Form = ({ response, getActualResponse }) => {
   };
 
   return (
-    <Box>
-      {
-        auth ?
+    <Box sx={{ maxWidth: 700 }}>
+      {auth ? (
         <CustomBox
-        sx={{
-          display: submitted ? "none" : "block",
-        }}
-      >
-        <Typography variant="h5" sx={{ margin: "1em 0", color: "#0069d9" }}>
-          Leave us your contact information
-        </Typography>
-        <form>
-          <Box>
-            <InputLabel>Enter Your Name</InputLabel>
-            <TextField
-              sx={{ mb: 3, borderRadius: "2em" }}
-              style={{
-                width: "100%",
-              }}
-              id="outlined-basic, user-name"
-              variant="outlined"
-              value={formInput.userName}
-              onChange={(e) => {
-                setFormInput({
-                  userName: e.target.value,
-                  email: formInput.email,
-                });
-                setErrorMessage({ usernameError: null, emailError: null });
-                setCheckInputVal(false);
-              }}
-              error={checkInputVal}
-              helperText={errorMessage.usernameError}
-            />
-            {/* <br /> */}
-            <InputLabel>Enter Your Email</InputLabel>
-            <TextField
-              sx={{ mb: 3 }}
-              style={{ width: "100%" }}
-              id="outlined-basic, user-email"
-              variant="outlined"
-              value={formInput.email}
-              onChange={(e) => {
-                setFormInput({
-                  userName: formInput.userName,
-                  email: e.target.value,
-                });
-                setErrorMessage({ usernameError: null, emailError: null });
-                setCheckInputVal(false);
-              }}
-              error={checkInputVal}
-              helperText={errorMessage.emailError}
-            />
-            <br />
-            <Button
-              variant="contained"
-              onClick={() => {
-          
+          sx={{
+            display: submitted ? "none" : "block",
+          }}
+        >
+          <Typography variant="h5" sx={{ margin: "1em 0", color: "#0069d9" }}>
+            Leave us your contact information
+          </Typography>
+          <form>
+            <Box>
+              <InputLabel>Enter Your Name</InputLabel>
+              <TextField
+                sx={{ mb: 3, borderRadius: "2em" }}
+                style={{
+                  width: "100%",
+                }}
+                id="outlined-basic, user-name"
+                variant="outlined"
+                value={formInput.userName}
+                onChange={(e) => {
+                  setFormInput({
+                    userName: e.target.value,
+                    email: formInput.email,
+                  });
+                  setErrorMessage({ usernameError: null, emailError: null });
+                  setCheckInputVal(false);
+                }}
+                error={checkInputVal}
+                helperText={errorMessage.usernameError}
+              />
+              {/* <br /> */}
+              <InputLabel>Enter Your Email</InputLabel>
+              <TextField
+                sx={{ mb: 3 }}
+                style={{ width: "100%" }}
+                id="outlined-basic, user-email"
+                variant="outlined"
+                value={formInput.email}
+                onChange={(e) => {
+                  setFormInput({
+                    userName: formInput.userName,
+                    email: e.target.value,
+                  });
+                  setErrorMessage({ usernameError: null, emailError: null });
+                  setCheckInputVal(false);
+                }}
+                error={checkInputVal}
+                helperText={errorMessage.emailError}
+              />
+              <br />
+              <Button
+                variant="contained"
+                onClick={() => {
                   submitForm(formInput);
-               
-              }}
-            >
-              Submit
-            </Button>
-          </Box>
-        </form>
-      </CustomBox>
-      :null
-      }
+                }}
+              >
+                Submit
+              </Button>
+            </Box>
+          </form>
+        </CustomBox>
+      ) : null}
       {submitted ? (
         <ShowResponse response={{ ...response, ...formInput }} />
       ) : null}
@@ -170,4 +169,4 @@ const Form = ({ response, getActualResponse }) => {
   );
 };
 
-export default Form; 
+export default Form;

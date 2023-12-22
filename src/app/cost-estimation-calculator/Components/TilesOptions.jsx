@@ -17,8 +17,8 @@ const CustomButton = styled(Button)(({ theme }) => ({
   minwidth: "140px",
   display: "flex",
   flexWrap: "wrap",
-  // transition:
-  //   "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
+  transition:
+    "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
@@ -48,7 +48,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
   "& span.price": {
     color: "#005DBD",
-    // transition: "color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
+    transition: "color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
   },
   "&:hover span.price": {
     color: "#fff",
@@ -77,6 +77,7 @@ const TilesComponent = ({
   const [selectedFormats, setSelectedFormats] = useState("");
 
   useEffect(() => {
+
     if (selectedOption && selectedOption.length > 0) {
       setSelectedFormats(selectedOption[0] || null);
 
@@ -100,10 +101,10 @@ const TilesComponent = ({
   }, [selectedOption, options]);
 
   const checkSelectedOption = (value, price) => {
-    const res =
-      selectedFormats?.opt === value && selectedFormats?.price === price;
 
+    const res = selectedFormats?.opt === value && selectedFormats?.price === price;
     return !!res;
+
   };
 
   const submitOtherVal = () => {

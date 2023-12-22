@@ -26,7 +26,7 @@ const ShowResponse = ({ response }) => {
         sx={{
           border: "1px solid #cfcfcf",
           padding: "1em 1em",
-          // width: "100%",
+          width: "100%",
           margin: "3em 0.5em",
         }}
       >
@@ -46,7 +46,7 @@ const ShowResponse = ({ response }) => {
             />
           </CustomButton>
           <CustomButton sx={{ display: "flex", gap: "1em" }}>
-            <Typography variant="body1"> Email</Typography>
+            <Typography variant="body1">Email</Typography>
             <Chip
               sx={{
                 whiteSpace: "nowrap",

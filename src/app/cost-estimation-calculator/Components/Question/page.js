@@ -28,7 +28,7 @@ const page = ({
 }) => {
   const [selectedData, setSelectedData] = useState([]);
 
-  const linkRef = useRef(null);
+  // const linkRef = useRef(null);
 
   const selectedOptionPassToParent = (data) => {
     if (Array.isArray(data)) {
@@ -71,7 +71,7 @@ const page = ({
 
   return (
       <Box
-        ref={linkRef}
+        // ref={linkRef}
         sx={{
           display: "flex",
           flexDirection: "column",

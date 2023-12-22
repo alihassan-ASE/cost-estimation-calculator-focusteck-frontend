@@ -2,7 +2,6 @@
 // final code
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
-
 import {
   getQuestions,
   getDynamicQuestion,
@@ -69,19 +68,11 @@ const page = () => {
   const [questionsToShow, setQuestionsToShow] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
-  // const [slideIn, setSlideIn] = useState(true);
-  const slideIn = useRef(true);
+  const [slideIn, setSlideIn] = useState(true);
 
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
-
-  const CustomSlider = styled(Slide)(({ theme }) => ({
-    transform: "translateY(-12px)",
-    transition: slideIn
-      ? "transform 500ms cubic-bezier(0, 0, 0.2, 1) 200ms"
-      : null,
-  }));
 
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
@@ -288,19 +279,21 @@ const page = () => {
   ) {
     goToForm();
   }
-
-  useEffect(() => {
-    // setSlideIn(true);
-    slideIn.current = true;
-  }, [actualResponses.length]);
-
   console.log("actual responses: ", actualResponses);
+
+  // useEffect(() => {
+  //   slideIn.current = true;
+  // }, [actualResponses.length]);
+
+  // const slider = function () {
+  //   slideIn.current = false;
+  // };
+
   const slider = function () {
-    // setSlideIn(false);
-    // setTimeout(() => {
-    // setSlideIn(false);
-    slideIn.current = false;
-    // }, 1000);
+    setSlideIn(false);
+    setTimeout(() => {
+      setSlideIn(true);
+    }, 250);
   };
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
@@ -373,7 +366,16 @@ const page = () => {
                 </Grid>
               )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                {/* <CustomSlider direction="down" in={slideIn} mountOnEnter> */}
+                <Slide
+                  direction="down"
+                  in={slideIn}
+                  timeout={{
+                    appear: 250,
+                    enter: 250,
+                    exit: 0,
+                  }}
+                  appear={true}
+                >
                   <div>
                     <Question
                       currentQuestion={currentQuestion}
@@ -381,7 +383,7 @@ const page = () => {
                       selectedOption={lastQuestionSelectedOption}
                     />
                   </div>
-                {/* </CustomSlider> */}
+                </Slide>
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
@@ -390,7 +392,6 @@ const page = () => {
                     vairant="contained"
                     onClick={() => {
                       nextQuestion();
-                      slideIn.current = false;
                     }}
                   >
                     Next
@@ -401,15 +402,24 @@ const page = () => {
           ) : (
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                {/* <CustomSlider direction="down" in={slideIn}> */}
-                  {/* <div> */}
+                <Slide
+                  direction="down"
+                  in={slideIn}
+                  timeout={{
+                    appear: 250,
+                    enter: 250,
+                    exit: 0,
+                  }}
+                  appear={true}
+                >
+                  <div>
                     <Question
                       currentQuestion={currentQuestion}
                       getResponsesData={getResponsesData}
                       selectedOption={lastQuestionSelectedOption}
                     />
-                  {/* </div> */}
-                {/* </CustomSlider> */}
+                  </div>
+                </Slide>
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
@@ -419,7 +429,6 @@ const page = () => {
                     vairant="contained"
                     onClick={() => {
                       nextQuestion();
-                      slideIn.current = false;
                     }}
                   >
                     Next
