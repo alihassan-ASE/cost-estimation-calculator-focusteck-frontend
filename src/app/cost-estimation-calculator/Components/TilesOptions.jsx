@@ -77,6 +77,7 @@ const TilesComponent = ({
   const [selectedFormats, setSelectedFormats] = useState("");
 
   useEffect(() => {
+
     if (selectedOption && selectedOption.length > 0) {
       setSelectedFormats(selectedOption[0] || null);
 
@@ -100,10 +101,10 @@ const TilesComponent = ({
   }, [selectedOption, options]);
 
   const checkSelectedOption = (value, price) => {
-    const res =
-      selectedFormats?.opt === value && selectedFormats?.price === price;
 
+    const res = selectedFormats?.opt === value && selectedFormats?.price === price;
     return !!res;
+
   };
 
   const submitOtherVal = () => {

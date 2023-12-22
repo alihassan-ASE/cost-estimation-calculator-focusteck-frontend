@@ -20,6 +20,7 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
+  localStorage.clear();
   return (
     <>
       <Box

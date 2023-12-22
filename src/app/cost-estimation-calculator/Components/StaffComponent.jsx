@@ -16,6 +16,8 @@ import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
@@ -73,9 +75,9 @@ const CustomButton = styled(Button)(({ theme }) => ({
 }));
 
 const CustomCard = styled(Card)(({ theme }) => ({
-  height: 340,
+  height: 380,
   width: "294px",
-  padding: "2em 1.5em",
+  padding: "1em 1em",
   margin: "1em",
   borderRadius: ".5em",
   display: "flex",
@@ -91,7 +93,6 @@ const CustomCard = styled(Card)(({ theme }) => ({
 
 const StaffComponent = () => {
   const [count, setCount] = useState(0);
-  const [addMore, setAddMore] = useState(false);
   const [values, setValues] = useState([]);
   const [buttonState, setButtonState] = useState(true);
 
@@ -120,7 +121,6 @@ const StaffComponent = () => {
   const dataObj = {};
 
   // Setting Staff Resources and Questions
-
   useEffect(() => {
     getQuestions().then((resp) => {
       const { Resources, additionalQuestions } = resp;
@@ -154,7 +154,23 @@ const StaffComponent = () => {
     if (values?.length > 0) {
       setCount(values?.length - 1);
     }
+    setResource(values)
   }, [values?.length]);
+
+
+  const deleteResource = (index) => {
+    if (values) {
+      if (index >= 0 && index < values.length) {
+        const newValues = values.filter((_, i) => i !== index)
+        setValues(newValues);
+      } else {
+        if (index > 0) {
+          setCount(count - 1);
+        }
+      }
+    } 
+  };
+
 
   // Function to navigate on Form Page
   const goToForm = () => {
@@ -224,27 +240,31 @@ const StaffComponent = () => {
 
   // receiving selected option from child Component
   const selectedOptionPassToParent = (data, boolVal, label) => {
-    setResource();
+
     setValues((prev) => [...prev, data]);
     setButtonState(true);
-    setAddMore(!boolVal);
+   
     setIsOptionSelected(false);
-  };
+    setResource((prev) => [...prev, data]);
 
+  };
+  
   // setting Response in actual Array
   const setResponseData = () => {
+
     dataObj.resources = values;
     setResource(dataObj.resources);
     currentState
       ? setActualResponses({ responses: [dataObj] })
       : setActualResponses((prev) => {
-          return {
-            responses: [
-              ...prev.responses,
-              { ...currentQuestion, ...addedOption },
-            ],
-          };
-        });
+        return {
+          responses: [
+            ...prev.responses,
+            { ...currentQuestion, ...addedOption },
+          ],
+        };
+      });
+
   };
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
@@ -254,6 +274,7 @@ const StaffComponent = () => {
 
   // Handling Next Quesiton
   const nextQuestion = () => {
+
     setCurrentState(false);
     setButtonState(true);
     setIsOptionSelected((prev) => !prev);
@@ -280,6 +301,7 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
+
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
@@ -324,10 +346,13 @@ const StaffComponent = () => {
       }
     }
   };
-  // Returning selected Resources
+
+
+  // Showing selected Resources
   const returnResources = () => {
     const tags = [];
     for (let i = 0; i <= count; i++) {
+
       tags.push(
         <CustomCard key={i}>
           <StaffResource
@@ -335,10 +360,14 @@ const StaffComponent = () => {
             question={currentQuestion}
             options={staffBase}
             index={i}
+            count={count}
+            setCount={setCount}
             setValues={setValues}
             values={values}
             selectedOption={resource}
             selectedOptionPassToParent={selectedOptionPassToParent}
+            deleteResource={deleteResource}
+
           />
         </CustomCard>
       );
@@ -407,122 +436,124 @@ const StaffComponent = () => {
               >
                 {returnResources()}
 
-                <Box>
-                  {addMore && (
+                {resource.length > 0 
+                ?
+                <Box >
                     <CustomButton
                       onClick={() => {
-                        setAddMore(false);
                         setCount(count + 1);
                         returnResources();
                       }}
                     >
                       <ControlPointIcon
                         sx={{ fontSize: 30 }}
-                        onClick={() => setAddMore(false)}
                       />
                     </CustomButton>
-                  )}
-                </Box>
-              </Box>
+                
+              </Box> 
+               : null} 
+            </Box>
+          <Box
+            sx={{
+              margin: "2em 1em",
+            }}
+          >
+            <CustomNextButton
+              size="medium"
+              variant="contained"
+              onClick={() => {
+                nextQuestion();
+              }}
+              disabled={values[0] ? false : true}
+            >
+              Next
+            </CustomNextButton>
+          </Box>
+          {/* )} */}
+        </>
+      ) : isNarrowScreen ? (
+        <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+          {stepperState && (
+            <Grid item lg={4} md={3} sm={4} xs={12}>
+              {actualResponses.length || actualResponses.responses ? (
+                <Stepper
+                  responses={actualResponses.responses}
+                  changeActiveQuestion={changeActiveQuestion}
+                  orientation={orientation}
+                />
+              ) : null}
+            </Grid>
+          )}
+          <Grid item lg={8} md={9} sm={8} xs={12}>
+            <Question
+              currentQuestion={currentQuestion}
+              getResponsesData={getResponsesData}
+              selectedOption={lastQuestionSelectedOption}
+            />
+
+            {additionalQuesiton.length >= currentQuestionIndex && (
               <Box
                 sx={{
-                  margin: "2em 1em",
+                  margin: "2em 0",
                 }}
               >
                 <CustomNextButton
                   size="medium"
                   variant="contained"
-                  onClick={() => {
-                    nextQuestion();
-                  }}
-                  disabled={values[0] ? false : true}
+                  sx={{ width: 150 }}
+                  onClick={nextQuestion}
+                  disabled={isOptionSelected}
                 >
                   Next
                 </CustomNextButton>
               </Box>
-              {/* )} */}
-            </>
-          ) : isNarrowScreen ? (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
-              {stepperState && (
-                <Grid item lg={4} md={3} sm={4} xs={12}>
-                  {actualResponses.length || actualResponses.responses ? (
-                    <Stepper
-                      responses={actualResponses.responses}
-                      changeActiveQuestion={changeActiveQuestion}
-                      orientation={orientation}
-                    />
-                  ) : null}
-                </Grid>
-              )}
-              <Grid item lg={8} md={9} sm={8} xs={12}>
-                <Question
-                  currentQuestion={currentQuestion}
-                  getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelectedOption}
-                />
-
-                {additionalQuesiton.length >= currentQuestionIndex && (
-                  <Box
-                    sx={{
-                      margin: "2em 0",
-                    }}
-                  >
-                    <CustomNextButton
-                      size="medium"
-                      variant="contained"
-                      sx={{ width: 150 }}
-                      onClick={nextQuestion}
-                      disabled={isOptionSelected}
-                    >
-                      Next
-                    </CustomNextButton>
-                  </Box>
-                )}
-              </Grid>
-            </Grid>
-          ) : (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
-              <Grid item lg={8} md={9} sm={8} xs={12}>
-                <Question
-                  currentQuestion={currentQuestion}
-                  getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelectedOption}
-                />
-                {additionalQuesiton.length >= currentQuestionIndex && (
-                  <Box
-                    sx={{
-                      margin: "2em 0",
-                    }}
-                  >
-                    <CustomNextButton
-                      size="medium"
-                      variant="contained"
-                      sx={{ width: 150 }}
-                      onClick={nextQuestion}
-                      disabled={isOptionSelected}
-                    >
-                      Next
-                    </CustomNextButton>
-                  </Box>
-                )}
-              </Grid>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
-                {actualResponses.length || actualResponses.responses ? (
-                  <Stepper
-                    responses={actualResponses.responses}
-                    changeActiveQuestion={changeActiveQuestion}
-                    orientation={orientation}
-                  />
-                ) : null}
-              </Grid>
-            </Grid>
-          )}
-        </Box>
+            )}
+          </Grid>
+        </Grid>
       ) : (
-        <Box sx={{ margin: "2em 1em" }}>Loading .....</Box>
+        <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+          <Grid item lg={8} md={9} sm={8} xs={12}>
+            <Question
+              currentQuestion={currentQuestion}
+              getResponsesData={getResponsesData}
+              selectedOption={lastQuestionSelectedOption}
+            />
+            {additionalQuesiton.length >= currentQuestionIndex && (
+              <Box
+                sx={{
+                  margin: "2em 0",
+                }}
+              >
+                <CustomNextButton
+                  size="medium"
+                  variant="contained"
+                  sx={{ width: 150 }}
+                  onClick={nextQuestion}
+                  disabled={isOptionSelected}
+                >
+                  Next
+                </CustomNextButton>
+              </Box>
+            )}
+          </Grid>
+          <Grid item lg={4} md={3} sm={4} xs={12}>
+            {actualResponses.length || actualResponses.responses ? (
+              <Stepper
+                responses={actualResponses.responses}
+                changeActiveQuestion={changeActiveQuestion}
+                orientation={orientation}
+              />
+            ) : null}
+          </Grid>
+        </Grid>
       )}
     </Box>
+  ) : (
+    <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center",height:"100vh" }}><CircularProgress />
+  </Box>
+  )
+}
+    </Box >
   );
 };
 

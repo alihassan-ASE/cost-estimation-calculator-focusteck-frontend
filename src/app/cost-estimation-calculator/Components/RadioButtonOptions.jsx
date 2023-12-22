@@ -5,6 +5,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  TextField,
+  Button,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -45,26 +47,77 @@ const RadioButtonComponent = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
-  const [selectedFormat, setSelectedFormat] = useState(0);
+  let otherData = {
+    opt: null,
+    price: null,
+  };
+  const [otherVal, setOtherVal] = useState("");
+  const [inputField, setInputField] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [checkInputVal, setCheckInputVal] = useState(false);
+  const [selectedFormats, setSelectedFormats] = useState("");
+  const [price , setPrice] = useState(0);
 
   useEffect(() => {
-    if (selectedOption?.length > 0) {
-      setSelectedFormat(selectedOption[0]);
+    if (selectedOption && selectedOption.length > 0) {
+      setSelectedFormats(selectedOption[0] || null);
+
+      const isSelectedOptAvailable = options.some(
+        (option) => option.opt === selectedOption[0]?.opt
+      );
+
+      if (!isSelectedOptAvailable) {
+        if (
+          selectedOption[0]?.opt !== "Other (Specify)" &&
+          selectedOption[0]?.opt !== "Other"
+        ) {
+          setOtherVal(selectedOption[0]?.opt || null);
+          selectedOption.length = 0;
+          setInputField(true);
+        }
+      }
+    } else {
+      setOtherVal("");
     }
-  }, [selectedOption]);
+  }, [selectedOption, options]);
+
+  const checkSelectedOption = (value, price) => {
+    const res = selectedFormats?.opt === value && selectedFormats?.price === price;
+
+    return !!res;
+  };
+
+  const submitOtherVal = () => {
+    const trimmedOtherVal = otherVal.trim();
+
+    if (!trimmedOtherVal) {
+      setErrorMessage("Field cannot be empty");
+      setCheckInputVal(true);
+      setInputField(true);
+    }
+    if (trimmedOtherVal) {
+      setErrorMessage(null);
+      setInputField(false);
+      setCheckInputVal(false);
+      setOtherVal(trimmedOtherVal);
+    }
+  };
+
 
   const handleFormat = (event) => {
     const selectedOpt = event.target.value;
     const selectedData = options.find((data) => data.opt === selectedOpt);
-    setSelectedFormat(selectedData);
+    setSelectedFormats(selectedData);
     selectedOptionPassToParent(selectedData);
   };
+
+  
   return (
     <Box>
       <FormControl>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          value={selectedFormat}
+          value={selectedFormats}
           onChange={handleFormat}
           name="radio-buttons-group"
         >
@@ -82,10 +135,66 @@ const RadioButtonComponent = ({
                   </span>
                 </CustomTypography>
               }
-              checked={selectedFormat?.opt === data.opt}
+              onClick={() => {
+                if (data.opt === "Other (Specify)" || data.opt === "Other") {
+                  setInputField(!inputField);
+                  setPrice(data.price)
+                } else {
+                  setSelectedFormats(data);
+                  selectedOptionPassToParent(data);
+                  setInputField(false);
+                }
+              }}
+
+              checked={checkSelectedOption(data.opt , data.price)}
             />
           ))}
         </RadioGroup>
+     { inputField ?
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: "1em",
+                    flexWrap: "wrap",
+                    margin: ".5em 0",
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="fullWidth"
+                    label="Other"
+                    variant="outlined"
+                    sx={{ width: "90%" }}
+                    value={otherVal}
+                    onChange={(e) => {
+                      setOtherVal(e.target.value);
+                      setCheckInputVal(false);
+                      setErrorMessage(null);
+                    }}
+                    error={checkInputVal}
+                    helperText={errorMessage}
+                  />
+                  <Button
+                    variant="contained"
+                    sx={{ width: "100px" }}
+                    onClick={() => {
+                      otherData.price = price;
+                      otherData.opt = otherVal;
+                      if (otherVal !== "") {
+                        setSelectedFormats(otherData);
+                        selectedOptionPassToParent(otherData);
+                        setInputField(false);
+                        setOtherVal(otherVal);
+                        setErrorMessage(null);
+                      }
+                      submitOtherVal();
+                    }}
+                  >
+                    Enter
+                  </Button>
+                </Box>
+              
+            : null}
       </FormControl>
     </Box>
   );

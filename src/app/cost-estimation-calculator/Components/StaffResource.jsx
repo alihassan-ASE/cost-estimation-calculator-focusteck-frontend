@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, Typography, Button, Chip, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
+import CloseIcon from '@mui/icons-material/Close';
 import QuestionsComponent from "./Questions";
 
 const CustomButton = styled(Button)(({ theme }) => ({
@@ -22,9 +22,12 @@ const StaffResource = ({
   label,
   index,
   setValues,
+  count,
+  setCount,
   values,
   selectedOption,
   selectedOptionPassToParent,
+  deleteResource
 }) => {
   let newOption;
   let resourceData;
@@ -39,6 +42,15 @@ const StaffResource = ({
 
   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
   useEffect(() => {
+
+    if (values.length === 0 ) {
+      setCurrentResource({});
+      setCount(0);
+    }
+  
+    if (values.length <= 0) {
+      setShowDropdown(true)
+    }
     if (selectedOption?.length ? selectedOption[index] : null) {
       setCurrentResource({
         resource: selectedOption[index]?.resource,
@@ -48,7 +60,7 @@ const StaffResource = ({
       });
       setShowDropdown(false);
     }
-  }, []);
+  }, [selectedOption]);
 
   const numOfResourcesOptions = {
     "Mid Level": [1, 2, 3, 4],
@@ -75,7 +87,6 @@ const StaffResource = ({
 
     setLabel(label);
   };
-
   newOption = useMemo(() => {
     return options.map((item) => item.typeOfResource);
   }, [options]);
@@ -105,7 +116,8 @@ const StaffResource = ({
         width: 270,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", }}>
+      <CloseIcon onClick={() => { deleteResource(index) }} sx={{position: "relative",marginLeft:"auto",transition:"all 0.7s ease",fontSize:"20px",fontWeight: 'bold',borderRadius:"50%",color:"red",height:"20px",width:"20px",cursor:"pointer", "&:hover":{ backgroundColor:"red",color:"white" }}}/>
         {showDropdown && (
           <QuestionsComponent
             typeOfSelection={typeOfSelection}
@@ -168,13 +180,13 @@ const StaffResource = ({
               disable={currentResource.resource ? false : true}
               selectedOption={
                 currentResource.resource &&
-                !currentResource?.resourceOption?.opt
+                  !currentResource?.resourceOption?.opt
                   ? null
                   : currentResource?.resourceOption?.opt
-                  ? currentResource?.resourceOption
-                  : selectedOption?.length
-                  ? selectedOption[index]?.resourceOption?.opt
-                  : null
+                    ? currentResource?.resourceOption
+                    : selectedOption?.length
+                      ? selectedOption[index]?.resourceOption?.opt
+                      : null
               }
               selectedOptionPassToParent={getData}
             />
@@ -222,10 +234,10 @@ const StaffResource = ({
               currentResource.resource && !currentResource.seniorityLevel
                 ? null
                 : currentResource.seniorityLevel
-                ? currentResource.seniorityLevel
-                : selectedOption?.length
-                ? selectedOption[index]?.seniorityLevel
-                : null
+                  ? currentResource.seniorityLevel
+                  : selectedOption?.length
+                    ? selectedOption[index]?.seniorityLevel
+                    : null
             }
             selectedOptionPassToParent={getData}
           />
@@ -268,10 +280,10 @@ const StaffResource = ({
                 currentResource.resource && !currentResource.numOfResources
                   ? null
                   : currentResource.numOfResources
-                  ? currentResource.numOfResources
-                  : selectedOption?.length
-                  ? selectedOption[index]?.numOfResources
-                  : null
+                    ? currentResource.numOfResources
+                    : selectedOption?.length
+                      ? selectedOption[index]?.numOfResources
+                      : null
               }
               selectedOptionPassToParent={getData}
             />
@@ -308,11 +320,11 @@ const StaffResource = ({
         <Box sx={{ margin: "1em 0" }}>
           <Button
             disabled={
-              currentResource.resource &&
-              currentResource.resourceOption &&
-              currentResource.seniorityLevel &&
-              currentResource.numOfResources &&
-              saveButton
+                currentResource.resource &&
+                currentResource.resourceOption &&
+                currentResource.seniorityLevel &&
+                currentResource.numOfResources &&
+                saveButton
                 ? false
                 : true
             }
@@ -332,11 +344,11 @@ const StaffResource = ({
                 if (
                   existingResource?.resource !== currentResource.resource ||
                   existingResource?.resourceOption !==
-                    currentResource.resourceOption ||
+                  currentResource.resourceOption ||
                   existingResource?.seniorityLevel !==
-                    currentResource.seniorityLevel ||
+                  currentResource.seniorityLevel ||
                   existingResource?.numOfResources !==
-                    currentResource.numOfResources
+                  currentResource.numOfResources
                 ) {
                   const updatedValues = [...values];
                   updatedValues[index] = {
@@ -371,7 +383,15 @@ const StaffResource = ({
             Save
           </Button>
         </Box>
-      ) : null}
+      ) : null
+        // ( currentResource.resource &&
+        //   currentResource.resourceOption &&
+        //   currentResource.seniorityLevel &&
+        //   currentResource.numOfResources )
+        //   ?
+        //   <Button onClick={() => { deleteResource(index) }} variant="contained" sx={{ marginLeft: "10px" }}>Delete</Button> : null
+      }
+      
     </Box>
   );
 };

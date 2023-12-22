@@ -11,13 +11,17 @@ import { useState, useEffect } from "react";
 import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { styled } from "@mui/material/styles";
+
 
 const CustomButton = styled(Button)(({ theme }) => ({
   "&:hover": {
     backgroundColor: "#fff",
   },
 }));
+
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
@@ -46,13 +50,18 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
     margin: "1.5em 0",
   },
 }));
+
+
 const page = () => {
+
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
 
   const [currentState, setCurrentState] = useState("pre");
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [loaderState, setLoaderState] = useState(false);
+
 
   const [selectedOption, setSelectedOption] = useState();
   const [selectedData, setSelectedData] = useState();
@@ -71,6 +80,7 @@ const page = () => {
 
   const route = useRouter();
   let cost;
+
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -117,32 +127,34 @@ const page = () => {
     }
   };
 
+
   const goToForm = () => {
     try {
       let data = JSON.stringify({
         responses: actualResponses,
         totalCost: totalCost,
       });
-     if(data){
-      localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/submit");
-     }else{
-      router.push('/cost-estimation-calculator')
-     }
-    } catch (error) {}
+      if (data) {
+        localStorage.setItem("Response", data);
+        route.push("/cost-estimation-calculator/submit");
+      }
+    } catch (error) { }
   };
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
+
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
     if (resp.selectedData || resp.selectedData.length > 3) {
       setIsOptionSelected(false);
     }
+
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -153,10 +165,33 @@ const page = () => {
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
+
   };
+
+  // Handling Stepper and Active Question
+  const changeActiveQuestion = (obj) => {
+
+    const { index, step } = obj;
+    setCurrentQuestionIndex(step.index);
+    setCurrentQuestion(step.question);
+    setCurrentState(step.state);
+    actualResponses.splice(index - 1);
+    setLastQuestionSelectedOption(step.selectedOption);
+    handlePrice("stepper");
+
+    if (step.question.label == "project type" || step.question.label == "both platform") {
+      step.stack = [];
+    }
+    else {
+      setQuestionsToShow(step.stack)
+    }
+
+  };
+
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -169,13 +204,18 @@ const page = () => {
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
+
   };
 
   // Handling Next Question
   const nextQuestion = async () => {
+
+    setIsOptionSelected(true);
+    setLoaderState(true);
+
     cost = 0;
-    let questionToShowArray = [];
     setStepperState(true);
+
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -197,13 +237,14 @@ const page = () => {
         }
       }
       case "dynamic": {
+
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
         } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
           } else {
-            if (selectedOption && !questionsToShowLocal.includes(selectedOption) ) {
+            if (selectedOption && !questionsToShowLocal.includes(selectedOption)) {
               questionsToShowLocal.push(selectedOption);
             }
           }
@@ -241,33 +282,15 @@ const page = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
+    setLoaderState((prev) => !prev)
 
     selectedData.map((op) => {
       cost = cost + op.price;
     });
 
     handlePrice("next", cost);
-    setIsOptionSelected(true);
     setLastQuestionSelectedOption([]);
   };
-  if (
-    currentState === "post" &&
-    currentQuestionIndex > postProjectQuestions.length
-  ) {
-    goToForm();
-  }
-
-  // Handling Stepper and Active Question
-  const changeActiveQuestion = (obj) => {
-    const { index, step } = obj;
-    setCurrentQuestionIndex(step.index);
-    setCurrentQuestion(step.question);
-    setCurrentState(step.state);
-    setQuestionsToShow(step.stack);
-    actualResponses.splice(index - 1);
-    setLastQuestionSelectedOption(step.selectedOption);
-    handlePrice("stepper");
-  };
 
   if (
     currentState === "post" &&
@@ -275,6 +298,7 @@ const page = () => {
   ) {
     goToForm();
   }
+
 
   return (
     <>
@@ -328,11 +352,14 @@ const page = () => {
                 </Grid>
               )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                <Question
+                {!loaderState ? <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
-                />
+                /> :
+                <Box sx={{ margin: "5em 2em",display:"flex",alignItems:"center" }}><CircularProgress />
+              </Box>
+                }
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
@@ -349,11 +376,14 @@ const page = () => {
           ) : (
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                <Question
+                {!loaderState ? <Question
                   currentQuestion={currentQuestion}
                   getResponsesData={getResponsesData}
                   selectedOption={lastQuestionSelectedOption}
-                />
+                /> :
+                  <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center" }}><CircularProgress />
+                  </Box>
+                }
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
@@ -378,7 +408,8 @@ const page = () => {
           )}
         </Box>
       ) : (
-        <Box sx={{ margin: "2em 1em" }}>Loading .....</Box>
+        <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}><CircularProgress />
+        </Box>
       )}
     </>
   );
