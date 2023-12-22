@@ -337,24 +337,6 @@ const page = () => {
     slideIn.current = false;
     // }, 1000);
   };
-  // Handling Stepper and Active Question
-  const changeActiveQuestion = (obj) => {
-    const { index, step } = obj;
-    setCurrentQuestionIndex(step.index);
-    setCurrentQuestion(step.question);
-    setCurrentState(step.state);
-    setQuestionsToShow(step.stack);
-    actualResponses.splice(index - 1);
-    setLastQuestionSelectedOption(step.selectedOption);
-    handlePrice("stepper");
-  };
-
-  if (
-    currentState === "post" &&
-    currentQuestionIndex > postProjectQuestions.length
-  ) {
-    goToForm();
-  }
 
 
   return (
@@ -445,15 +427,6 @@ const page = () => {
                   <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center" }}><CircularProgress />
                   </Box>
                 }
-                {/* <CustomSlider direction="down" in={slideIn}> */}
-                  {/* <div> */}
-                    <Question
-                      currentQuestion={currentQuestion}
-                      getResponsesData={getResponsesData}
-                      selectedOption={lastQuestionSelectedOption}
-                    />
-                  {/* </div> */}
-                {/* </CustomSlider> */}
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}

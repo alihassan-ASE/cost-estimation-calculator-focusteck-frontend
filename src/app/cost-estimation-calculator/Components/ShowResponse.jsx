@@ -27,7 +27,7 @@ const ShowResponse = ({ response }) => {
         sx={{
           border: "1px solid #cfcfcf",
           padding: "1em 1em",
-          // width: "100%",
+          maxWidth: "100%",
           margin: "3em 0.5em",
         }}
       >
@@ -136,10 +136,6 @@ const ShowResponse = ({ response }) => {
                 ))}
               </CustomButton>
             ))}
-            <CustomButton sx={{ gap: "1em" }}>
-              <Typography> Total Cost</Typography>
-              <Chip key="Cost" label={`$${response.totalCost}`} />
-            </CustomButton>
           </Box>
         ) : (
           <Box>
@@ -149,35 +145,38 @@ const ShowResponse = ({ response }) => {
               <>
                 <CustomButton sx={{ gap: "1em" }}>
                   <Typography>{data.question.label}</Typography>
+                  <Box sx={{ display: "flex", justifyContent: "normal", gap: ".5em" }}>
 
-                  {data.selectedOption.map((eachOption) => (
-                    <Chip
-                      sx={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                      key="Questions"
-                      label={`${eachOption.opt} ($${eachOption.price})`}
-                    />
-                  ))}
+                    {data.selectedOption.map((eachOption) => (
+                      <Chip
+                        sx={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        key="Questions"
+                        label={`${eachOption.opt} ($${eachOption.price})`}
+                      />
+                    ))}
+                  </Box>
                 </CustomButton>
               </>
             ))}
-            <CustomButton sx={{ gap: "1em" }}>
-              <Typography> Total Cost</Typography>
-              <Chip
-                sx={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                key="Cost"
-                label={`$${response.totalCost}`}
-              />
-            </CustomButton>
+
           </Box>
         )}
+        <CustomButton sx={{ gap: "1em" }}>
+          <Typography> Total Cost</Typography>
+          <Chip
+            sx={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+            key="Cost"
+            label={`$${response.totalCost}`}
+          />
+        </CustomButton>
       </Box>
     </>
   );

@@ -28,7 +28,6 @@ const page = () => {
   return (
     <Box
       sx={{
-        maxWidth: 700,
         margin: "auto",
       }}
     >
