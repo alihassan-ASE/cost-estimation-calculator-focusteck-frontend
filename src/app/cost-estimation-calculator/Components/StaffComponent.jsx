@@ -76,7 +76,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
   height: 340,
   width: "294px",
   padding: "2em 1.5em",
-  margin: "1em",
+  margin: "0 1em",
   borderRadius: ".5em",
   display: "flex",
   justifyContent: "center",
@@ -354,7 +354,7 @@ const StaffComponent = () => {
   }
 
   return (
-    <Box sx={{ margin: "3em 1em 1em 1em" }}>
+    <Box>
       {additionalQuesiton.length && staffBase.length ? (
         <Box>
           <Box
@@ -426,7 +426,7 @@ const StaffComponent = () => {
               </Box>
               <Box
                 sx={{
-                  margin: "2em 1em",
+                  margin: ".8em 1em",
                 }}
               >
                 <CustomNextButton

@@ -13,6 +13,7 @@ const QuestionsComponent = ({
   typeofUI,
   typeOfSelection,
 }) => {
+  
   return (
     <Box>
       <ShowOption

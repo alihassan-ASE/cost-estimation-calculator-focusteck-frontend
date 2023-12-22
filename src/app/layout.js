@@ -1,11 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import SouthIcon from "@mui/icons-material/South";
+import { useRouter, usePathname } from "next/navigation";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import {
   BottomNavigation,
@@ -24,6 +23,45 @@ const CustomBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const CustomStartButton = styled(Button)(({ theme }) => ({
+  width: "300px",
+  margin: "0 .5em",
+  height: "50px",
+  backgroundColor: "#0045e6",
+  padding: 0,
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
+
+  "&:hover": {
+    backgroundColor: "#fff",
+    boxShadow: "none",
+    color: "#000",
+    "& #start": {
+      marginLeft: "30px",
+      transition: "margin-left 0.2s ease-in-out",
+    },
+    "& svg": {
+      opacity: 1,
+      marginLeft: "15px",
+      transition: "margin-left 0.2s ease-in-out",
+      borderRadius: "0 50% 50% 0",
+    },
+    "&:before": {
+      transform: "scale(1, 1)",
+      textIndent: 0,
+    },
+  },
+
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: 10,
+    width: "160px",
+  },
+}));
+
 const CustomBannerBox = styled(Box)(({ theme }) => ({
   color: "white",
   padding: "6em 3em",
@@ -38,6 +76,7 @@ const CustomBannerBox = styled(Box)(({ theme }) => ({
     padding: "4em 1em",
   },
 }));
+
 const CustomTypography = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     fontSize: "3em",
@@ -77,7 +116,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     [theme.breakpoints.up("sm")]: {
@@ -91,16 +129,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function RootLayout({ children }) {
   const route = useRouter();
+  // const [startButton, setStartButton] = useState(true);
+  // const customBoxRef = useRef(null);
+
+  // const handleRouteChange = () => {
+  //   route.push("/cost-estimation-calculator");
+  //   setStartButton(false);
+  // };
+
+  const baseRoute = usePathname();
+  // console.log(baseRoute);
 
   return (
-    <html lang="en" style={{ scrollBehavior: "smooth" }}>
+    <html lang="en">
       <body style={{ margin: "0" }}>
         <Box
           style={{
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
-            scrollBehavior: "smooth",
           }}
         >
           <AppBar
@@ -108,7 +155,7 @@ export default function RootLayout({ children }) {
             sx={{
               color: "#000",
               backgroundColor: "#fff",
-              minHeight: 80,
+              // minHeight: 55,
               display: "flex",
               justifyContent: "center",
             }}
@@ -252,79 +299,90 @@ export default function RootLayout({ children }) {
               just a few clicks.
             </Typography>
 
-            <Link
-              style={{
-                textDecoration: "none",
-                color: "#fff",
-                display: "flex",
-                gap: "1em",
-                alignItems: "center",
-              }}
-              href="#scroll-down"
-            >
-              <Typography
-                sx={{
-                  backgroundColor: "hsla(3, 1%, 0%, 0.1)",
-                  padding: "1em .5em",
-                }}
-              >
-                Take the next Step for your Project
-              </Typography>
-              <SouthIcon
-                sx={{
-                  fontSize: 20,
-                  borderRadius: "50%",
-                  padding: ".3em",
-                  backgroundColor: "rgb(0, 69, 230)",
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#fff",
-                    color: "#000",
-                  },
-                }}
-              />
-            </Link>
-          </CustomBannerBox>
-
-          <CustomBox
-            id="scroll-down"
-            sx={{
-              flexGrow: 1,
-              minHeight: "100vh",
-            }}
-          >
-            {children}
-          </CustomBox>
-          <BottomNavigation
-            sx={{
-              flexShrink: 0,
-              padding: ".5em 2em",
-              boxShadow: "-3px -3px 9px rgba(0, 0, 0, 0.2)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="body1" sx={{ fontSize: 13 }}>
-              © Focusteck, All rights reserved
-            </Typography>
             <Box
               sx={{
-                gap: "2em",
-                display: { xs: "none", sm: "flex" },
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Link
+                href="/cost-estimation-calculator"
+                scroll={false}
+                style={{
+                  textDecoration: "none",
+                }}
+              >
+                <CustomStartButton
+                  variant="contained"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  <ArrowForwardIcon
+                    sx={{
+                      marginRight: "auto",
+                      opacity:0,
+                      backgroundColor: "#0045e6",
+                      color: "#fff",
+                      padding: "1em",
+                      position: "absolute",
+                      left: "-19px",
+                      borderRadius: "0 50% 50% 0",
+                    }}
+                  />
+                  <span id="start">Start</span>
+                </CustomStartButton>
+              </Link>
+            </Box>
+          </CustomBannerBox>
+
+          {baseRoute === "/" ? null : baseRoute ===
+            "/cost-estimation-calculator" ? (
+            <CustomBox
+              sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}
+            >
+              {children}
+            </CustomBox>
+          ) : (
+            <CustomBox sx={{ minHeight: "100vh" }}>{children}</CustomBox>
+          )}
+
+          {baseRoute === "/" ? null : (
+            <BottomNavigation
+              sx={{
+                flexShrink: 0,
+                padding: ".5em 2em",
+                boxShadow: "-3px -3px 9px rgba(0, 0, 0, 0.2)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Typography variant="body1" sx={{ fontSize: 13 }}>
-                Privacy Policy
+                © Focusteck, All rights reserved
               </Typography>
-              <Typography variant="body1" sx={{ fontSize: 13 }}>
-                Terms of use
-              </Typography>
-              <Typography variant="body1" sx={{ fontSize: 13 }}>
-                Site Map
-              </Typography>
-            </Box>
-          </BottomNavigation>
+              <Box
+                sx={{
+                  gap: "2em",
+                  display: { xs: "none", sm: "flex" },
+                }}
+              >
+                <Typography variant="body1" sx={{ fontSize: 13 }}>
+                  Privacy Policy
+                </Typography>
+                <Typography variant="body1" sx={{ fontSize: 13 }}>
+                  Terms of use
+                </Typography>
+                <Typography variant="body1" sx={{ fontSize: 13 }}>
+                  Site Map
+                </Typography>
+              </Box>
+            </BottomNavigation>
+          )}
         </Box>
       </body>
     </html>

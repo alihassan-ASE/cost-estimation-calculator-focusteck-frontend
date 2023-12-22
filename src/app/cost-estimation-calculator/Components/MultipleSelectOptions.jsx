@@ -38,20 +38,9 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     [theme.breakpoints.down("sm")]: {
       fontSize: 10,
     },
-    fontFamily: [
-      "Proxima Nova",
-      "Poppins",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
+    fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+      ","
+    ),
   },
 }));
 

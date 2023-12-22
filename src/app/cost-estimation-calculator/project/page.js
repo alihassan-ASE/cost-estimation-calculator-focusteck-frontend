@@ -7,8 +7,15 @@ import {
   getQuestions,
   getDynamicQuestion,
 } from "@/app/lib/api/getProjectQuestions";
-import { useState, useEffect } from "react";
-import { Button, Box, Typography, useMediaQuery, Grid } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import {
+  Button,
+  Box,
+  Typography,
+  useMediaQuery,
+  Grid,
+  Slide,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { styled } from "@mui/material/styles";
@@ -46,6 +53,7 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
     margin: "1.5em 0",
   },
 }));
+
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
@@ -61,13 +69,31 @@ const page = () => {
   const [questionsToShow, setQuestionsToShow] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
+  // const [slideIn, setSlideIn] = useState(true);
+  const slideIn = useRef(true);
 
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
+
+  const CustomSlider = styled(Slide)(({ theme }) => ({
+    transform: "translateY(-12px)",
+    transition: slideIn
+      ? "transform 500ms cubic-bezier(0, 0, 0.2, 1) 200ms"
+      : null,
+  }));
+
   const [isOptionSelected, setIsOptionSelected] = useState(true);
   const [totalCost, setTotalCost] = useState(0);
   const [stepperState, setStepperState] = useState(false);
+
+  const projectPageRef = useRef(null);
+
+  useEffect(() => {
+    if (projectPageRef.current) {
+      projectPageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
 
   const route = useRouter();
   let cost;
@@ -123,12 +149,12 @@ const page = () => {
         responses: actualResponses,
         totalCost: totalCost,
       });
-     if(data){
-      localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/submit");
-     }else{
-      router.push('/cost-estimation-calculator')
-     }
+      if (data) {
+        localStorage.setItem("Response", data);
+        route.push("/cost-estimation-calculator/submit");
+      } else {
+        route.push("/cost-estimation-calculator");
+      }
     } catch (error) {}
   };
 
@@ -175,6 +201,7 @@ const page = () => {
   const nextQuestion = async () => {
     cost = 0;
     let questionToShowArray = [];
+
     setStepperState(true);
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
@@ -203,7 +230,10 @@ const page = () => {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
           } else {
-            if (selectedOption && !questionsToShowLocal.includes(selectedOption) ) {
+            if (
+              selectedOption &&
+              !questionsToShowLocal.includes(selectedOption)
+            ) {
               questionsToShowLocal.push(selectedOption);
             }
           }
@@ -249,7 +279,9 @@ const page = () => {
     handlePrice("next", cost);
     setIsOptionSelected(true);
     setLastQuestionSelectedOption([]);
+    slider();
   };
+
   if (
     currentState === "post" &&
     currentQuestionIndex > postProjectQuestions.length
@@ -257,6 +289,19 @@ const page = () => {
     goToForm();
   }
 
+  useEffect(() => {
+    // setSlideIn(true);
+    slideIn.current = true;
+  }, [actualResponses.length]);
+
+  console.log("actual responses: ", actualResponses);
+  const slider = function () {
+    // setSlideIn(false);
+    // setTimeout(() => {
+    // setSlideIn(false);
+    slideIn.current = false;
+    // }, 1000);
+  };
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
@@ -277,7 +322,7 @@ const page = () => {
   }
 
   return (
-    <>
+    <Box ref={projectPageRef} sx={{ padding: "1em 0" }}>
       {fetchQuesitons !== null ? (
         <Box sx={{ margin: "1em 2em" }}>
           <Box
@@ -328,18 +373,25 @@ const page = () => {
                 </Grid>
               )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                <Question
-                  currentQuestion={currentQuestion}
-                  getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelectedOption}
-                />
+                {/* <CustomSlider direction="down" in={slideIn} mountOnEnter> */}
+                  <div>
+                    <Question
+                      currentQuestion={currentQuestion}
+                      getResponsesData={getResponsesData}
+                      selectedOption={lastQuestionSelectedOption}
+                    />
+                  </div>
+                {/* </CustomSlider> */}
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
                     vairant="contained"
-                    onClick={nextQuestion}
+                    onClick={() => {
+                      nextQuestion();
+                      slideIn.current = false;
+                    }}
                   >
                     Next
                   </CustomNextButton>
@@ -349,11 +401,15 @@ const page = () => {
           ) : (
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                <Question
-                  currentQuestion={currentQuestion}
-                  getResponsesData={getResponsesData}
-                  selectedOption={lastQuestionSelectedOption}
-                />
+                {/* <CustomSlider direction="down" in={slideIn}> */}
+                  {/* <div> */}
+                    <Question
+                      currentQuestion={currentQuestion}
+                      getResponsesData={getResponsesData}
+                      selectedOption={lastQuestionSelectedOption}
+                    />
+                  {/* </div> */}
+                {/* </CustomSlider> */}
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
                     disabled={isOptionSelected}
@@ -361,7 +417,10 @@ const page = () => {
                     variant="contained"
                     sx={{ width: 150 }}
                     vairant="contained"
-                    onClick={nextQuestion}
+                    onClick={() => {
+                      nextQuestion();
+                      slideIn.current = false;
+                    }}
                   >
                     Next
                   </CustomNextButton>
@@ -380,7 +439,7 @@ const page = () => {
       ) : (
         <Box sx={{ margin: "2em 1em" }}>Loading .....</Box>
       )}
-    </>
+    </Box>
   );
 };
 

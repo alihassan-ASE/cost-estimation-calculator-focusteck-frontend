@@ -3,61 +3,61 @@ import { Button, Box, Typography, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  color: "#000000",
-  boxShadow: "none",
+  backgroundColor: "#fff",
+  // border: "1px solid gray",
+  border: "1px solid #fff",
+  boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
+  color: "#000",
   textTransform: "none",
-  fontSize: 16,
-  padding: "1em 2em",
+  fontSize: "0.9rem",
+  padding: ".3em 1em",
   lineHeight: 1.5,
-  backgroundColor: "#F8F8F9",
   fontWeight: "normal",
-  borderRadius: "3em",
+  borderRadius: "5px",
   minwidth: "140px",
   display: "flex",
   flexWrap: "wrap",
-  fontFamily: [
-    "Proxima Nova",
-    "Poppins",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(","),
+  // transition:
+  //   "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
   "&:hover": {
-    backgroundColor: "#0069d9",
-    borderColor: "#0062cc",
-    boxShadow: "none",
-    color: "white",
+    color: "#fff",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
+  },
+  "&:active": {
+    color: "#fff",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
   },
   "&:focus": {
-    backgroundColor: "#0069d9",
-    borderColor: "#0062cc",
-    boxShadow: "none",
-    color: "white",
+    color: "#fff",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
-    padding: ".7em 1.3em",
+    // padding: ".7em 1.3em",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: 10,
-    padding: ".7em 1.7em",
+    // padding: ".7em 1.7em",
     width: "160px",
   },
   "& span.price": {
-    color: "#3f37c9",
+    color: "#005DBD",
+    // transition: "color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
   },
   "&:hover span.price": {
-    color: "white",
+    color: "#fff",
+  },
+  "&:active span.price": {
+    color: "#fff",
   },
   "&:focus span.price": {
-    color: "white",
+    color: "#fff",
   },
 }));
 
@@ -125,7 +125,7 @@ const TilesComponent = ({
   return (
     <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
       {options?.map((data, index) => (
-        <Box sx={{ display: "inline-block" }} key={index} >
+        <Box sx={{ display: "inline-block" }} key={index}>
           <CustomButton
             value={
               selectedFormats?.opt && selectedFormats?.price
@@ -144,7 +144,7 @@ const TilesComponent = ({
             sx={
               checkSelectedOption(data.opt, data.price)
                 ? {
-                    backgroundColor: "#0062cc",
+                    backgroundColor: "#005DBD",
                     color: "white",
                     "& span.price": {
                       color: "white",
