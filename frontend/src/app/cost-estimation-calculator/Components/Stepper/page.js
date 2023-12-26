@@ -62,10 +62,9 @@ export default function VerticalLinearStepper(props) {
         padding: orientation === "vertical" ? "2em 1em" : ".5em 1em",
         boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
         borderRadius: "5px",
-        // minWidth: orientation === "vertical" ? "212px" : 0,
       }}
     >
-      <Typography sx={{ textAlign: "center" }}>Summary</Typography>
+        <Typography sx={{ textAlign: "center" }}>Summary</Typography>
       <Box
         sx={{
           maxHeight: orientation === "horizontal" ? "60vh" : "max-content",
@@ -143,3 +142,17 @@ export default function VerticalLinearStepper(props) {
     </Box>
   );
 }
+
+// <Box
+//   sx={{
+//     maxHeight: orientation === "horizontal" ? "60vh" : "max-content",
+//     height: orientation === "vertical" ? "60vh" : "max-content",
+//     boxShadow:
+//       responses.length <= 0 ? "none" : "0 0 5px 0 rgba(163,163,163,0.75)",
+//     // maxWidth: "100%",
+//     // margin: "1em 0",
+//     // overflow: "auto",
+//     // padding: ".5em 1em",
+//   }}
+// >
+// </Box>

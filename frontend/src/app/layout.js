@@ -15,7 +15,6 @@ import {
   Button,
   AppBar,
 } from "@mui/material";
-import { baseUrl } from "@/config/constants";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "0 2em",
@@ -130,22 +129,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function RootLayout({ children }) {
   const route = useRouter();
+  // const [startButton, setStartButton] = useState(true);
+  // const customBoxRef = useRef(null);
+
+  // const handleRouteChange = () => {
+  //   route.push("/cost-estimation-calculator");
+  //   setStartButton(false);
+  // };
 
   const baseRoute = usePathname();
 
-  // const isRoot = baseRoute === "/";
-  // const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
-
-  // const href = isRoot
-  //   ? "/cost-estimation-calculator"
-  //   : isEstimationPage
-  //   ? "#scroll-down"
-  //   : "/cost-estimation-calculator";
-
-  const href = "/cost-estimation-calculator";
-
   return (
-    <html lang="en" style={{ scrollBehavior: "smooth" }}>
+    <html lang="en">
       <body style={{ margin: "0" }}>
         <Box
           style={{
@@ -311,8 +306,8 @@ export default function RootLayout({ children }) {
               }}
             >
               <Link
-                href={href}
-                // scroll={false}
+                href="/cost-estimation-calculator"
+                scroll={false}
                 style={{
                   textDecoration: "none",
                 }}
@@ -329,7 +324,7 @@ export default function RootLayout({ children }) {
                   <ArrowForwardIcon
                     sx={{
                       marginRight: "auto",
-                      opacity: 0,
+                      opacity:0,
                       backgroundColor: "#0045e6",
                       color: "#fff",
                       padding: "1em",
@@ -347,15 +342,12 @@ export default function RootLayout({ children }) {
           {baseRoute === "/" ? null : baseRoute ===
             "/cost-estimation-calculator" ? (
             <CustomBox
-              id="scroll-down"
               sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}
             >
               {children}
             </CustomBox>
           ) : (
-            <CustomBox id="scroll-down" sx={{ minHeight: "100vh" }}>
-              {children}
-            </CustomBox>
+            <CustomBox sx={{ minHeight: "100vh" }}>{children}</CustomBox>
           )}
 
           {baseRoute === "/" ? null : (

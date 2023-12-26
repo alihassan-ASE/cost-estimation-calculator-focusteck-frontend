@@ -17,29 +17,16 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import CircularProgress from "@mui/material/CircularProgress";
+import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from "@mui/material/styles";
-import { Opacity } from "@mui/icons-material";
+
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  padding: 0,
-  color: "#ACACAC",
-  borderRadius: "50%",
-  justifyContent: "normal",
-  minWidth: "min-content",
   "&:hover": {
     backgroundColor: "#fff",
   },
-  "&:selected": {
-    backgroundColor: "#fff",
-  },
-  "&:focus": {
-    backgroundColor: "#fff",
-  },
-  "&:active": {
-    backgroundColor: "#fff",
-  },
 }));
+
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
@@ -70,6 +57,7 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
 }));
 
 const page = () => {
+
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
 
@@ -77,6 +65,7 @@ const page = () => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loaderState, setLoaderState] = useState(false);
+
 
   const [selectedOption, setSelectedOption] = useState();
   const [selectedData, setSelectedData] = useState();
@@ -105,6 +94,7 @@ const page = () => {
 
   const route = useRouter();
   let cost;
+
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -151,6 +141,7 @@ const page = () => {
     }
   };
 
+
   const goToForm = () => {
     try {
       let data = JSON.stringify({
@@ -161,20 +152,23 @@ const page = () => {
         localStorage.setItem("Response", data);
         route.push("/cost-estimation-calculator/submit");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
+
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
     if (resp.selectedData || resp.selectedData.length > 3) {
       setIsOptionSelected(false);
     }
+
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -185,10 +179,12 @@ const page = () => {
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
+
   };
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
@@ -197,18 +193,19 @@ const page = () => {
     setLastQuestionSelectedOption(step.selectedOption);
     handlePrice("stepper");
 
-    if (
-      step.question.label == "project type" ||
-      step.question.label == "both platform"
-    ) {
+    if (step.question.label == "project type" || step.question.label == "both platform") {
       step.stack = [];
-    } else {
-      setQuestionsToShow(step.stack);
     }
+    else {
+      setQuestionsToShow(step.stack)
+    }
+
   };
+
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -217,15 +214,17 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
-    setIsOptionSelected(false);
+    setIsOptionSelected(false)
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
+
   };
 
   // Handling Next Question
   const nextQuestion = async () => {
+
     setIsOptionSelected(true);
     setLoaderState(true);
 
@@ -253,16 +252,14 @@ const page = () => {
         }
       }
       case "dynamic": {
+
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
         } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
           } else {
-            if (
-              selectedOption &&
-              !questionsToShowLocal.includes(selectedOption)
-            ) {
+            if (selectedOption && !questionsToShowLocal.includes(selectedOption)) {
               questionsToShowLocal.push(selectedOption);
             }
           }
@@ -301,7 +298,7 @@ const page = () => {
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
     // setTimeout(() => {
-    setLoaderState((prev) => !prev);
+    setLoaderState((prev) => !prev)
     // }, 500);
     selectedData.map((op) => {
       cost = cost + op.price;
@@ -319,12 +316,14 @@ const page = () => {
     goToForm();
   }
 
+
   const slider = function () {
     setSlideIn(false);
     setTimeout(() => {
       setSlideIn(true);
     }, 250);
   };
+
 
   return (
     <Box ref={projectPageRef} sx={{ padding: "1em 0" }}>
@@ -339,7 +338,14 @@ const page = () => {
             }}
           >
             {actualResponses.length > 0 && (
-              <CustomButton onClick={backQuestion}>
+              <CustomButton
+                sx={{
+                  color: "#ACACAC",
+                  borderRadius: "50%",
+                  padding: ".3em",
+                }}
+                onClick={backQuestion}
+              >
                 <KeyboardBackspaceIcon
                   sx={{
                     color: "#ACACAC",
@@ -360,9 +366,9 @@ const page = () => {
           </Box>
 
           {isNarrowScreen ? (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 5, lg: 4, xl: 5 }}>
               {actualResponses.length > 0 && stepperState && (
-                <Grid item lg={4} md={4} sm={4} xs={12}>
+                <Grid item lg={4} md={3} sm={4} xs={12}>
                   <Stepper
                     responses={actualResponses}
                     changeActiveQuestion={changeActiveQuestion}
@@ -370,48 +376,31 @@ const page = () => {
                   />
                 </Grid>
               )}
-              <Grid item lg={8} md={8} sm={8} xs={12}>
+              <Grid item lg={8} md={9} sm={8} xs={12}>
                 <Slide
                   direction="down"
                   in={slideIn}
                   timeout={{
-                    appear: 100,
-                    enter: 950,
+                    appear: 250,
+                    enter: 250,
                     exit: 0,
                   }}
                   appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
-                  }}
                 >
                   <div>
-                    {!loaderState ? (
-                      <Question
-                        currentQuestion={currentQuestion}
-                        getResponsesData={getResponsesData}
-                        selectedOption={lastQuestionSelectedOption}
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          margin: "5em 2em",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
+                  {!loaderState ?
+                  <Question
+                    currentQuestion={currentQuestion}
+                    getResponsesData={getResponsesData}
+                    selectedOption={lastQuestionSelectedOption}
+                  />
+                  :
+                  <Box sx={{ margin: "5em 2em", display: "flex", alignItems: "center" }}><CircularProgress />
+                  </Box>
+                }
                   </div>
                 </Slide>
+               
 
                 <Box sx={{ display: "flex", gap: "2em" }}>
                   <CustomNextButton
@@ -435,42 +424,21 @@ const page = () => {
                   direction="down"
                   in={slideIn}
                   timeout={{
-                    appear: 100,
-                    enter: 950,
+                    appear: 250,
+                    enter: 250,
                     exit: 0,
                   }}
                   appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
-                  }}
                 >
                   <div>
-                    {!loaderState ? (
-                      <Question
-                        currentQuestion={currentQuestion}
-                        getResponsesData={getResponsesData}
-                        selectedOption={lastQuestionSelectedOption}
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          margin: "5em 2em",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
+                  {!loaderState ? <Question
+                  currentQuestion={currentQuestion}
+                  getResponsesData={getResponsesData}
+                  selectedOption={lastQuestionSelectedOption}
+                /> :
+                  <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center" }}><CircularProgress />
+                  </Box>
+                }
                   </div>
                 </Slide>
                 <Box sx={{ display: "flex", gap: "2em" }}>
@@ -499,16 +467,7 @@ const page = () => {
           )}
         </Box>
       ) : (
-        <Box
-          sx={{
-            margin: "5em 2em",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
-          <CircularProgress />
+        <Box sx={{ margin: "5em 2em", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}><CircularProgress />
         </Box>
       )}
     </Box>

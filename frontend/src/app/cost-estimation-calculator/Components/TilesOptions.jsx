@@ -1,37 +1,67 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Button, Box, Typography, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const CustomTypography = styled(Typography)(({ theme }) => ({
-  fontSize: 16,
+const CustomButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#fff",
+  // border: "1px solid gray",
+  border: "1px solid #fff",
+  boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
+  color: "#000",
+  textTransform: "none",
+  fontSize: "0.9rem",
+  padding: ".3em 1em",
+  lineHeight: 1.5,
   fontWeight: "normal",
+  borderRadius: "5px",
+  minwidth: "140px",
+  display: "flex",
+  flexWrap: "wrap",
+  transition:
+    "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
+  "&:hover": {
+    color: "#fff",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
+  },
+  "&:active": {
+    color: "#fff",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
+  },
+  "&:focus": {
+    color: "#fff",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
+  },
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
+    // padding: ".7em 1.3em",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: 10,
+    // padding: ".7em 1.7em",
+    width: "160px",
   },
   "& span.price": {
-    color: "#3f37c9",
+    color: "#005DBD",
+    transition: "color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
+  },
+  "&:hover span.price": {
+    color: "#fff",
+  },
+  "&:active span.price": {
+    color: "#fff",
   },
   "&:focus span.price": {
-    color: "white",
+    color: "#fff",
   },
 }));
 
-const RadioButtonComponent = ({
+const TilesComponent = ({
   options,
   selectedOption,
   selectedOptionPassToParent,
@@ -45,9 +75,9 @@ const RadioButtonComponent = ({
   const [errorMessage, setErrorMessage] = useState(null);
   const [checkInputVal, setCheckInputVal] = useState(false);
   const [selectedFormats, setSelectedFormats] = useState("");
-  const [price , setPrice] = useState(0);
 
   useEffect(() => {
+
     if (selectedOption && selectedOption.length > 0) {
       setSelectedFormats(selectedOption[0] || null);
 
@@ -71,9 +101,10 @@ const RadioButtonComponent = ({
   }, [selectedOption, options]);
 
   const checkSelectedOption = (value, price) => {
-    const res = selectedFormats?.opt === value && selectedFormats?.price === price;
 
+    const res = selectedFormats?.opt === value && selectedFormats?.price === price;
     return !!res;
+
   };
 
   const submitOtherVal = () => {
@@ -92,54 +123,45 @@ const RadioButtonComponent = ({
     }
   };
 
-
-  const handleFormat = (event) => {
-    const selectedOpt = event.target.value;
-    const selectedData = options.find((data) => data.opt === selectedOpt);
-    setSelectedFormats(selectedData);
-    selectedOptionPassToParent(selectedData);
-  };
-
-  
   return (
-    <Box>
-      <FormControl>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          value={selectedFormats}
-          onChange={handleFormat}
-          name="radio-buttons-group"
-        >
-          {options?.map((data, index) => (
-            <FormControlLabel
-              key={index}
-              value={data.opt}
-              control={<Radio />}
-              label={
-                <CustomTypography variant="body1">
-                  <span>{data.opt ? data.opt : data}</span>&nbsp;
-                  <span className="price">
-                    {" "}
-                    {data.price ? `($${data.price})` : null}
-                  </span>
-                </CustomTypography>
+    <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
+      {options?.map((data, index) => (
+        <Box sx={{ display: "inline-block" }} key={index}>
+          <CustomButton
+            value={
+              selectedFormats?.opt && selectedFormats?.price
+                ? { opt: selectedFormats.opt, price: selectedFormats.price }
+                : selectedFormats
+            }
+            onClick={() => {
+              if (data.opt === "Other (Specify)" || data.opt === "Other") {
+                setInputField(!inputField);
+              } else {
+                setSelectedFormats(data);
+                selectedOptionPassToParent(data);
+                setInputField(false);
               }
-              onClick={() => {
-                if (data.opt === "Other (Specify)" || data.opt === "Other") {
-                  setInputField(!inputField);
-                  setPrice(data.price)
-                } else {
-                  setSelectedFormats(data);
-                  selectedOptionPassToParent(data);
-                  setInputField(false);
-                }
-              }}
-
-              checked={checkSelectedOption(data.opt , data.price)}
-            />
-          ))}
-        </RadioGroup>
-     { inputField ?
+            }}
+            sx={
+              checkSelectedOption(data.opt, data.price)
+                ? {
+                    backgroundColor: "#005DBD",
+                    color: "white",
+                    "& span.price": {
+                      color: "white",
+                    },
+                  }
+                : {}
+            }
+          >
+            <span>{data.opt ? data.opt : data}</span>&nbsp;
+            <span className="price">
+              {" "}
+              {data.price ? `($${data.price})` : null}
+            </span>
+          </CustomButton>
+          {data.opt === "Other (Specify)" || data.opt === "Other"
+            ? inputField && (
                 <Box
                   sx={{
                     display: "flex",
@@ -167,7 +189,7 @@ const RadioButtonComponent = ({
                     variant="contained"
                     sx={{ width: "100px" }}
                     onClick={() => {
-                      otherData.price = price;
+                      otherData.price = data.price;
                       otherData.opt = otherVal;
                       if (otherVal !== "") {
                         setSelectedFormats(otherData);
@@ -182,11 +204,12 @@ const RadioButtonComponent = ({
                     Enter
                   </Button>
                 </Box>
-              
+              )
             : null}
-      </FormControl>
+        </Box>
+      ))}
     </Box>
   );
 };
 
-export default RadioButtonComponent;
+export default TilesComponent;

@@ -47,11 +47,6 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
   },
 }));
 const CustomBackButton = styled(Button)(({ theme }) => ({
-  padding: 0,
-  color: "#ACACAC",
-  borderRadius: "50%",
-  justifyContent: "normal",
-  minWidth: "min-content",
   "&:hover": {
     backgroundColor: "#fff",
   },
@@ -386,7 +381,7 @@ const StaffComponent = () => {
   }
 
   return (
-    <Box sx={{ margin: "1em 2em" }}>
+    <Box>
       {additionalQuesiton.length && staffBase.length ? (
         <Box>
           <Box
@@ -398,7 +393,14 @@ const StaffComponent = () => {
             }}
           >
             {currentQuestionIndex > 0 && (
-              <CustomBackButton onClick={backQuestion}>
+              <CustomBackButton
+                sx={{
+                  color: "#ACACAC",
+                  borderRadius: "50%",
+                  padding: ".3em",
+                }}
+                onClick={backQuestion}
+              >
                 <KeyboardBackspaceIcon
                   sx={{
                     color: "#ACACAC",
@@ -481,22 +483,11 @@ const StaffComponent = () => {
                   direction="down"
                   in={slideIn}
                   timeout={{
-                    appear: 100,
-                    enter: 950,
+                    appear: 250,
+                    enter: 250,
                     exit: 0,
                   }}
                   appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
-                  }}
                 >
                   <div>
                     <Question
@@ -533,22 +524,11 @@ const StaffComponent = () => {
                   direction="down"
                   in={slideIn}
                   timeout={{
-                    appear: 100,
-                    enter: 950,
+                    appear: 250,
+                    enter: 250,
                     exit: 0,
                   }}
                   appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
-                  }}
                 >
                   <div>
                     <Question
