@@ -15,7 +15,7 @@ import Question from "../Components/Question/page";
 import { useRouter } from "next/navigation";
 import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
-import StaffResource from "./StaffResource";
+import StaffResourceV2 from "./StaffResourceV2";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -47,6 +47,11 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
   },
 }));
 const CustomBackButton = styled(Button)(({ theme }) => ({
+  padding: 0,
+  color: "#ACACAC",
+  borderRadius: "50%",
+  justifyContent: "normal",
+  minWidth: "min-content",
   "&:hover": {
     backgroundColor: "#fff",
   },
@@ -75,33 +80,20 @@ const CustomButton = styled(Button)(({ theme }) => ({
 }));
 
 const CustomCard = styled(Card)(({ theme }) => ({
-  height: 380,
-  width: "294px",
-  padding: "2em 1.5em",
-  margin: "0 1em",
-  borderRadius: ".5em",
-  display: "flex",
-  justifyContent: "center",
-  [theme.breakpoints.down("md")]: {
-    margin: "2em 0 ",
-  },
-  [theme.breakpoints.down("sm")]: {
-    margin: "1em 0",
-    padding: "2em 1em",
-  },
+  boxShadow: "none",
 }));
 
-const StaffComponent = () => {
+const StaffComponentV2 = () => {
+  const [buttonState, setButtonState] = useState(true);
   const [count, setCount] = useState(0);
   const [values, setValues] = useState([]);
-  const [buttonState, setButtonState] = useState(true);
 
   const [additionalQuesiton, setAdditionalQuesiton] = useState([]);
   const [staffBase, setStaffBaseResources] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [currentState, setCurrentState] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [actualResponses, setActualResponses] = useState({});
+  const [actualResponses, setActualResponses] = useState({ responses: [] });
 
   const [isOptionSelected, setIsOptionSelected] = useState(true);
 
@@ -120,6 +112,18 @@ const StaffComponent = () => {
   const [stepperState, setStepperState] = useState(false);
   const route = useRouter();
   const dataObj = {};
+  let newOption;
+  const [questionState, setQuestionState] = useState(0);
+
+  const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
+  const numOfResourcesOptions = {
+    "Mid Level": [1, 2, 3, 4],
+    "Senior Level": [1, 2, 3, 4, 5],
+    "Team Lead": [1, 2],
+  };
+
+  const [option, setOption] = useState();
+  const [resourceOption, setResourceOption] = useState();
 
   // Setting Staff Resources and Questions
   useEffect(() => {
@@ -152,24 +156,16 @@ const StaffComponent = () => {
   }, [actualResponses, isNextClicked, isStepperClicked]);
 
   useEffect(() => {
-    if (values?.length > 0) {
-      setCount(values?.length - 1);
-    }
-    setResource(values);
-  }, [values?.length]);
+    setResourceOption(staffBase.map((item) => item.typeOfResource));
+  }, [staffBase]);
 
-  const deleteResource = (index) => {
-    if (values) {
-      if (index >= 0 && index < values.length) {
-        const newValues = values.filter((_, i) => i !== index);
-        setValues(newValues);
-      } else {
-        if (index > 0) {
-          setCount(count - 1);
-        }
-      }
-    }
-  };
+  const type = useMemo(() => {
+    return staffBase[0]?.typeOfUI;
+  }, [staffBase]);
+
+  const typeOfSelection = useMemo(() => {
+    return staffBase[0]?.typeofselection;
+  }, [staffBase]);
 
   // Function to navigate on Form Page
   const goToForm = () => {
@@ -237,60 +233,74 @@ const StaffComponent = () => {
     setIsStepperClicked(true);
   };
 
-  // receiving selected option from child Component
-  const selectedOptionPassToParent = (data, boolVal, label) => {
-    setValues((prev) => [...prev, data]);
-    setButtonState(true);
-
-    setIsOptionSelected(false);
-    setResource((prev) => [...prev, data]);
-  };
-
   // setting Response in actual Array
   const setResponseData = () => {
-    dataObj.resources = values;
-    setResource(dataObj.resources);
-    currentState
-      ? setActualResponses({ responses: [dataObj] })
-      : setActualResponses((prev) => {
-          return {
-            responses: [
-              ...prev.responses,
-              { ...currentQuestion, ...addedOption },
-            ],
-          };
-        });
+    const newResponse = { ...currentQuestion, ...addedOption };
+
+    setActualResponses((prev) => ({
+      ...prev,
+      responses: [...prev.responses, newResponse],
+    }));
   };
+
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
+    setOption(resp.selectedData[0]);
     setIsOptionSelected(false);
     setAddedOption(resp);
   };
 
   // Handling Next Quesiton
   const nextQuestion = () => {
-    setCurrentState(false);
-    setButtonState(true);
-    setIsOptionSelected((prev) => !prev);
-    setStepperState(true);
+    setOption();
 
-    let currentQuestionLocal = currentQuestion;
-    let currentQuestionIndexLocal = currentQuestionIndex;
-    if (!currentQuestion) {
-      currentQuestionLocal = additionalQuesiton[currentQuestionIndexLocal];
-      currentQuestionIndexLocal++;
-    } else if (currentQuestionIndexLocal < additionalQuesiton.length) {
-      currentQuestionLocal = additionalQuesiton[currentQuestionIndexLocal];
-      currentQuestionIndexLocal++;
+    staffBase.find((data) => {
+      if (data.typeOfResource === option) {
+        newOption = data.options;
+      }
+    });
+
+    if (newOption) {
+      setQuestionState(questionState + 1);
+      setResourceOption(newOption);
     } else {
-      setCurrentQuestionIndex(currentQuestionIndexLocal++);
+      for (const key in numOfResourcesOptions) {
+        if (key === option) {
+          setQuestionState(questionState + 1);
+          setResourceOption(numOfResourcesOptions[key]);
+          break;
+        } else if (questionState === 1) {
+          setQuestionState(questionState + 1);
+          setResourceOption(seniorityLevelOptions);
+        } else {
+          setCurrentState(false);
+          setButtonState(true);
+          setIsOptionSelected((prev) => !prev);
+          setStepperState(true);
+
+          let currentQuestionLocal = currentQuestion;
+          let currentQuestionIndexLocal = currentQuestionIndex;
+          if (!currentQuestion) {
+            currentQuestionLocal =
+              additionalQuesiton[currentQuestionIndexLocal];
+            currentQuestionIndexLocal++;
+          } else if (currentQuestionIndexLocal < additionalQuesiton.length) {
+            currentQuestionLocal =
+              additionalQuesiton[currentQuestionIndexLocal];
+            currentQuestionIndexLocal++;
+          } else {
+            setCurrentQuestionIndex(currentQuestionIndexLocal++);
+          }
+
+          setCurrentQuestion(currentQuestionLocal);
+          setCurrentQuestionIndex(currentQuestionIndexLocal);
+          setIsNextClicked(true);
+          setLastQuestionSelectedOption([]);
+        }
+      }
     }
 
-    setCurrentQuestion(currentQuestionLocal);
-    setCurrentQuestionIndex(currentQuestionIndexLocal);
     setResponseData();
-    setIsNextClicked(true);
-    setLastQuestionSelectedOption([]);
     slider();
   };
 
@@ -301,7 +311,9 @@ const StaffComponent = () => {
     }, 250);
   };
 
+  console.log("actual responses: ", questionState);
   // Handling Back Question and Calculating Price on Back Button
+
   const backQuestion = () => {
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
@@ -322,55 +334,42 @@ const StaffComponent = () => {
       if (actualResponses.responses.length >= 0) {
         let totalPriceToSubtract = 0;
         if (lastQuestion) {
-          if (lastQuestion.resources?.length) {
-            if (lastQuestion.resources && lastQuestion.resources.length > 0) {
-              lastQuestion.resources.forEach((resource) => {
-                if (resource.resourceOption && resource.resourceOption.price) {
-                  totalPriceToSubtract += resource.resourceOption.price;
-                }
-              });
-            }
-          } else {
-            if (
-              lastQuestion.selectedData &&
-              lastQuestion.selectedData.length > 0
-            ) {
-              lastQuestion.selectedData.forEach((select) => {
-                if (select.price) {
-                  totalPriceToSubtract += select.price;
-                }
-              });
-            }
-          }
+          // if (lastQuestion.resources?.length) {
+          //   if (lastQuestion.resources && lastQuestion.resources.length > 0) {
+          //     lastQuestion.resources.forEach((resource) => {
+          //       if (resource.resourceOption && resource.resourceOption.price) {
+          //         totalPriceToSubtract += resource.resourceOption.price;
+          //       }
+          //     });
+          //   }
+          // } else {
+          //   if (
+          //     lastQuestion.selectedData &&
+          //     lastQuestion.selectedData.length > 0
+          //   ) {
+          //     lastQuestion.selectedData.forEach((select) => {
+          //       if (select.price) {
+          //         totalPriceToSubtract += select.price;
+          //       }
+          //     });
+          //   }
+          // }
           setTotalCost((prev) => prev - totalPriceToSubtract);
         }
       }
-    }
-  };
+    } else {
+      if (questionState > 0) {
+        setQuestionState(questionState - 1);
+        let newArray = [...actualResponses.responses];
+        lastQuestion = newArray.pop();
 
-  // Showing selected Resources
-  const returnResources = () => {
-    const tags = [];
-    for (let i = 0; i <= count; i++) {
-      tags.push(
-        <CustomCard key={i}>
-          <StaffResource
-            key={i}
-            question={currentQuestion}
-            options={staffBase}
-            index={i}
-            count={count}
-            setCount={setCount}
-            setValues={setValues}
-            values={values}
-            selectedOption={resource}
-            selectedOptionPassToParent={selectedOptionPassToParent}
-            deleteResource={deleteResource}
-          />
-        </CustomCard>
-      );
+        if (lastQuestion) {
+          setCurrentQuestion(lastQuestion);
+          setActualResponses({ responses: newArray });
+          setIsOptionSelected(false);
+        }
+      }
     }
-    return tags;
   };
 
   // calling goToForm Function after selecting last question
@@ -381,7 +380,7 @@ const StaffComponent = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ margin: "1em 2em" }}>
       {additionalQuesiton.length && staffBase.length ? (
         <Box>
           <Box
@@ -392,15 +391,8 @@ const StaffComponent = () => {
               margin: "1em 0",
             }}
           >
-            {currentQuestionIndex > 0 && (
-              <CustomBackButton
-                sx={{
-                  color: "#ACACAC",
-                  borderRadius: "50%",
-                  padding: ".3em",
-                }}
-                onClick={backQuestion}
-              >
+            {actualResponses.responses?.length > 0 && (
+              <CustomBackButton onClick={backQuestion}>
                 <KeyboardBackspaceIcon
                   sx={{
                     color: "#ACACAC",
@@ -422,50 +414,7 @@ const StaffComponent = () => {
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
           </Box>
 
-          {currentState ? (
-            <>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                  gap: "1em",
-                }}
-              >
-                {returnResources()}
-
-                {resource.length > 0 ? (
-                  <Box>
-                    <CustomButton
-                      onClick={() => {
-                        setCount(count + 1);
-                        returnResources();
-                      }}
-                    >
-                      <ControlPointIcon sx={{ fontSize: 30 }} />
-                    </CustomButton>
-                  </Box>
-                ) : null}
-              </Box>
-              <Box
-                sx={{
-                  margin: "2em 1em",
-                }}
-              >
-                <CustomNextButton
-                  size="medium"
-                  variant="contained"
-                  onClick={() => {
-                    nextQuestion();
-                  }}
-                  disabled={values[0] ? false : true}
-                >
-                  Next
-                </CustomNextButton>
-              </Box>
-              {/* )} */}
-            </>
-          ) : isNarrowScreen ? (
+          {isNarrowScreen ? (
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               {stepperState && (
                 <Grid item lg={4} md={3} sm={4} xs={12}>
@@ -483,17 +432,23 @@ const StaffComponent = () => {
                   direction="down"
                   in={slideIn}
                   timeout={{
-                    appear: 250,
-                    enter: 250,
+                    appear: 100,
+                    enter: 950,
                     exit: 0,
                   }}
                   appear={true}
+                  onEnter={(node) => {
+                    node.style.transform = "translateY(-50px)";
+                  }}
                 >
                   <div>
                     <Question
                       currentQuestion={currentQuestion}
+                      options={resourceOption}
                       getResponsesData={getResponsesData}
                       selectedOption={lastQuestionSelectedOption}
+                      typeOfSelection={typeOfSelection}
+                      typeofUI={type}
                     />
                   </div>
                 </Slide>
@@ -524,17 +479,23 @@ const StaffComponent = () => {
                   direction="down"
                   in={slideIn}
                   timeout={{
-                    appear: 250,
-                    enter: 250,
+                    appear: 100,
+                    enter: 950,
                     exit: 0,
                   }}
                   appear={true}
+                  onEnter={(node) => {
+                    node.style.transform = "translateY(-50px)";
+                  }}
                 >
                   <div>
                     <Question
                       currentQuestion={currentQuestion}
+                      options={resourceOption}
                       getResponsesData={getResponsesData}
                       selectedOption={lastQuestionSelectedOption}
+                      typeOfSelection={typeOfSelection}
+                      typeofUI={type}
                     />
                   </div>
                 </Slide>
@@ -557,13 +518,14 @@ const StaffComponent = () => {
                 )}
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
-                {actualResponses.length || actualResponses.responses ? (
-                  <Stepper
-                    responses={actualResponses.responses}
-                    changeActiveQuestion={changeActiveQuestion}
-                    orientation={orientation}
-                  />
-                ) : null}
+                {actualResponses.length || actualResponses.responses
+                  ? //   <Stepper
+                    //     responses={actualResponses.responses}
+                    //     changeActiveQuestion={changeActiveQuestion}
+                    //     orientation={orientation}
+                    //   />
+                    null
+                  : null}
               </Grid>
             </Grid>
           )}
@@ -585,4 +547,4 @@ const StaffComponent = () => {
   );
 };
 
-export default StaffComponent;
+export default StaffComponentV2;
