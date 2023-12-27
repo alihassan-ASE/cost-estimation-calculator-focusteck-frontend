@@ -512,7 +512,7 @@ export default function RootLayout({ children }) {
             >
               <Link
                 href={href}
-                // scroll={false}
+                scroll={false}
                 style={{
                   textDecoration: "none",
                 }}

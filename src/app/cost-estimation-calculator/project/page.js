@@ -202,7 +202,7 @@ const page = () => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
-    if (resp.selectedData.length <= 3 && currentQuestion.typeOfUI == "CheckBox") {
+    if (resp.selectedData.length < 3 && currentQuestion.typeOfUI == "CheckBox") {
       setIsOptionSelected(true);
     }
     else if (resp.selectedData.length !== 0) {

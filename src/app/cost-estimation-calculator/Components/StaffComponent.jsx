@@ -174,6 +174,7 @@ const StaffComponent = () => {
 
   // Function To Handling Price
   const handlePrice = (type) => {
+
     switch (type) {
       case "stepper":
       case "next": {
@@ -213,6 +214,7 @@ const StaffComponent = () => {
 
   // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
 
     if (index == 1) {
@@ -224,6 +226,8 @@ const StaffComponent = () => {
     actualResponses.responses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedData);
     setIsStepperClicked(true);
+    setIsOptionSelected(false)
+    
   };
 
   // receiving selected option from child Component
