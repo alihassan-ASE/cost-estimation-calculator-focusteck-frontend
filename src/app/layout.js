@@ -18,7 +18,7 @@ import {
 import { baseUrl } from "@/config/constants";
 
 const CustomBox = styled(Box)(({ theme }) => ({
-  margin: "0 2em",
+  // margin: "0 2em",
   [theme.breakpoints.down("sm")]: {
     margin: "0",
   },
@@ -152,6 +152,7 @@ export default function RootLayout({ children }) {
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
+            margin: 0
           }}
         >
           <AppBar

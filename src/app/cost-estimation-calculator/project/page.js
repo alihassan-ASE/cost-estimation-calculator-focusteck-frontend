@@ -2,6 +2,8 @@
 // final code
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
   getQuestions,
   getDynamicQuestion,
@@ -16,58 +18,88 @@ import {
   Slide,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
-import { Opacity } from "@mui/icons-material";
+
+// const CustomButton = styled(Button)(({ theme }) => ({
+//   padding: 0,
+//   color: "#ACACAC",
+//   borderRadius: "50%",
+//   justifyContent: "normal",
+//   minWidth: "min-content",
+//   "&:hover": {
+//     backgroundColor: "#fff",
+//   },
+//   "&:selected": {
+//     backgroundColor: "#fff",
+//   },
+//   "&:focus": {
+//     backgroundColor: "#fff",
+//   },
+//   "&:active": {
+//     backgroundColor: "#fff",
+//   },
+// }));
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  padding: 0,
-  color: "#ACACAC",
-  borderRadius: "50%",
-  justifyContent: "normal",
-  minWidth: "min-content",
+  color: "white",
+  boxShadow: "none",
+  textTransform: "none",
+  // padding: "4em 2em",
+  lineHeight: 1.5,
+  height: "40px",
+  maxWidth: "100px",
+  backgroundColor: "#005DBD",
+  fontWeight: "normal",
+  borderRadius: "5px",
+  textAlign: "center",
+  // display: "flex",
+  flexWrap: "wrap",
+  flexDirection: "column",
+  flexGrow: 1,
+  flexShrink: 1,
+  gap: ".1em",
+  transition: "all 0.3s ease",
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
   "&:hover": {
-    backgroundColor: "#fff",
+    backgroundColor: "#005DBD",
+    color: "#fff",
   },
-  "&:selected": {
-    backgroundColor: "#fff",
-  },
-  "&:focus": {
-    backgroundColor: "#fff",
-  },
-  "&:active": {
-    backgroundColor: "#fff",
-  },
+  "&.Mui-disabled": {
+    background: "#4f9ef0",
+    color: "#eaeaea"
+  }
 }));
 
-const CustomNextButton = styled(Button)(({ theme }) => ({
-  width: 150,
-  margin: "2em 0",
-  fontFamily: [
-    "Proxima Nova",
-    "Poppins",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(","),
-  [theme.breakpoints.down("md")]: {
-    fontSize: 14,
-    margin: "2em 0",
-  },
-  [theme.breakpoints.down("sm")]: {
-    width: 100,
-    fontSize: 10,
-    margin: "1.5em 0",
-  },
-}));
+
+//   width: 150,
+//   margin: "2em 0",
+//   fontFamily: [
+//     "Proxima Nova",
+//     "Poppins",
+//     "-apple-system",
+//     "BlinkMacSystemFont",
+//     '"Segoe UI"',
+//     "Roboto",
+//     '"Helvetica Neue"',
+//     "Arial",
+//     "sans-serif",
+//     '"Apple Color Emoji"',
+//     '"Segoe UI Emoji"',
+//     '"Segoe UI Symbol"',
+//   ].join(","),
+//   [theme.breakpoints.down("md")]: {
+//     fontSize: 14,
+//     margin: "2em 0",
+//   },
+//   [theme.breakpoints.down("sm")]: {
+//     width: 100,
+//     fontSize: 10,
+//     margin: "1.5em 0",
+//   },
+// }));
 
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -161,20 +193,27 @@ const page = () => {
         localStorage.setItem("Response", data);
         route.push("/cost-estimation-calculator/submit");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
+
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
-    if (resp.selectedData || resp.selectedData.length > 3) {
-      setIsOptionSelected(false);
+
+    if (resp.selectedData.length <= 3 && currentQuestion.typeOfUI == "CheckBox") {
+      setIsOptionSelected(true);
     }
+    else if (resp.selectedData.length !== 0) {
+      setIsOptionSelected(false)
+    }
+
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -185,10 +224,12 @@ const page = () => {
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
+
   };
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
@@ -209,6 +250,7 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     cost = 0;
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -217,14 +259,12 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
-    setIsOptionSelected(false);
-
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
   };
 
-  // Handling Next Question
+  // // Handling Next Question
   const nextQuestion = async () => {
     setIsOptionSelected(true);
     setLoaderState(true);
@@ -311,6 +351,96 @@ const page = () => {
     setLastQuestionSelectedOption([]);
     slider();
   };
+  // const nextQuestion = async () => {
+
+  //   setIsOptionSelected(true);
+  //   setLoaderState(true);
+
+  //   cost = 0;
+  //   setStepperState(true);
+
+  //   let currentStateLocal = currentState;
+  //   let currentQuestionLocal = currentQuestion;
+  //   let currentQuestionIndexLocal = currentQuestionIndex;
+  //   let questionsToShowLocal = questionsToShow;
+
+  //   switch (currentStateLocal) {
+  //     case "pre": {
+  //       if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
+  //         currentStateLocal = "dynamic";
+  //         currentQuestionLocal = null;
+  //         currentQuestionIndexLocal = 0;
+  //       } else {
+  //         currentQuestionLocal =
+  //           preProjectQuestions[currentQuestionIndexLocal + 1];
+  //         currentQuestionIndexLocal++;
+  //       }
+  //       if (currentQuestionLocal) {
+  //         break;
+  //       }
+  //     }
+  //     case "dynamic": {
+  //       if (!currentQuestionLocal) {
+  //         currentQuestionLocal = await getDynamicQuestion();
+  //       } else if (currentQuestionLocal) {
+  //         if (Array.isArray(
+
+  //         )) {
+  //           questionsToShowLocal.push(...selectedOption);
+  //         } else {
+  //           if (
+  //             selectedOption &&
+  //             !questionsToShowLocal.includes(selectedOption)
+  //           ) {
+  //             questionsToShowLocal.push(selectedOption);
+  //           }
+  //         }
+  //         if (questionsToShowLocal.length) {
+  //           currentQuestionLocal = await getDynamicQuestion(
+  //             questionsToShowLocal[questionsToShowLocal.length - 1]
+  //           );
+  //         } else {
+  //           currentStateLocal = "post";
+  //           currentQuestionLocal = null;
+  //           currentQuestionIndexLocal = 0;
+  //         }
+  //       }
+  //       if (currentQuestionLocal) {
+  //         break;
+  //       }
+  //     }
+
+  //     case "post": {
+  //       if (currentQuestionIndexLocal < postProjectQuestions.length) {
+  //         currentQuestionLocal =
+  //           postProjectQuestions[currentQuestionIndexLocal];
+  //         currentQuestionIndexLocal++;
+  //       } else {
+  //         currentQuestionIndexLocal++;
+  //         break;
+  //       }
+  //     }
+  //     default: {
+  //       null;
+  //     }
+  //   }
+  //   setCurrentState(currentStateLocal);
+  //   setCurrentQuestion(currentQuestionLocal);
+  //   setCurrentQuestionIndex(currentQuestionIndexLocal);
+  //   setQuestionsToShow(questionsToShowLocal);
+  //   setResponseData();
+  //   // setTimeout(() => {
+  //   setLoaderState((prev) => !prev);
+  //   // }, 500);
+  //   selectedData.map((op) => {
+  //     cost = cost + op.price;
+  //   });
+
+  //   handlePrice("next", cost);
+  //   setLastQuestionSelectedOption([]);
+  //   // setSelectedData([]);
+  //   slider();
+  // };
 
   if (
     currentState === "post" &&
@@ -329,38 +459,95 @@ const page = () => {
   return (
     <Box ref={projectPageRef} sx={{ padding: "1em 0" }}>
       {fetchQuesitons !== null ? (
-        <Box sx={{ margin: "1em 2em" }}>
+        <Box >
           <Box
             sx={{
               display: "flex",
               gap: "1em",
               alignItems: "center",
-              margin: "1em 0",
+              margin: "-2em 0",
+              display: "flex",
+              flexDirection: "row",
+              backgroundColor: "#f5fcff",
+              justifyContent: "space-between",
+              maxWidth: "100%",
+              position: "sticky",
+              padding: "0 2em",
+              top: 0,
+              left: 0,
+              right: 0,
+              zIndex: 1000,
+              height: "80px",
             }}
           >
-            {actualResponses.length > 0 && (
-              <CustomButton onClick={backQuestion}>
-                <KeyboardBackspaceIcon
-                  sx={{
-                    color: "#ACACAC",
-                    border: "2px solid #ACACAC",
-                    borderRadius: "50%",
-                    padding: ".3em",
-                    ":hover": {
-                      cursor: "pointer",
-                      backgroundColor: "#0069d9",
-                      border: "2px solid #fff",
-                      color: "#fff",
-                    },
-                  }}
-                />
-              </CustomButton>
-            )}
+
+            <CustomButton
+              disabled={!actualResponses.length}
+              onClick={backQuestion}
+              sx={{
+                "&:hover svg": {
+                  color: "#005DBD",
+                  height: "100%",
+                  backgroundColor: "white",
+                  transform: "translateX(-20px)",
+                  position: "relative",
+                },
+                overflow: "hidden",
+                "&:hover": {
+                  borderRadius: "0px 5px 5px 0px",
+                }
+              }}
+            >
+              <ArrowBackIcon sx={{
+                fontSize: "18px",
+                transition: "all 0.2s ease-in",
+                padding: ".5em .8em",
+                marginLeft: "3px",
+                borderRadius: "0px 50% 50% 0px",
+                color: "white",
+              }} />
+              <Typography sx={{
+                fontSize: "12px",
+                color: "white",
+              }}>Back</Typography>
+            </CustomButton>
+
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+
+            <CustomButton
+              onClick={nextQuestion}
+              sx={{
+                "&:hover svg": {
+                  color: "#005DBD",
+                  height: "100%",
+                  backgroundColor: "white",
+                  transform: "translateX(20px)",
+                  position: "relative",
+                },
+                overflow: "hidden",
+                "&:hover": {
+                  borderRadius: "5px 0px 0px 5px",
+                }
+              }}
+              disabled={isOptionSelected}>
+              <Typography sx={{
+                fontSize: "12px",
+                color: "white",
+              }}>Next</Typography>
+
+              <ArrowForwardIcon sx={{
+                fontSize: "18px",
+                transition: "all 0.2s ease-in",
+                padding: ".5em .8em",
+                marginLeft: "3px",
+                borderRadius: "50% 5px 5px 50%",
+                color: "white",
+              }} />
+            </CustomButton>
           </Box>
 
           {isNarrowScreen ? (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid sx={{ padding: " 2em" }} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               {actualResponses.length > 0 && stepperState && (
                 <Grid item lg={4} md={4} sm={4} xs={12}>
                   <Stepper
@@ -386,7 +573,6 @@ const page = () => {
                     // node.addEventListener(
                     //   "transition",
                     //   (e) => {
-                    //     console.log("Actually done");
                     //   },
                     //   false
                     // );
@@ -414,7 +600,7 @@ const page = () => {
                 </Slide>
 
                 <Box sx={{ display: "flex", gap: "2em" }}>
-                  <CustomNextButton
+                  {/* <CustomNextButton
                     disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
@@ -424,12 +610,12 @@ const page = () => {
                     }}
                   >
                     Next
-                  </CustomNextButton>
+                  </CustomNextButton> */}
                 </Box>
               </Grid>
             </Grid>
           ) : (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid sx={{ padding: "2em" }} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               <Grid item lg={8} md={9} sm={8} xs={12}>
                 <Slide
                   direction="down"
@@ -441,15 +627,15 @@ const page = () => {
                   }}
                   appear={true}
                   onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
 
+                    node.style.transform = "translateY(-50px)";
                     // node.addEventListener(
                     //   "transition",
                     //   (e) => {
-                    //     console.log("Actually done");
                     //   },
                     //   false
                     // );
+
                   }}
                 >
                   <div>
@@ -474,7 +660,7 @@ const page = () => {
                   </div>
                 </Slide>
                 <Box sx={{ display: "flex", gap: "2em" }}>
-                  <CustomNextButton
+                  {/* <CustomNextButton
                     disabled={isOptionSelected}
                     size="medium"
                     variant="contained"
@@ -485,7 +671,7 @@ const page = () => {
                     }}
                   >
                     Next
-                  </CustomNextButton>
+                  </CustomNextButton> */}
                 </Box>
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
