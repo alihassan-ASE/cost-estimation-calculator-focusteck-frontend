@@ -21,26 +21,6 @@ import { useRouter } from "next/navigation";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 
-// const CustomButton = styled(Button)(({ theme }) => ({
-//   padding: 0,
-//   color: "#ACACAC",
-//   borderRadius: "50%",
-//   justifyContent: "normal",
-//   minWidth: "min-content",
-//   "&:hover": {
-//     backgroundColor: "#fff",
-//   },
-//   "&:selected": {
-//     backgroundColor: "#fff",
-//   },
-//   "&:focus": {
-//     backgroundColor: "#fff",
-//   },
-//   "&:active": {
-//     backgroundColor: "#fff",
-//   },
-// }));
-
 const CustomButton = styled(Button)(({ theme }) => ({
   color: "white",
   boxShadow: "none",
@@ -66,40 +46,21 @@ const CustomButton = styled(Button)(({ theme }) => ({
   "&:hover": {
     backgroundColor: "#005DBD",
     color: "#fff",
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+
   },
   "&.Mui-disabled": {
     background: "#4f9ef0",
     color: "#eaeaea"
-  }
+  },
+  "&:focus": {
+    outline: "none", 
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+  },
 }));
 
 
-//   width: 150,
-//   margin: "2em 0",
-//   fontFamily: [
-//     "Proxima Nova",
-//     "Poppins",
-//     "-apple-system",
-//     "BlinkMacSystemFont",
-//     '"Segoe UI"',
-//     "Roboto",
-//     '"Helvetica Neue"',
-//     "Arial",
-//     "sans-serif",
-//     '"Apple Color Emoji"',
-//     '"Segoe UI Emoji"',
-//     '"Segoe UI Symbol"',
-//   ].join(","),
-//   [theme.breakpoints.down("md")]: {
-//     fontSize: 14,
-//     margin: "2em 0",
-//   },
-//   [theme.breakpoints.down("sm")]: {
-//     width: 100,
-//     fontSize: 10,
-//     margin: "1.5em 0",
-//   },
-// }));
+
 
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -199,6 +160,7 @@ const page = () => {
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
+    
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
@@ -252,13 +214,16 @@ const page = () => {
   const backQuestion = () => {
 
     cost = 0;
+
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
+
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
+
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
@@ -266,6 +231,7 @@ const page = () => {
 
   // // Handling Next Question
   const nextQuestion = async () => {
+    
     setIsOptionSelected(true);
     setLoaderState(true);
 
@@ -351,97 +317,7 @@ const page = () => {
     setLastQuestionSelectedOption([]);
     slider();
   };
-  // const nextQuestion = async () => {
-
-  //   setIsOptionSelected(true);
-  //   setLoaderState(true);
-
-  //   cost = 0;
-  //   setStepperState(true);
-
-  //   let currentStateLocal = currentState;
-  //   let currentQuestionLocal = currentQuestion;
-  //   let currentQuestionIndexLocal = currentQuestionIndex;
-  //   let questionsToShowLocal = questionsToShow;
-
-  //   switch (currentStateLocal) {
-  //     case "pre": {
-  //       if (currentQuestionIndexLocal >= preProjectQuestions.length - 1) {
-  //         currentStateLocal = "dynamic";
-  //         currentQuestionLocal = null;
-  //         currentQuestionIndexLocal = 0;
-  //       } else {
-  //         currentQuestionLocal =
-  //           preProjectQuestions[currentQuestionIndexLocal + 1];
-  //         currentQuestionIndexLocal++;
-  //       }
-  //       if (currentQuestionLocal) {
-  //         break;
-  //       }
-  //     }
-  //     case "dynamic": {
-  //       if (!currentQuestionLocal) {
-  //         currentQuestionLocal = await getDynamicQuestion();
-  //       } else if (currentQuestionLocal) {
-  //         if (Array.isArray(
-
-  //         )) {
-  //           questionsToShowLocal.push(...selectedOption);
-  //         } else {
-  //           if (
-  //             selectedOption &&
-  //             !questionsToShowLocal.includes(selectedOption)
-  //           ) {
-  //             questionsToShowLocal.push(selectedOption);
-  //           }
-  //         }
-  //         if (questionsToShowLocal.length) {
-  //           currentQuestionLocal = await getDynamicQuestion(
-  //             questionsToShowLocal[questionsToShowLocal.length - 1]
-  //           );
-  //         } else {
-  //           currentStateLocal = "post";
-  //           currentQuestionLocal = null;
-  //           currentQuestionIndexLocal = 0;
-  //         }
-  //       }
-  //       if (currentQuestionLocal) {
-  //         break;
-  //       }
-  //     }
-
-  //     case "post": {
-  //       if (currentQuestionIndexLocal < postProjectQuestions.length) {
-  //         currentQuestionLocal =
-  //           postProjectQuestions[currentQuestionIndexLocal];
-  //         currentQuestionIndexLocal++;
-  //       } else {
-  //         currentQuestionIndexLocal++;
-  //         break;
-  //       }
-  //     }
-  //     default: {
-  //       null;
-  //     }
-  //   }
-  //   setCurrentState(currentStateLocal);
-  //   setCurrentQuestion(currentQuestionLocal);
-  //   setCurrentQuestionIndex(currentQuestionIndexLocal);
-  //   setQuestionsToShow(questionsToShowLocal);
-  //   setResponseData();
-  //   // setTimeout(() => {
-  //   setLoaderState((prev) => !prev);
-  //   // }, 500);
-  //   selectedData.map((op) => {
-  //     cost = cost + op.price;
-  //   });
-
-  //   handlePrice("next", cost);
-  //   setLastQuestionSelectedOption([]);
-  //   // setSelectedData([]);
-  //   slider();
-  // };
-
+  
   if (
     currentState === "post" &&
     currentQuestionIndex > postProjectQuestions.length
@@ -495,20 +371,24 @@ const page = () => {
                 overflow: "hidden",
                 "&:hover": {
                   borderRadius: "0px 5px 5px 0px",
-                }
+                },
+                "&:hover > .typography": { 
+                  transform: "translateX(-10px)", 
+                },
               }}
             >
               <ArrowBackIcon sx={{
                 fontSize: "18px",
                 transition: "all 0.2s ease-in",
-                padding: ".5em .8em",
+                padding: ".5em .9em",
                 marginLeft: "3px",
                 borderRadius: "0px 50% 50% 0px",
                 color: "white",
               }} />
-              <Typography sx={{
+              <Typography className="typography" sx={{
                 fontSize: "12px",
                 color: "white",
+                transition: "all 0.2s ease-in",
               }}>Back</Typography>
             </CustomButton>
 
@@ -527,18 +407,23 @@ const page = () => {
                 overflow: "hidden",
                 "&:hover": {
                   borderRadius: "5px 0px 0px 5px",
-                }
+                },
+                "&:hover > .typography": { 
+                  transform: "translateX(10px)", 
+                },
               }}
               disabled={isOptionSelected}>
-              <Typography sx={{
+              <Typography className="typography" sx={{
                 fontSize: "12px",
                 color: "white",
+                transition: "all 0.2s ease-in",
+
               }}>Next</Typography>
 
               <ArrowForwardIcon sx={{
                 fontSize: "18px",
                 transition: "all 0.2s ease-in",
-                padding: ".5em .8em",
+                padding: ".5em .9em",
                 marginLeft: "3px",
                 borderRadius: "50% 5px 5px 50%",
                 color: "white",

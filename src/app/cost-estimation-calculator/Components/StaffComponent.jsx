@@ -22,10 +22,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  color: "#fff",
+  color: "white",
   boxShadow: "none",
   textTransform: "none",
-  padding: 0,
   lineHeight: 1.5,
   height: "40px",
   maxWidth: "100px",
@@ -33,21 +32,31 @@ const CustomButton = styled(Button)(({ theme }) => ({
   fontWeight: "normal",
   borderRadius: "5px",
   textAlign: "center",
-  display: "flex",
-  flexWrap: "noWrap",
-  flexDirection: "row",
+  flexWrap: "wrap",
+  flexDirection: "column",
   flexGrow: 1,
   flexShrink: 1,
   gap: ".1em",
-  transition: "all 0.6s ease",
+  transition: "all 0.3s ease",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   "&:hover": {
     backgroundColor: "#005DBD",
     color: "#fff",
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+
+  },
+  "&.Mui-disabled": {
+    background: "#4f9ef0",
+    color: "#eaeaea"
+  },
+  "&:focus": {
+    outline: "none", 
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
 }));
+
 const CustomButtonAdd = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
@@ -146,6 +155,7 @@ const StaffComponent = () => {
     setResource(values);
   }, [values?.length]);
 
+
   const deleteResource = (index) => {
     if (values) {
       if (index >= 0 && index < values.length) {
@@ -231,7 +241,7 @@ const StaffComponent = () => {
   };
 
   // receiving selected option from child Component
-  const selectedOptionPassToParent = (data,saveButton,setSaveButton, boolVal, label) => {
+  const selectedOptionPassToParent = (data, boolVal, label) => {
     setValues((prev) => [...prev, data]);
     setButtonState(true);
 
@@ -358,6 +368,7 @@ const StaffComponent = () => {
 
   // Showing selected Resources
   const returnResources = () => {
+
     const tags = [];
     for (let i = 0; i <= count; i++) {
       tags.push(
@@ -379,6 +390,7 @@ const StaffComponent = () => {
       );
     }
     return tags;
+    
   };
 
   // calling goToForm Function after selecting last question
@@ -427,7 +439,10 @@ const StaffComponent = () => {
                   overflow: "hidden",
                   "&:hover":{
                     borderRadius:"0px 5px 5px 0px",
-                  }
+                  },
+                  "&:hover > .typography": { 
+                    transform: "translateX(-10px)", 
+                  },
                 }}
                >
                 <ArrowBackIcon sx={{
@@ -438,8 +453,9 @@ const StaffComponent = () => {
                 borderRadius: "0px 50% 50% 0px",
                 color: "white",
               }}/>
-                <Typography sx={{
+                <Typography className="typography" sx={{
                 fontSize: "12px",
+                transition:"all 0.2s ease-in",
               }}>Back</Typography>
               </CustomButton>
          
@@ -458,11 +474,15 @@ const StaffComponent = () => {
                 overflow: "hidden",
                 "&:hover":{
                   borderRadius:"5px 0px 0px 5px",
-                }
+                },
+                "&:hover > .typography": { 
+                  transform: "translateX(10px)", 
+                },
               }}
               disabled={isOptionSelected}>
-              <Typography sx={{
+              <Typography className="typography" sx={{
                 fontSize: "12px",
+                transition:"all 0.2s ease-in",
               }}>Next</Typography>
 
               <ArrowForwardIcon sx={{
