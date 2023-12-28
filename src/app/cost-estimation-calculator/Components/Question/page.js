@@ -26,9 +26,7 @@ const page = (props) => {
   } = props;
 
   const [selectedData, setSelectedData] = useState([]);
-
   const selectedOptionPassToParent = (data) => {
-
     if (Array.isArray(data)) {
       setSelectedData([...data]);
     } else {
@@ -36,10 +34,9 @@ const page = (props) => {
     }
   };
 
-  
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
-         selectedData?.forEach((data) => {
+      selectedData?.forEach((data) => {
         const { nextQuestion } = data;
 
         if (nextQuestion == undefined) {
@@ -48,16 +45,13 @@ const page = (props) => {
             nextQuestion: currentQuestion.nextQuestion,
           });
         } else if (nextQuestion !== "") {
-
           getResponsesData({ selectedData, nextQuestion });
         } else if (currentQuestion.nextQuestion) {
-
           getResponsesData({
             selectedData,
             nextQuestion: currentQuestion.nextQuestion,
           });
         } else {
-
           getResponsesData({
             selectedData,
             nextQuestion: currentQuestion.nextQuestion,

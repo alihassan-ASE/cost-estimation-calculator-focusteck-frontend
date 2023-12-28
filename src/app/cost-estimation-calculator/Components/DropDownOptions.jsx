@@ -205,8 +205,8 @@ const DropDownComponent = ({
                 selectedOptionPassToParent(otherData);
                 setInputField(false);
                 setErrorMessage(null);
+                submitOtherVal();
               }
-              submitOtherVal();
             }}
           >
             Enter

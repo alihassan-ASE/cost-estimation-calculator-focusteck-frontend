@@ -10,54 +10,62 @@ import {
   Slide,
 } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled } from "@mui/material/styles";
 import Question from "../Components/Question/page";
 import { useRouter } from "next/navigation";
 import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 
-
-const CustomButton = styled(Button)(({ theme }) => ({
-  color: "white",
-  boxShadow: "none",
-  textTransform: "none",
-  lineHeight: 1.5,
-  height: "40px",
-  maxWidth: "100px",
-  backgroundColor: "#005DBD",
-  fontWeight: "normal",
-  borderRadius: "5px",
-  textAlign: "center",
-  flexWrap: "wrap",
-  flexDirection: "column",
-  flexGrow: 1,
-  flexShrink: 1,
-  gap: ".1em",
-  transition: "all 0.3s ease",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
-  "&:hover": {
-    backgroundColor: "#005DBD",
-    color: "#fff",
-    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
-
+const CustomNextButton = styled(Button)(({ theme }) => ({
+  width: 150,
+  // margin: "2em 0",
+  fontFamily: [
+    "Proxima Nova",
+    "Poppins",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+    padding: ".7em 1.3em",
   },
-  "&.Mui-disabled": {
-    background: "#4f9ef0",
-    color: "#eaeaea"
-  },
-  "&:focus": {
-    outline: "none", 
-    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+  [theme.breakpoints.down("sm")]: {
+    width: 100,
+    fontSize: 10,
+    padding: ".7em 1.7em",
   },
 }));
-
-const CustomButtonAdd = styled(Button)(({ theme }) => ({
+const CustomBackButton = styled(Button)(({ theme }) => ({
+  padding: 0,
+  color: "#ACACAC",
+  borderRadius: "50%",
+  justifyContent: "normal",
+  minWidth: "min-content",
+  "&:hover": {
+    backgroundColor: "#fff",
+  },
+  "&:selected": {
+    backgroundColor: "#fff",
+  },
+  "&:focus": {
+    backgroundColor: "#fff",
+  },
+  "&:active": {
+    backgroundColor: "#fff",
+  },
+}));
+const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
   borderRadius: ".5em",
@@ -75,7 +83,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
   height: 380,
   width: "294px",
   padding: "2em 1.5em",
-  margin: "2em 1em",
+  margin: "0 1em",
   borderRadius: ".5em",
   display: "flex",
   justifyContent: "center",
@@ -169,7 +177,6 @@ const StaffComponent = () => {
     }
   };
 
-
   // Function to navigate on Form Page
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
@@ -247,12 +254,10 @@ const StaffComponent = () => {
 
     setIsOptionSelected(false);
     setResource((prev) => [...prev, data]);
-
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
-
     dataObj.resources = values;
     setResource(dataObj.resources);
     currentState
@@ -265,25 +270,15 @@ const StaffComponent = () => {
             ],
           };
         });
-
   };
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
-
+    setIsOptionSelected(false);
     setAddedOption(resp);
-     if ( resp.selectedData.length == 0 ) {
-      setIsOptionSelected(true);
-    }
-    else{
-      setIsOptionSelected(false)
-    }
-
-
   };
 
   // Handling Next Quesiton
   const nextQuestion = () => {
-
     setCurrentState(false);
     setButtonState(true);
     setIsOptionSelected((prev) => !prev);
@@ -318,14 +313,12 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
-
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
     }
 
     if (currentQuestionIndex > 0) {
-
       let newArray = [...actualResponses.responses];
       lastQuestion = newArray.pop();
       if (lastQuestion) {
@@ -363,7 +356,6 @@ const StaffComponent = () => {
         }
       }
     }
-
   };
 
   // Showing selected Resources
@@ -401,99 +393,38 @@ const StaffComponent = () => {
   }
 
   return (
-    <Box >
+    <Box sx={{ margin: "1em 2em" }}>
       {additionalQuesiton.length && staffBase.length ? (
-        <Box >
+        <Box>
           <Box
             sx={{
               display: "flex",
               gap: "1em",
               alignItems: "center",
-              margin: "-1em 0",
-              display: "flex",
-              flexDirection: "row",
-              backgroundColor:"#f5fcff",
-              justifyContent: "space-between",
-              maxWidth: "100%",
-              position: "sticky",
-              padding:"0 2em",
-              top: 0,
-              left:0,
-              right:0,
-              zIndex: 1000,
-              height: "80px",
+              margin: "1em 0",
             }}
           >
-           
-              <CustomButton
-              disabled={!currentQuestionIndex > 0}
-                onClick={backQuestion}
-                sx={{
-                  "&:hover svg": {
-                    color: "#005DBD",
-                    height:"100%",
-                    backgroundColor:"white",
-                    transform: "translateX(-20px)",
-                    position: "relative",
-                  },
-                  overflow: "hidden",
-                  "&:hover":{
-                    borderRadius:"0px 5px 5px 0px",
-                  },
-                  "&:hover > .typography": { 
-                    transform: "translateX(-10px)", 
-                  },
-                }}
-               >
-                <ArrowBackIcon sx={{
-                fontSize: "18px",
-                transition:"all 0.2s ease-in",
-                padding: ".5em .8em",
-                marginLeft:"3px",
-                borderRadius: "0px 50% 50% 0px",
-                color: "white",
-              }}/>
-                <Typography className="typography" sx={{
-                fontSize: "12px",
-                transition:"all 0.2s ease-in",
-              }}>Back</Typography>
-              </CustomButton>
-         
+            {currentQuestionIndex > 0 && (
+              <CustomBackButton onClick={backQuestion}>
+                <KeyboardBackspaceIcon
+                  sx={{
+                    color: "#ACACAC",
+                    border: "2px solid #ACACAC",
+                    borderRadius: "50%",
+                    padding: ".3em",
+                    borderRadius: "50%",
+
+                    ":hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#0069d9",
+                      border: "2px solid #fff",
+                      color: "#fff",
+                    },
+                  }}
+                />
+              </CustomBackButton>
+            )}
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
-
-            <CustomButton
-              onClick={nextQuestion}
-              sx={{
-                "&:hover svg": {
-                  color: "#005DBD",
-                  height:"100%",
-                  backgroundColor:"white",
-                  transform: "translateX(20px)",
-                  position: "relative",
-                },
-                overflow: "hidden",
-                "&:hover":{
-                  borderRadius:"5px 0px 0px 5px",
-                },
-                "&:hover > .typography": { 
-                  transform: "translateX(10px)", 
-                },
-              }}
-              disabled={isOptionSelected}>
-              <Typography className="typography" sx={{
-                fontSize: "12px",
-                transition:"all 0.2s ease-in",
-              }}>Next</Typography>
-
-              <ArrowForwardIcon sx={{
-                fontSize: "18px",
-                transition:"all 0.2s ease-in",
-                padding: ".5em .8em",
-                marginLeft:"3px",
-                borderRadius: "50% 5px 5px 50%",
-                color: "white",
-              }} />
-            </CustomButton>
           </Box>
 
           {currentState ? (
@@ -503,28 +434,44 @@ const StaffComponent = () => {
                   display: "flex",
                   flexWrap: "wrap",
                   alignItems: "center",
-                  padding:"2em",
                   gap: "1em",
                 }}
               >
                 {returnResources()}
 
                 {resource.length > 0 ? (
-                  <Box >
-                    <CustomButtonAdd
+                  <Box>
+                    <CustomButton
                       onClick={() => {
                         setCount(count + 1);
                         returnResources();
                       }}
                     >
                       <ControlPointIcon sx={{ fontSize: 30 }} />
-                    </CustomButtonAdd>
+                    </CustomButton>
                   </Box>
                 ) : null}
               </Box>
+              <Box
+                sx={{
+                  margin: "2em 1em",
+                }}
+              >
+                <CustomNextButton
+                  size="medium"
+                  variant="contained"
+                  onClick={() => {
+                    nextQuestion();
+                  }}
+                  disabled={values[0] ? false : true}
+                >
+                  Next
+                </CustomNextButton>
+              </Box>
+              {/* )} */}
             </>
           ) : isNarrowScreen ? (
-            <Grid sx={{padding:"2em",maxWidth:"100%"}} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               {stepperState && (
                 <Grid item lg={4} md={3} sm={4} xs={12}>
                   {actualResponses.length || actualResponses.responses ? (
@@ -552,6 +499,7 @@ const StaffComponent = () => {
                     // node.addEventListener(
                     //   "transition",
                     //   (e) => {
+                    //     console.log("Actually done");
                     //   },
                     //   false
                     // );
@@ -565,10 +513,28 @@ const StaffComponent = () => {
                     />
                   </div>
                 </Slide>
+
+                {additionalQuesiton.length >= currentQuestionIndex && (
+                  <Box
+                    sx={{
+                      margin: "2em 0",
+                    }}
+                  >
+                    <CustomNextButton
+                      size="medium"
+                      variant="contained"
+                      sx={{ width: 150 }}
+                      onClick={nextQuestion}
+                      disabled={isOptionSelected}
+                    >
+                      Next
+                    </CustomNextButton>
+                  </Box>
+                )}
               </Grid>
             </Grid>
           ) : (
-            <Grid sx={{padding:"2em",maxWidth:"100%"}} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
               <Grid item lg={8} md={9} sm={8} xs={12}>
                 <Slide
                   direction="down"
@@ -585,6 +551,7 @@ const StaffComponent = () => {
                     // node.addEventListener(
                     //   "transition",
                     //   (e) => {
+                    //     console.log("Actually done");
                     //   },
                     //   false
                     // );
@@ -598,6 +565,23 @@ const StaffComponent = () => {
                     />
                   </div>
                 </Slide>
+                {additionalQuesiton.length >= currentQuestionIndex && (
+                  <Box
+                    sx={{
+                      margin: "2em 0",
+                    }}
+                  >
+                    <CustomNextButton
+                      size="medium"
+                      variant="contained"
+                      sx={{ width: 150 }}
+                      onClick={nextQuestion}
+                      disabled={isOptionSelected}
+                    >
+                      Next
+                    </CustomNextButton>
+                  </Box>
+                )}
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
