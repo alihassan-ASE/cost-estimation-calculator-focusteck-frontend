@@ -191,7 +191,7 @@ const TilesComponent = ({
                     onClick={() => {
                       otherData.price = data.price;
                       otherData.opt = otherVal;
-                      if (otherVal !== "") {
+                      if (otherVal.trim()) {
                         setSelectedFormats(otherData);
                         selectedOptionPassToParent(otherData);
                         setInputField(false);

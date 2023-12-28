@@ -27,7 +27,7 @@ import { baseUrl } from "@/config/constants";
 import { minWidth } from "@mui/system";
 
 const CustomBox = styled(Box)(({ theme }) => ({
-  margin: "0 2em",
+  // margin: "0 2em",
   [theme.breakpoints.down("sm")]: {
     margin: "0",
   },
@@ -256,6 +256,7 @@ export default function RootLayout({ children }) {
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
+            margin: 0
           }}
         >
           <Box sx={{ height: "100vh", overflow: "hidden" }}>
