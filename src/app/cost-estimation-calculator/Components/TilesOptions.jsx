@@ -24,17 +24,17 @@ const CustomButton = styled(Button)(({ theme }) => ({
   ),
   "&:hover": {
     color: "#fff",
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     border: "1px solid #005DBD",
   },
   "&:active": {
     color: "#fff",
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     border: "1px solid #005DBD",
   },
   "&:focus": {
     color: "#fff",
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     border: "1px solid #005DBD",
   },
   [theme.breakpoints.down("md")]: {
@@ -134,18 +134,18 @@ const TilesComponent = ({
                 : selectedFormats
             }
             onClick={() => {
-              if (data.opt === "Other (Specify)" || data.opt === "Other") {
-                setInputField(!inputField);
-              } else {
+              // if (data.opt === "Other (Specify)" || data.opt === "Other") {
+              //   setInputField(!inputField);
+              // } else {
                 setSelectedFormats(data);
                 selectedOptionPassToParent(data);
                 setInputField(false);
-              }
+              // }
             }}
             sx={
               checkSelectedOption(data.opt, data.price)
                 ? {
-                    backgroundColor: "#005DBD",
+                    backgroundColor: "#0045e6",
                     color: "white",
                     "& span.price": {
                       color: "white",
@@ -155,12 +155,12 @@ const TilesComponent = ({
             }
           >
             <span>{data.opt ? data.opt : data}</span>&nbsp;
-            <span className="price">
+            {/* <span className="price">
               {" "}
               {data.price ? `($${data.price})` : null}
-            </span>
+            </span> */}
           </CustomButton>
-          {data.opt === "Other (Specify)" || data.opt === "Other"
+          {/* {data.opt === "Other (Specify)" || data.opt === "Other"
             ? inputField && (
                 <Box
                   sx={{
@@ -205,7 +205,7 @@ const TilesComponent = ({
                   </Button>
                 </Box>
               )
-            : null}
+            : null} */}
         </Box>
       ))}
     </Box>

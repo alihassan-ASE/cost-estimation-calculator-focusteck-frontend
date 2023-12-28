@@ -68,11 +68,11 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
 
   "&:hover": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "&.Mui-selected": {
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     color: "white",
     "& span.price": {
       color: "#fff",
@@ -80,8 +80,8 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
   "&.Mui-selected:hover": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "& span.price": {
     color: "#005DBD",
@@ -144,7 +144,6 @@ const MultipleComponent = ({
             }}
           >
             <span>{data.opt}</span>&nbsp;
-            <span className="price">($ {data.price})</span>
           </StyleToggleButton>
         ))}
       </StyledToggleButtonGroup>

@@ -108,8 +108,7 @@ export default function VerticalLinearStepper(props) {
                             </Box>
                             <Box sx={{ width: "50%",padding:"3px" }}>
                               <Typography textAlign={"left"} fontSize={"13px"} fontWeight={400} color={"grey"}>
-                              {resource.resourceOption.opt} ($
-                                {resource.resourceOption.price})
+                              {resource.resourceOption.opt}
                               </Typography>
                             </Box>
                           </Box>
@@ -145,7 +144,7 @@ export default function VerticalLinearStepper(props) {
                           </Box>
                           <Box sx={{ width: "50%",padding:"3px" }}>
                             <Typography textAlign={"left"} fontSize={"13px"} fontWeight={400} color={"grey"}>
-                              {selected.opt} (${selected.price})
+                              {selected.opt}
                             </Typography>
                           </Box>
                         </Box>

@@ -23,9 +23,16 @@ import { styled } from "@mui/material/styles";
 const CustomButton = styled(Button)(({ theme }) => ({
   padding: 0,
   color: "#ACACAC",
+  height: "50px",
+  width: "50px",
   borderRadius: "50%",
   justifyContent: "normal",
   minWidth: "min-content",
+  border: "2px solid #ACACAC",
+  padding: ".2em",
+  "&:hover svg": {
+    transform: "translateX(-5px)"
+  },
   "&:hover": {
     backgroundColor: "#fff",
   },
@@ -43,6 +50,10 @@ const CustomButton = styled(Button)(({ theme }) => ({
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
   margin: "2em 0",
+  backgroundColor:"#0045e6",
+  "&:hover":{
+    backgroundColor:"#0045e6"
+  },
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -78,7 +89,7 @@ const page = () => {
   const [loaderState, setLoaderState] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState();
-  const [selectedData, setSelectedData] = useState();
+  const [selectedData, setSelectedData] = useState([]);
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
@@ -90,11 +101,14 @@ const page = () => {
     []
   );
 
-  const [isOptionSelected, setIsOptionSelected] = useState(true);
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [stepperState, setStepperState] = useState(false);
 
   const projectPageRef = useRef(null);
+
+  const route = useRouter();
+  let cost;
 
   useEffect(() => {
     if (projectPageRef.current) {
@@ -102,8 +116,11 @@ const page = () => {
     }
   }, []);
 
-  const route = useRouter();
-  let cost;
+  useEffect(() => {
+    if (selectedData.length && currentQuestion.typeofselection == "single") {
+      nextQuestion();
+    }
+  }, [selectedData])
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -160,24 +177,27 @@ const page = () => {
         localStorage.setItem("Response", data);
         route.push("/cost-estimation-calculator/submit");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
+
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
-    if (resp.selectedData.length < 3 && currentQuestion.typeofselection == "multiple") {
+    if (resp.selectedData.length >= 3 && currentQuestion.typeofselection == "multiple") {
       setIsOptionSelected(true);
     }
-    else if (resp.selectedData.length !== 0) {
+    else {
       setIsOptionSelected(false)
     }
+
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -185,13 +205,16 @@ const page = () => {
     dataObj.state = currentState;
     dataObj.index = currentQuestionIndex;
     dataObj.stack = [...questionsToShow];
+
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
+
   };
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
@@ -208,12 +231,16 @@ const page = () => {
     } else {
       setQuestionsToShow(step.stack);
     }
+    slider();
+
   };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     cost = 0;
-    
+
+
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
 
@@ -222,17 +249,26 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
-    setIsOptionSelected(false);
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
+
+    if (lastQuestion.question.typeofselection === "multiple") {
+      setIsOptionSelected(true)
+    }
+    else {
+      setIsOptionSelected(false)
+    }
+
+    slider();
+
   };
 
   // Handling Next Question
   const nextQuestion = async () => {
-    
-    setIsOptionSelected(true);
+
+    setIsOptionSelected(false);
     setLoaderState(true);
 
     cost = 0;
@@ -345,24 +381,33 @@ const page = () => {
             }}
           >
             {actualResponses.length > 0 && (
-              <CustomButton onClick={backQuestion}>
+              <CustomButton sx={{
+
+              }} onClick={backQuestion}>
                 <KeyboardBackspaceIcon
                   sx={{
-                    color: "#ACACAC",
-                    border: "2px solid #ACACAC",
-                    borderRadius: "50%",
-                    padding: ".3em",
+                    textAlign: "center",
+                    fontSize: "1.6em",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                    transition: "all 0.3s ease-in-out",
+                    width: "100%",
+                    // color: "#ACACAC",
+                    // border: "2px solid #ACACAC",
+                    // borderRadius: "50%",
+                    // padding: ".3em",
                     ":hover": {
                       cursor: "pointer",
-                      backgroundColor: "#0069d9",
-                      border: "2px solid #fff",
-                      color: "#fff",
+                      // backgroundColor: "#0069d9",
+                      // border: "2px solid #fff",
+                      // color: "#fff",
                     },
                   }}
                 />
               </CustomButton>
             )}
-            <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+            {/* <Typography variant="h6">Total Cost : $ {totalCost}</Typography> */}
           </Box>
 
           {isNarrowScreen ? (
@@ -419,19 +464,21 @@ const page = () => {
                   </div>
                 </Slide>
 
-                <Box sx={{ display: "flex", gap: "2em" }}>
-                  <CustomNextButton
-                    disabled={isOptionSelected}
-                    size="medium"
-                    variant="contained"
-                    vairant="contained"
-                    onClick={() => {
-                      nextQuestion();
-                    }}
-                  >
-                    Next
-                  </CustomNextButton>
-                </Box>
+                {
+                  isOptionSelected ?
+                    <Box sx={{ display: "flex", gap: "2em" }}>
+                      <CustomNextButton
+                        sx={{ width: 150,backgroundColor:"#0045e6" }}
+                        size="medium"
+                        onClick={() => {
+                          nextQuestion();
+                        }}
+                      >
+                        Next
+                      </CustomNextButton>
+                    </Box>
+                    : null
+                }
               </Grid>
             </Grid>
           ) : (
@@ -479,20 +526,22 @@ const page = () => {
                     )}
                   </div>
                 </Slide>
-                <Box sx={{ display: "flex", gap: "2em" }}>
-                  <CustomNextButton
-                    disabled={isOptionSelected}
-                    size="medium"
-                    variant="contained"
-                    sx={{ width: 150 }}
-                    vairant="contained"
-                    onClick={() => {
-                      nextQuestion();
-                    }}
-                  >
-                    Next
-                  </CustomNextButton>
-                </Box>
+                {
+                  isOptionSelected ?
+                    <Box sx={{ display: "flex", gap: "2em" }}>
+                      <CustomNextButton
+                        size="medium"
+                        variant="contained"
+                        sx={{ width: 150,backgroundColor:"#0045e6","&:hover":{backgroundColor:"#0045e6"} }}
+
+                        onClick={() => {
+                          nextQuestion();
+                        }}
+                      >
+                        Next
+                      </CustomNextButton>
+                    </Box> : null
+                }
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
                 <Stepper
