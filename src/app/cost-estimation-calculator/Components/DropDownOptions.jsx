@@ -118,7 +118,7 @@ const DropDownComponent = ({
       <InputLabel id="demo-simple-select-label">{label?label:"Select Your Option"}</InputLabel>
       <Select
 
-        sx={{ height: "65px", width: "34%" }}
+        sx={{ height: "65px", width: "270px" }}
         autoFocus={false}
         value={disable ? null : selectedFormats}
         onChange={(e) => {
@@ -184,7 +184,7 @@ const DropDownComponent = ({
             id="fullWidth"
             label="Other"
             variant="outlined"
-            sx={{ width: "34%" }}
+            sx={{ width: "270px" }}
             value={otherVal}
             onChange={(e) => {
               setOtherVal(e.target.value);

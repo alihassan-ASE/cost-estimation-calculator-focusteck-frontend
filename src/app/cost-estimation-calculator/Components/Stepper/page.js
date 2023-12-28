@@ -74,7 +74,11 @@ export default function VerticalLinearStepper(props) {
         }}
       >
         <CustomScrollableContainer ref={containerRef}>
-          <Stepper activeStep={activeStep} orientation={orientation}>
+          <Stepper sx={{
+            "& .MuiStepConnector-line": {
+              minHeight: ".5em"
+            }
+          }} activeStep={activeStep} orientation={orientation}>
             {responses?.map((step, index) => (
               <Step key={index}>
                 {step.resources && index === 0 ? (
@@ -96,12 +100,20 @@ export default function VerticalLinearStepper(props) {
                           cursor="pointer"
                           onClick={() => handleStep(step, index + 1)}
                         >
-                          {resource.resource.toUpperCase()}
+                          {/* {resource.resource.toUpperCase()} */}
 
-                          <Typography fontSize={"10px"} color={"gray"}>
-                            {resource.resourceOption.opt} ($
-                            {resource.resourceOption.price})
-                          </Typography>
+                          <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
+                            <Box sx={{ width: "50%" }}>
+                              <Typography fontSize={"12px"} fontWeight={400}>  {resource.resource.toUpperCase()}</Typography>
+                            </Box>
+                            <Box sx={{ width: "50%",padding:"3px" }}>
+                              <Typography textAlign={"left"} fontSize={"13px"} fontWeight={400} color={"grey"}>
+                              {resource.resourceOption.opt} ($
+                                {resource.resourceOption.price})
+                              </Typography>
+                            </Box>
+                          </Box>
+                       
                         </StepLabel>
                       </div>
                     ))}
@@ -119,18 +131,24 @@ export default function VerticalLinearStepper(props) {
                           "& .MuiStepLabel-label": {
                             fontSize: "0.7rem",
                           },
-                          width: "170px",
+
                         }}
                         key={key}
                         cursor="pointer"
                         onClick={() => handleStep(step, index + 1)}
                       >
-                        {step.question.label
-                          ? step.question.label.toUpperCase()
-                          : step.label.toUpperCase()}{" "}
-                        <Typography fontSize={"10px"} color={"gray"}>
-                          {selected.opt} (${selected.price})
-                        </Typography>
+                        <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
+                          <Box sx={{ width: "50%" }}>
+                            <Typography fontSize={"12px"} fontWeight={400}>  {step.question.label
+                              ? step.question.label.toUpperCase()
+                              : step.label.toUpperCase()}</Typography>
+                          </Box>
+                          <Box sx={{ width: "50%",padding:"3px" }}>
+                            <Typography textAlign={"left"} fontSize={"13px"} fontWeight={400} color={"grey"}>
+                              {selected.opt} (${selected.price})
+                            </Typography>
+                          </Box>
+                        </Box>
                       </StepLabel>
                     )
                   )

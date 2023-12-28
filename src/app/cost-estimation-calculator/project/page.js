@@ -57,9 +57,28 @@ const CustomButton = styled(Button)(({ theme }) => ({
     outline: "none", 
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
+
+  [theme.breakpoints.down("md")]: {
+    
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "30px",
+    maxWidth: "70px",
+  },
+  "&:hover ArrowBackIcon ":{
+
+  }
+
 }));
 
-
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    fontSize: "16px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: ".5em",
+  },
+}));
 
 
 const page = () => {
@@ -160,11 +179,10 @@ const page = () => {
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
-    
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
-    if (resp.selectedData.length < 3 && currentQuestion.typeOfUI == "CheckBox") {
+    if (resp.selectedData.length < 3 && currentQuestion.typeofselection == "multiple") {
       setIsOptionSelected(true);
     }
     else if (resp.selectedData.length !== 0) {
@@ -214,7 +232,7 @@ const page = () => {
   const backQuestion = () => {
 
     cost = 0;
-
+    
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
 
@@ -392,7 +410,7 @@ const page = () => {
               }}>Back</Typography>
             </CustomButton>
 
-            <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+            <CustomTypography variant="h6">Total Cost : $ {totalCost}</CustomTypography>
 
             <CustomButton
               onClick={nextQuestion}
