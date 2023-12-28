@@ -489,7 +489,7 @@ export default function RootLayout({ children }) {
               variant="h3"
               style={{
                 maxWidth: 800,
-                "@media (max-width: 600px)": {
+                "@media (maxWidth: 600px)": {
                   padding: "0",
                 },
               }}
