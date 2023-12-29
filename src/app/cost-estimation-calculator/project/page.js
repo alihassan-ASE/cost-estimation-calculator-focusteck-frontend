@@ -411,54 +411,8 @@ const page = () => {
           </Box>
 
 
-
-             
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
-              <Grid sx={{paddingRight:"10px"}}   item lg={8} md={12} sm={12} xs={12}>
-                <Slide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    appear: 100,
-                    enter: 950,
-                    exit: 0,
-                  }}
-                  appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-                  }}
-                >
-                  <div>
-                    {!loaderState ? (
-                      displayQuestion
-                        ?
-                        <Question
-                          currentQuestion={currentQuestion}
-                          getResponsesData={getResponsesData}
-                          selectedOption={lastQuestionSelectedOption}
-                        />
-                        : <ShowSummary response={{
-                          responses: actualResponses,
-                          totalCost: totalCost,
-                        }} />
-                    ) : (
-                      <Box
-                        sx={{
-                          margin: "5em 2em",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
-                  </div>
-                </Slide>
-              </Grid>
-            </Grid>
-          ) : (
             <Grid
-              sx={{ padding: "2em" }}
+              // sx={{ padding: "2em" }}
               container
               spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
             >

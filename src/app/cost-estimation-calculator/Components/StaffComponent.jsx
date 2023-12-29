@@ -20,26 +20,28 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShowSummary from "./ShowSummary";
 
-const CustomButton = styled(Button)(({ theme }) => ({
-  color: "white",
-  boxShadow: "none",
-  textTransform: "none",
-  lineHeight: 1.5,
-  height: "40px",
-  maxWidth: "100px",
-  backgroundColor: "#005DBD",
-  fontWeight: "normal",
-  borderRadius: "5px",
-  textAlign: "center",
-  flexWrap: "wrap",
-  flexDirection: "column",
-  flexGrow: 1,
-  flexShrink: 1,
-  gap: ".1em",
-  transition: "all 0.3s ease",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
+// const CustomButton = styled(Button)(({ theme }) => ({
+//   color: "white",
+//   boxShadow: "none",
+//   textTransform: "none",
+//   lineHeight: 1.5,
+//   height: "40px",
+//   maxWidth: "100px",
+//   backgroundColor: "#005DBD",
+//   fontWeight: "normal",
+//   borderRadius: "5px",
+//   textAlign: "center",
+//   flexWrap: "wrap",
+//   flexDirection: "column",
+//   flexGrow: 1,
+//   flexShrink: 1,
+//   gap: ".1em",
+//   transition: "all 0.3s ease",
+//   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+//     ","
+//   ),
+
+//   }));
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
@@ -506,83 +508,8 @@ const StaffComponent = () => {
               </Box>
               {/* )} */}
             </>
-          ) : isNarrowScreen ? (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} sx={{ padding: "2em", maxWidth: "100%" }}>
-              {stepperState && (
-                <Grid item lg={4} md={3} sm={4} xs={12}>
-                  {actualResponses.length || actualResponses.responses ? (
-                    <Stepper
-                      responses={actualResponses.responses}
-                      changeActiveQuestion={changeActiveQuestion}
-                      orientation={orientation}
-                    />
-                  ) : null}
-                </Grid>
-              )}
-              <Grid item lg={8} md={9} sm={8} xs={12}>
-                {
-                  displayQuestion
-                    ?
-                    <Box
-                      sx={{
-                        paddingTop: "1.9em",
-                      }}
-                    >
-                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
-                        Question {actualResponses.responses.length}
-                      </Typography>
-                    </Box>
-                    : null
-                }
-                <Slide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    appear: 100,
-                    enter: 950,
-                    exit: 0,
-                  }}
-                  appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-                  }}
-                >
-                  <div>
-                    {
-                      displayQuestion
-                        ?
-                        <Question
-                          currentQuestion={currentQuestion}
-                          getResponsesData={getResponsesData}
-                          selectedOption={lastQuestionSelectedOption}
-                        />
-                        : <ShowSummary response={actualResponses} />
-                    }
-
-                  </div>
-                </Slide>
-
-                {additionalQuesiton.length >= currentQuestionIndex && (
-                  <Box
-                    sx={{
-                      margin: "2em 0",
-                    }}
-                  >
-                    <CustomNextButton
-                      size="medium"
-                      variant="contained"
-                      sx={{ width: 150 }}
-                      onClick={nextQuestion}
-                      disabled={isOptionSelected}
-                    >
-                      Next
-                    </CustomNextButton>
-                  </Box>
-                )}
-              </Grid>
-            </Grid>
           ) : (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}  sx={{ padding: "2em", maxWidth: "100%" }}>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}  sx={{  maxWidth: "100%" }}>
               <Grid item lg={8} md={9} sm={8} xs={12}>
                 {
                   displayQuestion
