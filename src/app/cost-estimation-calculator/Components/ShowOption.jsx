@@ -22,18 +22,15 @@ const ShowOption = ({
   return (
     <Box>
       {typeOfSelection === "single" ? (
-        typeofUI === "Radio" ? (
-          options?.length > 10
-            ? <RadioButtonComponent
-              options={options}
-              selectedOption={selectedOption}
-              selectedOptionPassToParent={selectedOptionPassToParent}
-            />
-            : <LargeTiles
-              options={options}
-              selectedOption={selectedOption}
-              selectedOptionPassToParent={selectedOptionPassToParent}
-            />
+        options?.length > 10 ? (
+          <DropDownComponent
+            options={options}
+            label={label}
+            disable={disable}
+            selectedOption={selectedOption}
+            selectedOptionPassToParent={selectedOptionPassToParent}
+          />
+        
         ) : typeofUI === "Tiles" ? (
           options.length > 4 ? (
             <TilesComponent

@@ -109,9 +109,9 @@ const ShowSummary = ({ response }) => {
   const [timeline, setTimeline] = useState("");
   useEffect(() => {
     {
-      response.responses.map((data) => {
+      response?.responses?.map((data) => {
         if (data.label === "engagement period") {
-          data.selectedData.map((value) => {
+          data.selectedData?.map((value) => {
             setTimeline(value.opt);
           });
         }

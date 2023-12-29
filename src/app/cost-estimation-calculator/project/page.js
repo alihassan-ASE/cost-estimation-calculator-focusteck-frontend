@@ -199,6 +199,7 @@ const page = () => {
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+
     setDisplayQuestion(true);
 
     const { index, step } = obj;
@@ -217,12 +218,16 @@ const page = () => {
     } else {
       setQuestionsToShow(step.stack);
     }
+    if(step.question.typeofselection === "multiple"){
+      setIsOptionSelected(true);
+    }
     slider();
 
   };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     setDisplayQuestion(true);
     cost = 0;
 
@@ -416,7 +421,7 @@ const page = () => {
               container
               spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
             >
-              <Grid item lg={8} md={9} sm={8} xs={12}>
+              <Grid sx={{paddingRight:"20px"}} item lg={8} md={9} sm={8} xs={12}>
                 {
                   displayQuestion
                     ?
@@ -425,7 +430,7 @@ const page = () => {
                         paddingTop: "1.9em",
                       }}
                     >
-                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em",fontWeight:"bold" }}>
                         Question {actualResponses.length + 1}
                       </Typography>
                     </Box>

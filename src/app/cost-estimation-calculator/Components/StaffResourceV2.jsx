@@ -61,7 +61,6 @@ const StaffResourceV2 = ({
 
   const getData = (data, label) => {
     setOption(data);
-    // console.log("label: ", label);
 
     if (label === "Resources") {
       setCurrentResource({ resource: data });
@@ -126,9 +125,6 @@ const StaffResourceV2 = ({
     numOfResources: "",
   });
 
-  // console.log("selectedOption: ", selectedOption);
-  // console.log("option: ", option);
-  // console.log("currentResource", currentResource);
 
   return (
     <Box>

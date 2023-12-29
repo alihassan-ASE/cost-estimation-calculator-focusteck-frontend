@@ -19,6 +19,16 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   margin: ".3em 0",
 }));
 
+const CustomInputLabel = styled(InputLabel)(({ theme }) => ({
+  position: 'absolute',
+  top: 0,
+  backgroundColor: 'white', 
+  padding: theme.spacing(0, 3),
+  transformOrigin: 'top left',
+  pointerEvents: 'none',
+}));
+
+
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
@@ -82,7 +92,11 @@ const DropDownComponent = ({
   const [errorMessage, setErrorMessage] = useState(null);
   const [checkInputVal, setCheckInputVal] = useState(false);
   const [selectedFormats, setSelectedFormats] = useState("");
-  const [price, setPrice] = useState(0);
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
 
   useEffect(() => {
     if (Array.isArray(selectedOption)) {
@@ -93,26 +107,27 @@ const DropDownComponent = ({
     }
   }, [selectedOption, options]);
 
-  const submitOtherVal = () => {
-    const trimmedOtherVal = otherVal.trim();
-    if (!trimmedOtherVal) {
-      setErrorMessage("Field cannot be empty");
-      setCheckInputVal(true);
-      setInputField(true);
-    }
-    if (trimmedOtherVal) {
-      setErrorMessage(null);
-      setInputField(false);
-      setCheckInputVal(false);
-      setOtherVal(trimmedOtherVal);
-    }
-  };
+  // const submitOtherVal = () => {
+  //   const trimmedOtherVal = otherVal.trim();
+  //   if (!trimmedOtherVal) {
+  //     setErrorMessage("Field cannot be empty");
+  //     setCheckInputVal(true);
+  //     setInputField(true);
+  //   }
+  //   if (trimmedOtherVal) {
+  //     setErrorMessage(null);
+  //     setInputField(false);
+  //     setCheckInputVal(false);
+  //     setOtherVal(trimmedOtherVal);
+  //   }
+  // };
+
   return (
-    <StyledFormControl>
-      <InputLabel  id="demo-simple-select-label">{label?label:"Select Your Option"}</InputLabel>
+    <StyledFormControl sx={{"& .MuiSvgIcon-root ":{backgroundColor:"#0045e6",borderRadius:"50%",color:"white",transition:"all 0.5s ease-in-out",right:"12px",height:"2.5rem",width:"2.5rem",top:"10px"}}}>
+      <CustomInputLabel id="demo-simple-select-label">{label?label:"Select Your Option"}</CustomInputLabel>
 
       <Select
-        sx={{ height: "65px", width: "90%",borderRadius:"50px"}}
+        sx={{ height: "60px",rowGap:"10px", width: "100%",borderRadius:"50px"}}
         autoFocus={false}
         value={disable ? null : selectedFormats}
         onChange={(e) => {
@@ -126,6 +141,7 @@ const DropDownComponent = ({
             setInputField(false);
             setSelectedFormats(selectedObject);
             selectedOptionPassToParent(selectedObject, label);
+            handleChange
           // }
 
 

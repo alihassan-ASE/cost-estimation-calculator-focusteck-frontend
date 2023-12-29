@@ -311,7 +311,6 @@ const StaffComponentV2 = () => {
     }, 250);
   };
 
-  console.log("actual responses: ", questionState);
   // Handling Back Question and Calculating Price on Back Button
 
   const backQuestion = () => {

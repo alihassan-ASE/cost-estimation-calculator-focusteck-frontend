@@ -20,28 +20,6 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShowSummary from "./ShowSummary";
 
-// const CustomButton = styled(Button)(({ theme }) => ({
-//   color: "white",
-//   boxShadow: "none",
-//   textTransform: "none",
-//   lineHeight: 1.5,
-//   height: "40px",
-//   maxWidth: "100px",
-//   backgroundColor: "#005DBD",
-//   fontWeight: "normal",
-//   borderRadius: "5px",
-//   textAlign: "center",
-//   flexWrap: "wrap",
-//   flexDirection: "column",
-//   flexGrow: 1,
-//   flexShrink: 1,
-//   gap: ".1em",
-//   transition: "all 0.3s ease",
-//   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-//     ","
-//   ),
-
-//   }));
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
@@ -89,6 +67,7 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#fff",
   },
 }));
+
 const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
@@ -130,17 +109,17 @@ const StaffComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [currentState, setCurrentState] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [actualResponses, setActualResponses] = useState({});
+  const [actualResponses , setActualResponses] = useState({});
 
   const [isOptionSelected, setIsOptionSelected] = useState(true);
 
-  const [addedOption, setAddedOption] = useState([]);
+  const [addedOption , setAddedOption] = useState([]);
 
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [orientation, setOrientation] = useState("horizontal");
-  const isNarrowScreen = useMediaQuery("(max-width:600px)");
+  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const [resource, setResource] = useState([]);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
@@ -160,6 +139,13 @@ const StaffComponent = () => {
     });
   }, []);
 
+  useEffect(()=>{
+
+        if(resource.length){
+          nextQuestion();
+        }
+    
+  },[addedOption])
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -199,18 +185,6 @@ const StaffComponent = () => {
           setCount(count - 1);
         }
       }
-    }
-  };
-
-  // Function to navigate on Form Page
-  const goToForm = () => {
-    actualResponses.totalCost = totalCost;
-    try {
-      let data = JSON.stringify(actualResponses);
-      localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/results");
-    } catch (error) {
-      console.log("Error", error);
     }
   };
 
@@ -255,6 +229,7 @@ const StaffComponent = () => {
 
   // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
     setDisplayQuestion(true);
 
@@ -267,7 +242,8 @@ const StaffComponent = () => {
     actualResponses.responses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedData);
     setIsStepperClicked(true);
-    setIsOptionSelected(false);
+    slider();
+    
   };
 
   // receiving selected option from child Component
@@ -281,6 +257,7 @@ const StaffComponent = () => {
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     dataObj.resources = values;
     setResource(dataObj.resources);
     currentState
@@ -294,17 +271,20 @@ const StaffComponent = () => {
           };
         });
   };
+
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
+
     setIsOptionSelected(false);
     setAddedOption(resp);
+
   };
 
   // Handling Next Quesiton
   const nextQuestion = () => {
+
     setCurrentState(false);
     setButtonState(true);
-    setIsOptionSelected((prev) => !prev);
     setStepperState(true);
 
     let currentQuestionLocal = currentQuestion;
@@ -336,6 +316,7 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
+
     setDisplayQuestion(true);
 
     let lastQuestion;
@@ -381,10 +362,13 @@ const StaffComponent = () => {
         }
       }
     }
+
+    slider();
   };
 
   useEffect(() => {
-    if (currentQuestionIndex > additionalQuesiton.length) {
+    if (currentQuestionIndex > additionalQuesiton.length && additionalQuesiton.length != 0) {
+  
       setDisplayQuestion(false);
       actualResponses.totalCost = totalCost;
       try {
@@ -395,7 +379,6 @@ const StaffComponent = () => {
       }
     }
   }, [nextQuestion]);
-
 
   // Showing selected Resources
   const returnResources = () => {
@@ -461,7 +444,7 @@ const StaffComponent = () => {
                 />
               </CustomBackButton>
             )}
-            <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
+            {/* <Typography variant="h6">Total Cost : $ {totalCost}</Typography> */}
           </Box>
 
           {currentState ? (
@@ -496,8 +479,7 @@ const StaffComponent = () => {
                 }}
               >
                 <CustomNextButton
-                  size="medium"
-                  variant="contained"
+                 sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" },color:"white" }}
                   onClick={() => {
                     nextQuestion();
                   }}
@@ -510,7 +492,7 @@ const StaffComponent = () => {
             </>
           ) : (
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}  sx={{  maxWidth: "100%" }}>
-              <Grid item lg={8} md={9} sm={8} xs={12}>
+              <Grid sx={{paddingRight:"20px"}} item lg={8} md={9} sm={8} xs={12}>
                 {
                   displayQuestion
                     ?
@@ -551,25 +533,33 @@ const StaffComponent = () => {
                     }
                   </div>
                 </Slide>
-                {additionalQuesiton.length >= currentQuestionIndex && (
-                  <Box
-                    sx={{
-                      margin: "2em 0",
-                    }}
-                  >
-                    <CustomNextButton
-                      size="medium"
-                      variant="contained"
-                      sx={{ width: 150 }}
-                      onClick={nextQuestion}
-                      disabled={isOptionSelected}
-                    >
-                      Next
-                    </CustomNextButton>
-                  </Box>
-                )}
+                {/* {additionalQuesiton.length >= currentQuestionIndex && (
+                  // <Box
+                  //   sx={{
+                  //     margin: "2em 0",
+                  //   }}
+                  // >
+                  //   <CustomNextButton
+                  //     size="medium"
+                  //     variant="contained"
+                  //     sx={{ width: 150 }}
+                  //     onClick={nextQuestion}
+                  //   >
+                  //     Next
+                  //   </CustomNextButton>
+                  // </Box>
+                )} */}
               </Grid>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
+              <Box sx={{
+                borderRight: orientation === "vertical" ? "1px solid grey" : "0",
+                borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
+                width: orientation !== "vertical" ? "100%" : "0",
+                marginTop:"7%",
+                // marginRight:"10px",
+                height:orientation=== "vertical" ? "65vh": 0
+
+              }}></Box>
+              <Grid item lg={3.9} md={12} sm={12} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
                   <Stepper
                     responses={actualResponses.responses}
