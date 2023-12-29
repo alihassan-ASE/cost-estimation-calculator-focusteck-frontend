@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import ShowResponse from "../Components/ShowResponse";
 
 const page = () => {
-  const [actualResponse, setActualResponse] = useState({});
 
   const [auth, setAuth] = useState(false);
   const router = useRouter();
@@ -33,17 +32,13 @@ const page = () => {
     }
   }
 
-  const getActualResponse = (formData) => {
-    setActualResponse(formData);
-  };
-
   return (
     <Box
       sx={{
         margin: "auto",
       }}
     >
-      {response?.responses.length ? <ShowResponse response={response} /> : null}
+      {response?.responses?.length ? <ShowResponse response={response} /> : null}
     </Box>
   );
 };

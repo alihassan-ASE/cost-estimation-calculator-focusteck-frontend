@@ -1,5 +1,6 @@
+"use client"
 import { Box, Typography, Chip, Button } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)({
@@ -19,9 +20,22 @@ const CustomTypography = styled(Typography)({
   margin: "1em 0",
 });
 
-const ShowResponse = ({ response }) => {
+const ShowResponse = () => {
+  const [response, setResponse] = useState({});
+  debugger;
+  let data =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("Response")
+      : false;
 
-  // localStorage.clear();
+  useEffect(() => {
+    setResponse(JSON.parse(data))
+
+  }, [data]);
+
+  // useEffect(() => {
+  //   localStorage.clear()
+  // }, [response])
 
   return (
     <>
@@ -62,7 +76,7 @@ const ShowResponse = ({ response }) => {
             />{" "}
           </CustomButton>
         </Box>
-        {response.responses[0].resources ? (
+        {response?.responses?.length && response.responses[0].resources ? (
           <Box sx={{ display: "flex", flexDirection: "column", gap: ".5em " }}>
             <CustomTypography variant="h6">Resources</CustomTypography>
             {response.responses[0].resources.map((data) => (
@@ -143,7 +157,7 @@ const ShowResponse = ({ response }) => {
           <Box>
             <CustomTypography variant="h6">Queries</CustomTypography>
 
-            {response.responses.map((data) => (
+            {response?.responses?.length && response.responses.map((data) => (
               <>
                 <CustomButton sx={{ gap: "1em" }}>
                   <Typography>{data.question.label}</Typography>

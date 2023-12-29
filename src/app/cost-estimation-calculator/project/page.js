@@ -59,6 +59,10 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const CustomSlide = styled(Slide)(({ theme }) => ({
+  transform: "translateY(-50px)",
+}));
+
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
@@ -302,13 +306,13 @@ const page = () => {
       currentState === "post" &&
       currentQuestionIndex > postProjectQuestions.length
     ) {
-      let data = JSON.stringify({
-        responses: actualResponses,
-        totalCost: totalCost,
-      });
-      if (data) {
-        localStorage.setItem("Response", data);
-      }
+      // let data = JSON.stringify({
+      //   responses: actualResponses,
+      //   totalCost: totalCost,
+      // });
+      // if (data) {
+      //   localStorage.setItem("Response", data);
+      // }
       setDisplayQuestion(false);
     }
   }, [nextQuestion]);
@@ -320,7 +324,7 @@ const page = () => {
       setSlideIn(true);
     }, 250);
   };
-
+  console.log("actual Responses", actualResponses)
   return (
     <Box ref={projectPageRef} sx={{ padding: "0 2.7%" }}>
       {fetchQuesitons !== null ? (
@@ -470,16 +474,17 @@ const page = () => {
                     : null
                 }
 
-                <Slide
+                <CustomSlide
                   direction="down"
                   in={slideIn}
                   timeout={{
-                    appear: 100,
-                    enter: 950,
+                    // appear: 0,
+                    enter: 5000,
                     exit: 0,
                   }}
-                  appear={true}
-                  onEnter={(node) => {
+                  easing={{ enter: 'ease-in' }}
+                  appear={false}
+                  onEntering={(node) => {
                     node.style.transform = "translateY(-50px)";
                   }}
                 >
@@ -508,7 +513,7 @@ const page = () => {
                       </Box>
                     )}
                   </div>
-                </Slide>
+                </CustomSlide>
               </Grid>
             </Grid>
           ) : (
@@ -532,46 +537,48 @@ const page = () => {
                     </Box>
                     : null
                 }
-                <Slide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    appear: 100,
-                    enter: 950,
-                    exit: 0,
-                  }}
-                  appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-                  }}
-                >
-                  <div>
-                    {!loaderState ? (
-                      displayQuestion
-                        ?
-                        <Question
-                          currentQuestion={currentQuestion}
-                          getResponsesData={getResponsesData}
-                          selectedOption={lastQuestionSelectedOption}
-                        />
-                        : <ShowSummary response={{
-                          responses: actualResponses,
-                          totalCost: totalCost,
-                        }} />
-                    ) : (
-                      <Box
-                        sx={{
-                          margin: "5em 2em",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
-                  </div>
-                </Slide>
+                {
+                  slideIn ?
+                    <Slide
+                      direction="down"
+                      in={slideIn}
+                      timeout={{
+                        enter: 1500,
+                        exit: 0,
+                      }}
+                      appear={true}
+                      onEnter={(node) => {
+                        node.style.transform = "translateY(-50px)";
+                      }}
+                    >
+                      <div>
+                        {!loaderState ? (
+                          displayQuestion
+                            ?
+                            <Question
+                              currentQuestion={currentQuestion}
+                              getResponsesData={getResponsesData}
+                              selectedOption={lastQuestionSelectedOption}
+                            />
+                            : <ShowSummary response={{
+                              responses: actualResponses,
+                              totalCost: totalCost,
+                            }} />
+                        ) : (
+                          <Box
+                            sx={{
+                              margin: "5em 2em",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <CircularProgress />
+                          </Box>
+                        )}
+                      </div>
+                    </Slide> : ''
+                }
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
                 <Stepper
@@ -595,8 +602,9 @@ const page = () => {
         >
           <CircularProgress />
         </Box>
-      )}
-    </Box>
+      )
+      }
+    </Box >
   );
 };
 

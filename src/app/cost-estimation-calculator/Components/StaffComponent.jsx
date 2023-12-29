@@ -169,17 +169,6 @@ const StaffComponent = () => {
     }
   };
 
-  // Function to navigate on Form Page
-  const goToForm = () => {
-    actualResponses.totalCost = totalCost;
-    try {
-      let data = JSON.stringify(actualResponses);
-      localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/results");
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
 
   // Function To Handling Price
   const handlePrice = (type) => {
@@ -357,13 +346,13 @@ const StaffComponent = () => {
   useEffect(() => {
     if (currentQuestionIndex > additionalQuesiton.length) {
       setDisplayQuestion(false);
-      actualResponses.totalCost = totalCost;
-      try {
-        let data = JSON.stringify(actualResponses);
-        localStorage.setItem("Response", data);
-      } catch (error) {
-        console.log("Error", error);
-      }
+      // actualResponses.totalCost = totalCost;
+      // try {
+      //   let data = JSON.stringify(actualResponses);
+      //   localStorage.setItem("Response", data);
+      // } catch (error) {
+      //   console.log("Error", error);
+      // }
     }
   }, [nextQuestion]);
 
@@ -569,33 +558,36 @@ const StaffComponent = () => {
                     </Box>
                     : null
                 }
-                <Slide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    appear: 100,
-                    enter: 950,
-                    exit: 0,
-                  }}
-                  appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-                  }}
-                >
-                  <div>
-                    {
-                      displayQuestion
-                        ?
-                        <Question
-                          currentQuestion={currentQuestion}
-                          getResponsesData={getResponsesData}
-                          selectedOption={lastQuestionSelectedOption}
-                        />
-                        : <ShowSummary response={actualResponses} />
-                    }
+                {
+                  slideIn ?
+                    <Slide
+                      direction="down"
+                      in={slideIn}
+                      timeout={{
+                        enter: 1500,
+                        exit: 0,
+                      }}
+                      appear={true}
+                      onEnter={(node) => {
+                        node.style.transform = "translateY(-50px)";
+                      }}
+                    >
+                      <div>
+                        {
+                          displayQuestion
+                            ?
+                            <Question
+                              currentQuestion={currentQuestion}
+                              getResponsesData={getResponsesData}
+                              selectedOption={lastQuestionSelectedOption}
+                            />
+                            : <ShowSummary response={actualResponses} />
+                        }
 
-                  </div>
-                </Slide>
+                      </div>
+                    </Slide>
+                    : ''
+                }
               </Grid>
             </Grid>
           ) : (
@@ -619,32 +611,34 @@ const StaffComponent = () => {
                     </Box>
                     : null
                 }
-                <Slide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    appear: 100,
-                    enter: 950,
-                    exit: 0,
-                  }}
-                  appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-                  }}
-                >
-                  <div>
-                    {
-                      displayQuestion
-                        ?
-                        <Question
-                          currentQuestion={currentQuestion}
-                          getResponsesData={getResponsesData}
-                          selectedOption={lastQuestionSelectedOption}
-                        />
-                        : <ShowSummary response={actualResponses} />
-                    }
-                  </div>
-                </Slide>
+                {
+                  slideIn ?
+                    <Slide
+                      direction="down"
+                      in={slideIn}
+                      timeout={{
+                        enter: 1500,
+                        exit: 0,
+                      }}
+                      appear={true}
+                      onEnter={(node) => {
+                        node.style.transform = "translateY(-50px)";
+                      }}
+                    >
+                      <div>
+                        {
+                          displayQuestion
+                            ?
+                            <Question
+                              currentQuestion={currentQuestion}
+                              getResponsesData={getResponsesData}
+                              selectedOption={lastQuestionSelectedOption}
+                            />
+                            : <ShowSummary response={actualResponses} />
+                        }
+                      </div>
+                    </Slide>
+                    : ""}
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
