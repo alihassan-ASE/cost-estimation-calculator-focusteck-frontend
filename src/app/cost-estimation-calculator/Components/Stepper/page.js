@@ -3,18 +3,41 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Grid, Stepper, Step, StepLabel, Typography } from "@mui/material";
 import styled from "styled-components";
 import { maxHeight } from "@mui/system";
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
 export default function VerticalLinearStepper(props) {
-  const { responses, changeActiveQuestion, orientation } = props;
+  const { responses, changeActiveQuestion } = props;
 
   const leng = responses?.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
   const containerRef = useRef(null);
 
+  const QontoConnector = styled(StepConnector)(({ theme }) => ({
+    [`&.${stepConnectorClasses.alternativeLabel}`]: {
+      top: 0,
+      bottom: 0,
+    },
+    [`&.${stepConnectorClasses.active}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: '#784af4',
+      },
+    },
+    [`&.${stepConnectorClasses.completed}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: '#784af4',
+      },
+    },
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: '#eaeaf0',
+      borderTopWidth: 3,
+      borderRadius: 1,
+    },
+  }));
+
   const [CustomScrollableContainer] = useState(
     styled.div({
       maxHeight: "60vh",
-      maxWidth: "100%",
+      Width: "100%",
       minHeight: "70px",
       margin: "1em 0",
       overflow: "auto",
@@ -22,6 +45,7 @@ export default function VerticalLinearStepper(props) {
         width: "5px",
         height: "5px",
       },
+      
       "&::-webkit-scrollbar-track": {
         backgroundColor: "#f1f1f1",
       },
@@ -47,29 +71,29 @@ export default function VerticalLinearStepper(props) {
     setActiveStep(responses?.length + 1);
   }, [responses?.length]);
 
-  useEffect(() => {
-    if (containerRef.current && orientation === "vertical") {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-    if (containerRef.current && orientation === "horizontal") {
-      containerRef.current.scrollLeft = containerRef.current.scrollWidth;
-    }
-  }, [handleStep]);
+  // useEffect(() => {
+  //   if (containerRef.current && orientation === "vertical") {
+  //     containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  //   }
+  //   if (containerRef.current && orientation === "horizontal") {
+  //     containerRef.current.scrollLeft = containerRef.current.scrollWidth;
+  //   }
+  // }, [handleStep]);
 
   return (
     <Box
       sx={{
-        padding: orientation === "vertical" ? "2em 1em" : ".5em 1em",
-        boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
-        borderRadius: "5px",
+        padding: "2em 0em" 
         // minWidth: orientation === "vertical" ? "212px" : 0,
       }}
     >
-      <Typography sx={{ textAlign: "center" }}>Summary</Typography>
+      <Typography sx={{ textAlign: "left",fontSize:"1.7rem" }} fontWeight={500}>Summary</Typography>
       <Box
         sx={{
-          maxHeight: orientation === "horizontal" ? "60vh" : "max-content",
-          height: orientation === "vertical" ? "60vh" : "max-content",
+          maxHeight: "max-content",
+          height:"60vh" ,
+          paddingLeft: "0em",
+
           maxWidth: "100%",
         }}
       >
@@ -78,7 +102,9 @@ export default function VerticalLinearStepper(props) {
             "& .MuiStepConnector-line": {
               minHeight: ".5em"
             }
-          }} activeStep={activeStep} orientation={orientation}>
+          }}
+          connector={<QontoConnector />}
+          nonLinear activeStep={responses.length + 1} orientation={"vertical"}>
             {responses?.map((step, index) => (
               <Step key={index}>
                 {step.resources && index === 0 ? (
@@ -87,12 +113,17 @@ export default function VerticalLinearStepper(props) {
                       <div key={resourceIndex}>
                         <StepLabel
                           sx={{
+                            "& .MuiStepLabel-root":{
+                              padding: 0
+                            },
                             "& .MuiStepIcon-root": {
                               width: "1.2rem",
                               height: "1.2rem",
                             },
                             "& .MuiStepLabel-label": {
                               fontSize: "0.7rem",
+                              
+
                             },
                             minWidth: "170px",
                           }}
@@ -104,10 +135,12 @@ export default function VerticalLinearStepper(props) {
 
                           <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
                             <Box sx={{ width: "50%" }}>
-                              <Typography fontSize={"12px"} fontWeight={400}>  {resource.resource.toUpperCase()}</Typography>
+                              <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>  {resource.resource}</Typography>
                             </Box>
                             <Box sx={{ width: "50%",padding:"3px" }}>
-                              <Typography textAlign={"left"} fontSize={"13px"} fontWeight={400} color={"grey"}>
+                              <Typography textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+        ","
+      ),}}>
                               {resource.resourceOption.opt}
                               </Typography>
                             </Box>
@@ -126,10 +159,16 @@ export default function VerticalLinearStepper(props) {
                           "& .MuiStepIcon-root": {
                             width: "1.2rem",
                             height: "1.2rem",
+                            color: index < activeStep ? "#0045e6" : "0045e6", // Change color based on completion status
+
+
                           },
                           "& .MuiStepLabel-label": {
                             fontSize: "0.7rem",
                           },
+                          "& .MuiSvgIcon-root-MuiStepIcon-root .Mui-completed":{
+                            backgroundColor:"#0045e6"
+                          }
 
                         }}
                         key={key}
@@ -138,12 +177,14 @@ export default function VerticalLinearStepper(props) {
                       >
                         <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
                           <Box sx={{ width: "50%" }}>
-                            <Typography fontSize={"12px"} fontWeight={400}>  {step.question.label
-                              ? step.question.label.toUpperCase()
-                              : step.label.toUpperCase()}</Typography>
+                            <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>  {step.question.label
+                              ? step.question.label
+                              : step.label}</Typography>
                           </Box>
                           <Box sx={{ width: "50%",padding:"3px" }}>
-                            <Typography textAlign={"left"} fontSize={"13px"} fontWeight={400} color={"grey"}>
+                            <Typography textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+        ","
+      ),}}>
                               {selected.opt}
                             </Typography>
                           </Box>

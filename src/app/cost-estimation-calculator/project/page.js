@@ -50,9 +50,9 @@ const CustomButton = styled(Button)(({ theme }) => ({
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
   margin: "2em 0",
-  backgroundColor:"#0045e6",
-  "&:hover":{
-    backgroundColor:"#0045e6"
+  backgroundColor: "#0045e6",
+  "&:hover": {
+    backgroundColor: "#0045e6"
   },
   fontFamily: [
     "Proxima Nova",
@@ -94,7 +94,7 @@ const page = () => {
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
-  const isNarrowScreen = useMediaQuery("(max-width:600px)");
+  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const [slideIn, setSlideIn] = useState(true);
 
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
@@ -410,80 +410,11 @@ const page = () => {
             {/* <Typography variant="h6">Total Cost : $ {totalCost}</Typography> */}
           </Box>
 
-          {isNarrowScreen ? (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
-              {actualResponses.length > 0 && stepperState && (
-                <Grid item lg={4} md={4} sm={4} xs={12}>
-                  <Stepper
-                    responses={actualResponses}
-                    changeActiveQuestion={changeActiveQuestion}
-                    orientation={orientation}
-                  />
-                </Grid>
-              )}
-              <Grid item lg={8} md={8} sm={8} xs={12}>
-                <Slide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    appear: 100,
-                    enter: 950,
-                    exit: 0,
-                  }}
-                  appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
 
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
-                  }}
-                >
-                  <div>
-                    {!loaderState ? (
-                      <Question
-                        currentQuestion={currentQuestion}
-                        getResponsesData={getResponsesData}
-                        selectedOption={lastQuestionSelectedOption}
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          margin: "5em 2em",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
-                  </div>
-                </Slide>
 
-                {
-                  isOptionSelected ?
-                    <Box sx={{ display: "flex", gap: "2em" }}>
-                      <CustomNextButton
-                        sx={{ width: 150,backgroundColor:"#0045e6" }}
-                        size="medium"
-                        onClick={() => {
-                          nextQuestion();
-                        }}
-                      >
-                        Next
-                      </CustomNextButton>
-                    </Box>
-                    : null
-                }
-              </Grid>
-            </Grid>
-          ) : (
+             
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
-              <Grid item lg={8} md={9} sm={8} xs={12}>
+              <Grid sx={{paddingRight:"10px"}}   item lg={8} md={12} sm={12} xs={12}>
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -532,7 +463,7 @@ const page = () => {
                       <CustomNextButton
                         size="medium"
                         variant="contained"
-                        sx={{ width: 150,backgroundColor:"#0045e6","&:hover":{backgroundColor:"#0045e6"} }}
+                        sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" } }}
 
                         onClick={() => {
                           nextQuestion();
@@ -542,16 +473,27 @@ const page = () => {
                       </CustomNextButton>
                     </Box> : null
                 }
+             
               </Grid>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
+              <Box sx={{
+                borderRight: orientation === "vertical" ? "1px solid grey" : "0",
+                borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
+                width: orientation !== "vertical" ? "100%" : "0",
+                marginTop:"7%",
+                // marginRight:"10px",
+                height:orientation=== "vertical" ? "65vh": 0
+
+              }}></Box>
+              <Grid item lg={3.9} md={12} sm={12} xs={12}>
+            
                 <Stepper
                   responses={actualResponses}
                   changeActiveQuestion={changeActiveQuestion}
-                  orientation={orientation}
+                
                 />
               </Grid>
             </Grid>
-          )}
+          
         </Box>
       ) : (
         <Box
@@ -565,8 +507,9 @@ const page = () => {
         >
           <CircularProgress />
         </Box>
-      )}
-    </Box>
+      )
+      }
+    </Box >
   );
 };
 

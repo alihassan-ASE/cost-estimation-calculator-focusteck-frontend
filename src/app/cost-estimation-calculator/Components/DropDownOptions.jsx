@@ -118,7 +118,7 @@ const DropDownComponent = ({
       <InputLabel  id="demo-simple-select-label">{label?label:"Select Your Option"}</InputLabel>
 
       <Select
-        sx={{ height: "65px", width: "100%",borderRadius:"50px"}}
+        sx={{ height: "65px", width: "90%",borderRadius:"50px"}}
         autoFocus={false}
         value={disable ? null : selectedFormats}
         onChange={(e) => {
@@ -143,7 +143,7 @@ const DropDownComponent = ({
             {selected.opt ? (
               <Chip
                 key={selected.opt}
-                label={`${selected.opt} ($${selected.price})`}
+                label={`${selected.opt}`}
               />
             ) : (
               <Chip key={selected} label={selected} />
