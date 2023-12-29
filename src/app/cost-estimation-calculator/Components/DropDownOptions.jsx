@@ -9,7 +9,7 @@ import {
   Chip,
   Button,
   Grid,
-  TextField
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -65,7 +65,6 @@ const MenuProps = {
   },
 };
 
-
 const DropDownComponent = ({
   options,
   label,
@@ -86,19 +85,15 @@ const DropDownComponent = ({
   const [price, setPrice] = useState(0);
 
   useEffect(() => {
-
-
     if (Array.isArray(selectedOption)) {
       setSelectedFormats(selectedOption[0]);
     } else {
       setSelectedFormats(selectedOption);
       setSelectedFormats(selectedOption);
     }
-
-  }, [selectedOption, options])
+  }, [selectedOption, options]);
 
   const submitOtherVal = () => {
-
     const trimmedOtherVal = otherVal.trim();
     if (!trimmedOtherVal) {
       setErrorMessage("Field cannot be empty");
@@ -111,7 +106,6 @@ const DropDownComponent = ({
       setCheckInputVal(false);
       setOtherVal(trimmedOtherVal);
     }
-
   };
   return (
     <StyledFormControl>
@@ -218,5 +212,3 @@ const DropDownComponent = ({
 };
 
 export default DropDownComponent;
-
-

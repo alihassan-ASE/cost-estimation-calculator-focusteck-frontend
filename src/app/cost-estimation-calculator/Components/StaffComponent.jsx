@@ -18,6 +18,28 @@ import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
+import ShowSummary from "./ShowSummary";
+
+const CustomButton = styled(Button)(({ theme }) => ({
+  color: "white",
+  boxShadow: "none",
+  textTransform: "none",
+  lineHeight: 1.5,
+  height: "40px",
+  maxWidth: "100px",
+  backgroundColor: "#005DBD",
+  fontWeight: "normal",
+  borderRadius: "5px",
+  textAlign: "center",
+  flexWrap: "wrap",
+  flexDirection: "column",
+  flexGrow: 1,
+  flexShrink: 1,
+  gap: ".1em",
+  transition: "all 0.3s ease",
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
@@ -125,6 +147,7 @@ const StaffComponent = () => {
   const [stepperState, setStepperState] = useState(false);
   const route = useRouter();
   const dataObj = {};
+  const [displayQuestion, setDisplayQuestion] = useState(true);
 
   // Setting Staff Resources and Questions
   useEffect(() => {
@@ -134,6 +157,7 @@ const StaffComponent = () => {
       setStaffBaseResources(Resources);
     });
   }, []);
+
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -163,7 +187,6 @@ const StaffComponent = () => {
     setResource(values);
   }, [values?.length]);
 
-
   const deleteResource = (index) => {
     if (values) {
       if (index >= 0 && index < values.length) {
@@ -183,7 +206,7 @@ const StaffComponent = () => {
     try {
       let data = JSON.stringify(actualResponses);
       localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/submit");
+      route.push("/cost-estimation-calculator/results");
     } catch (error) {
       console.log("Error", error);
     }
@@ -191,7 +214,6 @@ const StaffComponent = () => {
 
   // Function To Handling Price
   const handlePrice = (type) => {
-
     switch (type) {
       case "stepper":
       case "next": {
@@ -231,8 +253,8 @@ const StaffComponent = () => {
 
   // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
-
     const { index, step } = obj;
+    setDisplayQuestion(true);
 
     if (index == 1) {
       setCurrentState(true);
@@ -243,8 +265,7 @@ const StaffComponent = () => {
     actualResponses.responses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedData);
     setIsStepperClicked(true);
-    setIsOptionSelected(false)
-    
+    setIsOptionSelected(false);
   };
 
   // receiving selected option from child Component
@@ -313,6 +334,8 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
+    setDisplayQuestion(true);
+
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
@@ -358,9 +381,22 @@ const StaffComponent = () => {
     }
   };
 
+  useEffect(() => {
+    if (currentQuestionIndex > additionalQuesiton.length) {
+      setDisplayQuestion(false);
+      actualResponses.totalCost = totalCost;
+      try {
+        let data = JSON.stringify(actualResponses);
+        localStorage.setItem("Response", data);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    }
+  }, [nextQuestion]);
+
+
   // Showing selected Resources
   const returnResources = () => {
-
     const tags = [];
     for (let i = 0; i <= count; i++) {
       tags.push(
@@ -382,20 +418,19 @@ const StaffComponent = () => {
       );
     }
     return tags;
-    
   };
 
-  // calling goToForm Function after selecting last question
-  if (currentQuestionIndex > additionalQuesiton.length) {
-    setTimeout(() => {
-      goToForm();
-    }, 100);
-  }
 
   return (
-    <Box sx={{ margin: "1em 2em" }}>
+    <Box sx={{ padding: "0 2.7%" }}>
       {additionalQuesiton.length && staffBase.length ? (
-        <Box>
+        <Box
+          sx={{
+            maxWidth: "1520px",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -434,6 +469,7 @@ const StaffComponent = () => {
                   display: "flex",
                   flexWrap: "wrap",
                   alignItems: "center",
+                  padding: "2em",
                   gap: "1em",
                 }}
               >
@@ -471,7 +507,7 @@ const StaffComponent = () => {
               {/* )} */}
             </>
           ) : isNarrowScreen ? (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} sx={{ padding: "2em", maxWidth: "100%" }}>
               {stepperState && (
                 <Grid item lg={4} md={3} sm={4} xs={12}>
                   {actualResponses.length || actualResponses.responses ? (
@@ -484,6 +520,20 @@ const StaffComponent = () => {
                 </Grid>
               )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
+                {
+                  displayQuestion
+                    ?
+                    <Box
+                      sx={{
+                        paddingTop: "1.9em",
+                      }}
+                    >
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        Question {actualResponses.responses.length}
+                      </Typography>
+                    </Box>
+                    : null
+                }
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -495,22 +545,20 @@ const StaffComponent = () => {
                   appear={true}
                   onEnter={(node) => {
                     node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
                   }}
                 >
                   <div>
-                    <Question
-                      currentQuestion={currentQuestion}
-                      getResponsesData={getResponsesData}
-                      selectedOption={lastQuestionSelectedOption}
-                    />
+                    {
+                      displayQuestion
+                        ?
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                        : <ShowSummary response={actualResponses} />
+                    }
+
                   </div>
                 </Slide>
 
@@ -534,8 +582,22 @@ const StaffComponent = () => {
               </Grid>
             </Grid>
           ) : (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}  sx={{ padding: "2em", maxWidth: "100%" }}>
               <Grid item lg={8} md={9} sm={8} xs={12}>
+                {
+                  displayQuestion
+                    ?
+                    <Box
+                      sx={{
+                        paddingTop: "1.9em",
+                      }}
+                    >
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        Question {actualResponses.responses.length}
+                      </Typography>
+                    </Box>
+                    : null
+                }
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -547,22 +609,19 @@ const StaffComponent = () => {
                   appear={true}
                   onEnter={(node) => {
                     node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
                   }}
                 >
                   <div>
-                    <Question
-                      currentQuestion={currentQuestion}
-                      getResponsesData={getResponsesData}
-                      selectedOption={lastQuestionSelectedOption}
-                    />
+                    {
+                      displayQuestion
+                        ?
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                        : <ShowSummary response={actualResponses} />
+                    }
                   </div>
                 </Slide>
                 {additionalQuesiton.length >= currentQuestionIndex && (

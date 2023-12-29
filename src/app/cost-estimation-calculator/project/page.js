@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
+import ShowSummary from "../Components/ShowSummary";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   padding: 0,
@@ -34,16 +35,17 @@ const CustomButton = styled(Button)(({ theme }) => ({
     transform: "translateX(-5px)"
   },
   "&:hover": {
-    backgroundColor: "#fff",
+    backgroundColor: "#005DBD",
+    color: "#fff",
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
-  "&:selected": {
-    backgroundColor: "#fff",
+  "&.Mui-disabled": {
+    background: "#4f9ef0",
+    color: "#eaeaea",
   },
   "&:focus": {
-    backgroundColor: "#fff",
-  },
-  "&:active": {
-    backgroundColor: "#fff",
+    outline: "none",
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
 }));
 
@@ -96,7 +98,7 @@ const page = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const [slideIn, setSlideIn] = useState(true);
-
+  const [displayQuestion, setDisplayQuestion] = useState(true);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
@@ -167,22 +169,8 @@ const page = () => {
     }
   };
 
-  const goToForm = () => {
-    try {
-      let data = JSON.stringify({
-        responses: actualResponses,
-        totalCost: totalCost,
-      });
-      if (data) {
-        localStorage.setItem("Response", data);
-        route.push("/cost-estimation-calculator/submit");
-      }
-    } catch (error) { }
-  };
-
   // getting Response from child Component
   const getResponsesData = (resp) => {
-
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
@@ -192,12 +180,10 @@ const page = () => {
     else {
       setIsOptionSelected(false)
     }
-
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
-
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -209,11 +195,11 @@ const page = () => {
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
-
   };
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+    setDisplayQuestion(true);
 
     const { index, step } = obj;
     setCurrentQuestionIndex(step.index);
@@ -237,7 +223,7 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
-
+    setDisplayQuestion(true);
     cost = 0;
 
 
@@ -342,9 +328,7 @@ const page = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
-    // setTimeout(() => {
     setLoaderState((prev) => !prev);
-    // }, 500);
     selectedData.map((op) => {
       cost = cost + op.price;
     });
@@ -354,12 +338,22 @@ const page = () => {
     slider();
   };
 
-  if (
-    currentState === "post" &&
-    currentQuestionIndex > postProjectQuestions.length
-  ) {
-    goToForm();
-  }
+  useEffect(() => {
+    if (
+      currentState === "post" &&
+      currentQuestionIndex > postProjectQuestions.length
+    ) {
+      let data = JSON.stringify({
+        responses: actualResponses,
+        totalCost: totalCost,
+      });
+      if (data) {
+        localStorage.setItem("Response", data);
+      }
+      setDisplayQuestion(false);
+    }
+  }, [nextQuestion]);
+
 
   const slider = function () {
     setSlideIn(false);
@@ -369,9 +363,15 @@ const page = () => {
   };
 
   return (
-    <Box ref={projectPageRef} sx={{ padding: "1em 0" }}>
+    <Box ref={projectPageRef} sx={{ padding: "0 2.7%" }}>
       {fetchQuesitons !== null ? (
-        <Box sx={{ margin: "1em 2em" }}>
+        <Box
+          sx={{
+            maxWidth: "1520px",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -426,23 +426,83 @@ const page = () => {
                   appear={true}
                   onEnter={(node) => {
                     node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //     console.log("Actually done");
-                    //   },
-                    //   false
-                    // );
                   }}
                 >
                   <div>
                     {!loaderState ? (
-                      <Question
-                        currentQuestion={currentQuestion}
-                        getResponsesData={getResponsesData}
-                        selectedOption={lastQuestionSelectedOption}
-                      />
+                      displayQuestion
+                        ?
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                        : <ShowSummary response={{
+                          responses: actualResponses,
+                          totalCost: totalCost,
+                        }} />
+                    ) : (
+                      <Box
+                        sx={{
+                          margin: "5em 2em",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <CircularProgress />
+                      </Box>
+                    )}
+                  </div>
+                </Slide>
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid
+              sx={{ padding: "2em" }}
+              container
+              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+            >
+              <Grid item lg={8} md={9} sm={8} xs={12}>
+                {
+                  displayQuestion
+                    ?
+                    <Box
+                      sx={{
+                        paddingTop: "1.9em",
+                      }}
+                    >
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        Question {actualResponses.length + 1}
+                      </Typography>
+                    </Box>
+                    : null
+                }
+                <Slide
+                  direction="down"
+                  in={slideIn}
+                  timeout={{
+                    appear: 100,
+                    enter: 950,
+                    exit: 0,
+                  }}
+                  appear={true}
+                  onEnter={(node) => {
+                    node.style.transform = "translateY(-50px)";
+                  }}
+                >
+                  <div>
+                    {!loaderState ? (
+                      displayQuestion
+                        ?
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                        : <ShowSummary response={{
+                          responses: actualResponses,
+                          totalCost: totalCost,
+                        }} />
                     ) : (
                       <Box
                         sx={{

@@ -87,7 +87,7 @@ export default function VerticalLinearStepper(props) {
         // minWidth: orientation === "vertical" ? "212px" : 0,
       }}
     >
-      <Typography sx={{ textAlign: "left",fontSize:"1.7rem" }} fontWeight={500}>Summary</Typography>
+      <Typography sx={{ fontWeight: "bold" }}>SUMMARY</Typography>
       <Box
         sx={{
           maxHeight: "max-content",

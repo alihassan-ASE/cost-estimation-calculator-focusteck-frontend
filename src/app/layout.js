@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -23,7 +24,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { baseUrl } from "@/config/constants";
-import { minWidth } from "@mui/system";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "0 2em",
@@ -41,7 +41,6 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
-
   "&:hover": {
     backgroundColor: "#fff",
     boxShadow: "none",
@@ -61,7 +60,12 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
       textIndent: 0,
     },
   },
-
+  // [theme.breakpoints.up("xl")]: {
+  //   fontSize: "3em",
+  //   width: "100%",
+  //   height: "100%",
+  //   padding: "1em 7em",
+  // },
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
   },
@@ -73,50 +77,45 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
 
 const CustomBannerBox = styled(Box)(({ theme }) => ({
   color: "white",
-  padding: "6em 3em",
-  display: "flex",
-  flexDirection: "column",
-  gap: "2em",
+  // display: "flex",
+  // alignItems: "center",
+
+  padding: "1em 0",
   background: `linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5),rgba(0,0,0,.5)), url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
   backgroundPosition: "center",
-  minHeight: "60vh",
-  [theme.breakpoints.down("sm")]: {
-    padding: "4em 1em",
-    height: "60vh",
-  },
-  [theme.breakpoints.up("lg")]: {
-    height: "88vh",
-  },
-  [theme.breakpoints.down("lg")]: {
-    minHeight: "70vh",
-  },
-  [theme.breakpoints.down("md")]: {
-    height: "60vh",
-  },
-  [theme.breakpoints.down("sm")]: {
-    height: "60vh",
-  },
-  // [theme.breakpoints.down("sm")]: {
-  //   padding: "4em 1em",
-  // },
+  height: "100%",
 }));
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
+  maxWidth: 800,
+  // [theme.breakpoints.up("xl")]: {
+  //   fontSize: "7em",
+  //   maxWidth: "100%",
+  // },
   [theme.breakpoints.down("md")]: {
     fontSize: "3em",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "2em",
+    fontSize: "1.5em",
   },
 }));
 
+const CustomParagraph = styled(Typography)(({ theme }) => ({
+  maxWidth: 600,
+  // [theme.breakpoints.up("xl")]: {
+  //   maxWidth: "40%",
+  //   fontSize: "3rem",
+  // },
+}));
+
 const CustomNavbarButton = styled(Link)(({ theme }) => ({
-  color: "#000",
   textTransform: "none",
-  fontSize: "1em",
+  fontSize: "17px",
   textDecoration: "none",
+  width: "max-content",
+  paddingTop: 20,
   lineHeight: 1.5,
   fontWeight: 300,
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
@@ -144,11 +143,16 @@ const CustomNavbarButton = styled(Link)(({ theme }) => ({
 
 const CustomBottomHeading = styled(Typography)(({ theme }) => ({
   color: "#005DBD",
+  marginRight: "38.854px",
   lineHeight: 1.5,
+  letterSpacing: 1.2,
   fontWeight: "bold",
   fontSize: "15px",
-  padding: ".5em 0",
-  margin: ".5em 0",
+
+  padding: ".5em  9.5em 5px 0",
+  width: "max-content",
+  margin: ".5em 2em .2em 0",
+  // margin: "1% 3% 1.2% 0",
   borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
   transition: "all 0.25s ease-in-out 0.25s",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
@@ -162,11 +166,12 @@ const CustomBottomHeading = styled(Typography)(({ theme }) => ({
 const CustomBottomLink = styled(Link)(({ theme }) => ({
   color: "#2E2E2E",
   textTransform: "none",
-  fontSize: "14px",
+  fontSize: "15px",
   textDecoration: "none",
   lineHeight: 1.5,
   width: "max-content",
   fontWeight: 300,
+  padding: ".05em 0",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
@@ -206,45 +211,42 @@ const CustomFooterTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const CustomAppBar = styled(Box)(({ theme }) => ({
-  color: "#000",
   backgroundColor: "#fff",
+  padding: ".5% 5% 1% 5%",
+  maxHeight: 51.7,
   display: "flex",
-  justifyContent: "center",
-  padding: "0 3em",
   [theme.breakpoints.down("md")]: {
     padding: "0 1em",
-    gap: "5em",
-    justifyContent: "center",
   },
   [theme.breakpoints.down("sm")]: {
     padding: "0 .5em",
-    gap: "2em",
-    justifyContent: "center",
   },
 }));
 
 const CustomToolBar = styled(Box)(({ theme }) => ({
   display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  gap: "3em",
+  justifyContent: "center",
+  width: "100%",
   [theme.breakpoints.down("md")]: {
-    gap: "10em",
+    alignItems: "center",
   },
   [theme.breakpoints.down("sm")]: {
-    gap: "3em",
+    alignItems: "center",
   },
 }));
 
 export default function RootLayout({ children }) {
-  const isNarrowScreen = useMediaQuery("(max-width:900px)");
+  const isNarrowScreen = useMediaQuery("(max-width:1148px)");
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
   const route = useRouter();
+  const [showMenuIcon, setShowMenuIcon] = useState(true);
 
   const baseRoute = usePathname();
   const handleNavBar = () => {
     setHamburgerClicked(!hamburgerClicked);
+    // setShowMenuIcon((prev) => !prev);
   };
+
   // const isRoot = baseRoute === "/";
   // const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
 
@@ -264,285 +266,345 @@ export default function RootLayout({ children }) {
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
+            margin: 0,
           }}
         >
-          <CustomAppBar position="static">
-            <CustomToolBar>
-              <Button
-                sx={{
-                  background: `url('https://focusteck.com/wp-content/uploads/2022/03/focusteck-logo.svg')`,
-                  backgroundRepeat: "no-repeat",
-                  width: 157,
-                  height: 43,
-                  "&:hover": {
-                    backgroundColor: "#fff",
-                  },
-                }}
-              ></Button>
+          <Box sx={{ height: "100vh", overflow: "hidden" }}>
+            <CustomAppBar position="static">
+              <CustomToolBar>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    paddingTop: "9.3px",
+                    marginRight: "37.27px",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      background: `url('https://focusteck.com/wp-content/uploads/2022/03/focusteck-logo.svg')`,
+                      backgroundRepeat: "no-repeat",
+                      width: 149.13,
+                      height: 42.4,
+                      "&:hover": {
+                        backgroundColor: "#fff",
+                      },
+                    }}
+                  ></Box>
+                </Box>
 
-              <Box sx={{ display: "flex", gap: "1.5em" }}>
-                <CustomNavbarButton
-                  href="#"
-                  onClick={() => route.push("/cost-estimation-calculator")}
+                <Box
                   sx={{
-                    flexGrow: 1,
-                    display: { xs: "none", md: "block", lg: "block" },
-                    my: 2,
-                    color: "#000",
-                    textTransform: "capitalize",
+                    display: "inline-flex",
+                    justifyContent: "center",
+                    alignItems: "stretch",
+                    gap: "22px",
+                    margin: "0px 67px",
+                    // margin: "0 6%",
                   }}
                 >
-                  Services
-                </CustomNavbarButton>
-                <CustomNavbarButton
-                  href="#"
+                  <CustomNavbarButton
+                    href="#"
+                    onClick={() => route.push("/cost-estimation-calculator")}
+                    sx={{
+                      flexGrow: 1,
+                      display: { xs: "none", md: "none", lg: "flex" },
+                      color: "#2e2e2e",
+                      alignItems: "stretch",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Services
+                  </CustomNavbarButton>
+                  <CustomNavbarButton
+                    href="#"
+                    sx={{
+                      flexGrow: 1,
+                      display: { xs: "none", md: "none", lg: "flex" },
+                      color: "#2e2e2e",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Engagement Model
+                  </CustomNavbarButton>
+                  <CustomNavbarButton
+                    href="#"
+                    sx={{
+                      flexGrow: 1,
+                      display: { xs: "none", md: "none", lg: "flex" },
+                      color: "#2e2e2e",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Success Stories
+                  </CustomNavbarButton>
+                  <CustomNavbarButton
+                    href="#"
+                    sx={{
+                      flexGrow: 1,
+                      display: { xs: "none", md: "none", lg: "flex" },
+                      color: "#2e2e2e",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Careers
+                  </CustomNavbarButton>
+                  <CustomNavbarButton
+                    href="#"
+                    sx={{
+                      flexGrow: 1,
+                      display: { xs: "none", md: "none", lg: "flex" },
+                      color: "#2e2e2e",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    About Us
+                  </CustomNavbarButton>
+                  <CustomNavbarButton
+                    href="#"
+                    sx={{
+                      flexGrow: 1,
+                      display: { xs: "none", md: "none", lg: "flex" },
+                      color: "#2e2e2e",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Blog
+                  </CustomNavbarButton>
+                </Box>
+                <Box
                   sx={{
-                    flexGrow: 1,
-                    display: { xs: "none", md: "block", lg: "block" },
-                    my: 2,
-                    color: "#000",
-                    textTransform: "capitalize",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "204.5px",
                   }}
                 >
-                  Engagement Model
-                </CustomNavbarButton>
-                <CustomNavbarButton
-                  href="#"
-                  sx={{
-                    flexGrow: 1,
-                    display: { xs: "none", md: "block", lg: "block" },
-                    my: 2,
-                    color: "#000",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Success Stories
-                </CustomNavbarButton>
-                <CustomNavbarButton
-                  href="#"
-                  sx={{
-                    flexGrow: 1,
-                    display: { xs: "none", md: "block", lg: "block" },
-                    my: 2,
-                    color: "#000",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Careers
-                </CustomNavbarButton>
-                <CustomNavbarButton
-                  href="#"
-                  sx={{
-                    flexGrow: 1,
-                    display: { xs: "none", md: "block", lg: "block" },
-                    my: 2,
-                    color: "#000",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  About Us
-                </CustomNavbarButton>
-                <CustomNavbarButton
-                  href="#"
-                  sx={{
-                    flexGrow: 1,
-                    display: { xs: "none", md: "block", lg: "block" },
-                    my: 2,
-                    color: "#000",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Blog
-                </CustomNavbarButton>
-              </Box>
-              <Button
-                sx={{
-                  display: { xs: "none", md: "none", lg: "block" },
-                  my: 2,
-                  padding: ".2em 1em",
-                  fontSize: "15px",
-                  color: "#fff",
-                  textTransform: "capitalize",
-                  fontWeight: 700,
-                  backgroundColor: "#005DBD",
-                  border: "1px solid #005DBD",
-                  letterSpacing: "1.5px",
-                  "&:hover": {
-                    color: "#000",
-                    backgroundColor: "#fff",
-                    border: "1px solid #000",
-                  },
-                }}
-              >
-                Contact Us
-              </Button>
+                  <Button
+                    sx={{
+                      display: { xs: "none", md: "none", lg: "flex" },
+                      padding: "4.2px 14px",
+                      fontSize: "15px",
+                      height: "34px",
+                      marginTop: "14.313px",
+                      marginRight: "6.135px",
+                      color: "#fff",
+                      textTransform: "capitalize",
+                      fontWeight: 700,
+                      backgroundColor: "#005DBD",
+                      border: "1px solid #005DBD",
+                      letterSpacing: "1.5px",
+                      borderRadius: "5px",
+                      width: "max-content",
+                      "&:hover": {
+                        color: "#000",
+                        backgroundColor: "#fff",
+                        border: "1px solid #000",
+                      },
+                    }}
+                  >
+                    Contact Us
+                  </Button>
+                </Box>
 
-              <MenuIcon
-                onClick={handleNavBar}
-                sx={{
-                  color: "#005DBD",
-                  display: { xs: "block", md: "none", lg: "none" },
-                  marginLeft: "auto",
-                  transform: hamburgerClicked
-                    ? "rotate(180deg)"
-                    : "rotate(0deg)",
-                  transition: hamburgerClicked ? "transform .4s ease" : null,
-                }}
-              />
-            </CustomToolBar>
-          </CustomAppBar>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "1em",
-              position: "absolute",
-              backgroundColor: "#fff",
-              left: 0,
-              right: 0,
-              top: 42,
-              zIndex: 1,
-              margin: "auto",
-              maxWidth: 500,
-              visibility:
-                hamburgerClicked && isNarrowScreen ? "visible" : "hidden",
-              opacity: hamburgerClicked && isNarrowScreen ? 1 : 0,
-              maxHeight: hamburgerClicked && isNarrowScreen ? "1000px" : "0",
-              overflow: "hidden",
-              transition: "opacity 0.5s ease-out, max-height 0.7s ease-out",
-            }}
-          >
-            <CustomNavbarButton
-              href="#"
-              onClick={() => route.push("/cost-estimation-calculator")}
-              sx={{
-                flexGrow: 1,
-                my: 2,
-                color: "#000",
-                textTransform: "capitalize",
-              }}
-            >
-              Services
-            </CustomNavbarButton>
-            <CustomNavbarButton
-              href="#"
-              sx={{
-                flexGrow: 1,
-                my: 2,
-                color: "#000",
-                textTransform: "capitalize",
-              }}
-            >
-              Engagement Model
-            </CustomNavbarButton>
-            <CustomNavbarButton
-              href="#"
-              sx={{
-                flexGrow: 1,
-                my: 2,
-                color: "#000",
-                textTransform: "capitalize",
-              }}
-            >
-              Success Stories
-            </CustomNavbarButton>
-            <CustomNavbarButton
-              href="#"
-              sx={{
-                flexGrow: 1,
-                my: 2,
-                color: "#000",
-                textTransform: "capitalize",
-              }}
-            >
-              Careers
-            </CustomNavbarButton>
-            <CustomNavbarButton
-              href="#"
-              sx={{
-                flexGrow: 1,
-                my: 2,
-                color: "#000",
-                textTransform: "capitalize",
-              }}
-            >
-              About Us
-            </CustomNavbarButton>
-            <CustomNavbarButton
-              href="#"
-              sx={{
-                flexGrow: 1,
-                my: 2,
-                color: "#000",
-                textTransform: "capitalize",
-              }}
-            >
-              Blog
-            </CustomNavbarButton>
-          </Box>
-
-          <CustomBannerBox>
-            <CustomTypography
-              variant="h3"
-              style={{
-                maxWidth: 800,
-                "@media (max-width: 600px)": {
-                  padding: "0",
-                },
-              }}
-            >
-              Estimate the cost of your Software Project
-            </CustomTypography>
-            <Typography sx={{ maxWidth: 600 }}>
-              Answer five simple questions, and you’ll receive an instant cost
-              estimation to help you get your project moving. Don't let cost
-              uncertainties hold you back. Define your budget effortlessly with
-              just a few clicks.
-            </Typography>
+                <>
+                  {showMenuIcon ? (
+                    <MenuIcon
+                      onClick={handleNavBar}
+                      sx={{
+                        color: "#005DBD",
+                        display: { xs: "block", md: "block", lg: "none" },
+                        margin: "auto 0 auto auto",
+                        transform: hamburgerClicked
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                        transition: "transform .4s ease",
+                        "&:hover": {
+                          cursor: "pointer",
+                        },
+                      }}
+                    />
+                  ) : (
+                    <CloseIcon
+                      onClick={handleNavBar}
+                      sx={{
+                        color: "#005DBD",
+                        display: { xs: "block", md: "block", lg: "none" },
+                        marginLeft: "auto",
+                        transform: hamburgerClicked
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                        transition: "transform .4s ease",
+                        "&:hover": {
+                          cursor: "pointer",
+                        },
+                      }}
+                    />
+                  )}
+                </>
+              </CustomToolBar>
+            </CustomAppBar>
 
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "center",
+                flexDirection: "column",
                 alignItems: "center",
+                gap: "1em",
+                position: "absolute",
+                backgroundColor: "#fff",
+                left: 0,
+                right: 0,
+                top: 42,
+                zIndex: 1,
+                margin: "auto",
+                maxWidth: 500,
+                visibility:
+                  hamburgerClicked && isNarrowScreen ? "visible" : "hidden",
+                opacity: hamburgerClicked && isNarrowScreen ? 1 : 0,
+                maxHeight: hamburgerClicked && isNarrowScreen ? "1000px" : "0",
+                overflow: "hidden",
+                transition:
+                  "opacity 0.5s ease-out, max-height 0.7s ease-out, visibility 0.5s ease-out",
               }}
             >
-              <Link
-                href={href}
-                scroll={false}
-                style={{
-                  textDecoration: "none",
+              <CustomNavbarButton
+                href="#"
+                onClick={() => route.push("/cost-estimation-calculator")}
+                sx={{
+                  flexGrow: 1,
+                  my: 2,
+                  color: "#2e2e2e",
+                  textTransform: "capitalize",
                 }}
               >
-                <CustomStartButton
-                  variant="contained"
+                Services
+              </CustomNavbarButton>
+              <CustomNavbarButton
+                href="#"
+                sx={{
+                  flexGrow: 1,
+                  my: 2,
+                  color: "#2e2e2e",
+                  textTransform: "capitalize",
+                }}
+              >
+                Engagement Model
+              </CustomNavbarButton>
+              <CustomNavbarButton
+                href="#"
+                sx={{
+                  flexGrow: 1,
+                  my: 2,
+                  color: "#2e2e2e",
+                  textTransform: "capitalize",
+                }}
+              >
+                Success Stories
+              </CustomNavbarButton>
+              <CustomNavbarButton
+                href="#"
+                sx={{
+                  flexGrow: 1,
+                  my: 2,
+                  color: "#2e2e2e",
+                  textTransform: "capitalize",
+                }}
+              >
+                Careers
+              </CustomNavbarButton>
+              <CustomNavbarButton
+                href="#"
+                sx={{
+                  flexGrow: 1,
+                  my: 2,
+                  color: "#2e2e2e",
+                  textTransform: "capitalize",
+                }}
+              >
+                About Us
+              </CustomNavbarButton>
+              <CustomNavbarButton
+                href="#"
+                sx={{
+                  flexGrow: 1,
+                  my: 2,
+                  color: "#2e2e2e",
+                  textTransform: "capitalize",
+                }}
+              >
+                Blog
+              </CustomNavbarButton>
+            </Box>
+
+            <CustomBannerBox>
+              <Box
+                sx={{
+                  maxWidth: "1520px",
+                  marginRight: "auto",
+                  marginLeft: "auto",
+                }}
+              >
+                <Box
                   sx={{
+                    padding: "7% 5%",
                     display: "flex",
-                    alignItems: "center",
-                    position: "relative",
-                    overflow: "hidden",
+                    flexDirection: "column",
+                    gap: "2em",
                   }}
                 >
-                  <ArrowForwardIcon
-                    sx={{
-                      marginRight: "auto",
-                      opacity: 0,
-                      backgroundColor: "#0045e6",
-                      color: "#fff",
-                      padding: "1em",
-                      position: "absolute",
-                      left: "-19px",
-                      borderRadius: "0 50% 50% 0",
-                    }}
-                  />
-                  <span id="start">Start</span>
-                </CustomStartButton>
-              </Link>
-            </Box>
-          </CustomBannerBox>
+                  <CustomTypography variant="h3">
+                    Estimate the cost of your Software Project
+                  </CustomTypography>
+                  <CustomParagraph>
+                    Answer simple questions, and you’ll receive an instant cost
+                    estimation to help you get your project moving. Don't let
+                    cost uncertainties hold you back. Define your budget
+                    effortlessly with just a few clicks.
+                  </CustomParagraph>
 
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Link
+                      href={href}
+                      scroll={false}
+                      style={{
+                        textDecoration: "none",
+                      }}
+                    >
+                      <CustomStartButton
+                        variant="contained"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <ArrowForwardIcon
+                          sx={{
+                            marginRight: "auto",
+                            opacity: 0,
+                            backgroundColor: "#0045e6",
+                            color: "#fff",
+                            padding: "1em",
+                            position: "absolute",
+                            left: "-19px",
+                            borderRadius: "0 50% 50% 0",
+                          }}
+                        />
+                        <span id="start">Start</span>
+                      </CustomStartButton>
+                    </Link>
+                  </Box>
+                </Box>
+              </Box>
+            </CustomBannerBox>
+          </Box>
           {baseRoute === "/" ? null : baseRoute ===
             "/cost-estimation-calculator" ? (
             <CustomBox
@@ -564,46 +626,80 @@ export default function RootLayout({ children }) {
                   sx={{
                     height: "max-content",
                     display: "flex",
-                    padding: "3em 1em",
-                    justifyContent: "space-evenly",
+                    // justifyContent: "normal",
+                    justifyContent: "center",
                     borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+                    margin: "0px 94.750px",
+                    padding: "25.260px 37.896px",
+                    // padding: "2% 3%",
+                    // margin: "0px 7%",
                   }}
                 >
                   <Box
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      gap: ".5em",
+                      paddingTop: "1em",
+                      marginRight: "9%",
                     }}
                   >
                     <Button
                       sx={{
                         background: `url('https://focusteck.com/wp-content/uploads/2022/03/focusteck-logo.svg')`,
                         backgroundRepeat: "no-repeat",
-                        width: "120px",
-                        height: "47px",
+                        width: "129.490px",
+                        height: "36.813px",
+                        padding: 0,
                         "&:hover": {
                           backgroundColor: "#fff",
                         },
                       }}
                     ></Button>
-                    <Typography
-                      variant="body1"
-                      sx={{ fontSize: "18px", color: "#00000099" }}
+
+                    <Box sx={{ padding: "5px 0 0 2px" }}>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: "19px",
+                          color: "#00000099",
+                          marginTop: "2.633px",
+                          // padding: "5px 0 0 2px",
+                        }}
+                      >
+                        Drop us a line 🙂
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          color: "#005DBD",
+                          fontWeight: "bold",
+                          paddingBottom: "10px",
+                          fontSize: "14px",
+                        }}
+                      >
+                        services@focusteck.com
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "1.2em",
+                        marginBottom: "8px",
+                      }}
                     >
-                      Drops us a line 🙂
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{ color: "#005DBD", fontWeight: "bold" }}
-                    >
-                      services@focusteck.com
-                    </Typography>
-                    <Box sx={{ display: "flex", gap: ".5em" }}>
-                      <FacebookIcon sx={{ color: "#767676" }} />
-                      <InstagramIcon sx={{ color: "#767676" }} />
-                      <LinkedInIcon sx={{ color: "#767676" }} />
-                      <TwitterIcon sx={{ color: "#767676" }} />
+                      <FacebookIcon
+                        sx={{ color: "#767676", fontSize: "1.3rem" }}
+                      />
+                      <InstagramIcon
+                        sx={{ color: "#767676", fontSize: "1.3rem" }}
+                      />
+                      <LinkedInIcon
+                        sx={{ color: "#767676", fontSize: "1.3rem" }}
+                      />
+                      <TwitterIcon
+                        sx={{ color: "#767676", fontSize: "1.3rem" }}
+                      />
                     </Box>
                     <img
                       style={{
@@ -612,101 +708,155 @@ export default function RootLayout({ children }) {
                         width: "102px",
                         height: "102px",
                         border: "0 solid #fff",
+                        // marginRight: "153.396px",
                       }}
                     />
                   </Box>
+
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
-                      gap: "1em",
+                      // width: "100%",
                     }}
                   >
-                    <Box>
-                      <CustomBottomHeading variant="h6">
-                        COMPANY
-                      </CustomBottomHeading>
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <CustomBottomLink href="#">About Us</CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Success Stories
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">Blogs</CustomBottomLink>
-                        <CustomBottomLink href="#">Careers</CustomBottomLink>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <CustomBottomHeading variant="h6">
-                        LOCATION
-                      </CustomBottomHeading>
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <CustomBottomLink href="#">
-                          Leesburg, Virginia
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          +1 571 577 4513
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Lahore, Pakistan
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          +92 42 37870173
-                        </CustomBottomLink>
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Box>
-                    <CustomBottomHeading variant="h6">
-                      SERVICES
-                    </CustomBottomHeading>
                     <Box
                       sx={{
                         display: "flex",
                         flexDirection: "column",
+                        gap: "10px",
+
+                        // width: "100%",
+                        // padding: "1% 1% 3% 0",
+                        // margin: "1% 3% 1.2% 0",
                       }}
                     >
-                      <CustomBottomLink href="#">
-                        Custom Software Development
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        Mobile Development
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        Web Development
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        QA and Testing
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        UI / UX Design
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        AWS Managed Services
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        DevOps Automation
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        Magento Development
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">Shopify</CustomBottomLink>
-                      <CustomBottomLink href="#">Woocommerce</CustomBottomLink>
+                      <Box>
+                        <CustomBottomHeading variant="h6">
+                          COMPANY
+                        </CustomBottomHeading>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            // flexWrap: "wrap",
+                          }}
+                        >
+                          <CustomBottomLink href="#">About Us</CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Success Stories
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">Blogs</CustomBottomLink>
+                          <CustomBottomLink href="#">Careers</CustomBottomLink>
+                        </Box>
+                      </Box>
+                      <Box sx={{ paddingBottom: "23px" }}>
+                        <CustomBottomHeading variant="h6">
+                          LOCATION
+                        </CustomBottomHeading>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            // flexWrap: "wrap",
+                          }}
+                        >
+                          <CustomBottomLink href="#">
+                            Leesburg, Virginia
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            +1 571 577 4513
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Lahore, Pakistan
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            +92 42 37870173
+                          </CustomBottomLink>
+                        </Box>
+                      </Box>
                     </Box>
-                  </Box>
-                  <Box>
-                    <CustomBottomHeading variant="h6">
-                      ENGAGEMENT MODELS
-                    </CustomBottomHeading>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <CustomBottomLink href="#">
-                        Dedicated Team
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        Staff Augmentation
-                      </CustomBottomLink>
-                      <CustomBottomLink href="#">
-                        Project Based
-                      </CustomBottomLink>
+                    <Box
+                      sx={{
+                        paddingBottom: "23px",
+                        // width: "100%",
+                        // padding: "1% 6% 3% 0",
+                        // margin: "1% 1% 1.2% 0",
+                        // display: "flex",
+                        // flexWrap: "wrap",
+                      }}
+                    >
+                      <CustomBottomHeading variant="h6">
+                        SERVICES
+                      </CustomBottomHeading>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          // flexWrap: "wrap",
+                        }}
+                      >
+                        <CustomBottomLink href="#">
+                          Custom Software Development
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          Mobile Development
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          Web Development
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          QA and Testing
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          UI / UX Design
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          AWS Managed Services
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          DevOps Automation
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          Magento Development
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">Shopify</CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          Woocommerce
+                        </CustomBottomLink>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={
+                        {
+                          // width: "100%",
+                          // padding: "1% 15% 3% 0",
+                          // margin: "1% 3% 1.2% 0",
+                          // display: "flex",
+                          // flexWrap: "wrap",
+                          // height: "min-content",
+                        }
+                      }
+                    >
+                      <CustomBottomHeading
+                        variant="h6"
+                        sx={{
+                          // width: "min-content",
+                          paddingRight: ".5% !important",
+                        }}
+                      >
+                        ENGAGEMENT MODELS
+                      </CustomBottomHeading>
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <CustomBottomLink href="#">
+                          Dedicated Team
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          Staff Augmentation
+                        </CustomBottomLink>
+                        <CustomBottomLink href="#">
+                          Project Based
+                        </CustomBottomLink>
+                      </Box>
                     </Box>
                   </Box>
                 </BottomNavigation>
@@ -750,10 +900,18 @@ export default function RootLayout({ children }) {
                       services@focusteck.com
                     </Typography>
                     <Box sx={{ display: "flex", gap: ".5em" }}>
-                      <FacebookIcon sx={{ color: "#767676" }} />
-                      <InstagramIcon sx={{ color: "#767676" }} />
-                      <LinkedInIcon sx={{ color: "#767676" }} />
-                      <TwitterIcon sx={{ color: "#767676" }} />
+                      <FacebookIcon
+                        sx={{ color: "#767676", fontSize: "1rem" }}
+                      />
+                      <InstagramIcon
+                        sx={{ color: "#767676", fontSize: "1rem" }}
+                      />
+                      <LinkedInIcon
+                        sx={{ color: "#767676", fontSize: "1rem" }}
+                      />
+                      <TwitterIcon
+                        sx={{ color: "#767676", fontSize: "1rem" }}
+                      />
                     </Box>
                   </Box>
                 </BottomNavigation>
@@ -763,15 +921,19 @@ export default function RootLayout({ children }) {
                 sx={{
                   flexShrink: 0,
                   padding: "0 2em",
-                  boxShadow: "-3px -3px 9px rgba(0, 0, 0, 0.2)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+                  // display: "flex",
+                  // justifyContent: "center",
+                  // alignItems: "center",
+                  height: "min-content",
                 }}
               >
                 <CustomFooterTypography
-                  variant="body1"
-                  sx={{ textAlign: "center" }}
+                  sx={{
+                    textAlign: "center",
+                    paddingTop: "10px",
+                    height: "min-content",
+                  }}
                 >
                   Copyright © 2013–2023{" "}
                   <Link

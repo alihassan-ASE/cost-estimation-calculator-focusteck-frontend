@@ -66,11 +66,16 @@ const page = (props) => {
   }, [currentQuestion]);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
-      
-          <CustomTypography variant="h4">
-            {currentQuestion?.question}
-          </CustomTypography>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1em",
+      }}
+    >
+      <CustomTypography variant="h4">
+        {currentQuestion?.question}
+      </CustomTypography>
       <ShowOptions
         typeofUI={typeofUI || currentQuestion?.typeOfUI}
         typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}
