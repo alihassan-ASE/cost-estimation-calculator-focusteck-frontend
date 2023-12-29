@@ -65,7 +65,7 @@ export default function VerticalLinearStepper(props) {
         // minWidth: orientation === "vertical" ? "212px" : 0,
       }}
     >
-      <Typography sx={{ textAlign: "center" }}>Summary</Typography>
+      <Typography sx={{ fontWeight: "bold" }}>SUMMARY</Typography>
       <Box
         sx={{
           maxHeight: orientation === "horizontal" ? "60vh" : "max-content",
@@ -99,8 +99,7 @@ export default function VerticalLinearStepper(props) {
                           {resource.resource.toUpperCase()}
 
                           <Typography fontSize={"10px"} color={"gray"}>
-                            {resource.resourceOption.opt} ($
-                            {resource.resourceOption.price})
+                            {resource.resourceOption.opt}
                           </Typography>
                         </StepLabel>
                       </div>
@@ -129,7 +128,7 @@ export default function VerticalLinearStepper(props) {
                           ? step.question.label.toUpperCase()
                           : step.label.toUpperCase()}{" "}
                         <Typography fontSize={"10px"} color={"gray"}>
-                          {selected.opt} (${selected.price})
+                          {selected.opt}
                         </Typography>
                       </StepLabel>
                     )

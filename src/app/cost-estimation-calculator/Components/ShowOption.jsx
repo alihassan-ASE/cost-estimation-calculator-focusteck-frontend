@@ -6,6 +6,7 @@ import CheckBoxComponent from "./CheckBoxOptions";
 import MultipleComponent from "./MultipleSelectOptions";
 import DropDownComponent from "./DropDownOptions";
 import RadioButtonComponent from "./RadioButtonOptions";
+import LargeTiles from "./LargeTiles";
 
 // Show Options will get options Array, selected option Array, and the Style of the Component
 
@@ -28,11 +29,19 @@ const ShowOption = ({
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
         ) : typeofUI === "Tiles" ? (
-          <TilesComponent
-            options={options}
-            selectedOption={selectedOption}
-            selectedOptionPassToParent={selectedOptionPassToParent}
-          />
+          options.length > 4 ? (
+            <TilesComponent
+              options={options}
+              selectedOption={selectedOption}
+              selectedOptionPassToParent={selectedOptionPassToParent}
+            />
+          ) : (
+            <LargeTiles
+              options={options}
+              selectedOption={selectedOption}
+              selectedOptionPassToParent={selectedOptionPassToParent}
+            />
+          )
         ) : typeofUI === "DropDown" ? (
           <DropDownComponent
             options={options}
@@ -41,8 +50,14 @@ const ShowOption = ({
             selectedOption={selectedOption}
             selectedOptionPassToParent={selectedOptionPassToParent}
           />
-        ) : (
+        ) : options.length > 4 ? (
           <TilesComponent
+            options={options}
+            selectedOption={selectedOption}
+            selectedOptionPassToParent={selectedOptionPassToParent}
+          />
+        ) : (
+          <LargeTiles
             options={options}
             selectedOption={selectedOption}
             selectedOptionPassToParent={selectedOptionPassToParent}

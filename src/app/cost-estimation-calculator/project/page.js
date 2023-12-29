@@ -2,8 +2,8 @@
 // final code
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   getQuestions,
   getDynamicQuestion,
@@ -20,6 +20,7 @@ import {
 import { useRouter } from "next/navigation";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
+import ShowSummary from "../Components/ShowSummary";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   color: "white",
@@ -47,20 +48,16 @@ const CustomButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#005DBD",
     color: "#fff",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
-
   },
   "&.Mui-disabled": {
     background: "#4f9ef0",
-    color: "#eaeaea"
+    color: "#eaeaea",
   },
   "&:focus": {
-    outline: "none", 
+    outline: "none",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
 }));
-
-
-
 
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
@@ -70,7 +67,7 @@ const page = () => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loaderState, setLoaderState] = useState(false);
-
+  // const [questionNo, setQuestionNo] = useState(1);
   const [selectedOption, setSelectedOption] = useState();
   const [selectedData, setSelectedData] = useState();
   const [fetchQuesitons, setFetchQuestions] = useState(null);
@@ -79,7 +76,7 @@ const page = () => {
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
   const [slideIn, setSlideIn] = useState(true);
-
+  const [displayQuestion, setDisplayQuestion] = useState(true);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
@@ -152,30 +149,28 @@ const page = () => {
       });
       if (data) {
         localStorage.setItem("Response", data);
-        route.push("/cost-estimation-calculator/submit");
+        route.push("/cost-estimation-calculator/results");
       }
-    } catch (error) { }
+    } catch (error) {}
   };
-
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
-    
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
-    if (resp.selectedData.length < 3 && currentQuestion.typeOfUI == "CheckBox") {
+    if (
+      resp.selectedData.length < 3 &&
+      currentQuestion.typeOfUI == "CheckBox"
+    ) {
       setIsOptionSelected(true);
+    } else if (resp.selectedData.length !== 0) {
+      setIsOptionSelected(false);
     }
-    else if (resp.selectedData.length !== 0) {
-      setIsOptionSelected(false)
-    }
-
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
-
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -186,12 +181,10 @@ const page = () => {
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
-
   };
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
-
     const { index, step } = obj;
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
@@ -212,7 +205,6 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
-
     cost = 0;
 
     let newResponse = [...actualResponses];
@@ -231,7 +223,6 @@ const page = () => {
 
   // // Handling Next Question
   const nextQuestion = async () => {
-    
     setIsOptionSelected(true);
     setLoaderState(true);
 
@@ -317,7 +308,17 @@ const page = () => {
     setLastQuestionSelectedOption([]);
     slider();
   };
-  
+
+  // useEffect(() => {
+  //   if (
+  //     currentState === "post" &&
+  //     currentQuestionIndex > postProjectQuestions.length
+  //   ) {
+  //     // goToForm();
+  //     setDisplayQuestion(false);
+  //   }
+  // }, [nextQuestion]);
+
   if (
     currentState === "post" &&
     currentQuestionIndex > postProjectQuestions.length
@@ -333,9 +334,15 @@ const page = () => {
   };
 
   return (
-    <Box ref={projectPageRef} sx={{ padding: "1em 0" }}>
+    <Box ref={projectPageRef} sx={{ padding: "0 2.7%" }}>
       {fetchQuesitons !== null ? (
-        <Box >
+        <Box
+          sx={{
+            maxWidth: "1520px",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -356,7 +363,6 @@ const page = () => {
               height: "80px",
             }}
           >
-
             <CustomButton
               disabled={!actualResponses.length}
               onClick={backQuestion}
@@ -372,24 +378,31 @@ const page = () => {
                 "&:hover": {
                   borderRadius: "0px 5px 5px 0px",
                 },
-                "&:hover > .typography": { 
-                  transform: "translateX(-10px)", 
+                "&:hover > .typography": {
+                  transform: "translateX(-10px)",
                 },
               }}
             >
-              <ArrowBackIcon sx={{
-                fontSize: "18px",
-                transition: "all 0.2s ease-in",
-                padding: ".5em .9em",
-                marginLeft: "3px",
-                borderRadius: "0px 50% 50% 0px",
-                color: "white",
-              }} />
-              <Typography className="typography" sx={{
-                fontSize: "12px",
-                color: "white",
-                transition: "all 0.2s ease-in",
-              }}>Back</Typography>
+              <ArrowBackIcon
+                sx={{
+                  fontSize: "18px",
+                  transition: "all 0.2s ease-in",
+                  padding: ".5em .9em",
+                  marginLeft: "3px",
+                  borderRadius: "0px 50% 50% 0px",
+                  color: "white",
+                }}
+              />
+              <Typography
+                className="typography"
+                sx={{
+                  fontSize: "12px",
+                  color: "white",
+                  transition: "all 0.2s ease-in",
+                }}
+              >
+                Back
+              </Typography>
             </CustomButton>
 
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
@@ -408,31 +421,42 @@ const page = () => {
                 "&:hover": {
                   borderRadius: "5px 0px 0px 5px",
                 },
-                "&:hover > .typography": { 
-                  transform: "translateX(10px)", 
+                "&:hover > .typography": {
+                  transform: "translateX(10px)",
                 },
               }}
-              disabled={isOptionSelected}>
-              <Typography className="typography" sx={{
-                fontSize: "12px",
-                color: "white",
-                transition: "all 0.2s ease-in",
+              disabled={isOptionSelected}
+            >
+              <Typography
+                className="typography"
+                sx={{
+                  fontSize: "12px",
+                  color: "white",
+                  transition: "all 0.2s ease-in",
+                }}
+              >
+                Next
+              </Typography>
 
-              }}>Next</Typography>
-
-              <ArrowForwardIcon sx={{
-                fontSize: "18px",
-                transition: "all 0.2s ease-in",
-                padding: ".5em .9em",
-                marginLeft: "3px",
-                borderRadius: "50% 5px 5px 50%",
-                color: "white",
-              }} />
+              <ArrowForwardIcon
+                sx={{
+                  fontSize: "18px",
+                  transition: "all 0.2s ease-in",
+                  padding: ".5em .9em",
+                  marginLeft: "3px",
+                  borderRadius: "50% 5px 5px 50%",
+                  color: "white",
+                }}
+              />
             </CustomButton>
           </Box>
 
           {isNarrowScreen ? (
-            <Grid sx={{ padding: " 2em" }} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid
+              sx={{ padding: " 2em" }}
+              container
+              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+            >
               {actualResponses.length > 0 && stepperState && (
                 <Grid item lg={4} md={4} sm={4} xs={12}>
                   <Stepper
@@ -454,22 +478,26 @@ const page = () => {
                   appear={true}
                   onEnter={(node) => {
                     node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //   },
-                    //   false
-                    // );
                   }}
                 >
                   <div>
                     {!loaderState ? (
-                      <Question
-                        currentQuestion={currentQuestion}
-                        getResponsesData={getResponsesData}
-                        selectedOption={lastQuestionSelectedOption}
-                      />
+                      <>
+                        <Box
+                          sx={{
+                            padding: " 1.5em 0",
+                          }}
+                        >
+                          <Typography>
+                            Question {actualResponses.length + 1}
+                          </Typography>
+                        </Box>
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                      </>
                     ) : (
                       <Box
                         sx={{
@@ -483,25 +511,24 @@ const page = () => {
                     )}
                   </div>
                 </Slide>
-
-                <Box sx={{ display: "flex", gap: "2em" }}>
-                  {/* <CustomNextButton
-                    disabled={isOptionSelected}
-                    size="medium"
-                    variant="contained"
-                    vairant="contained"
-                    onClick={() => {
-                      nextQuestion();
-                    }}
-                  >
-                    Next
-                  </CustomNextButton> */}
-                </Box>
               </Grid>
             </Grid>
           ) : (
-            <Grid sx={{ padding: "2em" }} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid
+              sx={{ padding: "2em" }}
+              container
+              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+            >
               <Grid item lg={8} md={9} sm={8} xs={12}>
+                <Box
+                  sx={{
+                    paddingTop: "1.9em",
+                  }}
+                >
+                  <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                    Question {actualResponses.length + 1}
+                  </Typography>
+                </Box>
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -512,15 +539,7 @@ const page = () => {
                   }}
                   appear={true}
                   onEnter={(node) => {
-
                     node.style.transform = "translateY(-50px)";
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //   },
-                    //   false
-                    // );
-
                   }}
                 >
                   <div>
@@ -544,20 +563,6 @@ const page = () => {
                     )}
                   </div>
                 </Slide>
-                <Box sx={{ display: "flex", gap: "2em" }}>
-                  {/* <CustomNextButton
-                    disabled={isOptionSelected}
-                    size="medium"
-                    variant="contained"
-                    sx={{ width: 150 }}
-                    vairant="contained"
-                    onClick={() => {
-                      nextQuestion();
-                    }}
-                  >
-                    Next
-                  </CustomNextButton> */}
-                </Box>
               </Grid>
               <Grid item lg={4} md={3} sm={4} xs={12}>
                 <Stepper

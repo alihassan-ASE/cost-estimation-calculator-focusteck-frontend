@@ -10,8 +10,8 @@ import {
   Slide,
 } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { styled } from "@mui/material/styles";
 import Question from "../Components/Question/page";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,6 @@ import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import CircularProgress from "@mui/material/CircularProgress";
-
 
 const CustomButton = styled(Button)(({ theme }) => ({
   color: "white",
@@ -45,14 +44,13 @@ const CustomButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#005DBD",
     color: "#fff",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
-
   },
   "&.Mui-disabled": {
     background: "#4f9ef0",
-    color: "#eaeaea"
+    color: "#eaeaea",
   },
   "&:focus": {
-    outline: "none", 
+    outline: "none",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
 }));
@@ -117,6 +115,7 @@ const StaffComponent = () => {
   const [stepperState, setStepperState] = useState(false);
   const route = useRouter();
   const dataObj = {};
+  const [displayQuestion, setDisplayQuestion] = useState(true);
 
   // Setting Staff Resources and Questions
   useEffect(() => {
@@ -127,6 +126,7 @@ const StaffComponent = () => {
     });
   }, []);
 
+  console.log("displayQuestion", displayQuestion);
   useEffect(() => {
     if (isNarrowScreen) {
       setOrientation("horizontal");
@@ -155,7 +155,6 @@ const StaffComponent = () => {
     setResource(values);
   }, [values?.length]);
 
-
   const deleteResource = (index) => {
     if (values) {
       if (index >= 0 && index < values.length) {
@@ -169,14 +168,13 @@ const StaffComponent = () => {
     }
   };
 
-
   // Function to navigate on Form Page
   const goToForm = () => {
     actualResponses.totalCost = totalCost;
     try {
       let data = JSON.stringify(actualResponses);
       localStorage.setItem("Response", data);
-      route.push("/cost-estimation-calculator/submit");
+      route.push("/cost-estimation-calculator/results");
     } catch (error) {
       console.log("Error", error);
     }
@@ -184,7 +182,6 @@ const StaffComponent = () => {
 
   // Function To Handling Price
   const handlePrice = (type) => {
-
     switch (type) {
       case "stepper":
       case "next": {
@@ -224,7 +221,6 @@ const StaffComponent = () => {
 
   // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
-
     const { index, step } = obj;
 
     if (index == 1) {
@@ -236,8 +232,7 @@ const StaffComponent = () => {
     actualResponses.responses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedData);
     setIsStepperClicked(true);
-    setIsOptionSelected(false)
-    
+    setIsOptionSelected(false);
   };
 
   // receiving selected option from child Component
@@ -247,12 +242,10 @@ const StaffComponent = () => {
 
     setIsOptionSelected(false);
     setResource((prev) => [...prev, data]);
-
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
-
     dataObj.resources = values;
     setResource(dataObj.resources);
     currentState
@@ -265,25 +258,19 @@ const StaffComponent = () => {
             ],
           };
         });
-
   };
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
-
     setAddedOption(resp);
-     if ( resp.selectedData.length == 0 ) {
+    if (resp.selectedData.length == 0) {
       setIsOptionSelected(true);
+    } else {
+      setIsOptionSelected(false);
     }
-    else{
-      setIsOptionSelected(false)
-    }
-
-
   };
 
   // Handling Next Quesiton
   const nextQuestion = () => {
-
     setCurrentState(false);
     setButtonState(true);
     setIsOptionSelected((prev) => !prev);
@@ -318,14 +305,12 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
-
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
     }
 
     if (currentQuestionIndex > 0) {
-
       let newArray = [...actualResponses.responses];
       lastQuestion = newArray.pop();
       if (lastQuestion) {
@@ -363,12 +348,19 @@ const StaffComponent = () => {
         }
       }
     }
-
   };
+
+  // useEffect(() => {
+  if (currentQuestionIndex > additionalQuesiton.length) {
+    setTimeout(() => {
+      goToForm();
+    }, 100);
+    //     setDisplayQuestion(false);
+  }
+  // }, [nextQuestion]);
 
   // Showing selected Resources
   const returnResources = () => {
-
     const tags = [];
     for (let i = 0; i <= count; i++) {
       tags.push(
@@ -390,20 +382,20 @@ const StaffComponent = () => {
       );
     }
     return tags;
-    
   };
 
   // calling goToForm Function after selecting last question
-  if (currentQuestionIndex > additionalQuesiton.length) {
-    setTimeout(() => {
-      goToForm();
-    }, 100);
-  }
+  // if (currentQuestionIndex > additionalQuesiton.length) {
+  //   // setTimeout(() => {
+  //   //   goToForm();
+  //   // }, 100);
+  //   setDisplayQuestion(false);
+  // }
 
   return (
-    <Box >
+    <Box>
       {additionalQuesiton.length && staffBase.length ? (
-        <Box >
+        <Box>
           <Box
             sx={{
               display: "flex",
@@ -412,53 +404,59 @@ const StaffComponent = () => {
               margin: "-1em 0",
               display: "flex",
               flexDirection: "row",
-              backgroundColor:"#f5fcff",
+              backgroundColor: "#f5fcff",
               justifyContent: "space-between",
               maxWidth: "100%",
               position: "sticky",
-              padding:"0 2em",
+              padding: "0 2em",
               top: 0,
-              left:0,
-              right:0,
+              left: 0,
+              right: 0,
               zIndex: 1000,
               height: "80px",
             }}
           >
-           
-              <CustomButton
+            <CustomButton
               disabled={!currentQuestionIndex > 0}
-                onClick={backQuestion}
+              onClick={backQuestion}
+              sx={{
+                "&:hover svg": {
+                  color: "#005DBD",
+                  height: "100%",
+                  backgroundColor: "white",
+                  transform: "translateX(-20px)",
+                  position: "relative",
+                },
+                overflow: "hidden",
+                "&:hover": {
+                  borderRadius: "0px 5px 5px 0px",
+                },
+                "&:hover > .typography": {
+                  transform: "translateX(-10px)",
+                },
+              }}
+            >
+              <ArrowBackIcon
                 sx={{
-                  "&:hover svg": {
-                    color: "#005DBD",
-                    height:"100%",
-                    backgroundColor:"white",
-                    transform: "translateX(-20px)",
-                    position: "relative",
-                  },
-                  overflow: "hidden",
-                  "&:hover":{
-                    borderRadius:"0px 5px 5px 0px",
-                  },
-                  "&:hover > .typography": { 
-                    transform: "translateX(-10px)", 
-                  },
+                  fontSize: "18px",
+                  transition: "all 0.2s ease-in",
+                  padding: ".5em .8em",
+                  marginLeft: "3px",
+                  borderRadius: "0px 50% 50% 0px",
+                  color: "white",
                 }}
-               >
-                <ArrowBackIcon sx={{
-                fontSize: "18px",
-                transition:"all 0.2s ease-in",
-                padding: ".5em .8em",
-                marginLeft:"3px",
-                borderRadius: "0px 50% 50% 0px",
-                color: "white",
-              }}/>
-                <Typography className="typography" sx={{
-                fontSize: "12px",
-                transition:"all 0.2s ease-in",
-              }}>Back</Typography>
-              </CustomButton>
-         
+              />
+              <Typography
+                className="typography"
+                sx={{
+                  fontSize: "12px",
+                  transition: "all 0.2s ease-in",
+                }}
+              >
+                Back
+              </Typography>
+            </CustomButton>
+
             <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
 
             <CustomButton
@@ -466,33 +464,41 @@ const StaffComponent = () => {
               sx={{
                 "&:hover svg": {
                   color: "#005DBD",
-                  height:"100%",
-                  backgroundColor:"white",
+                  height: "100%",
+                  backgroundColor: "white",
                   transform: "translateX(20px)",
                   position: "relative",
                 },
                 overflow: "hidden",
-                "&:hover":{
-                  borderRadius:"5px 0px 0px 5px",
+                "&:hover": {
+                  borderRadius: "5px 0px 0px 5px",
                 },
-                "&:hover > .typography": { 
-                  transform: "translateX(10px)", 
+                "&:hover > .typography": {
+                  transform: "translateX(10px)",
                 },
               }}
-              disabled={isOptionSelected}>
-              <Typography className="typography" sx={{
-                fontSize: "12px",
-                transition:"all 0.2s ease-in",
-              }}>Next</Typography>
+              disabled={isOptionSelected}
+            >
+              <Typography
+                className="typography"
+                sx={{
+                  fontSize: "12px",
+                  transition: "all 0.2s ease-in",
+                }}
+              >
+                Next
+              </Typography>
 
-              <ArrowForwardIcon sx={{
-                fontSize: "18px",
-                transition:"all 0.2s ease-in",
-                padding: ".5em .8em",
-                marginLeft:"3px",
-                borderRadius: "50% 5px 5px 50%",
-                color: "white",
-              }} />
+              <ArrowForwardIcon
+                sx={{
+                  fontSize: "18px",
+                  transition: "all 0.2s ease-in",
+                  padding: ".5em .8em",
+                  marginLeft: "3px",
+                  borderRadius: "50% 5px 5px 50%",
+                  color: "white",
+                }}
+              />
             </CustomButton>
           </Box>
 
@@ -503,14 +509,14 @@ const StaffComponent = () => {
                   display: "flex",
                   flexWrap: "wrap",
                   alignItems: "center",
-                  padding:"2em",
+                  padding: "2em",
                   gap: "1em",
                 }}
               >
                 {returnResources()}
 
                 {resource.length > 0 ? (
-                  <Box >
+                  <Box>
                     <CustomButtonAdd
                       onClick={() => {
                         setCount(count + 1);
@@ -524,7 +530,11 @@ const StaffComponent = () => {
               </Box>
             </>
           ) : isNarrowScreen ? (
-            <Grid sx={{padding:"2em",maxWidth:"100%"}} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid
+              sx={{ padding: "2em", maxWidth: "100%" }}
+              container
+              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+            >
               {stepperState && (
                 <Grid item lg={4} md={3} sm={4} xs={12}>
                   {actualResponses.length || actualResponses.responses ? (
@@ -568,7 +578,11 @@ const StaffComponent = () => {
               </Grid>
             </Grid>
           ) : (
-            <Grid sx={{padding:"2em",maxWidth:"100%"}} container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+            <Grid
+              sx={{ padding: "2em", maxWidth: "100%" }}
+              container
+              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+            >
               <Grid item lg={8} md={9} sm={8} xs={12}>
                 <Slide
                   direction="down"

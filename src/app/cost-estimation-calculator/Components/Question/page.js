@@ -28,7 +28,6 @@ const page = (props) => {
   const [selectedData, setSelectedData] = useState([]);
 
   const selectedOptionPassToParent = (data) => {
-
     if (Array.isArray(data)) {
       setSelectedData([...data]);
     } else {
@@ -36,10 +35,9 @@ const page = (props) => {
     }
   };
 
-  
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
-         selectedData?.forEach((data) => {
+      selectedData?.forEach((data) => {
         const { nextQuestion } = data;
 
         if (nextQuestion == undefined) {
@@ -48,16 +46,13 @@ const page = (props) => {
             nextQuestion: currentQuestion.nextQuestion,
           });
         } else if (nextQuestion !== "") {
-
           getResponsesData({ selectedData, nextQuestion });
         } else if (currentQuestion.nextQuestion) {
-
           getResponsesData({
             selectedData,
             nextQuestion: currentQuestion.nextQuestion,
           });
         } else {
-
           getResponsesData({
             selectedData,
             nextQuestion: currentQuestion.nextQuestion,
@@ -72,11 +67,16 @@ const page = (props) => {
   }, [currentQuestion]);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "1em" }}>
-      
-          <CustomTypography variant="h4">
-            {currentQuestion?.question}
-          </CustomTypography>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1em",
+      }}
+    >
+      <CustomTypography variant="h4">
+        {currentQuestion?.question}
+      </CustomTypography>
       <ShowOptions
         typeofUI={typeofUI || currentQuestion?.typeOfUI}
         typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}

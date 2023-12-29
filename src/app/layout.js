@@ -24,7 +24,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { baseUrl } from "@/config/constants";
-import { minWidth } from "@mui/system";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   // margin: "0 2em",
@@ -42,7 +41,6 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
-
   "&:hover": {
     backgroundColor: "#fff",
     boxShadow: "none",
@@ -62,7 +60,12 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
       textIndent: 0,
     },
   },
-
+  // [theme.breakpoints.up("xl")]: {
+  //   fontSize: "3em",
+  //   width: "100%",
+  //   height: "100%",
+  //   padding: "1em 7em",
+  // },
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
   },
@@ -74,30 +77,37 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
 
 const CustomBannerBox = styled(Box)(({ theme }) => ({
   color: "white",
-  padding: "6em 3em",
-  display: "flex",
-  flexDirection: "column",
-  gap: "2em",
+  // display: "flex",
+  // alignItems: "center",
+
+  padding: "1em 0",
   background: `linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5),rgba(0,0,0,.5)), url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
   backgroundPosition: "center",
   height: "100%",
-  [theme.breakpoints.down("md")]: {
-    padding: "3em 2em",
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: "3em 1em",
-  },
 }));
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
+  maxWidth: 800,
+  // [theme.breakpoints.up("xl")]: {
+  //   fontSize: "7em",
+  //   maxWidth: "100%",
+  // },
   [theme.breakpoints.down("md")]: {
     fontSize: "3em",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "1.5em",
   },
+}));
+
+const CustomParagraph = styled(Typography)(({ theme }) => ({
+  maxWidth: 600,
+  // [theme.breakpoints.up("xl")]: {
+  //   maxWidth: "40%",
+  //   fontSize: "3rem",
+  // },
 }));
 
 const CustomNavbarButton = styled(Link)(({ theme }) => ({
@@ -256,7 +266,7 @@ export default function RootLayout({ children }) {
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
-            margin: 0
+            margin: 0,
           }}
         >
           <Box sx={{ height: "100vh", overflow: "hidden" }}>
@@ -527,62 +537,71 @@ export default function RootLayout({ children }) {
             </Box>
 
             <CustomBannerBox>
-              <CustomTypography
-                variant="h3"
-                style={{
-                  maxWidth: 800,
-                  "@media (max-width: 600px)": {
-                    padding: "0",
-                  },
-                }}
-              >
-                Estimate the cost of your Software Project
-              </CustomTypography>
-              <Typography sx={{ maxWidth: 600 }}>
-                Answer five simple questions, and you’ll receive an instant cost
-                estimation to help you get your project moving. Don't let cost
-                uncertainties hold you back. Define your budget effortlessly
-                with just a few clicks.
-              </Typography>
-
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  maxWidth: "1520px",
+                  marginRight: "auto",
+                  marginLeft: "auto",
                 }}
               >
-                <Link
-                  href={href}
-                  scroll={false}
-                  style={{
-                    textDecoration: "none",
+                <Box
+                  sx={{
+                    padding: "7% 5%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "2em",
                   }}
                 >
-                  <CustomStartButton
-                    variant="contained"
+                  <CustomTypography variant="h3">
+                    Estimate the cost of your Software Project
+                  </CustomTypography>
+                  <CustomParagraph>
+                    Answer simple questions, and you’ll receive an instant cost
+                    estimation to help you get your project moving. Don't let
+                    cost uncertainties hold you back. Define your budget
+                    effortlessly with just a few clicks.
+                  </CustomParagraph>
+
+                  <Box
                     sx={{
                       display: "flex",
+                      justifyContent: "center",
                       alignItems: "center",
-                      position: "relative",
-                      overflow: "hidden",
                     }}
                   >
-                    <ArrowForwardIcon
-                      sx={{
-                        marginRight: "auto",
-                        opacity: 0,
-                        backgroundColor: "#0045e6",
-                        color: "#fff",
-                        padding: "1em",
-                        position: "absolute",
-                        left: "-19px",
-                        borderRadius: "0 50% 50% 0",
+                    <Link
+                      href={href}
+                      scroll={false}
+                      style={{
+                        textDecoration: "none",
                       }}
-                    />
-                    <span id="start">Start</span>
-                  </CustomStartButton>
-                </Link>
+                    >
+                      <CustomStartButton
+                        variant="contained"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <ArrowForwardIcon
+                          sx={{
+                            marginRight: "auto",
+                            opacity: 0,
+                            backgroundColor: "#0045e6",
+                            color: "#fff",
+                            padding: "1em",
+                            position: "absolute",
+                            left: "-19px",
+                            borderRadius: "0 50% 50% 0",
+                          }}
+                        />
+                        <span id="start">Start</span>
+                      </CustomStartButton>
+                    </Link>
+                  </Box>
+                </Box>
               </Box>
             </CustomBannerBox>
           </Box>

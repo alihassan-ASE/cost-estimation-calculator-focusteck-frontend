@@ -9,7 +9,7 @@ import {
   Chip,
   Button,
   Grid,
-  TextField
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -65,7 +65,6 @@ const MenuProps = {
   },
 };
 
-
 const DropDownComponent = ({
   options,
   label,
@@ -86,19 +85,15 @@ const DropDownComponent = ({
   const [price, setPrice] = useState(0);
 
   useEffect(() => {
-
-
     if (Array.isArray(selectedOption)) {
       setSelectedFormats(selectedOption[0]);
     } else {
       setSelectedFormats(selectedOption);
       setSelectedFormats(selectedOption);
     }
-
-  }, [selectedOption, options])
+  }, [selectedOption, options]);
 
   const submitOtherVal = () => {
-
     const trimmedOtherVal = otherVal.trim();
     if (!trimmedOtherVal) {
       setErrorMessage("Field cannot be empty");
@@ -111,21 +106,24 @@ const DropDownComponent = ({
       setCheckInputVal(false);
       setOtherVal(trimmedOtherVal);
     }
-
   };
   return (
     <StyledFormControl>
-      <InputLabel id="demo-simple-select-label">{label?label:"Select Your Option"}</InputLabel>
+      <InputLabel id="demo-simple-select-label">
+        {label ? label : "Select Your Option"}
+      </InputLabel>
       <Select
-
-        sx={{ height: "65px", width: "34%" }}
+        sx={{ height: "65px", width: "270px" }}
         autoFocus={false}
         value={disable ? null : selectedFormats}
         onChange={(e) => {
           const selectedObject = e.target.value;
 
-          if (selectedObject.opt === "Other (Specify)" || selectedObject.opt === "Other") {
-            setPrice(selectedObject.price)
+          if (
+            selectedObject.opt === "Other (Specify)" ||
+            selectedObject.opt === "Other"
+          ) {
+            setPrice(selectedObject.price);
             setInputField(true);
             setOtherVal(""); // Clear any previous input value
           } else {
@@ -133,11 +131,14 @@ const DropDownComponent = ({
             setSelectedFormats(selectedObject);
             selectedOptionPassToParent(selectedObject, label);
           }
-
-
         }}
         disabled={disable ? true : false}
-        input={<OutlinedInput id="select-multiple-chip" label={label?label:"Select Your Option"} />}
+        input={
+          <OutlinedInput
+            id="select-multiple-chip"
+            label={label ? label : "Select Your Option"}
+          />
+        }
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {selected.opt ? (
@@ -169,7 +170,7 @@ const DropDownComponent = ({
       </Select>
       {/* Input field for "Other (Specify)" or "Other" */}
 
-      {inputField ?
+      {inputField ? (
         <Box
           sx={{
             display: "flex",
@@ -211,12 +212,10 @@ const DropDownComponent = ({
           >
             Enter
           </Button>
-        </Box> : null
-      }
+        </Box>
+      ) : null}
     </StyledFormControl>
   );
 };
 
 export default DropDownComponent;
-
-

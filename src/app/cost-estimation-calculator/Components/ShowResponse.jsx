@@ -1,5 +1,5 @@
 import { Box, Typography, Chip, Button } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)({
@@ -20,7 +20,9 @@ const CustomTypography = styled(Typography)({
 });
 
 const ShowResponse = ({ response }) => {
-  localStorage.clear();
+
+    // localStorage.clear();
+
   return (
     <>
       <Box
@@ -43,7 +45,7 @@ const ShowResponse = ({ response }) => {
                 whiteSpace: "normal",
               }}
               key="Name"
-              label={response.userName}
+              label={response?.userName}
             />
           </CustomButton>
           <CustomButton sx={{ display: "flex", gap: "1em" }}>
@@ -56,7 +58,7 @@ const ShowResponse = ({ response }) => {
                 whiteSpace: "normal",
               }}
               key="Name"
-              label={response.email}
+              label={response?.email}
             />{" "}
           </CustomButton>
         </Box>
