@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 
-import Form from "../Components/Form";
 import ShowResponse from "../Components/ShowResponse";
 
 const page = () => {
@@ -44,7 +43,6 @@ const page = () => {
         margin: "auto",
       }}
     >
-      {/* <Form response={response} getActualResponse={getActualResponse} /> */}
       {response?.responses.length ? <ShowResponse response={response} /> : null}
     </Box>
   );

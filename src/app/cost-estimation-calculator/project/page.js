@@ -67,7 +67,7 @@ const page = () => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loaderState, setLoaderState] = useState(false);
-  // const [questionNo, setQuestionNo] = useState(1);
+
   const [selectedOption, setSelectedOption] = useState();
   const [selectedData, setSelectedData] = useState();
   const [fetchQuesitons, setFetchQuestions] = useState(null);
@@ -141,19 +141,6 @@ const page = () => {
     }
   };
 
-  const goToForm = () => {
-    try {
-      let data = JSON.stringify({
-        responses: actualResponses,
-        totalCost: totalCost,
-      });
-      if (data) {
-        localStorage.setItem("Response", data);
-        route.push("/cost-estimation-calculator/results");
-      }
-    } catch (error) {}
-  };
-
   // getting Response from child Component
   const getResponsesData = (resp) => {
     setSelectedData(resp.selectedData);
@@ -185,6 +172,8 @@ const page = () => {
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+    setDisplayQuestion(true);
+
     const { index, step } = obj;
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
@@ -205,6 +194,7 @@ const page = () => {
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+    setDisplayQuestion(true);
     cost = 0;
 
     let newResponse = [...actualResponses];
@@ -297,9 +287,7 @@ const page = () => {
     setCurrentQuestionIndex(currentQuestionIndexLocal);
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
-    // setTimeout(() => {
     setLoaderState((prev) => !prev);
-    // }, 500);
     selectedData.map((op) => {
       cost = cost + op.price;
     });
@@ -309,22 +297,22 @@ const page = () => {
     slider();
   };
 
-  // useEffect(() => {
-  //   if (
-  //     currentState === "post" &&
-  //     currentQuestionIndex > postProjectQuestions.length
-  //   ) {
-  //     // goToForm();
-  //     setDisplayQuestion(false);
-  //   }
-  // }, [nextQuestion]);
+  useEffect(() => {
+    if (
+      currentState === "post" &&
+      currentQuestionIndex > postProjectQuestions.length
+    ) {
+      let data = JSON.stringify({
+        responses: actualResponses,
+        totalCost: totalCost,
+      });
+      if (data) {
+        localStorage.setItem("Response", data);
+      }
+      setDisplayQuestion(false);
+    }
+  }, [nextQuestion]);
 
-  if (
-    currentState === "post" &&
-    currentQuestionIndex > postProjectQuestions.length
-  ) {
-    goToForm();
-  }
 
   const slider = function () {
     setSlideIn(false);
@@ -467,6 +455,21 @@ const page = () => {
                 </Grid>
               )}
               <Grid item lg={8} md={8} sm={8} xs={12}>
+                {
+                  displayQuestion
+                    ?
+                    <Box
+                      sx={{
+                        paddingTop: "1.9em",
+                      }}
+                    >
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        Question {actualResponses.length + 1}
+                      </Typography>
+                    </Box>
+                    : null
+                }
+
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -482,22 +485,17 @@ const page = () => {
                 >
                   <div>
                     {!loaderState ? (
-                      <>
-                        <Box
-                          sx={{
-                            padding: " 1.5em 0",
-                          }}
-                        >
-                          <Typography>
-                            Question {actualResponses.length + 1}
-                          </Typography>
-                        </Box>
+                      displayQuestion
+                        ?
                         <Question
                           currentQuestion={currentQuestion}
                           getResponsesData={getResponsesData}
                           selectedOption={lastQuestionSelectedOption}
                         />
-                      </>
+                        : <ShowSummary response={{
+                          responses: actualResponses,
+                          totalCost: totalCost,
+                        }} />
                     ) : (
                       <Box
                         sx={{
@@ -520,15 +518,20 @@ const page = () => {
               spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
             >
               <Grid item lg={8} md={9} sm={8} xs={12}>
-                <Box
-                  sx={{
-                    paddingTop: "1.9em",
-                  }}
-                >
-                  <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
-                    Question {actualResponses.length + 1}
-                  </Typography>
-                </Box>
+                {
+                  displayQuestion
+                    ?
+                    <Box
+                      sx={{
+                        paddingTop: "1.9em",
+                      }}
+                    >
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        Question {actualResponses.length + 1}
+                      </Typography>
+                    </Box>
+                    : null
+                }
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -544,11 +547,17 @@ const page = () => {
                 >
                   <div>
                     {!loaderState ? (
-                      <Question
-                        currentQuestion={currentQuestion}
-                        getResponsesData={getResponsesData}
-                        selectedOption={lastQuestionSelectedOption}
-                      />
+                      displayQuestion
+                        ?
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                        : <ShowSummary response={{
+                          responses: actualResponses,
+                          totalCost: totalCost,
+                        }} />
                     ) : (
                       <Box
                         sx={{

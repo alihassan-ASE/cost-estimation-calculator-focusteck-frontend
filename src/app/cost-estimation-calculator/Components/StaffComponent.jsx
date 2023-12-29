@@ -19,6 +19,7 @@ import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import CircularProgress from "@mui/material/CircularProgress";
+import ShowSummary from "./ShowSummary";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   color: "white",
@@ -126,7 +127,7 @@ const StaffComponent = () => {
     });
   }, []);
 
-  console.log("displayQuestion", displayQuestion);
+
   useEffect(() => {
     if (isNarrowScreen) {
       setOrientation("horizontal");
@@ -222,6 +223,7 @@ const StaffComponent = () => {
   // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
     const { index, step } = obj;
+    setDisplayQuestion(true);
 
     if (index == 1) {
       setCurrentState(true);
@@ -251,13 +253,13 @@ const StaffComponent = () => {
     currentState
       ? setActualResponses({ responses: [dataObj] })
       : setActualResponses((prev) => {
-          return {
-            responses: [
-              ...prev.responses,
-              { ...currentQuestion, ...addedOption },
-            ],
-          };
-        });
+        return {
+          responses: [
+            ...prev.responses,
+            { ...currentQuestion, ...addedOption },
+          ],
+        };
+      });
   };
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
@@ -305,6 +307,8 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
+    setDisplayQuestion(true);
+
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
@@ -350,14 +354,19 @@ const StaffComponent = () => {
     }
   };
 
-  // useEffect(() => {
-  if (currentQuestionIndex > additionalQuesiton.length) {
-    setTimeout(() => {
-      goToForm();
-    }, 100);
-    //     setDisplayQuestion(false);
-  }
-  // }, [nextQuestion]);
+  useEffect(() => {
+    if (currentQuestionIndex > additionalQuesiton.length) {
+      setDisplayQuestion(false);
+      actualResponses.totalCost = totalCost;
+      try {
+        let data = JSON.stringify(actualResponses);
+        localStorage.setItem("Response", data);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    }
+  }, [nextQuestion]);
+
 
   // Showing selected Resources
   const returnResources = () => {
@@ -384,18 +393,17 @@ const StaffComponent = () => {
     return tags;
   };
 
-  // calling goToForm Function after selecting last question
-  // if (currentQuestionIndex > additionalQuesiton.length) {
-  //   // setTimeout(() => {
-  //   //   goToForm();
-  //   // }, 100);
-  //   setDisplayQuestion(false);
-  // }
 
   return (
-    <Box>
+    <Box sx={{ padding: "0 2.7%" }}>
       {additionalQuesiton.length && staffBase.length ? (
-        <Box>
+        <Box
+          sx={{
+            maxWidth: "1520px",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -547,6 +555,20 @@ const StaffComponent = () => {
                 </Grid>
               )}
               <Grid item lg={8} md={9} sm={8} xs={12}>
+                {
+                  displayQuestion
+                    ?
+                    <Box
+                      sx={{
+                        paddingTop: "1.9em",
+                      }}
+                    >
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        Question {actualResponses.responses.length}
+                      </Typography>
+                    </Box>
+                    : null
+                }
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -558,21 +580,20 @@ const StaffComponent = () => {
                   appear={true}
                   onEnter={(node) => {
                     node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //   },
-                    //   false
-                    // );
                   }}
                 >
                   <div>
-                    <Question
-                      currentQuestion={currentQuestion}
-                      getResponsesData={getResponsesData}
-                      selectedOption={lastQuestionSelectedOption}
-                    />
+                    {
+                      displayQuestion
+                        ?
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                        : <ShowSummary response={actualResponses} />
+                    }
+
                   </div>
                 </Slide>
               </Grid>
@@ -584,6 +605,20 @@ const StaffComponent = () => {
               spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
             >
               <Grid item lg={8} md={9} sm={8} xs={12}>
+                {
+                  displayQuestion
+                    ?
+                    <Box
+                      sx={{
+                        paddingTop: "1.9em",
+                      }}
+                    >
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        Question {actualResponses.responses.length}
+                      </Typography>
+                    </Box>
+                    : null
+                }
                 <Slide
                   direction="down"
                   in={slideIn}
@@ -595,21 +630,19 @@ const StaffComponent = () => {
                   appear={true}
                   onEnter={(node) => {
                     node.style.transform = "translateY(-50px)";
-
-                    // node.addEventListener(
-                    //   "transition",
-                    //   (e) => {
-                    //   },
-                    //   false
-                    // );
                   }}
                 >
                   <div>
-                    <Question
-                      currentQuestion={currentQuestion}
-                      getResponsesData={getResponsesData}
-                      selectedOption={lastQuestionSelectedOption}
-                    />
+                    {
+                      displayQuestion
+                        ?
+                        <Question
+                          currentQuestion={currentQuestion}
+                          getResponsesData={getResponsesData}
+                          selectedOption={lastQuestionSelectedOption}
+                        />
+                        : <ShowSummary response={actualResponses} />
+                    }
                   </div>
                 </Slide>
               </Grid>
