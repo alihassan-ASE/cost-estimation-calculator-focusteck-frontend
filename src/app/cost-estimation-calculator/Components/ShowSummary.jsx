@@ -117,11 +117,13 @@ const ShowSummary = ({ response }) => {
   const [actualResponse, setActualResponse] = useState({});
   const [openForm, setOpenForm] = useState(false)
 
+  const [data,setData] = useState({})
   const handleForm = () => {
     setOpenForm(true)
   }
 
   const getActualResponse = (value, formData) => {
+    console.log("formData",formData)
     setOpenForm(value)
     setActualResponse(formData);
     let data = JSON.stringify(formData);
@@ -136,28 +138,32 @@ const ShowSummary = ({ response }) => {
         if (data.label === "engagement period") {
           data.selectedData?.map((value) => {
             setTimeline(value.opt);
+            response.timeline = value.opt
           });
         }
         if (data.question?.label === "project timeline") {
           data.selectedOption.map((value) => {
             setTimeline(value.opt);
+            response.timeline = value.opt
           });
         }
         if ((data.label || data.question?.label) === "type of industry") {
           (data.selectedData || data.selectedOption).map((value) => {
             setIndustry(value.opt);
+            response.industry = value.opt
           });
         }
         if ((data.label || data.question?.label) === "system type") {
           (data.selectedData || data.selectedOption).map((value) => {
             setSystemType(value.opt);
+            response.systemType = value.opt
           });
+
         }
       });
     }
   }, [response]);
 
-  console.log(response)
 
   return (
     <>

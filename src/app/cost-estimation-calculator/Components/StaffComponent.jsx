@@ -539,7 +539,7 @@ const StaffComponent = () => {
                       </div>
                     </Slide>
                     : ""}
-                {additionalQuesiton.length >= currentQuestionIndex && (
+                {/* {additionalQuesiton.length >= currentQuestionIndex && (
                   <Box
                     sx={{
                       margin: "2em 0",
@@ -555,7 +555,7 @@ const StaffComponent = () => {
                       Next
                     </CustomNextButton>
                   </Box>
-                )}
+                )} */}
 
               </Grid>
               <Box sx={{

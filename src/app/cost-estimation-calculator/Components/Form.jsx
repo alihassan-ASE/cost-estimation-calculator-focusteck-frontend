@@ -47,6 +47,8 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const Form = ({ response, getActualResponse }) => {
+
+  console.log({ response, getActualResponse })
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
     userName: "",
