@@ -2,8 +2,6 @@
 // final code
 import Stepper from "../Components/Stepper/page";
 import Question from "../Components/Question/page";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   getQuestions,
   getDynamicQuestion,
@@ -18,35 +16,25 @@ import {
   Slide,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 import ShowSummary from "../Components/ShowSummary";
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  color: "white",
-  boxShadow: "none",
-  textTransform: "none",
-  // padding: "4em 2em",
-  lineHeight: 1.5,
-  height: "40px",
-  maxWidth: "100px",
-  backgroundColor: "#005DBD",
-  fontWeight: "normal",
-  borderRadius: "5px",
-  textAlign: "center",
-  // display: "flex",
-  flexWrap: "wrap",
-  flexDirection: "column",
-  flexGrow: 1,
-  flexShrink: 1,
-  gap: ".1em",
-  transition: "all 0.3s ease",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
+  padding: 0,
+  color: "#ACACAC",
+  height: "50px",
+  width: "50px",
+  borderRadius: "50%",
+  justifyContent: "normal",
+  minWidth: "min-content",
+  border: "2px solid #ACACAC",
+  padding: ".2em",
+  "&:hover svg": {
+    transform: "translateX(-5px)"
+  },
   "&:hover": {
-    backgroundColor: "#005DBD",
-    color: "#fff",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
   "&.Mui-disabled": {
@@ -59,8 +47,36 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const CustomSlide = styled(Slide)(({ theme }) => ({
-  transform: "translateY(-50px)",
+const CustomNextButton = styled(Button)(({ theme }) => ({
+  width: 150,
+  margin: "2em 0",
+  backgroundColor: "#0045e6",
+  "&:hover": {
+    backgroundColor: "#0045e6"
+  },
+  fontFamily: [
+    "Proxima Nova",
+    "Poppins",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  [theme.breakpoints.down("md")]: {
+    fontSize: 14,
+    margin: "2em 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: 100,
+    fontSize: 10,
+    margin: "1.5em 0",
+  },
 }));
 
 const page = () => {
@@ -73,23 +89,26 @@ const page = () => {
   const [loaderState, setLoaderState] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState();
-  const [selectedData, setSelectedData] = useState();
+  const [selectedData, setSelectedData] = useState([]);
   const [fetchQuesitons, setFetchQuestions] = useState(null);
   const [actualResponses, setActualResponses] = useState([]);
   const [questionsToShow, setQuestionsToShow] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
-  const isNarrowScreen = useMediaQuery("(max-width:600px)");
+  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const [slideIn, setSlideIn] = useState(true);
   const [displayQuestion, setDisplayQuestion] = useState(true);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
 
-  const [isOptionSelected, setIsOptionSelected] = useState(true);
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [stepperState, setStepperState] = useState(false);
 
   const projectPageRef = useRef(null);
+
+  const route = useRouter();
+  let cost;
 
   useEffect(() => {
     if (projectPageRef.current) {
@@ -97,8 +116,11 @@ const page = () => {
     }
   }, []);
 
-  const route = useRouter();
-  let cost;
+  useEffect(() => {
+    if (selectedData.length && currentQuestion.typeofselection == "single") {
+      nextQuestion();
+    }
+  }, [selectedData])
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -150,13 +172,11 @@ const page = () => {
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
-    if (
-      resp.selectedData.length < 3 &&
-      currentQuestion.typeOfUI == "CheckBox"
-    ) {
+    if (resp.selectedData.length >= 3 && currentQuestion.typeofselection == "multiple") {
       setIsOptionSelected(true);
-    } else if (resp.selectedData.length !== 0) {
-      setIsOptionSelected(false);
+    }
+    else {
+      setIsOptionSelected(false)
     }
   };
 
@@ -169,6 +189,7 @@ const page = () => {
     dataObj.state = currentState;
     dataObj.index = currentQuestionIndex;
     dataObj.stack = [...questionsToShow];
+
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
     setActualResponses((prev) => [...prev, dataObj]);
@@ -194,12 +215,15 @@ const page = () => {
     } else {
       setQuestionsToShow(step.stack);
     }
+    slider();
+
   };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
     setDisplayQuestion(true);
     cost = 0;
+
 
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
@@ -213,11 +237,22 @@ const page = () => {
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
+
+    if (lastQuestion.question.typeofselection === "multiple") {
+      setIsOptionSelected(true)
+    }
+    else {
+      setIsOptionSelected(false)
+    }
+
+    slider();
+
   };
 
-  // // Handling Next Question
+  // Handling Next Question
   const nextQuestion = async () => {
-    setIsOptionSelected(true);
+
+    setIsOptionSelected(false);
     setLoaderState(true);
 
     cost = 0;
@@ -326,7 +361,7 @@ const page = () => {
   };
   console.log("actual Responses", actualResponses)
   return (
-    <Box ref={projectPageRef} sx={{ padding: "0 2.7%" }}>
+    <Box ref={projectPageRef} >
       {fetchQuesitons !== null ? (
         <Box
           sx={{
@@ -335,201 +370,48 @@ const page = () => {
             marginLeft: "auto",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              gap: "1em",
-              alignItems: "center",
-              margin: "-2em 0",
-              display: "flex",
-              flexDirection: "row",
-              backgroundColor: "#f5fcff",
-              justifyContent: "space-between",
-              maxWidth: "100%",
-              position: "sticky",
-              padding: "0 2em",
-              top: 0,
-              left: 0,
-              right: 0,
-              zIndex: 1000,
-              height: "80px",
-            }}
+          <Grid
+            container
+            spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
           >
-            <CustomButton
-              disabled={!actualResponses.length}
-              onClick={backQuestion}
-              sx={{
-                "&:hover svg": {
-                  color: "#005DBD",
-                  height: "100%",
-                  backgroundColor: "white",
-                  transform: "translateX(-20px)",
-                  position: "relative",
-                },
-                overflow: "hidden",
-                "&:hover": {
-                  borderRadius: "0px 5px 5px 0px",
-                },
-                "&:hover > .typography": {
-                  transform: "translateX(-10px)",
-                },
-              }}
-            >
-              <ArrowBackIcon
-                sx={{
-                  fontSize: "18px",
-                  transition: "all 0.2s ease-in",
-                  padding: ".5em .9em",
-                  marginLeft: "3px",
-                  borderRadius: "0px 50% 50% 0px",
-                  color: "white",
-                }}
-              />
-              <Typography
-                className="typography"
-                sx={{
-                  fontSize: "12px",
-                  color: "white",
-                  transition: "all 0.2s ease-in",
-                }}
-              >
-                Back
-              </Typography>
-            </CustomButton>
-
-            <Typography variant="h6">Total Cost : $ {totalCost}</Typography>
-
-            <CustomButton
-              onClick={nextQuestion}
-              sx={{
-                "&:hover svg": {
-                  color: "#005DBD",
-                  height: "100%",
-                  backgroundColor: "white",
-                  transform: "translateX(20px)",
-                  position: "relative",
-                },
-                overflow: "hidden",
-                "&:hover": {
-                  borderRadius: "5px 0px 0px 5px",
-                },
-                "&:hover > .typography": {
-                  transform: "translateX(10px)",
-                },
-              }}
-              disabled={isOptionSelected}
-            >
-              <Typography
-                className="typography"
-                sx={{
-                  fontSize: "12px",
-                  color: "white",
-                  transition: "all 0.2s ease-in",
-                }}
-              >
-                Next
-              </Typography>
-
-              <ArrowForwardIcon
-                sx={{
-                  fontSize: "18px",
-                  transition: "all 0.2s ease-in",
-                  padding: ".5em .9em",
-                  marginLeft: "3px",
-                  borderRadius: "50% 5px 5px 50%",
-                  color: "white",
-                }}
-              />
-            </CustomButton>
-          </Box>
-
-          {isNarrowScreen ? (
-            <Grid
-              sx={{ padding: " 2em" }}
-              container
-              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
-            >
-              {actualResponses.length > 0 && stepperState && (
-                <Grid item lg={4} md={4} sm={4} xs={12}>
-                  <Stepper
-                    responses={actualResponses}
-                    changeActiveQuestion={changeActiveQuestion}
-                    orientation={orientation}
-                  />
-                </Grid>
-              )}
-              <Grid item lg={8} md={8} sm={8} xs={12}>
-                {
-                  displayQuestion
-                    ?
-                    <Box
-                      sx={{
-                        paddingTop: "1.9em",
-                      }}
-                    >
-                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
-                        Question {actualResponses.length + 1}
-                      </Typography>
-                    </Box>
-                    : null
-                }
-
-                <CustomSlide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    // appear: 0,
-                    enter: 5000,
-                    exit: 0,
-                  }}
-                  easing={{ enter: 'ease-in' }}
-                  appear={false}
-                  onEntering={(node) => {
-                    node.style.transform = "translateY(-50px)";
+            <Grid item lg={8} md={12} sm={12} xs={12}>
+              <Box sx={{
+                display: "flex", gap: "1em", alignItems: "center",
+                paddingTop: "1.9em",
+              }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: "1em",
+                    alignItems: "center",
+                    margin: "1em 0",
                   }}
                 >
-                  <div>
-                    {!loaderState ? (
-                      displayQuestion
-                        ?
-                        <Question
-                          currentQuestion={currentQuestion}
-                          getResponsesData={getResponsesData}
-                          selectedOption={lastQuestionSelectedOption}
-                        />
-                        : <ShowSummary response={{
-                          responses: actualResponses,
-                          totalCost: totalCost,
-                        }} />
-                    ) : (
-                      <Box
+                  {actualResponses.length > 0 && (
+                    <CustomButton onClick={backQuestion}>
+                      <KeyboardBackspaceIcon
                         sx={{
-                          margin: "5em 2em",
-                          display: "flex",
+                          textAlign: "center",
+                          fontSize: "1.6em",
                           alignItems: "center",
+                          justifyContent: "center",
+                          display: "flex",
+                          transition: "all 0.3s ease-in-out",
+                          width: "100%",
+
+                          ":hover": {
+                            cursor: "pointer",
+
+                          },
                         }}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
-                  </div>
-                </CustomSlide>
-              </Grid>
-            </Grid>
-          ) : (
-            <Grid
-              sx={{ padding: "2em" }}
-              container
-              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
-            >
-              <Grid item lg={8} md={9} sm={8} xs={12}>
+                      />
+                    </CustomButton>
+                  )}
+                </Box>
                 {
                   displayQuestion
                     ?
                     <Box
-                      sx={{
-                        paddingTop: "1.9em",
-                      }}
                     >
                       <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
                         Question {actualResponses.length + 1}
@@ -537,58 +419,86 @@ const page = () => {
                     </Box>
                     : null
                 }
-                {
-                  slideIn ?
-                    <Slide
-                      direction="down"
-                      in={slideIn}
-                      timeout={{
-                        enter: 1500,
-                        exit: 0,
-                      }}
-                      appear={true}
-                      onEnter={(node) => {
-                        node.style.transform = "translateY(-50px)";
+              </Box>
+              {
+                slideIn ?
+                  <Slide
+                    direction="down"
+                    in={slideIn}
+                    timeout={{
+                      enter: 1500,
+                      exit: 0,
+                    }}
+                    appear={true}
+                    onEnter={(node) => {
+                      node.style.transform = "translateY(-50px)";
+                    }}
+                  >
+                    <div style={{ padding: "0 4.7%" }}>
+                      {!loaderState ? (
+                        displayQuestion
+                          ?
+                          <Question
+                            currentQuestion={currentQuestion}
+                            getResponsesData={getResponsesData}
+                            selectedOption={lastQuestionSelectedOption}
+                          />
+                          : <ShowSummary response={{
+                            responses: actualResponses,
+                            totalCost: totalCost,
+                          }} />
+                      ) : (
+                        <Box
+                          sx={{
+                            margin: "5em 2em",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <CircularProgress />
+                        </Box>
+                      )}
+                    </div>
+                  </Slide> : ''
+              }
+
+              {
+                isOptionSelected ?
+                  <Box sx={{ display: "flex", gap: "2em" }}>
+                    <CustomNextButton
+                      size="medium"
+                      variant="contained"
+                      sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" } }}
+
+                      onClick={() => {
+                        nextQuestion();
                       }}
                     >
-                      <div>
-                        {!loaderState ? (
-                          displayQuestion
-                            ?
-                            <Question
-                              currentQuestion={currentQuestion}
-                              getResponsesData={getResponsesData}
-                              selectedOption={lastQuestionSelectedOption}
-                            />
-                            : <ShowSummary response={{
-                              responses: actualResponses,
-                              totalCost: totalCost,
-                            }} />
-                        ) : (
-                          <Box
-                            sx={{
-                              margin: "5em 2em",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <CircularProgress />
-                          </Box>
-                        )}
-                      </div>
-                    </Slide> : ''
-                }
-              </Grid>
-              <Grid item lg={4} md={3} sm={4} xs={12}>
-                <Stepper
-                  responses={actualResponses}
-                  changeActiveQuestion={changeActiveQuestion}
-                  orientation={orientation}
-                />
-              </Grid>
+                      Next
+                    </CustomNextButton>
+                  </Box> : null
+              }
+
             </Grid>
-          )}
+            <Box sx={{
+              borderRight: orientation === "vertical" ? "1px solid grey" : "0",
+              borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
+              width: orientation !== "vertical" ? "100%" : "0",
+              marginTop: "7%",
+              height: orientation === "vertical" ? "65vh" : 0
+
+            }}></Box>
+            <Grid item lg={3.9} md={12} sm={12} xs={12}>
+
+              <Stepper
+                responses={actualResponses}
+                changeActiveQuestion={changeActiveQuestion}
+
+              />
+            </Grid>
+          </Grid>
+
         </Box>
       ) : (
         <Box
@@ -605,7 +515,8 @@ const page = () => {
       )
       }
     </Box >
-  );
-};
+  )
+}
+
 
 export default page;

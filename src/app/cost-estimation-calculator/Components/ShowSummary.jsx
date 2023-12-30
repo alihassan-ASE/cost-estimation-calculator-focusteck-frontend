@@ -41,7 +41,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
   ),
 }));
 
-const CustomButton = styled(Link)(({ theme }) => ({
+const CustomButton = styled(Button)(({ theme }) => ({
   color: "#fff",
   backgroundColor: "#0045e6",
   border: "1px solid #0045e6",
@@ -52,7 +52,6 @@ const CustomButton = styled(Link)(({ theme }) => ({
   padding: ".3em 1em",
   lineHeight: 1.5,
   fontWeight: "normal",
-  textDecoration: "none",
   borderRadius: "5px",
   width: "200px",
   display: "flex",
@@ -76,6 +75,11 @@ const CustomButton = styled(Link)(({ theme }) => ({
     color: "#000",
     backgroundColor: "#fff",
     border: "1px solid #000",
+  },
+  "&.Mui-disabled": {
+    color: "white",
+    backgroundColor: "#D7D7D7",
+    borderColor: "#D7D7D7"
   },
 }));
 
@@ -106,6 +110,7 @@ const CustomLinkBox = styled(Link)(({ theme }) => ({
 }));
 
 const ShowSummary = ({ response }) => {
+  const hasResponse = window.localStorage.getItem('Response');
   const [timeline, setTimeline] = useState("");
   const [systemType, setSystemType] = useState("");
   const [industry, setIndustry] = useState("");
@@ -124,7 +129,6 @@ const ShowSummary = ({ response }) => {
       localStorage.setItem("Response", data);
     }
   };
-
 
   useEffect(() => {
     {
@@ -152,6 +156,8 @@ const ShowSummary = ({ response }) => {
       });
     }
   }, [response]);
+
+  console.log(response)
 
   return (
     <>
@@ -293,53 +299,80 @@ const ShowSummary = ({ response }) => {
                 </CustomLinkBox>
               </Box>
 
+              {hasResponse ? (
+                <Link href="/cost-estimation-calculator/submit"
+                  sx={{ textDecoration: "none", color: "white" }}>
+                  <CustomButton
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      position: "relative",
+                      overflow: "hidden",
+                      "&:hover": {
+                        cursor: "pointer",
+                        backgroundColor: "#fff",
+                        boxShadow: "none",
+                        color: "#000",
+                        "& #forward": {
+                          marginRight: "30px",
+                          transition: "margin-right 0.2s ease-in-out",
+                        },
+                        "& svg": {
+                          backgroundColor: "#0045e6",
 
-              <CustomButton
-                href="/cost-estimation-calculator/submit"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  position: "relative",
-                  overflow: "hidden",
-                  "&:hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#fff",
-                    boxShadow: "none",
-                    color: "#000",
-                    "& #forward": {
-                      marginRight: "30px",
-                      transition: "margin-right 0.2s ease-in-out",
-                    },
-                    "& svg": {
-                      backgroundColor: "#0045e6",
+                          opacity: 1,
+                          marginRight: "15px",
+                          transition:
+                            "margin-right 0.2s ease-in-out, border-color 0.2s ease-in-out",
+                          borderRadius: "50% 0 0 50%",
+                        },
+                        "&:before": {
+                          transform: "scale(1, 1)",
+                          textIndent: 0,
+                        },
+                      },
+                    }}
+                  >
 
-                      opacity: 1,
-                      marginRight: "15px",
-                      transition:
-                        "margin-right 0.2s ease-in-out, border-color 0.2s ease-in-out",
-                      borderRadius: "50% 0 0 50%",
-                    },
-                    "&:before": {
-                      transform: "scale(1, 1)",
-                      textIndent: 0,
-                    },
-                  },
-                }}
-              >
-                <span id="forward">Show Response</span>{" "}
-                <ArrowRightAltIcon
+                    <span id="forward">Show Response</span>{" "}
+                    <ArrowRightAltIcon
+                      sx={{
+                        marginLeft: "auto",
+                        opacity: 0,
+                        color: "#fff",
+                        position: "absolute",
+                        right: "-19px",
+                        padding: ".5em",
+                        borderRadius: "0 50% 50% 0",
+                      }}
+                    />{" "}
+                  </CustomButton>
+                </Link>
+              ) : (
+                <CustomButton
+                  disabled
                   sx={{
-                    marginLeft: "auto",
-                    opacity: 0,
-                    color: "#fff",
-                    position: "absolute",
-                    right: "-19px",
-                    padding: ".5em",
-                    borderRadius: "0 50% 50% 0",
+                    display: "flex",
+                    alignItems: "center",
+                    position: "relative",
+                    overflow: "hidden",
                   }}
-                />{" "}
-              </CustomButton>
+                >
 
+                  <span style={{ textDecoration: "none" }} id="forward">Show Response</span>{" "}
+                  <ArrowRightAltIcon
+                    sx={{
+                      marginLeft: "auto",
+                      opacity: 0,
+                      color: "#fff",
+                      position: "absolute",
+                      right: "-19px",
+                      padding: ".5em",
+                      borderRadius: "0 50% 50% 0",
+                    }}
+                  />{" "}
+                </CustomButton>
+              )}
             </CustomBottomBox>
 
           </CustomMainBox>

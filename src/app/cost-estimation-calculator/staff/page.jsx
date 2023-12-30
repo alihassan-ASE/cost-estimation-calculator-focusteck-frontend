@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 
 import StaffComponent from "../Components/StaffComponent";
-import ShowSummary from "../Components/ShowSummary";
+import Form from "../Components/Form";
 
 const page = () => {
   const staffPageRef = useRef(null);
@@ -16,7 +16,6 @@ const page = () => {
   return (
     <Box ref={staffPageRef} sx={{ padding: "1em 0" }}>
       <StaffComponent />
-      {/* <ShowSummary /> */}
     </Box>
   );
 };

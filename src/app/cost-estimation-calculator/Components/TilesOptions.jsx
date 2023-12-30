@@ -24,17 +24,17 @@ const CustomButton = styled(Button)(({ theme }) => ({
   ),
   "&:hover": {
     color: "#fff",
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     border: "1px solid #005DBD",
   },
   "&:active": {
     color: "#fff",
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     border: "1px solid #005DBD",
   },
   "&:focus": {
     color: "#fff",
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     border: "1px solid #005DBD",
   },
   [theme.breakpoints.down("md")]: {

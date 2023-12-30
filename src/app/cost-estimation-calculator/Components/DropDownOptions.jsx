@@ -24,14 +24,14 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     ","
   ),
   "&:hover": {
-    backgroundColor: "#0069d9",
-    borderColor: "#0062cc",
+    backgroundColor: "#0045e6",
+    borderColor: "#0045e6",
     boxShadow: "none",
     color: "white",
   },
   "&:focus": {
-    backgroundColor: "#0069d9",
-    borderColor: "#0062cc",
+    backgroundColor: "#0045e6",
+    borderColor: "#0045e6",
     boxShadow: "none",
     color: "white",
   },
@@ -46,19 +46,19 @@ const MenuProps = {
     },
     sx: {
       "& .MuiMenuItem-root.Mui-selected": {
-        backgroundColor: "#0062cc",
+        backgroundColor: "#0045e6",
         color: "white",
       },
       "& .MuiMenuItem-root.Mui-selected:hover": {
-        backgroundColor: "#0069d9",
+        backgroundColor: "#0045e6",
         color: "white",
       },
       "& .Mui-selected:hover": {
-        backgroundColor: "#0069d9",
+        backgroundColor: "#0045e6",
         color: "white",
       },
       "& .MuiMenuItem-root.Mui-selected:focus": {
-        backgroundColor: "#0069d9",
+        backgroundColor: "#0045e6",
         color: "white",
       },
     },
@@ -109,42 +109,35 @@ const DropDownComponent = ({
   };
   return (
     <StyledFormControl>
-      <InputLabel id="demo-simple-select-label">
-        {label ? label : "Select Your Option"}
-      </InputLabel>
+      <InputLabel  id="demo-simple-select-label">{label?label:"Select Your Option"}</InputLabel>
+
       <Select
-        sx={{ height: "65px", width: "270px" }}
+        sx={{ height: "65px", width: "90%",borderRadius:"50px"}}
         autoFocus={false}
         value={disable ? null : selectedFormats}
         onChange={(e) => {
           const selectedObject = e.target.value;
 
-          if (
-            selectedObject.opt === "Other (Specify)" ||
-            selectedObject.opt === "Other"
-          ) {
-            setPrice(selectedObject.price);
-            setInputField(true);
-            setOtherVal(""); // Clear any previous input value
-          } else {
+          // if (selectedObject.opt === "Other (Specify)" || selectedObject.opt === "Other") {
+          //   setPrice(selectedObject.price)
+          //   setInputField(true);
+          //   setOtherVal(""); // Clear any previous input value
+          // } else {
             setInputField(false);
             setSelectedFormats(selectedObject);
             selectedOptionPassToParent(selectedObject, label);
-          }
+          // }
+
+
         }}
         disabled={disable ? true : false}
-        input={
-          <OutlinedInput
-            id="select-multiple-chip"
-            label={label ? label : "Select Your Option"}
-          />
-        }
+        input={<OutlinedInput  id="select-multiple-chip" label={label?label:"Select Your Option"} />}
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {selected.opt ? (
               <Chip
                 key={selected.opt}
-                label={`${selected.opt} ($${selected.price})`}
+                label={`${selected.opt}`}
               />
             ) : (
               <Chip key={selected} label={selected} />
@@ -155,7 +148,7 @@ const DropDownComponent = ({
       >
         {options?.map((data, index) => (
           <StyledMenuItem
-            sx={{ width: 270, wordWrap: "break-word", whiteSpace: "normal" }}
+            sx={{ width: "100%", wordWrap: "break-word", whiteSpace: "normal" }}
             key={index}
             value={
               data.opt && data.price
@@ -164,13 +157,13 @@ const DropDownComponent = ({
             }
           >
             {data.opt ? data.opt : data}{" "}
-            {data.price ? `($${data.price})` : null}
+            {/* {data.price ? `($${data.price})` : null} */}
           </StyledMenuItem>
         ))}
       </Select>
       {/* Input field for "Other (Specify)" or "Other" */}
-
-      {inputField ? (
+{/* 
+      {inputField ?
         <Box
           sx={{
             display: "flex",
@@ -185,7 +178,7 @@ const DropDownComponent = ({
             id="fullWidth"
             label="Other"
             variant="outlined"
-            sx={{ width: "34%" }}
+            sx={{ width: "270px" }}
             value={otherVal}
             onChange={(e) => {
               setOtherVal(e.target.value);
@@ -206,14 +199,14 @@ const DropDownComponent = ({
                 selectedOptionPassToParent(otherData);
                 setInputField(false);
                 setErrorMessage(null);
+                submitOtherVal();
               }
-              submitOtherVal();
             }}
           >
             Enter
           </Button>
-        </Box>
-      ) : null}
+        </Box> : null
+      } */}
     </StyledFormControl>
   );
 };

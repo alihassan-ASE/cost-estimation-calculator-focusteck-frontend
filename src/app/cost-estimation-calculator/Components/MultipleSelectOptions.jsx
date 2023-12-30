@@ -10,28 +10,30 @@ import { styled } from "@mui/material/styles";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
-    margin: theme.spacing(0.5),
+    margin: theme.spacing(1),
+    boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
+    gap: "1em",
     border: "none",
-    minWidth: 200,
-    padding: "1em 2em",
+    minwidth: "140px",
+    padding: ".3em 1em",
     fontWeight: "normal",
+    border: "1px solid #fff",
+
     "&.Mui-disabled": {
       border: 0,
     },
     "&:not(:first-of-type)": {
-      borderRadius: "3em",
+      borderRadius: "5px",
     },
     "&:first-of-type": {
-      borderRadius: "3em",
+      borderRadius: "5px",
     },
     color: "#000000",
-    boxShadow: "none",
     textTransform: "none",
-    fontSize: 16,
-    padding: "1em 2em",
+    fontSize: "0.9rem",
     lineHeight: 1.5,
-    backgroundColor: "#F8F8F9",
-    borderRadius: "3em",
+    backgroundColor: "#fff",
+    borderRadius: "5px",
     [theme.breakpoints.down("md")]: {
       fontSize: 14,
     },
@@ -45,42 +47,45 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 
 const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
+  backgroundColor: "#fff",
+  // border: "1px solid gray",
+  border: "1px solid #fff",
+  color: "#000",
+  textTransform: "none",
+  fontSize: "0.9rem",
+  padding: ".3em 1em",
+  lineHeight: 1.5,
   fontWeight: "normal",
+  borderRadius: "5px",
+  minwidth: "140px",
+  display: "flex",
+  flexWrap: "wrap",
+  transition:
+    "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
+
   "&:hover": {
-    backgroundColor: "#0069d9",
-    borderColor: "#0062cc",
-    boxShadow: "none",
-    color: "white",
-    fontFamily: [
-      "Proxima Nova",
-      "Poppins",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    transition:
-      "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    color: "#fff",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "&.Mui-selected": {
-    backgroundColor: "#0062cc",
+    backgroundColor: "#0045e6",
     color: "white",
     "& span.price": {
       color: "#fff",
     },
   },
   "&.Mui-selected:hover": {
-    backgroundColor: "#0069d9",
-    color: "white",
+    color: "#fff",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "& span.price": {
-    color: "#3f37c9",
+    color: "#005DBD",
+    transition:"all 0.5s ease-in-out"
   },
   "&:hover span.price": {
     color: "white",
@@ -139,7 +144,6 @@ const MultipleComponent = ({
             }}
           >
             <span>{data.opt}</span>&nbsp;
-            <span className="price">($ {data.price})</span>
           </StyleToggleButton>
         ))}
       </StyledToggleButtonGroup>

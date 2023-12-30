@@ -22,20 +22,32 @@ const CustomTypography = styled(Typography)({
 
 const ShowResponse = () => {
   const [response, setResponse] = useState({});
-  debugger;
-  let data =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("Response")
-      : false;
 
   useEffect(() => {
-    setResponse(JSON.parse(data))
+    const fetchData = () => {
+      const data =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem("Response")
+          : false;
 
-  }, [data]);
+      if (data) {
+        try {
+          const parsedData = JSON.parse(data);
+          setResponse(parsedData);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
+      }
+    };
 
-  // useEffect(() => {
-  //   localStorage.clear()
-  // }, [response])
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (response && Object.keys(response).length > 0) {
+      window.localStorage.removeItem("Response");
+    }
+  }, [response]);
 
   return (
     <>
@@ -75,6 +87,59 @@ const ShowResponse = () => {
               label={response?.email}
             />{" "}
           </CustomButton>
+          <CustomButton sx={{ display: "flex", gap: "1em" }}>
+            <Typography variant="body1">Phone</Typography>
+            <Chip
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+              }}
+              key="Name"
+              label={response?.phone}
+            />
+          </CustomButton>
+          <CustomButton sx={{ display: "flex", gap: "1em" }}>
+            <Typography variant="body1">Country</Typography>
+            <Chip
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+              }}
+              key="Name"
+              label={response?.country}
+            />
+          </CustomButton>
+          <CustomButton sx={{ display: "flex", gap: "1em" }}>
+            <Typography variant="body1">Company</Typography>
+            <Chip
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+              }}
+              key="Name"
+              label={response?.company}
+            />
+          </CustomButton>
+          <CustomButton sx={{ display: "flex", gap: "1em" }}>
+            <Typography variant="body1">Message</Typography>
+            <Chip
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+              }}
+              key="Name"
+              label={response?.message}
+            />
+          </CustomButton>
+
         </Box>
         {response?.responses?.length && response.responses[0].resources ? (
           <Box sx={{ display: "flex", flexDirection: "column", gap: ".5em " }}>

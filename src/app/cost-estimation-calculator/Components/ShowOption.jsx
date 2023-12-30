@@ -23,11 +23,17 @@ const ShowOption = ({
     <Box>
       {typeOfSelection === "single" ? (
         typeofUI === "Radio" ? (
-          <RadioButtonComponent
-            options={options}
-            selectedOption={selectedOption}
-            selectedOptionPassToParent={selectedOptionPassToParent}
-          />
+          options?.length > 10
+            ? <RadioButtonComponent
+              options={options}
+              selectedOption={selectedOption}
+              selectedOptionPassToParent={selectedOptionPassToParent}
+            />
+            : <LargeTiles
+              options={options}
+              selectedOption={selectedOption}
+              selectedOptionPassToParent={selectedOptionPassToParent}
+            />
         ) : typeofUI === "Tiles" ? (
           options.length > 4 ? (
             <TilesComponent

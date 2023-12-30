@@ -26,7 +26,6 @@ const page = (props) => {
   } = props;
 
   const [selectedData, setSelectedData] = useState([]);
-
   const selectedOptionPassToParent = (data) => {
     if (Array.isArray(data)) {
       setSelectedData([...data]);

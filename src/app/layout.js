@@ -26,7 +26,7 @@ import {
 import { baseUrl } from "@/config/constants";
 
 const CustomBox = styled(Box)(({ theme }) => ({
-  // margin: "0 2em",
+  margin: "0 2em",
   [theme.breakpoints.down("sm")]: {
     margin: "0",
   },

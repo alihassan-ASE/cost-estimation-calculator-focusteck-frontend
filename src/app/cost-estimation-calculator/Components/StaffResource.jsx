@@ -375,7 +375,7 @@ const StaffResource = ({
                   getLabel
                 );
               } else {
-                selectedOptionPassToParent(currentResource,saveButton,setSaveButton, false, getLabel);
+                selectedOptionPassToParent(currentResource, false, getLabel);
               }
               setShowDropdown(false);
             }}
