@@ -9,8 +9,8 @@ const CustomButton = styled(Button)(({ theme }) => ({
   boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
   color: "#000",
   textTransform: "none",
-  fontSize: "0.9rem",
-  padding: ".3em 1em",
+  fontSize: "1rem",
+  padding: ".4em 1.2em",
   lineHeight: 1.5,
   fontWeight: "normal",
   borderRadius: "5px",
@@ -38,10 +38,10 @@ const CustomButton = styled(Button)(({ theme }) => ({
     border: "1px solid #005DBD",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: 14,
+    fontSize: ".9rem ",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: 10,
+    fontSize: ".7rem ",
     width: "160px",
   },
 }));
@@ -86,9 +86,10 @@ const TilesComponent = ({
             sx={
               checkSelectedOption(data.opt, data.price)
                 ? {
-                    backgroundColor: "#0045e6",
-                    color: "white",
-                  }
+                  backgroundColor: "#005DBD",
+                  border: "1px solid #005DBD",
+                  color: "white",
+                }
                 : {}
             }
           >

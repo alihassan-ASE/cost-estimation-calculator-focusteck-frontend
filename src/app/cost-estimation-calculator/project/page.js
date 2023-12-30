@@ -35,8 +35,6 @@ const CustomButton = styled(Button)(({ theme }) => ({
     transform: "translateX(-5px)"
   },
   "&:hover": {
-    backgroundColor: "#005DBD",
-    color: "#fff",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
   "&.Mui-disabled": {
@@ -348,13 +346,13 @@ const page = () => {
       currentState === "post" &&
       currentQuestionIndex > postProjectQuestions.length
     ) {
-      let data = JSON.stringify({
-        responses: actualResponses,
-        totalCost: totalCost,
-      });
-      if (data) {
-        localStorage.setItem("Response", data);
-      }
+      // let data = JSON.stringify({
+      //   responses: actualResponses,
+      //   totalCost: totalCost,
+      // });
+      // if (data) {
+      //   localStorage.setItem("Response", data);
+      // }
       setDisplayQuestion(false);
     }
   }, [nextQuestion]);
@@ -366,9 +364,9 @@ const page = () => {
       setSlideIn(true);
     }, 250);
   };
-
+  console.log("actual Responses", actualResponses)
   return (
-    <Box ref={projectPageRef} sx={{ padding: "0 2.7%" }}>
+    <Box ref={projectPageRef} >
       {fetchQuesitons !== null ? (
         <Box
           sx={{
@@ -377,58 +375,48 @@ const page = () => {
             marginLeft: "auto",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              gap: "1em",
-              alignItems: "center",
-              margin: "1em 0",
-            }}
+          <Grid
+            container
+            spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
           >
-            {actualResponses.length > 0 && (
-              <CustomButton sx={{
-
-              }} onClick={backQuestion}>
-                <KeyboardBackspaceIcon
+            <Grid item lg={8} md={12} sm={12} xs={12}>
+              <Box sx={{
+                display: "flex", gap: "1em", alignItems: "center",
+                paddingTop: "1.9em",
+              }}>
+                <Box
                   sx={{
-                    textAlign: "center",
-                    fontSize: "1.6em",
-                    alignItems: "center",
-                    justifyContent: "center",
                     display: "flex",
-                    transition: "all 0.3s ease-in-out",
-                    width: "100%",
-                    // color: "#ACACAC",
-                    // border: "2px solid #ACACAC",
-                    // borderRadius: "50%",
-                    // padding: ".3em",
-                    ":hover": {
-                      cursor: "pointer",
-                      // backgroundColor: "#0069d9",
-                      // border: "2px solid #fff",
-                      // color: "#fff",
-                    },
+                    gap: "1em",
+                    alignItems: "center",
+                    margin: "1em 0",
                   }}
-                />
-              </CustomButton>
-            )}
-            {/* <Typography variant="h6">Total Cost : $ {totalCost}</Typography> */}
-          </Box>
+                >
+                  {actualResponses.length > 0 && (
+                    <CustomButton onClick={backQuestion}>
+                      <KeyboardBackspaceIcon
+                        sx={{
+                          textAlign: "center",
+                          fontSize: "1.6em",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          display: "flex",
+                          transition: "all 0.3s ease-in-out",
+                          width: "100%",
 
+                          ":hover": {
+                            cursor: "pointer",
 
-            <Grid
-              // sx={{ padding: "2em" }}
-              container
-              spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
-            >
-              <Grid sx={{paddingRight:"20px"}} item lg={8} md={9} sm={8} xs={12}>
+                          },
+                        }}
+                      />
+                    </CustomButton>
+                  )}
+                </Box>
                 {
                   displayQuestion
                     ?
                     <Box
-                      sx={{
-                        paddingTop: "1.9em",
-                      }}
                     >
                       <Typography sx={{ color: "#0045e6", fontSize: "1.2em",fontWeight:"bold" }}>
                         Question {actualResponses.length + 1}
@@ -436,83 +424,86 @@ const page = () => {
                     </Box>
                     : null
                 }
-                <Slide
-                  direction="down"
-                  in={slideIn}
-                  timeout={{
-                    appear: 100,
-                    enter: 950,
-                    exit: 0,
-                  }}
-                  appear={true}
-                  onEnter={(node) => {
-                    node.style.transform = "translateY(-50px)";
-                  }}
-                >
-                  <div>
-                    {!loaderState ? (
-                      displayQuestion
-                        ?
-                        <Question
-                          currentQuestion={currentQuestion}
-                          getResponsesData={getResponsesData}
-                          selectedOption={lastQuestionSelectedOption}
-                        />
-                        : <ShowSummary response={{
-                          responses: actualResponses,
-                          totalCost: totalCost,
-                        }} />
-                    ) : (
-                      <Box
-                        sx={{
-                          margin: "5em 2em",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
-                  </div>
-                </Slide>
-                {
-                  isOptionSelected ?
-                    <Box sx={{ display: "flex", gap: "2em" }}>
-                      <CustomNextButton
-                        size="medium"
-                        variant="contained"
-                        sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" } }}
+              </Box>
+              {
+                slideIn ?
+                  <Slide
+                    direction="down"
+                    in={slideIn}
+                    timeout={{
+                      enter: 1500,
+                      exit: 0,
+                    }}
+                    appear={true}
+                    onEnter={(node) => {
+                      node.style.transform = "translateY(-50px)";
+                    }}
+                  >
+                    <div style={{ padding: "0 4.7%" }}>
+                      {!loaderState ? (
+                        displayQuestion
+                          ?
+                          <Question
+                            currentQuestion={currentQuestion}
+                            getResponsesData={getResponsesData}
+                            selectedOption={lastQuestionSelectedOption}
+                          />
+                          : <ShowSummary response={{
+                            responses: actualResponses,
+                            totalCost: totalCost,
+                          }} />
+                      ) : (
+                        <Box
+                          sx={{
+                            margin: "5em 2em",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <CircularProgress />
+                        </Box>
+                      )}
+                    </div>
+                  </Slide> : ''
+              }
 
-                        onClick={() => {
-                          nextQuestion();
-                        }}
-                      >
-                        Next
-                      </CustomNextButton>
-                    </Box> : null
-                }
-             
-              </Grid>
-              <Box sx={{
-                borderRight: orientation === "vertical" ? "1px solid grey" : "0",
-                borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-                width: orientation !== "vertical" ? "100%" : "0",
-                marginTop:"7%",
-                // marginRight:"10px",
-                height:orientation=== "vertical" ? "65vh": 0
+              {
+                isOptionSelected ?
+                  <Box sx={{ display: "flex", gap: "2em" }}>
+                    <CustomNextButton
+                      size="medium"
+                      variant="contained"
+                      sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" } }}
 
-              }}></Box>
-              <Grid item lg={3.9} md={12} sm={12} xs={12}>
-            
-                <Stepper
-                  responses={actualResponses}
-                  changeActiveQuestion={changeActiveQuestion}
-                
-                />
-              </Grid>
+                      onClick={() => {
+                        nextQuestion();
+                      }}
+                    >
+                      Next
+                    </CustomNextButton>
+                  </Box> : null
+              }
+
             </Grid>
-          
+            <Box sx={{
+              borderRight: orientation === "vertical" ? "1px solid grey" : "0",
+              borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
+              width: orientation !== "vertical" ? "100%" : "0",
+              marginTop: "7%",
+              height: orientation === "vertical" ? "65vh" : 0
+
+            }}></Box>
+            <Grid item lg={3.9} md={12} sm={12} xs={12}>
+
+              <Stepper
+                responses={actualResponses}
+                changeActiveQuestion={changeActiveQuestion}
+
+              />
+            </Grid>
+          </Grid>
+
         </Box>
       ) : (
         <Box
@@ -529,7 +520,8 @@ const page = () => {
       )
       }
     </Box >
-  );
-};
+  )
+}
+
 
 export default page;
