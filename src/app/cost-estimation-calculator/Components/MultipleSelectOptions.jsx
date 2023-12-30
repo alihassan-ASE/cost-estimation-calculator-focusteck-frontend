@@ -10,15 +10,15 @@ import { styled } from "@mui/material/styles";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
-    margin: theme.spacing(1),
+    display: "flex",
     boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
     gap: "1em",
     border: "none",
     minwidth: "140px",
-    padding: ".3em 1em",
+    fontSize: "1rem",
+    padding: ".4em 1.2em",
     fontWeight: "normal",
     border: "1px solid #fff",
-
     "&.Mui-disabled": {
       border: 0,
     },
@@ -30,25 +30,24 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     },
     color: "#000000",
     textTransform: "none",
-    fontSize: "0.9rem",
     lineHeight: 1.5,
     backgroundColor: "#fff",
     borderRadius: "5px",
     [theme.breakpoints.down("md")]: {
-      fontSize: 14,
+      fontSize: ".9rem ",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: 10,
+      fontSize: ".7rem ",
     },
     fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
       ","
     ),
   },
+  gap: "1em",
 }));
 
 const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   backgroundColor: "#fff",
-  // border: "1px solid gray",
   border: "1px solid #fff",
   color: "#000",
   textTransform: "none",
@@ -59,6 +58,7 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   borderRadius: "5px",
   minwidth: "140px",
   display: "flex",
+  gap: "1em",
   flexWrap: "wrap",
   transition:
     "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
@@ -85,7 +85,7 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
   "& span.price": {
     color: "#005DBD",
-    transition:"all 0.5s ease-in-out"
+    transition: "all 0.5s ease-in-out"
   },
   "&:hover span.price": {
     color: "white",

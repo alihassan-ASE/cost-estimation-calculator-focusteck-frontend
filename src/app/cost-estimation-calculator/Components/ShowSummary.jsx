@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Modal } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -8,7 +8,7 @@ import Link from "next/link";
 import Form from "../Components/Form";
 
 const CustomMainBox = styled(Box)(({ theme }) => ({
-  margin: "1em 3em",
+  // margin: "1em 3em",
   [theme.breakpoints.down("md")]: {
     margin: "1em 2em",
   },
@@ -115,7 +115,9 @@ const ShowSummary = ({ response }) => {
   const [systemType, setSystemType] = useState("");
   const [industry, setIndustry] = useState("");
   const [actualResponse, setActualResponse] = useState({});
-  const [openForm, setOpenForm] = useState(false)
+  const [openForm, setOpenForm] = useState(false);
+
+  const handleClose = () => setOpenForm(false);
 
   const handleForm = () => {
     setOpenForm(true)
@@ -166,15 +168,10 @@ const ShowSummary = ({ response }) => {
           ? <CustomMainBox>
 
             <Box>
-              <CustomNormalTypography
-                variant="h5"
-                sx={{ color: "#89899C", fontWeight: 600, padding: "12px 0" }}
-              >
-                Your Results
-              </CustomNormalTypography>
+
               <CustomNormalTypography
                 variant="body1"
-                sx={{ color: "#373737", marginBottom: "14px " }}
+                sx={{ color: "#373737", margin: "12px 0 14px 0" }}
               >
                 Based on the answers you provided, we've estimated a price range for
                 your software project:
@@ -197,7 +194,7 @@ const ShowSummary = ({ response }) => {
                   variant="h6"
                   sx={{ color: "#fff", fontSize: "1.1em" }}
                 >
-                  Project Cost
+                  Estimated Cost
                 </CustomNormalTypography>
                 <CustomTypography>{response.totalCost} $</CustomTypography>
               </CustomBox>
@@ -376,7 +373,14 @@ const ShowSummary = ({ response }) => {
             </CustomBottomBox>
 
           </CustomMainBox>
-          : <Form response={response} getActualResponse={getActualResponse} />
+          : <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Form response={response} getActualResponse={getActualResponse} />
+          </Modal>
       }
     </>
   );

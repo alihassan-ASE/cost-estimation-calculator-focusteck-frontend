@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 
 import StaffComponent from "../Components/StaffComponent";
-import Form from "../Components/Form";
 
 const page = () => {
   const staffPageRef = useRef(null);

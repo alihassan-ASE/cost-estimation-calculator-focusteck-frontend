@@ -16,8 +16,8 @@ const CustomButton = styled(Button)(({ theme }) => ({
   lineHeight: 1.5,
   fontWeight: "normal",
   borderRadius: "5px",
-  width: "180px",
-  height: "180px",
+  width: "200px",
+  height: "200px",
   transition:
     "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
@@ -25,18 +25,18 @@ const CustomButton = styled(Button)(({ theme }) => ({
   ),
   "&:hover": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "&:active": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "&:focus": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "1rem",
@@ -64,32 +64,6 @@ const LargeTiles = ({
     }
   }, [selectedOption, options]);
 
-  // useEffect(() => {
-  //   let maxWidth = 0;
-  //   let maxHeight = 0;
-
-  //   buttonRefs.current.forEach((buttonRef) => {
-  //     if (buttonRef) {
-  //       const { offsetWidth, offsetHeight } = buttonRef;
-  //       if (offsetWidth > maxWidth) {
-  //         maxWidth = offsetWidth;
-  //       }
-  //       if (offsetHeight > maxHeight) {
-  //         maxHeight = offsetHeight;
-  //       }
-  //     }
-  //   });
-
-  //   const finalWidth = maxWidth > 140 ? maxWidth : 140;
-  //   const finalHeight = maxHeight > 140 ? maxHeight : 140;
-
-  //   buttonRefs.current.forEach((buttonRef) => {
-  //     if (buttonRef) {
-  //       buttonRef.style.minWidth = `${finalWidth}px`;
-  //       buttonRef.style.minHeight = `${finalHeight}px`;
-  //     }
-  //   });
-  // }, [options]);
 
   const checkSelectedOption = (value, price) => {
     const res =
@@ -114,10 +88,10 @@ const LargeTiles = ({
             }}
             sx={{
               backgroundColor: checkSelectedOption(data.opt, data.price)
-                ? "#005DBD"
+                ? "#0045e6"
                 : "#fff",
               border: checkSelectedOption(data.opt, data.price)
-                ? "1px solid #005DBD"
+                ? "1px solid #0045e6"
                 : "1px solid #fff",
               color: checkSelectedOption(data.opt, data.price)
                 ? "#fff"

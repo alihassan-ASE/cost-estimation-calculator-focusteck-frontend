@@ -20,13 +20,16 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 import ShowSummary from "../Components/ShowSummary";
+import { PaddingOutlined } from "@mui/icons-material";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   padding: 0,
   color: "#ACACAC",
-  height: "50px",
-  width: "50px",
+  width: "40px",
+  height: "40px",
   borderRadius: "50%",
+  position: "absolute",
+  right: "-32px",
   justifyContent: "normal",
   minWidth: "min-content",
   border: "2px solid #ACACAC",
@@ -77,6 +80,30 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
     fontSize: 10,
     margin: "1.5em 0",
   },
+}));
+
+const CustomCostBox = styled(Box)(({ theme }) => ({
+  backgroundColor: "#1E1D28",
+  padding: "2em",
+  borderRadius: "10px",
+  minWidth: "250px",
+  [theme.breakpoints.down("sm")]: {
+    padding: "1em",
+  },
+}));
+
+const CustomNormalTypography = styled(Typography)(({ theme }) => ({
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
+}));
+
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  color: "#fff",
+  fontSize: "2em",
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
 }));
 
 const page = () => {
@@ -376,15 +403,17 @@ const page = () => {
           >
             <Grid item lg={8} md={12} sm={12} xs={12}>
               <Box sx={{
-                display: "flex", gap: "1em", alignItems: "center",
-                paddingTop: "1.9em",
+                display: "flex", alignItems: "center",
+                padding: "2.2em 0 1em 0",
+                gap: isNarrowScreen && actualResponses.length > 0 ? "1.9em" : 0,
+                paddingLeft: isNarrowScreen && actualResponses.length > 0 ? "7.4%" : 0
               }}>
                 <Box
                   sx={{
                     display: "flex",
                     gap: "1em",
                     alignItems: "center",
-                    margin: "1em 0",
+                    position: "relative"
                   }}
                 >
                   {actualResponses.length > 0 && (
@@ -396,12 +425,10 @@ const page = () => {
                           alignItems: "center",
                           justifyContent: "center",
                           display: "flex",
-                          transition: "all 0.3s ease-in-out",
                           width: "100%",
-
+                          transition: "all 0.3s ease-in-out",
                           ":hover": {
                             cursor: "pointer",
-
                           },
                         }}
                       />
@@ -412,12 +439,19 @@ const page = () => {
                   displayQuestion
                     ?
                     <Box
+                      sx={{ paddingLeft: "7.4%" }}
                     >
-                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                      <Typography sx={{ color: "#0045e6", fontSize: "1.2em", }}>
                         Question {actualResponses.length + 1}
                       </Typography>
                     </Box>
-                    : null
+                    : <Box
+                      sx={{ paddingLeft: "7.4%" }}
+                    >
+                      <CustomNormalTypography variant="h5" sx={{ color: "#89899C", fontWeight: 600, }}>
+                        Your Results
+                      </CustomNormalTypography>
+                    </Box>
                 }
               </Box>
               {
@@ -434,7 +468,7 @@ const page = () => {
                       node.style.transform = "translateY(-50px)";
                     }}
                   >
-                    <div style={{ padding: "0 4.7%" }}>
+                    <div style={{ padding: "0 7.4%" }}>
                       {!loaderState ? (
                         displayQuestion
                           ?
@@ -465,11 +499,11 @@ const page = () => {
 
               {
                 isOptionSelected ?
-                  <Box sx={{ display: "flex", gap: "2em" }}>
+                  <Box sx={{ display: "flex", gap: "2em", justifyContent: "flex-end", paddingBottom: "1em" }}>
                     <CustomNextButton
                       size="medium"
                       variant="contained"
-                      sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" } }}
+                      sx={{ width: 150, backgroundColor: "#0045e6", margin: "1em 2em", "&:hover": { backgroundColor: "#0045e6" } }}
 
                       onClick={() => {
                         nextQuestion();
@@ -484,22 +518,41 @@ const page = () => {
             <Box sx={{
               borderRight: orientation === "vertical" ? "1px solid grey" : "0",
               borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-              width: orientation !== "vertical" ? "100%" : "0",
+              width: orientation !== "vertical" ? "90%" : "0",
+              margin: orientation !== "vertical" ? "auto" : "0",
               marginTop: "7%",
               height: orientation === "vertical" ? "65vh" : 0
-
             }}></Box>
             <Grid item lg={3.9} md={12} sm={12} xs={12}>
+              <div style={{
+                padding: orientation !== "vertical" ? "0 7.4%" : 0
+              }}>
+                <Stepper
+                  responses={actualResponses}
+                  changeActiveQuestion={changeActiveQuestion}
 
-              <Stepper
-                responses={actualResponses}
-                changeActiveQuestion={changeActiveQuestion}
+                />
+                {
+                  displayQuestion
+                    ?
+                    <CustomCostBox>
+                      <CustomNormalTypography
+                        variant="h6"
+                        sx={{ color: "#fff", fontSize: "1.1em" }}
+                      >
+                        Estimated Cost
+                      </CustomNormalTypography>
+                      <CustomTypography>{totalCost} $</CustomTypography>
+                    </CustomCostBox>
+                    : null
+                }
 
-              />
+
+              </div>
             </Grid>
-          </Grid>
+          </Grid >
 
-        </Box>
+        </Box >
       ) : (
         <Box
           sx={{

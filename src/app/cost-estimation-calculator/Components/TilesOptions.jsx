@@ -4,7 +4,6 @@ import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#fff",
-  // border: "1px solid gray",
   border: "1px solid #fff",
   boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
   color: "#000",
@@ -25,17 +24,17 @@ const CustomButton = styled(Button)(({ theme }) => ({
   "&:hover": {
     color: "#fff",
     backgroundColor: "#0045e6",
-    border: "1px solid #005DBD",
+    border: "1px solid #0045e6",
   },
   "&:active": {
     color: "#fff",
     backgroundColor: "#0045e6",
-    border: "1px solid #005DBD",
+    border: "1px solid #0045e6",
   },
   "&:focus": {
     color: "#fff",
     backgroundColor: "#0045e6",
-    border: "1px solid #005DBD",
+    border: "1px solid #0045e6",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: ".9rem ",
@@ -86,8 +85,8 @@ const TilesComponent = ({
             sx={
               checkSelectedOption(data.opt, data.price)
                 ? {
-                  backgroundColor: "#005DBD",
-                  border: "1px solid #005DBD",
+                  backgroundColor: "#0045e6",
+                  border: "1px solid #0045e6",
                   color: "white",
                 }
                 : {}

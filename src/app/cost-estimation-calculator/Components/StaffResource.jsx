@@ -43,11 +43,11 @@ const StaffResource = ({
   const seniorityLevelOptions = ["Mid Level", "Senior Level", "Team Lead"];
   useEffect(() => {
 
-    if (values.length === 0 ) {
+    if (values.length === 0) {
       setCurrentResource({});
       setCount(0);
     }
-  
+
     if (values.length <= 0) {
       setShowDropdown(true)
     }
@@ -117,7 +117,7 @@ const StaffResource = ({
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "column", }}>
-      <CloseIcon onClick={() => { deleteResource(index) }} sx={{position: "relative",marginLeft:"auto",transition:"all 0.7s ease",fontSize:"20px",fontWeight: 'bold',borderRadius:"50%",color:"red",height:"20px",width:"20px",cursor:"pointer", "&:hover":{ backgroundColor:"red",color:"white" }}}/>
+        <CloseIcon onClick={() => { deleteResource(index) }} sx={{ position: "relative", marginLeft: "auto", transition: "all 0.7s ease", fontSize: "20px", fontWeight: 'bold', borderRadius: "50%", color: "red", height: "20px", width: "20px", cursor: "pointer", "&:hover": { backgroundColor: "red", color: "white" } }} />
         {showDropdown && (
           <QuestionsComponent
             typeOfSelection={typeOfSelection}
@@ -319,8 +319,29 @@ const StaffResource = ({
       {showDropdown ? (
         <Box sx={{ margin: "1em 0" }}>
           <Button
+            sx={{
+              minWidth: "120px",
+              color: "#000",
+              backgroundColor: "#fff",
+              border: "1px solid #fff",
+              "&:hover": {
+                color: "#fff",
+                backgroundColor: "#0045e6",
+                border: "1px solid #0045e6",
+              },
+              "&:active": {
+                color: "#fff",
+                backgroundColor: "#0045e6",
+                border: "1px solid #0045e6",
+              },
+              "&:focus": {
+                color: "#fff",
+                backgroundColor: "#0045e6",
+                border: "1px solid #0045e6",
+              },
+            }}
             disabled={
-                currentResource.resource &&
+              currentResource.resource &&
                 currentResource.resourceOption &&
                 currentResource.seniorityLevel &&
                 currentResource.numOfResources &&
@@ -391,7 +412,7 @@ const StaffResource = ({
         //   ?
         //   <Button onClick={() => { deleteResource(index) }} variant="contained" sx={{ marginLeft: "10px" }}>Delete</Button> : null
       }
-      
+
     </Box>
   );
 };

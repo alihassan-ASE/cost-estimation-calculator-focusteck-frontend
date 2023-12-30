@@ -546,7 +546,7 @@ export default function RootLayout({ children }) {
               >
                 <Box
                   sx={{
-                    padding: "7% 5%",
+                    padding: "7% 7%",
                     display: "flex",
                     flexDirection: "column",
                     gap: "2em",
@@ -609,12 +609,12 @@ export default function RootLayout({ children }) {
             "/cost-estimation-calculator" ? (
             <CustomBox
               id="scroll-down"
-              sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}
+              sx={{ minHeight: "100vh", display: "flex", alignItems: "center", marginTop: "1em", marginBottom: "3em" }}
             >
               {children}
             </CustomBox>
           ) : (
-            <CustomBox id="scroll-down" sx={{ minHeight: "100vh" }}>
+            <CustomBox id="scroll-down" sx={{ minHeight: "100vh", marginTop: "1em", marginBottom: "3em" }}>
               {children}
             </CustomBox>
           )}
