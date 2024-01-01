@@ -34,7 +34,6 @@ const page = (props) => {
     }
   };
 
-  console.log("Question in question",currentQuestion)
   useEffect(() => {
     if (selectedData || Array.isArray(selectedData)) {
       selectedData?.forEach((data) => {

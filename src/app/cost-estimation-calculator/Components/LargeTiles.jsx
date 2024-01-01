@@ -67,7 +67,6 @@ const LargeTiles = ({
 
 
   const checkSelectedOption = (value, price) => {
-  console.log("Large Tiles");
 
     const res =
       selectedFormats?.opt === value && selectedFormats?.price === price;

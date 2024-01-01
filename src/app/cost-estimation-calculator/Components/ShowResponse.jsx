@@ -2,26 +2,60 @@
 import { Box, Typography, Chip, Button } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
-const CustomButton = styled(Button)({
-  "&:hover": {
-    cursor: "auto",
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  '&:not(:last-child)': {
+    borderBottom: 0,
   },
-  textTransform: "capitalize",
-  display: "flex",
-  justifyContent: "space-between",
-  gap: "1em",
-  width: "100%",
-});
+  '&::before': {
+    display: 'none',
+  },
+}))
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .05)'
+      : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
 
 const CustomTypography = styled(Typography)({
-  textAlign: "center",
-  backgroundColor: "#e4e4e4",
-  margin: "1em 0",
+  fontSize: "20px",
+  fontWeight: "bold",
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  )
+
 });
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
 
 const ShowResponse = () => {
   const [response, setResponse] = useState({});
+  const [showOption, setShowOption] = useState(null);
 
   useEffect(() => {
     const fetchData = () => {
@@ -49,231 +83,116 @@ const ShowResponse = () => {
     }
   }, [response]);
 
+
+  const toggleOption = (index) => {
+    setShowOption((prev) => (prev === index ? null : index));
+  };
   return (
-<></>
-    // <>
-    // {
-    //   response.response.map((question)=>{
-    //       <div>
-    //         <p>{question.question}</p>
-    //       </div>
-    //   })
-    // }
-    // </>
-    // <>
-    //   <Box
-    //     sx={{
-    //       border: "1px solid #cfcfcf",
-    //       padding: "1em 1em",
-    //       maxWidth: "100%",
-    //       margin: "3em 0.5em",
-    //     }}
-    //   >
-    //     <Box>
-    //       <CustomTypography variant="h6">User Details</CustomTypography>
-    //       <CustomButton sx={{ display: "flex", gap: "1em" }}>
-    //         <Typography variant="body1">Name</Typography>
-    //         <Chip
-    //           sx={{
-    //             whiteSpace: "nowrap",
-    //             overflow: "hidden",
-    //             textOverflow: "ellipsis",
-    //             whiteSpace: "normal",
-    //           }}
-    //           key="Name"
-    //           label={response?.userName}
-    //         />
-    //       </CustomButton>
-    //       <CustomButton sx={{ display: "flex", gap: "1em" }}>
-    //         <Typography variant="body1">Email</Typography>
-    //         <Chip
-    //           sx={{
-    //             whiteSpace: "nowrap",
-    //             overflow: "hidden",
-    //             textOverflow: "ellipsis",
-    //             whiteSpace: "normal",
-    //           }}
-    //           key="Name"
-    //           label={response?.email}
-    //         />{" "}
-    //       </CustomButton>
-    //       <CustomButton sx={{ display: "flex", gap: "1em" }}>
-    //         <Typography variant="body1">Phone</Typography>
-    //         <Chip
-    //           sx={{
-    //             whiteSpace: "nowrap",
-    //             overflow: "hidden",
-    //             textOverflow: "ellipsis",
-    //             whiteSpace: "normal",
-    //           }}
-    //           key="Name"
-    //           label={response?.phone}
-    //         />
-    //       </CustomButton>
-    //       <CustomButton sx={{ display: "flex", gap: "1em" }}>
-    //         <Typography variant="body1">Country</Typography>
-    //         <Chip
-    //           sx={{
-    //             whiteSpace: "nowrap",
-    //             overflow: "hidden",
-    //             textOverflow: "ellipsis",
-    //             whiteSpace: "normal",
-    //           }}
-    //           key="Name"
-    //           label={response?.country}
-    //         />
-    //       </CustomButton>
-    //       <CustomButton sx={{ display: "flex", gap: "1em" }}>
-    //         <Typography variant="body1">Company</Typography>
-    //         <Chip
-    //           sx={{
-    //             whiteSpace: "nowrap",
-    //             overflow: "hidden",
-    //             textOverflow: "ellipsis",
-    //             whiteSpace: "normal",
-    //           }}
-    //           key="Name"
-    //           label={response?.company}
-    //         />
-    //       </CustomButton>
-    //       <CustomButton sx={{ display: "flex", gap: "1em" }}>
-    //         <Typography variant="body1">Message</Typography>
-    //         <Chip
-    //           sx={{
-    //             whiteSpace: "nowrap",
-    //             overflow: "hidden",
-    //             textOverflow: "ellipsis",
-    //             whiteSpace: "normal",
-    //           }}
-    //           key="Name"
-    //           label={response?.message}
-    //         />
-    //       </CustomButton>
+    <>
+      <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ maxWidth: "1100px", padding: "0px 20px" }}>
+          {(response.responses && response.responses.length > 0) ? (
+            (response.responses).map((question, index) => (
+              <Box key={index}>
+                <Accordion
+                  TransitionProps={{ timeout: 900 }}
+                  sx={{
+                    borderLeft: "0px",
+                    borderRight: "0px",
+                    "& .MuiSvgIcon-root": {
+                      height: "1.5rem",
+                      width: "1.5rem",
+                      fontWeight: "100",
+                      color: "#4571d3"
+                    },
+                    "& .MuiAccordionSummary-root": {
+                      height: "130px",
+                      backgroundColor: "white",
 
-    //     </Box>
-    //     {response?.responses?.length && response.responses[0].resources ? (
-    //       <Box sx={{ display: "flex", flexDirection: "column", gap: ".5em " }}>
-    //         <CustomTypography variant="h6">Resources</CustomTypography>
-    //         {response.responses[0].resources.map((data) => (
-    //           <Box
-    //             sx={{
-    //               gap: "1em",
-    //               backgroundColor: "hsla(0, 0%, 0%, 0.03)",
-    //               padding: ".5em",
-    //             }}
-    //           >
-    //             <CustomButton>
-    //               <Typography>Resource</Typography>
-    //               <Chip
-    //                 sx={{
-    //                   maxWidth: "100%",
-    //                   overflow: "hidden",
-    //                   textOverflow: "ellipsis",
-    //                   whiteSpace: "nowrap",
-    //                 }}
-    //                 key="Resource"
-    //                 label={data.resource}
-    //               />
-    //             </CustomButton>
-    //             <CustomButton>
-    //               <Typography>Resource Option</Typography>
 
-    //               <Chip
-    //                 sx={{
-    //                   maxWidth: "100%",
-    //                   overflow: "hidden",
-    //                   textOverflow: "ellipsis",
-    //                   whiteSpace: "nowrap",
-    //                 }}
-    //                 key="Resource Option"
-    //                 label={`${data.resourceOption.opt} ($${data.resourceOption.price})`}
-    //               />
-    //             </CustomButton>
-    //             <CustomButton>
-    //               <Typography>Seniority Level</Typography>
+                    }
+                  }}
+                  expanded={showOption === index}
+                  onChange={() => { toggleOption(index) }}
+                >
+                  <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                    {index === 0 && question.resources ? (
+                      <Box>
+                        <CustomTypography>Resources</CustomTypography>
+                        {showOption === index ? (
 
-    //               <Chip
-    //                 sx={{
-    //                   whiteSpace: "nowrap",
-    //                   overflow: "hidden",
-    //                   textOverflow: "ellipsis",
-    //                 }}
-    //                 key="Seniority Level"
-    //                 label={data.seniorityLevel}
-    //               />
-    //             </CustomButton>
-    //             <CustomButton>
-    //               <Typography>Number of Resources</Typography>
+                          <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>Hide Answer</Typography>
+                        ) : (
+                          <Box sx={{ display: "flex" }}>
+                            <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>View Answer</Typography>
+                            <ArrowRightAltIcon sx={{ fontSize: "16px", marginBottom: "2px" }} />
 
-    //               <Chip key="Number of Resources" label={data.numOfResources} />
-    //             </CustomButton>
-    //           </Box>
-    //         ))}
-    //         <CustomTypography variant="h6">Queries</CustomTypography>
-    //         {response.responses.slice(1).map((data) => (
-    //           <CustomButton sx={{ gap: "1em" }}>
-    //             <Typography>{data.label}</Typography>
+                          </Box>
+                        )}
+                      </Box>
+                    ) : (
+                      <Box>
+                        <CustomTypography key={index}>
+                          {typeof question.question === 'string' ? (
+                            question.question // Display the question if it's a string
+                          ) : (
+                            question.question.question // Display the question.question if it's an object
+                          )}
+                        </CustomTypography>
+                        {showOption === index ? (
+                          <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>Hide Answer</Typography>
+                        ) : (
+                          <Box sx={{ display: "flex" }}>
+                            <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>View Answer</Typography>
+                            <ArrowRightAltIcon sx={{ fontSize: "16px", marginBottom: "2px" }} />
 
-    //             {data.selectedData.map((eachOption) => (
-    //               <Chip
-    //                 sx={{
-    //                   whiteSpace: "nowrap",
-    //                   overflow: "hidden",
-    //                   textOverflow: "ellipsis",
-    //                 }}
-    //                 key="Questions"
-    //                 label={`${eachOption.opt} ($${eachOption.price})`}
-    //               />
-    //             ))}
-    //           </CustomButton>
-    //         ))}
-    //       </Box>
-    //     ) : (
-    //       <Box>
-    //         <CustomTypography variant="h6">Queries</CustomTypography>
+                          </Box>
+                        )}
+                      </Box>
+                    )}
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ border: "0px" }}>
+                    {/* Display selectedData or selectedOption based on the type of response */}
+                    {index === 0 && question.resources ? (
+                      question.resources.map((resource, idx) => (
+                        <ul style={{ color: "#708090", fontSize: "20px", marginLeft: "15px" }}>
+                          <li>
+                            <Typography sx={{ fontWeight: "bold", color: "#708090", paddingBottom: "50px" }} key={idx}>{resource.resource}</Typography>
+                          </li>
+                        </ul>
+                      ))
+                    ) : (
+                      (question.selectedData && question.selectedData.length > 0) ? (
+                        question.selectedData.map((option, idx) => (
+                          <ul style={{ color: "#708090", fontSize: "20px", marginLeft: "15px" }}>
+                            <li>
+                              <Typography sx={{ fontWeight: "bold", color: "#708090", paddingBottom: "50px" }} key={idx}>{option.opt}</Typography>
+                            </li>
+                          </ul>
 
-    //         {response?.responses?.length && response.responses.map((data) => (
-    //           <>
-    //             <CustomButton sx={{ gap: "1em" }}>
-    //               <Typography>{data.question.label}</Typography>
-    //               <Box
-    //                 sx={{
-    //                   display: "flex",
-    //                   justifyContent: "normal",
-    //                   gap: ".5em",
-    //                 }}
-    //               >
-    //                 {data.selectedOption.map((eachOption) => (
-    //                   <Chip
-    //                     sx={{
-    //                       whiteSpace: "nowrap",
-    //                       overflow: "hidden",
-    //                       textOverflow: "ellipsis",
-    //                     }}
-    //                     key="Questions"
-    //                     label={`${eachOption.opt} ($${eachOption.price})`}
-    //                   />
-    //                 ))}
-    //               </Box>
-    //             </CustomButton>
-    //           </>
-    //         ))}
-    //       </Box>
-    //     )}
-    //     <CustomButton sx={{ gap: "1em" }}>
-    //       <Typography> Total Cost</Typography>
-    //       <Chip
-    //         sx={{
-    //           whiteSpace: "nowrap",
-    //           overflow: "hidden",
-    //           textOverflow: "ellipsis",
-    //         }}
-    //         key="Cost"
-    //         label={`$${response.totalCost}`}
-    //       />
-    //     </CustomButton>
-    //   </Box>
-    // </>
+                        ))
+                      ) : (
+                        (question.selectedOption && question.selectedOption.length > 0) && (
+                          question.selectedOption.map((option, idx) => (
+                            <ul style={{ color: "#708090", fontSize: "20px", marginLeft: "15px" }}>
+                              <li>
+                                <Typography sx={{ fontWeight: "bold", color: "#708090", height: "50px" }} key={idx}>{option.opt}</Typography>
+                              </li>
+                            </ul>
+                          ))
+                        )
+                      )
+                    )}
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            ))
+          ) : (
+            <Typography>No responses available yet.</Typography>
+          )}
+        </div>
+      </Box>
+    </>
   );
 };
 

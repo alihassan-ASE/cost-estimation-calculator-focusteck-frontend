@@ -20,7 +20,6 @@ const ShowOption = ({
   selectedOptionPassToParent,
 }) => {
 
-  console.log("option",options)
   return (
     <Box>
       {typeOfSelection === "single" ? (

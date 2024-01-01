@@ -51,7 +51,6 @@ const TilesComponent = ({
   selectedOptionPassToParent,
 }) => {
 
-  console.log("Tiles");
   const [selectedFormats, setSelectedFormats] = useState("");
 
   useEffect(() => {

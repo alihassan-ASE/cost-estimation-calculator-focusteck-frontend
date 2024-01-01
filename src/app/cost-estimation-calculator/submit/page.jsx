@@ -11,7 +11,7 @@ const page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!response?.responses.length) {
+    if (!response?.responses?.length) {
       router.push("/");
     } else {
       setAuth(true);

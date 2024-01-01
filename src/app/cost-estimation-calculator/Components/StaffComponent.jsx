@@ -20,26 +20,9 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShowSummary from "./ShowSummary";
 
+
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
-  color: "#000",
-  backgroundColor: "#fff",
-  border: "1px solid #fff",
-  "&:hover": {
-    color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
-  },
-  "&:active": {
-    color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
-  },
-  "&:focus": {
-    color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
-  },
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -67,11 +50,9 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
 const CustomBackButton = styled(Button)(({ theme }) => ({
   padding: 0,
   color: "#ACACAC",
-  width: "40px",
-  height: "40px",
+  height: "50px",
+  width: "50px",
   borderRadius: "50%",
-  position: "absolute",
-  right: "-32px",
   justifyContent: "normal",
   minWidth: "min-content",
   border: "2px solid #ACACAC",
@@ -96,8 +77,9 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
   borderRadius: ".5em",
-  height: 380,
-  width: "362px",
+  margin:"0 1em",
+  height: 445,
+  width: "345px",
   [theme.breakpoints.down("md")]: {
     width: "335px",
   },
@@ -123,31 +105,6 @@ const CustomCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const CustomCostBox = styled(Box)(({ theme }) => ({
-  backgroundColor: "#1E1D28",
-  padding: "2em",
-  borderRadius: "10px",
-  minWidth: "250px",
-  margin: "1em 0",
-  [theme.breakpoints.down("sm")]: {
-    padding: "1em",
-  },
-}));
-
-const CustomNormalTypography = styled(Typography)(({ theme }) => ({
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
-}));
-
-const CustomTypography = styled(Typography)(({ theme }) => ({
-  color: "#fff",
-  fontSize: "2em",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
-}));
-
 const StaffComponent = () => {
   const [count, setCount] = useState(0);
   const [values, setValues] = useState([]);
@@ -158,11 +115,11 @@ const StaffComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [currentState, setCurrentState] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [actualResponses, setActualResponses] = useState({});
+  const [actualResponses , setActualResponses] = useState({});
 
   const [isOptionSelected, setIsOptionSelected] = useState(true);
 
-  const [addedOption, setAddedOption] = useState([]);
+  const [addedOption , setAddedOption] = useState([]);
 
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
@@ -188,13 +145,13 @@ const StaffComponent = () => {
     });
   }, []);
 
-  useEffect(() => {
+  useEffect(()=>{
 
-    if (resource.length) {
-      nextQuestion();
-    }
-
-  }, [addedOption])
+        if(resource.length){
+          nextQuestion();
+        }
+    
+  },[addedOption])
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -293,7 +250,7 @@ const StaffComponent = () => {
     setLastQuestionSelectedOption(step.selectedData);
     setIsStepperClicked(true);
     slider();
-
+    
   };
 
   // receiving selected option from child Component
@@ -418,7 +375,7 @@ const StaffComponent = () => {
 
   useEffect(() => {
     if (currentQuestionIndex > additionalQuesiton.length && additionalQuesiton.length != 0) {
-
+  
       setDisplayQuestion(false);
       actualResponses.totalCost = totalCost;
     }
@@ -469,7 +426,7 @@ const StaffComponent = () => {
                   display: "flex",
                   flexWrap: "wrap",
                   alignItems: "center",
-                  padding: "1em 2em",
+                  padding: "2em",
                   gap: "1em",
                 }}
               >
@@ -490,12 +447,11 @@ const StaffComponent = () => {
               </Box>
               <Box
                 sx={{
-                  margin: "1em 3em",
+                  margin: "2em 1em",
                 }}
               >
                 <CustomNextButton
-                  size="medium"
-                  variant="contained"
+                 sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" },color:"white" }}
                   onClick={() => {
                     nextQuestion();
                   }}
@@ -510,33 +466,33 @@ const StaffComponent = () => {
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} sx={{ maxWidth: "100%" }}>
               <Grid item lg={8} md={12} sm={12} xs={12}>
                 <Box sx={{
-                  display: "flex", alignItems: "center",
-                  padding: "2.2em 0 1em 0",
-                  gap: isNarrowScreen && actualResponses.responses.length > 0 ? "1.9em" : 0,
-                  paddingLeft: isNarrowScreen && actualResponses.responses.length > 0 ? "7.4%" : 0
+                  display: "flex", gap: "1em", alignItems: "center",
+                  paddingTop: "1.9em",
                 }}>
                   <Box
                     sx={{
                       display: "flex",
                       gap: "1em",
                       alignItems: "center",
-                      position: "relative"
+                      margin: "1em 0",
                     }}
                   >
                     {currentQuestionIndex > 0 && (
                       <CustomBackButton onClick={backQuestion}>
                         <KeyboardBackspaceIcon
                           sx={{
-                            textAlign: "center",
-                            fontSize: "1.6em",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            display: "flex",
-                            width: "100%",
-                            transition: "all 0.3s ease-in-out",
-                            ":hover": {
-                              cursor: "pointer",
-                            },
+                            color: "#ACACAC",
+                            // border: "2px solid #ACACAC",
+                            // borderRadius: "50%",
+                            padding: ".3em",
+                            borderRadius: "50%",
+
+                            // ":hover": {
+                            //   cursor: "pointer",
+                            //   backgroundColor: "#0069d9",
+                            //   border: "2px solid #fff",
+                            //   color: "#fff",
+                            // },
                           }}
                         />
                       </CustomBackButton>
@@ -546,19 +502,13 @@ const StaffComponent = () => {
                     displayQuestion
                       ?
                       <Box
-                        sx={{ paddingLeft: "7.4%" }}
+
                       >
                         <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
                           Question {actualResponses.responses.length}
                         </Typography>
                       </Box>
-                      : <Box
-                        sx={{ paddingLeft: "7.4%" }}
-                      >
-                        <CustomNormalTypography variant="h5" sx={{ color: "#89899C", fontWeight: 600, }}>
-                          Your Results
-                        </CustomNormalTypography>
-                      </Box>
+                      : null
                   }
                 </Box>
 
@@ -576,7 +526,7 @@ const StaffComponent = () => {
                         node.style.transform = "translateY(-50px)";
                       }}
                     >
-                      <div style={{ padding: "0 7.4%" }}>
+                      <div style={{ padding: "0 4.7%" }}>
                         {
                           displayQuestion
                             ?
@@ -590,42 +540,40 @@ const StaffComponent = () => {
                       </div>
                     </Slide>
                     : ""}
+                {/* {additionalQuesiton.length >= currentQuestionIndex && (
+                  <Box
+                    sx={{
+                      margin: "2em 0",
+                    }}
+                  >
+                    <CustomNextButton
+                      size="medium"
+                      variant="contained"
+                      sx={{ width: 150 }}
+                      onClick={nextQuestion}
+                      disabled={isOptionSelected}
+                    >
+                      Next
+                    </CustomNextButton>
+                  </Box>
+                )} */}
 
               </Grid>
               <Box sx={{
                 borderRight: orientation === "vertical" ? "1px solid grey" : "0",
                 borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-                width: orientation !== "vertical" ? "90%" : "0",
-                margin: orientation !== "vertical" ? "auto" : "0",
+                width: orientation !== "vertical" ? "100%" : "0",
                 marginTop: "7%",
-                height: orientation === "vertical" ? "60vh" : 0
+                height: orientation === "vertical" ? "65vh" : 0
 
               }}></Box>
               <Grid item lg={3.9} md={12} sm={12} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
-                  <div style={{
-                    padding: orientation !== "vertical" ? "0 7.4%" : 0
-                  }}>
-                    <Stepper
-                      responses={actualResponses.responses}
-                      changeActiveQuestion={changeActiveQuestion}
-                      orientation={orientation}
-                    />
-                    {
-                      displayQuestion
-                        ?
-                        <CustomCostBox>
-                          <CustomNormalTypography
-                            variant="h6"
-                            sx={{ color: "#fff", fontSize: "1.1em" }}
-                          >
-                            Estimated Cost
-                          </CustomNormalTypography>
-                          <CustomTypography>{totalCost} $</CustomTypography>
-                        </CustomCostBox>
-                        : null
-                    }
-                  </div>
+                  <Stepper
+                    responses={actualResponses.responses}
+                    changeActiveQuestion={changeActiveQuestion}
+                    orientation={orientation}
+                  />
                 ) : null}
               </Grid>
             </Grid>
