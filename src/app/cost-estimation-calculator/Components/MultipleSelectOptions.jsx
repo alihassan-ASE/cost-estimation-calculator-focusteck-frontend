@@ -65,7 +65,6 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
-
   "&:hover": {
     color: "#fff",
     backgroundColor: "#0045e6",
@@ -73,6 +72,7 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
   "&.Mui-selected": {
     backgroundColor: "#0045e6",
+    border: "1px solid #fff",
     color: "white",
     "& span.price": {
       color: "#fff",

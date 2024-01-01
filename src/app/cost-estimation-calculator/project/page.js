@@ -87,6 +87,7 @@ const CustomCostBox = styled(Box)(({ theme }) => ({
   padding: "2em",
   borderRadius: "10px",
   minWidth: "250px",
+  margin: "1em 0",
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
   },
@@ -242,12 +243,17 @@ const page = () => {
     } else {
       setQuestionsToShow(step.stack);
     }
+    if (step.question.typeofselection === "multiple") {
+      setSelectedData(step.selectedOption)
+      setIsOptionSelected(true);
+    }
     slider();
 
   };
 
   // Handling Back Quesiton Functionality
   const backQuestion = () => {
+
     setDisplayQuestion(true);
     cost = 0;
 
@@ -368,13 +374,6 @@ const page = () => {
       currentState === "post" &&
       currentQuestionIndex > postProjectQuestions.length
     ) {
-      // let data = JSON.stringify({
-      //   responses: actualResponses,
-      //   totalCost: totalCost,
-      // });
-      // if (data) {
-      //   localStorage.setItem("Response", data);
-      // }
       setDisplayQuestion(false);
     }
   }, [nextQuestion]);
@@ -386,7 +385,6 @@ const page = () => {
       setSlideIn(true);
     }, 250);
   };
-  console.log("actual Responses", actualResponses)
   return (
     <Box ref={projectPageRef} >
       {fetchQuesitons !== null ? (
@@ -499,7 +497,7 @@ const page = () => {
 
               {
                 isOptionSelected ?
-                  <Box sx={{ display: "flex", gap: "2em", justifyContent: "flex-end", paddingBottom: "1em" }}>
+                  <Box sx={{ display: "flex", gap: "2em", justifyContent: "flex-end", paddingBottom: "1em", margin: "0 1em" }}>
                     <CustomNextButton
                       size="medium"
                       variant="contained"

@@ -252,10 +252,8 @@ const StaffComponentV2 = () => {
     setIsOptionSelected(false);
     setAddedOption(resp);
   };
-  // console.log("questionState: ", currentQuestionType);
 
   const selectedOptionPassToParent = (data, resourceOption, stateVal) => {
-    // console.log("resource Option: ", resourceOption);
     if (stateVal < 3) {
       setQuestionState(stateVal);
     } else {
@@ -392,12 +390,6 @@ const StaffComponentV2 = () => {
   //   }
   //   return tags;
   // };
-
-  // console.log("currentQuestion: ", currentQuestion);
-  // console.log("actualResponses", actualResponses);
-  console.log("values: ", values);
-  // console.log("actual responses: ", questionState);
-  // console.log("count: ", count);
 
   return (
     <Box sx={{ margin: "1em 2em" }}>

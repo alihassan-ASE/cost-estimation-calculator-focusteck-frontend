@@ -116,7 +116,7 @@ const StaffResource = ({
         width: 270,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", }}>
+      <Box sx={{ display: "flex", flexDirection: "column", rowGap: "10px" }}>
         <CloseIcon onClick={() => { deleteResource(index) }} sx={{ position: "relative", marginLeft: "auto", transition: "all 0.7s ease", fontSize: "20px", fontWeight: 'bold', borderRadius: "50%", color: "red", height: "20px", width: "20px", cursor: "pointer", "&:hover": { backgroundColor: "red", color: "white" } }} />
         {showDropdown && (
           <QuestionsComponent

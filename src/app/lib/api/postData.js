@@ -1,7 +1,6 @@
 import { baseUrl } from "../../../config/constants";
 
 export const postData = async (data) => {
-
   try {
     if (data.responses && data.responses.length > 0) {
       await fetch(`${baseUrl}/postdata`, {
@@ -11,9 +10,10 @@ export const postData = async (data) => {
         },
         body: JSON.stringify(data),
       });
-    } else {
-    }
+    } 
   } catch (error) {
     console.log("Error", error);
   }
 };
+
+

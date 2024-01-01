@@ -24,7 +24,7 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
   color: "#000",
   backgroundColor: "#fff",
-  border: "1px solid #000",
+  border: "1px solid #fff",
   "&:hover": {
     color: "#fff",
     backgroundColor: "#0045e6",
@@ -91,6 +91,7 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
 }));
+
 const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
@@ -127,6 +128,7 @@ const CustomCostBox = styled(Box)(({ theme }) => ({
   padding: "2em",
   borderRadius: "10px",
   minWidth: "250px",
+  margin: "1em 0",
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
   },
@@ -166,7 +168,7 @@ const StaffComponent = () => {
   const [isStepperClicked, setIsStepperClicked] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [orientation, setOrientation] = useState("horizontal");
-  const isNarrowScreen = useMediaQuery("(max-width:600px)");
+  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const [resource, setResource] = useState([]);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
@@ -186,6 +188,13 @@ const StaffComponent = () => {
     });
   }, []);
 
+  useEffect(() => {
+
+    if (resource.length) {
+      nextQuestion();
+    }
+
+  }, [addedOption])
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -270,6 +279,7 @@ const StaffComponent = () => {
 
   // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
+
     const { index, step } = obj;
     setDisplayQuestion(true);
 
@@ -282,7 +292,8 @@ const StaffComponent = () => {
     actualResponses.responses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedData);
     setIsStepperClicked(true);
-    setIsOptionSelected(false);
+    slider();
+
   };
 
   // receiving selected option from child Component
@@ -296,6 +307,7 @@ const StaffComponent = () => {
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     dataObj.resources = values;
     setResource(dataObj.resources);
     currentState
@@ -309,17 +321,20 @@ const StaffComponent = () => {
         };
       });
   };
+
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
+
     setIsOptionSelected(false);
     setAddedOption(resp);
+
   };
 
   // Handling Next Quesiton
   const nextQuestion = () => {
+
     setCurrentState(false);
     setButtonState(true);
-    setIsOptionSelected((prev) => !prev);
     setStepperState(true);
 
     let currentQuestionLocal = currentQuestion;
@@ -351,6 +366,7 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
+
     setDisplayQuestion(true);
 
     let lastQuestion;
@@ -396,15 +412,17 @@ const StaffComponent = () => {
         }
       }
     }
+
+    slider();
   };
 
   useEffect(() => {
-    if (currentQuestionIndex > additionalQuesiton.length) {
+    if (currentQuestionIndex > additionalQuesiton.length && additionalQuesiton.length != 0) {
+
       setDisplayQuestion(false);
       actualResponses.totalCost = totalCost;
     }
   }, [nextQuestion]);
-
 
   // Showing selected Resources
   const returnResources = () => {
@@ -494,8 +512,8 @@ const StaffComponent = () => {
                 <Box sx={{
                   display: "flex", alignItems: "center",
                   padding: "2.2em 0 1em 0",
-                  gap: isNarrowScreen && actualResponses.length > 0 ? "1.9em" : 0,
-                  paddingLeft: isNarrowScreen && actualResponses.length > 0 ? "7.4%" : 0
+                  gap: isNarrowScreen && actualResponses.responses.length > 0 ? "1.9em" : 0,
+                  paddingLeft: isNarrowScreen && actualResponses.responses.length > 0 ? "7.4%" : 0
                 }}>
                   <Box
                     sx={{
@@ -572,23 +590,6 @@ const StaffComponent = () => {
                       </div>
                     </Slide>
                     : ""}
-                {additionalQuesiton.length >= currentQuestionIndex && (
-                  <Box
-                    sx={{
-                      margin: "2em 0",
-                    }}
-                  >
-                    <CustomNextButton
-                      size="medium"
-                      variant="contained"
-                      sx={{ width: 150 }}
-                      onClick={nextQuestion}
-                      disabled={isOptionSelected}
-                    >
-                      Next
-                    </CustomNextButton>
-                  </Box>
-                )}
 
               </Grid>
               <Box sx={{

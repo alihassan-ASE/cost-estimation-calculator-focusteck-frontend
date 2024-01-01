@@ -12,7 +12,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
     fontSize: "1.5em",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1em",
+    fontSize: "1.3em",
   },
 }));
 

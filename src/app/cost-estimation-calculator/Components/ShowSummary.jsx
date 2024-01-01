@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography, Modal } from "@mui/material";
+import { Box, Button, Typography, Modal, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -116,14 +116,17 @@ const ShowSummary = ({ response }) => {
   const [industry, setIndustry] = useState("");
   const [actualResponse, setActualResponse] = useState({});
   const [openForm, setOpenForm] = useState(false);
+  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
 
   const handleClose = () => setOpenForm(false);
 
+  const [data, setData] = useState({})
   const handleForm = () => {
     setOpenForm(true)
   }
 
   const getActualResponse = (value, formData) => {
+    console.log("formData", formData)
     setOpenForm(value)
     setActualResponse(formData);
     let data = JSON.stringify(formData);
@@ -136,30 +139,34 @@ const ShowSummary = ({ response }) => {
     {
       response.responses.map((data, index) => {
         if (data.label === "engagement period") {
-          data.selectedData.map((value) => {
+          data.selectedData?.map((value) => {
             setTimeline(value.opt);
+            response.timeline = value.opt
           });
         }
         if (data.question?.label === "project timeline") {
           data.selectedOption.map((value) => {
             setTimeline(value.opt);
+            response.timeline = value.opt
           });
         }
         if ((data.label || data.question?.label) === "type of industry") {
           (data.selectedData || data.selectedOption).map((value) => {
             setIndustry(value.opt);
+            response.industry = value.opt
           });
         }
         if ((data.label || data.question?.label) === "system type") {
           (data.selectedData || data.selectedOption).map((value) => {
             setSystemType(value.opt);
+            response.systemType = value.opt
           });
+
         }
       });
     }
   }, [response]);
 
-  console.log(response)
 
   return (
     <>
@@ -188,7 +195,7 @@ const ShowSummary = ({ response }) => {
               </CustomNormalTypography>
             </Box>
 
-            <Box sx={{ display: "flex", gap: ".5em" }}>
+            <Box sx={{ display: "flex", gap: ".5em", flexWrap: isNarrowScreen ? "wrap" : "nowrap" }}>
               <CustomBox>
                 <CustomNormalTypography
                   variant="h6"

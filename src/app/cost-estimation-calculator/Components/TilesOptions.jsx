@@ -41,7 +41,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: ".7rem ",
-    width: "160px",
+    width: "120px",
   },
 }));
 
