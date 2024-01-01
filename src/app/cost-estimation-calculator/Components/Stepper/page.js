@@ -122,20 +122,20 @@ export default function VerticalLinearStepper(props) {
                                   width: "1.2rem",
                                   height: "1.2rem",
                                   alignItems: "start",
-                                  color: index < activeStep ? "#0045e6" : "0045e6",
+                                  color: index < activeStep ? "#0045e6" : "#0045e6",
                                 },
-                                position: "absolute",
-                                top: 0,
-                                "& .MuiStepLabel-root": {
-                                  padding: 0,
-                                  alignItems: "start"
-                                },
-                                "& .MuiStepIcon-root": {
-                                  width: "1.2rem",
-                                  height: "1.2rem",
-                                },
+
                                 "& .MuiStepLabel-label": {
                                   fontSize: "0.7rem",
+                                  alignItems: "start",
+                                  padding: "0px"
+                                },
+                                "&.css-1xr15il-MuiStepLabel-root": {
+                                },
+                                "& .MuiSvgIcon-root-MuiStepIcon-root .Mui-completed": {
+                                  backgroundColor: "#0045e6"
+                                },
+                                "& .MuiBox-root": {
                                   alignItems: "start"
                                 },
                                 minWidth: "170px",
@@ -149,14 +149,6 @@ export default function VerticalLinearStepper(props) {
                                   <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>  {resource.resource}</Typography>
                                 </Box>
                                 <Box sx={{ width: "50%", padding: "3px" }} >
-
-                                  {/* <Typography textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{
-                                    fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-                                      ","
-                                    ),
-                                  }}>
-                                    {resource.resource}
-                                  </Typography> */}
                                   <Typography textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{
                                     fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                                       ","
@@ -164,20 +156,6 @@ export default function VerticalLinearStepper(props) {
                                   }}>
                                     {resource.resourceOption.opt}
                                   </Typography>
-                                  {/* <Typography textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{
-                                    fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-                                      ","
-                                    ),
-                                  }}>
-                                    {resource.seniorityLevel}
-                                  </Typography>
-                                  <Typography textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{
-                                    fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-                                      ","
-                                    ),
-                                  }}>
-                                    {resource.numOfResources}
-                                  </Typography> */}
                                 </Box>
                               </Box>
 
@@ -267,7 +245,9 @@ export default function VerticalLinearStepper(props) {
                     cursor="pointer"
                     onClick={() => setActiveStep(index + 1)}
                   >
-                    {index < questionsArray.length ? questionsArray[index] : ''}
+                    <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>
+                      {index < questionsArray.length ? questionsArray[index] : ''}
+                    </Typography>
                   </StepLabel>
                 )}
               </Step>
