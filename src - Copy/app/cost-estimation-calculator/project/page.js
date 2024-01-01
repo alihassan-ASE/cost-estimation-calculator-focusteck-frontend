@@ -519,8 +519,8 @@ const page = () => {
               borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
               width: orientation !== "vertical" ? "90%" : "0",
               margin: orientation !== "vertical" ? "auto" : "0",
-              marginTop: "5%",
-              height: orientation === "vertical" ? "90vh" : 0
+              marginTop: "7%",
+              height: orientation === "vertical" ? "65vh" : 0
             }}></Box>
             <Grid item lg={3.9} md={12} sm={12} xs={12}>
               <div style={{
@@ -541,7 +541,7 @@ const page = () => {
                       >
                         Estimated Cost
                       </CustomNormalTypography>
-                      <CustomTypography>$ {totalCost}</CustomTypography>
+                      <CustomTypography>{totalCost} $</CustomTypography>
                     </CustomCostBox>
                     : null
                 }

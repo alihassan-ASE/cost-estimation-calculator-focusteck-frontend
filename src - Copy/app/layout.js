@@ -25,7 +25,12 @@ import {
 } from "@mui/material";
 import { baseUrl } from "@/config/constants";
 
-
+const CustomBox = styled(Box)(({ theme }) => ({
+  margin: "0 2em",
+  [theme.breakpoints.down("sm")]: {
+    margin: "0",
+  },
+}));
 
 const CustomStartButton = styled(Button)(({ theme }) => ({
   width: "300px",
@@ -55,6 +60,12 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
       textIndent: 0,
     },
   },
+  // [theme.breakpoints.up("xl")]: {
+  //   fontSize: "3em",
+  //   width: "100%",
+  //   height: "100%",
+  //   padding: "1em 7em",
+  // },
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
   },
@@ -66,6 +77,9 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
 
 const CustomBannerBox = styled(Box)(({ theme }) => ({
   color: "white",
+  // display: "flex",
+  // alignItems: "center",
+
   padding: "1em 0",
   background: `linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5),rgba(0,0,0,.5)), url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
   backgroundRepeat: "no-repeat",
@@ -76,6 +90,10 @@ const CustomBannerBox = styled(Box)(({ theme }) => ({
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
   maxWidth: 800,
+  // [theme.breakpoints.up("xl")]: {
+  //   fontSize: "7em",
+  //   maxWidth: "100%",
+  // },
   [theme.breakpoints.down("md")]: {
     fontSize: "3em",
   },
@@ -86,6 +104,10 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 
 const CustomParagraph = styled(Typography)(({ theme }) => ({
   maxWidth: 600,
+  // [theme.breakpoints.up("xl")]: {
+  //   maxWidth: "40%",
+  //   fontSize: "3rem",
+  // },
 }));
 
 const CustomNavbarButton = styled(Link)(({ theme }) => ({
@@ -215,9 +237,9 @@ const CustomToolBar = styled(Box)(({ theme }) => ({
 
 export default function RootLayout({ children }) {
   const isNarrowScreen = useMediaQuery("(max-width:1148px)");
-  const isNarrowForStaff = useMediaQuery("(max-width:500px)");
   const isMobileScreen = useMediaQuery("(max-width:360px)");
   const route = useRouter();
+  const [showMenuIcon, setShowMenuIcon] = useState(true);
 
   const baseRoute = usePathname();
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
@@ -226,13 +248,6 @@ export default function RootLayout({ children }) {
   const handleNavBar = () => {
     setHamburgerClicked(!hamburgerClicked);
   };
-
-  const CustomBox = styled(Box)(({ theme }) => ({
-    padding: isNarrowForStaff ? "0 .5em" : "0 2em",
-    [theme.breakpoints.down("sm")]: {
-      margin: "0",
-    },
-  }));
 
   useEffect(() => {
     if (hamburgerClicked) {
@@ -612,12 +627,12 @@ export default function RootLayout({ children }) {
             "/cost-estimation-calculator" ? (
             <CustomBox
               id="scroll-down"
-              sx={{ minHeight: "100vh", display: "flex", alignItems: "center", paddingTop: "1em", paddingBottom: "3em" }}
+              sx={{ minHeight: "100vh", display: "flex", alignItems: "center", marginTop: "1em", marginBottom: "3em" }}
             >
               {children}
             </CustomBox>
           ) : (
-            <CustomBox id="scroll-down" sx={{ minHeight: "100vh", paddingTop: "1em", paddingBottom: "3em" }}>
+            <CustomBox id="scroll-down" sx={{ minHeight: "100vh", marginTop: "1em", marginBottom: "3em" }}>
               {children}
             </CustomBox>
           )}

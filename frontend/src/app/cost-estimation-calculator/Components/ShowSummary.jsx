@@ -202,7 +202,7 @@ const ShowSummary = ({ response }) => {
                 >
                   Estimated Cost
                 </CustomNormalTypography>
-                <CustomTypography>$ {response.totalCost}</CustomTypography>
+                <CustomTypography>{response.totalCost} $</CustomTypography>
               </CustomBox>
               <CustomBox>
                 <CustomNormalTypography
