@@ -19,6 +19,8 @@ const ShowOption = ({
   typeofUI,
   selectedOptionPassToParent,
 }) => {
+
+  console.log("option",options)
   return (
     <Box>
       {typeOfSelection === "single" ? (
@@ -33,6 +35,7 @@ const ShowOption = ({
         
         ) : typeofUI === "Tiles" ? (
           options.length > 4 ? (
+            
             <TilesComponent
               options={options}
               selectedOption={selectedOption}

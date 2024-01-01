@@ -31,11 +31,11 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
     ","
   ),
   "&:hover": {
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     color: "#fff",
   },
   "&:focus": {
-    backgroundColor: "#005DBD",
+    backgroundColor: "#0045e6",
     color: "#fff",
   },
 
@@ -111,7 +111,7 @@ const page = () => {
             <Icon
               sx={{
                 fontSize: "2em",
-                color: "#005DBD",
+                color: "#0045e6",
                 "&:hover": { color: "#fff" },
               }}
             />

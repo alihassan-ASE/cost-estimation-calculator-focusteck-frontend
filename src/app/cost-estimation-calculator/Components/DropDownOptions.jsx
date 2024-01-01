@@ -123,7 +123,7 @@ const DropDownComponent = ({
   // };
 
   return (
-    <StyledFormControl sx={{"& .MuiSvgIcon-root ":{backgroundColor:"#0045e6",borderRadius:"50%",color:"white",transition:"all 0.5s ease-in-out",right:"12px",height:"2.5rem",width:"2.5rem",top:"10px"}}}>
+    <StyledFormControl sx={{"& .MuiSvgIcon-root ":{backgroundColor:"#0045e6",borderRadius:"50%",color:"white",transition:"all 0.5s ease-in-out",right:"12px",height:"2.4rem",width:"2.4rem",top:"10px"}}}>
       <CustomInputLabel id="demo-simple-select-label">{label?label:"Select Your Option"}</CustomInputLabel>
 
       <Select

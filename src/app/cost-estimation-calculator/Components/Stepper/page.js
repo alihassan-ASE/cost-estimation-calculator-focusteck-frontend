@@ -117,6 +117,15 @@ export default function VerticalLinearStepper(props) {
               textAlign: "start"
 
             },
+            "& .MuiStepConnector-line":{
+              borderColor:"#0045e6",
+              borderLeftWidth:"2px",
+              marginLeft:"-3px",
+              padding:"1px"
+            },
+            "& .MuiStepConnector-root":{
+              marginTop:"-2px",
+            },
             borderColor: "#0045e6",
 
           }}
@@ -139,9 +148,6 @@ export default function VerticalLinearStepper(props) {
                               fontSize: "0.7rem",
                               alignItems: "start",
                               padding: "0px"
-                            },
-                            "&.css-1xr15il-MuiStepLabel-root": {
-                              padding: "0"
                             },
                             "& .MuiSvgIcon-root-MuiStepIcon-root .Mui-completed": {
                               backgroundColor: "#0045e6"

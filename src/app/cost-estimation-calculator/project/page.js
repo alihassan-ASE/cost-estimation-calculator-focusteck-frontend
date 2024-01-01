@@ -107,7 +107,6 @@ const page = () => {
 
   const projectPageRef = useRef(null);
 
-  const route = useRouter();
   let cost;
 
   useEffect(() => {
@@ -169,6 +168,7 @@ const page = () => {
 
   // getting Response from child Component
   const getResponsesData = (resp) => {
+
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
@@ -178,10 +178,12 @@ const page = () => {
     else {
       setIsOptionSelected(false)
     }
+
   };
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -217,6 +219,7 @@ const page = () => {
       setQuestionsToShow(step.stack);
     }
     if(step.question.typeofselection === "multiple"){
+      setSelectedData(step.selectedOption);
       setIsOptionSelected(true);
     }
     slider();
@@ -262,7 +265,6 @@ const page = () => {
 
     cost = 0;
     setStepperState(true);
-
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;

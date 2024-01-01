@@ -51,6 +51,8 @@ const TilesComponent = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
+
+  console.log("Tiles");
   const [selectedFormats, setSelectedFormats] = useState("");
 
   useEffect(() => {
@@ -86,8 +88,8 @@ const TilesComponent = ({
             sx={
               checkSelectedOption(data.opt, data.price)
                 ? {
-                  backgroundColor: "#005DBD",
-                  border: "1px solid #005DBD",
+                  backgroundColor: "#0045e6",
+                  border: "1px solid #0045e6",
                   color: "white",
                 }
                 : {}

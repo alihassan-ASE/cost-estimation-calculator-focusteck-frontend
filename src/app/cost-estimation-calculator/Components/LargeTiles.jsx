@@ -25,18 +25,18 @@ const CustomButton = styled(Button)(({ theme }) => ({
   ),
   "&:hover": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "&:active": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   "&:focus": {
     color: "#fff",
-    backgroundColor: "#005DBD",
-    border: "1px solid #005DBD",
+    backgroundColor: "#0045e6",
+    border: "1px solid #0045e6",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "1rem",
@@ -92,6 +92,8 @@ const LargeTiles = ({
   // }, [options]);
 
   const checkSelectedOption = (value, price) => {
+  console.log("Large Tiles");
+
     const res =
       selectedFormats?.opt === value && selectedFormats?.price === price;
     return !!res;
@@ -114,10 +116,10 @@ const LargeTiles = ({
             }}
             sx={{
               backgroundColor: checkSelectedOption(data.opt, data.price)
-                ? "#005DBD"
+                ? "#0045e6"
                 : "#fff",
               border: checkSelectedOption(data.opt, data.price)
-                ? "1px solid #005DBD"
+                ? "1px solid #0045e6"
                 : "1px solid #fff",
               color: checkSelectedOption(data.opt, data.price)
                 ? "#fff"

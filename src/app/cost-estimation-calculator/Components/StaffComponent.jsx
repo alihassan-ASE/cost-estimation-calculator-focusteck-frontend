@@ -77,7 +77,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
   borderRadius: ".5em",
-  height: 445,
+  height: 380,
   width: "362px",
   [theme.breakpoints.down("md")]: {
     width: "335px",
