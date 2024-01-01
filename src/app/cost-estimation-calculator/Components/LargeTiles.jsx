@@ -16,8 +16,8 @@ const CustomButton = styled(Button)(({ theme }) => ({
   lineHeight: 1.5,
   fontWeight: "normal",
   borderRadius: "5px",
-  width: "180px",
-  height: "180px",
+  width: "200px",
+  height: "200px",
   transition:
     "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
@@ -42,7 +42,8 @@ const CustomButton = styled(Button)(({ theme }) => ({
     fontSize: "1rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: ".8rem",
+    fontSize: "1rem",
+    width: "270px"
   },
 }));
 
@@ -64,32 +65,6 @@ const LargeTiles = ({
     }
   }, [selectedOption, options]);
 
-  // useEffect(() => {
-  //   let maxWidth = 0;
-  //   let maxHeight = 0;
-
-  //   buttonRefs.current.forEach((buttonRef) => {
-  //     if (buttonRef) {
-  //       const { offsetWidth, offsetHeight } = buttonRef;
-  //       if (offsetWidth > maxWidth) {
-  //         maxWidth = offsetWidth;
-  //       }
-  //       if (offsetHeight > maxHeight) {
-  //         maxHeight = offsetHeight;
-  //       }
-  //     }
-  //   });
-
-  //   const finalWidth = maxWidth > 140 ? maxWidth : 140;
-  //   const finalHeight = maxHeight > 140 ? maxHeight : 140;
-
-  //   buttonRefs.current.forEach((buttonRef) => {
-  //     if (buttonRef) {
-  //       buttonRef.style.minWidth = `${finalWidth}px`;
-  //       buttonRef.style.minHeight = `${finalHeight}px`;
-  //     }
-  //   });
-  // }, [options]);
 
   const checkSelectedOption = (value, price) => {
   console.log("Large Tiles");

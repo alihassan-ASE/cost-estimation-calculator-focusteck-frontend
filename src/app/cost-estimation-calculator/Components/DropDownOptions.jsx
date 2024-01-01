@@ -10,8 +10,10 @@ import {
   Button,
   Grid,
   TextField,
+  InputBase
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   width: "100%",
@@ -22,7 +24,7 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 const CustomInputLabel = styled(InputLabel)(({ theme }) => ({
   position: 'absolute',
   top: 0,
-  backgroundColor: 'white', 
+  backgroundColor: 'white',
   padding: theme.spacing(0, 3),
   transformOrigin: 'top left',
   pointerEvents: 'none',
@@ -107,47 +109,62 @@ const DropDownComponent = ({
     }
   }, [selectedOption, options]);
 
-  // const submitOtherVal = () => {
-  //   const trimmedOtherVal = otherVal.trim();
-  //   if (!trimmedOtherVal) {
-  //     setErrorMessage("Field cannot be empty");
-  //     setCheckInputVal(true);
-  //     setInputField(true);
-  //   }
-  //   if (trimmedOtherVal) {
-  //     setErrorMessage(null);
-  //     setInputField(false);
-  //     setCheckInputVal(false);
-  //     setOtherVal(trimmedOtherVal);
-  //   }
-  // };
-
   return (
-    <StyledFormControl sx={{"& .MuiSvgIcon-root ":{backgroundColor:"#0045e6",borderRadius:"50%",color:"white",transition:"all 0.5s ease-in-out",right:"12px",height:"2.4rem",width:"2.4rem",top:"10px"}}}>
-      <CustomInputLabel id="demo-simple-select-label">{label?label:"Select Your Option"}</CustomInputLabel>
+    <StyledFormControl
+      sx={{
+        "& .MuiSvgIcon-root ": {
+          backgroundColor: "#1e1d28",
+          borderRadius: "50%",
+          color: "white",
+          transition: "all 0.5s ease-in-out",
+          right: "8px",
+          height: "1.5rem",
+          width: "1.5rem",
+          top: "10.5px",
+          padding: ".5rem",
+          zIndex: 1
+        },
+        "&:hover .MuiSvgIcon-root ": {
+          backgroundColor: disable ? "#1e1d28" : "#0045e6",
+        },
+        transition: "all 0.5s ease-in-out",
+        "&:hover .MuiOutlinedInput-root": {
+          color: "#0045e6",
+        },
+        "& .css-17bpk52-MuiInputBase-root-MuiOutlinedInput-root": {
+          borderColor: "#0045e6",
+          "& .MuiSvgIcon-root ": {
+            backgroundColor: disable ? "#1e1d28" : "#0045e6",
+          },
+        }
 
+      }}
+    >
+      <CustomInputLabel id="demo-simple-select-label">{label ? label : "Select Your Option"}</CustomInputLabel>
       <Select
-        sx={{ height: "60px",rowGap:"10px", width: "100%",borderRadius:"50px"}}
+        IconComponent={KeyboardArrowDownIcon}
+        sx={{ height: "60px", rowGap: "10px", width: "100%", borderRadius: "50px" }}
         autoFocus={false}
         value={disable ? null : selectedFormats}
         onChange={(e) => {
           const selectedObject = e.target.value;
-
-          // if (selectedObject.opt === "Other (Specify)" || selectedObject.opt === "Other") {
-          //   setPrice(selectedObject.price)
-          //   setInputField(true);
-          //   setOtherVal(""); // Clear any previous input value
-          // } else {
-            setInputField(false);
-            setSelectedFormats(selectedObject);
-            selectedOptionPassToParent(selectedObject, label);
-            handleChange
-          // }
-
-
+          setInputField(false);
+          setSelectedFormats(selectedObject);
+          selectedOptionPassToParent(selectedObject, label);
+          handleChange
         }}
         disabled={disable ? true : false}
-        input={<OutlinedInput  id="select-multiple-chip" label={label?label:"Select Your Option"} />}
+        input={<OutlinedInput id="select-multiple-chip" label={label ? label : "Select Your Option"} sx={{
+          ": hover": {
+            borderColor: "#0045e6"
+          },
+          '&:focus': {
+            borderRadius: 4,
+            borderColor: '#80bdff',
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+          },
+
+        }} />}
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {selected.opt ? (
@@ -173,56 +190,9 @@ const DropDownComponent = ({
             }
           >
             {data.opt ? data.opt : data}{" "}
-            {/* {data.price ? `($${data.price})` : null} */}
           </StyledMenuItem>
         ))}
       </Select>
-      {/* Input field for "Other (Specify)" or "Other" */}
-{/* 
-      {inputField ?
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1em",
-            flexWrap: "wrap",
-            margin: ".5em 0",
-          }}
-        >
-          <TextField
-            fullWidth
-            id="fullWidth"
-            label="Other"
-            variant="outlined"
-            sx={{ width: "270px" }}
-            value={otherVal}
-            onChange={(e) => {
-              setOtherVal(e.target.value);
-              setCheckInputVal(false);
-              setErrorMessage(null);
-            }}
-            error={checkInputVal}
-            helperText={errorMessage}
-          />
-          <Button
-            variant="contained"
-            sx={{ width: "100px" }}
-            onClick={() => {
-              otherData.price = price;
-              otherData.opt = otherVal;
-              if (otherVal.trim()) {
-                setSelectedFormats(otherData);
-                selectedOptionPassToParent(otherData);
-                setInputField(false);
-                setErrorMessage(null);
-                submitOtherVal();
-              }
-            }}
-          >
-            Enter
-          </Button>
-        </Box> : null
-      } */}
     </StyledFormControl>
   );
 };

@@ -220,7 +220,8 @@ const Form = ({ response, getActualResponse }) => {
   return (
     <CustomBox
       sx={{
-        maxWidth: "700px",
+        backgroundColor: "#fff",
+        maxWidth: "800px",
         maxHeight: "70vh",
         overflowY: "auto",
         display: submitted ? "none" : "block",
@@ -389,7 +390,6 @@ const Form = ({ response, getActualResponse }) => {
               }}
               error={checkInputVal.companyError}
               helperText={errorMessage.companyError}
-
             />
           </Box>
           <Box>
@@ -436,7 +436,7 @@ const Form = ({ response, getActualResponse }) => {
           </Box>
 
 
-          <Typography variant="body1" sx={{ fontSize: "12px" }}>We will add your info to our CRM for contacting you regarding your request. For more info please consult our <span>privacy policy</span></Typography>
+          <Typography variant="body1" sx={{ fontSize: "12px", padding: ".5em 0" }}>We will add your info to our CRM for contacting you regarding your request. For more info please consult our <span style={{ color: "#0045e6", fontWeight: 600 }}>privacy policy</span></Typography>
 
           <br />
           <Button

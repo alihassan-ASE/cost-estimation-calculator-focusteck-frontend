@@ -149,9 +149,9 @@ const CustomBottomHeading = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
   fontSize: "15px",
 
-  padding: ".5em  9.5em 5px 0",
+  padding: "0 9.5em 5px 0",
   width: "max-content",
-  margin: ".5em 2em .2em 0",
+  margin: "0 2em .2em 0",
   // margin: "1% 3% 1.2% 0",
   borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
   transition: "all 0.25s ease-in-out 0.25s",
@@ -212,7 +212,7 @@ const CustomFooterTypography = styled(Typography)(({ theme }) => ({
 
 const CustomAppBar = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
-  padding: ".5% 5% 1% 5%",
+  padding: ".5% 5% 1% 4.4%",
   maxHeight: 51.7,
   display: "flex",
   [theme.breakpoints.down("md")]: {
@@ -237,15 +237,28 @@ const CustomToolBar = styled(Box)(({ theme }) => ({
 
 export default function RootLayout({ children }) {
   const isNarrowScreen = useMediaQuery("(max-width:1148px)");
-  const [hamburgerClicked, setHamburgerClicked] = useState(false);
+  const isMobileScreen = useMediaQuery("(max-width:360px)");
   const route = useRouter();
   const [showMenuIcon, setShowMenuIcon] = useState(true);
 
   const baseRoute = usePathname();
+  const [hamburgerClicked, setHamburgerClicked] = useState(false);
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false);
+
   const handleNavBar = () => {
     setHamburgerClicked(!hamburgerClicked);
-    // setShowMenuIcon((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (hamburgerClicked) {
+      setIsTransitionComplete(!isTransitionComplete);
+    }
+  }, [hamburgerClicked]);
+
+  const handleTransitionEnd = () => {
+    setIsTransitionComplete(!isTransitionComplete);
+  };
+
 
   // const isRoot = baseRoute === "/";
   // const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
@@ -277,7 +290,7 @@ export default function RootLayout({ children }) {
                     display: "flex",
                     alignItems: "center",
                     paddingTop: "9.3px",
-                    marginRight: "37.27px",
+                    marginRight: isMobileScreen ? "0px" : "37.27px",
                   }}
                 >
                   <Box
@@ -286,6 +299,7 @@ export default function RootLayout({ children }) {
                       backgroundRepeat: "no-repeat",
                       width: 149.13,
                       height: 42.4,
+                      marginLeft: ".3em",
                       "&:hover": {
                         backgroundColor: "#fff",
                       },
@@ -384,8 +398,8 @@ export default function RootLayout({ children }) {
                       display: { xs: "none", md: "none", lg: "flex" },
                       padding: "4.2px 14px",
                       fontSize: "15px",
-                      height: "34px",
-                      marginTop: "14.313px",
+                      height: "32px",
+                      marginTop: "13.313px",
                       marginRight: "6.135px",
                       color: "#fff",
                       textTransform: "capitalize",
@@ -407,33 +421,30 @@ export default function RootLayout({ children }) {
                 </Box>
 
                 <>
-                  {showMenuIcon ? (
-                    <MenuIcon
-                      onClick={handleNavBar}
-                      sx={{
-                        color: "#005DBD",
-                        display: { xs: "block", md: "block", lg: "none" },
-                        margin: "auto 0 auto auto",
-                        transform: hamburgerClicked
-                          ? "rotate(180deg)"
-                          : "rotate(0deg)",
-                        transition: "transform .4s ease",
-                        "&:hover": {
-                          cursor: "pointer",
-                        },
-                      }}
-                    />
-                  ) : (
+                  {hamburgerClicked ? (
                     <CloseIcon
                       onClick={handleNavBar}
                       sx={{
                         color: "#005DBD",
                         display: { xs: "block", md: "block", lg: "none" },
                         marginLeft: "auto",
-                        transform: hamburgerClicked
-                          ? "rotate(180deg)"
-                          : "rotate(0deg)",
                         transition: "transform .4s ease",
+                        transform: `rotate(${isTransitionComplete ? '180deg' : '0deg'})`,
+                        "&:hover": {
+                          cursor: "pointer",
+                        },
+                      }}
+                    />
+                  ) : (
+                    <MenuIcon
+                      onClick={handleNavBar}
+                      onEntering={handleTransitionEnd}
+                      sx={{
+                        color: "#005DBD",
+                        display: { xs: "block", md: "block", lg: "none" },
+                        margin: "auto 0 auto auto",
+                        transition: "transform .4s ease",
+                        transform: "rotate(180deg)",
                         "&:hover": {
                           cursor: "pointer",
                         },
@@ -448,16 +459,17 @@ export default function RootLayout({ children }) {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
+                // alignItems: "center",
                 gap: "1em",
                 position: "absolute",
                 backgroundColor: "#fff",
                 left: 0,
                 right: 0,
-                top: 42,
+                top: 52,
                 zIndex: 1,
                 margin: "auto",
-                maxWidth: 500,
+                maxWidth: "80%",
+                padding: ".5em 1em",
                 visibility:
                   hamburgerClicked && isNarrowScreen ? "visible" : "hidden",
                 opacity: hamburgerClicked && isNarrowScreen ? 1 : 0,
@@ -472,8 +484,8 @@ export default function RootLayout({ children }) {
                 onClick={() => route.push("/cost-estimation-calculator")}
                 sx={{
                   flexGrow: 1,
-                  my: 2,
                   color: "#2e2e2e",
+                  // fontWeight: "bold",
                   textTransform: "capitalize",
                 }}
               >
@@ -483,7 +495,8 @@ export default function RootLayout({ children }) {
                 href="#"
                 sx={{
                   flexGrow: 1,
-                  my: 2,
+                  paddingTop: "5px",
+                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -494,7 +507,8 @@ export default function RootLayout({ children }) {
                 href="#"
                 sx={{
                   flexGrow: 1,
-                  my: 2,
+                  paddingTop: "5px",
+                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -505,7 +519,8 @@ export default function RootLayout({ children }) {
                 href="#"
                 sx={{
                   flexGrow: 1,
-                  my: 2,
+                  paddingTop: "5px",
+                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -516,7 +531,8 @@ export default function RootLayout({ children }) {
                 href="#"
                 sx={{
                   flexGrow: 1,
-                  my: 2,
+                  paddingTop: "5px",
+                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -527,7 +543,9 @@ export default function RootLayout({ children }) {
                 href="#"
                 sx={{
                   flexGrow: 1,
-                  my: 2,
+                  paddingTop: "5px",
+                  // fontWeight: "bold",
+                  paddingBottom: "20px",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -546,7 +564,7 @@ export default function RootLayout({ children }) {
               >
                 <Box
                   sx={{
-                    padding: "7% 5%",
+                    padding: "7% 7%",
                     display: "flex",
                     flexDirection: "column",
                     gap: "2em",
@@ -609,12 +627,12 @@ export default function RootLayout({ children }) {
             "/cost-estimation-calculator" ? (
             <CustomBox
               id="scroll-down"
-              sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}
+              sx={{ minHeight: "100vh", display: "flex", alignItems: "center", marginTop: "1em", marginBottom: "3em" }}
             >
               {children}
             </CustomBox>
           ) : (
-            <CustomBox id="scroll-down" sx={{ minHeight: "100vh" }}>
+            <CustomBox id="scroll-down" sx={{ minHeight: "100vh", marginTop: "1em", marginBottom: "3em" }}>
               {children}
             </CustomBox>
           )}
@@ -622,244 +640,249 @@ export default function RootLayout({ children }) {
           {baseRoute === "/" ? null : (
             <>
               {!isNarrowScreen ? (
-                <BottomNavigation
-                  sx={{
-                    height: "max-content",
-                    display: "flex",
-                    // justifyContent: "normal",
-                    justifyContent: "center",
-                    borderTop: "1px solid rgba(0, 0, 0, 0.1)",
-                    margin: "0px 94.750px",
-                    padding: "25.260px 37.896px",
-                    // padding: "2% 3%",
-                    // margin: "0px 7%",
-                  }}
-                >
-                  <Box
+                <Box sx={{
+                  paddingTop: "30px",
+                  borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+                }}>
+                  <BottomNavigation
                     sx={{
+                      height: "max-content",
                       display: "flex",
-                      flexDirection: "column",
-                      paddingTop: "1em",
-                      marginRight: "9%",
-                    }}
-                  >
-                    <Button
-                      sx={{
-                        background: `url('https://focusteck.com/wp-content/uploads/2022/03/focusteck-logo.svg')`,
-                        backgroundRepeat: "no-repeat",
-                        width: "129.490px",
-                        height: "36.813px",
-                        padding: 0,
-                        "&:hover": {
-                          backgroundColor: "#fff",
-                        },
-                      }}
-                    ></Button>
-
-                    <Box sx={{ padding: "5px 0 0 2px" }}>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontSize: "19px",
-                          color: "#00000099",
-                          marginTop: "2.633px",
-                          // padding: "5px 0 0 2px",
-                        }}
-                      >
-                        Drop us a line 🙂
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          color: "#005DBD",
-                          fontWeight: "bold",
-                          paddingBottom: "10px",
-                          fontSize: "14px",
-                        }}
-                      >
-                        services@focusteck.com
-                      </Typography>
-                    </Box>
-
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "1.2em",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      <FacebookIcon
-                        sx={{ color: "#767676", fontSize: "1.3rem" }}
-                      />
-                      <InstagramIcon
-                        sx={{ color: "#767676", fontSize: "1.3rem" }}
-                      />
-                      <LinkedInIcon
-                        sx={{ color: "#767676", fontSize: "1.3rem" }}
-                      />
-                      <TwitterIcon
-                        sx={{ color: "#767676", fontSize: "1.3rem" }}
-                      />
-                    </Box>
-                    <img
-                      style={{
-                        background: `url('https://focusteck.com/wp-content/uploads/2023/09/Aws_certificate-480x480.png')`,
-                        backgroundSize: "cover",
-                        width: "102px",
-                        height: "102px",
-                        border: "0 solid #fff",
-                        // marginRight: "153.396px",
-                      }}
-                    />
-                  </Box>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      // width: "100%",
+                      // justifyContent: "normal",
+                      justifyContent: "center",
+                      margin: "0px 94.750px",
+                      padding: "25.260px 37.896px",
+                      // padding: "2% 3%",
+                      // margin: "0px 7%",
                     }}
                   >
                     <Box
                       sx={{
                         display: "flex",
                         flexDirection: "column",
-                        gap: "10px",
-
-                        // width: "100%",
-                        // padding: "1% 1% 3% 0",
-                        // margin: "1% 3% 1.2% 0",
+                        // paddingTop: ".6em",
+                        marginRight: "9%",
                       }}
                     >
-                      <Box>
-                        <CustomBottomHeading variant="h6">
-                          COMPANY
-                        </CustomBottomHeading>
-                        <Box
+                      <Button
+                        sx={{
+                          background: `url('https://focusteck.com/wp-content/uploads/2022/03/focusteck-logo.svg')`,
+                          backgroundRepeat: "no-repeat",
+                          width: "129.490px",
+                          height: "36.813px",
+                          padding: 0,
+                          "&:hover": {
+                            backgroundColor: "#fff",
+                          },
+                        }}
+                      ></Button>
+
+                      <Box sx={{ padding: "5px 0 0 2px" }}>
+                        <Typography
+                          variant="body1"
                           sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            // flexWrap: "wrap",
+                            fontSize: "19px",
+                            color: "#00000099",
+                            marginTop: "2.633px",
+                            // padding: "5px 0 0 2px",
                           }}
                         >
-                          <CustomBottomLink href="#">About Us</CustomBottomLink>
-                          <CustomBottomLink href="#">
-                            Success Stories
-                          </CustomBottomLink>
-                          <CustomBottomLink href="#">Blogs</CustomBottomLink>
-                          <CustomBottomLink href="#">Careers</CustomBottomLink>
-                        </Box>
-                      </Box>
-                      <Box sx={{ paddingBottom: "23px" }}>
-                        <CustomBottomHeading variant="h6">
-                          LOCATION
-                        </CustomBottomHeading>
-                        <Box
+                          Drop us a line 🙂
+                        </Typography>
+                        <Typography
+                          variant="body1"
                           sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            // flexWrap: "wrap",
+                            color: "#005DBD",
+                            fontWeight: "bold",
+                            paddingBottom: "10px",
+                            fontSize: "14px",
                           }}
                         >
-                          <CustomBottomLink href="#">
-                            Leesburg, Virginia
-                          </CustomBottomLink>
-                          <CustomBottomLink href="#">
-                            +1 571 577 4513
-                          </CustomBottomLink>
-                          <CustomBottomLink href="#">
-                            Lahore, Pakistan
-                          </CustomBottomLink>
-                          <CustomBottomLink href="#">
-                            +92 42 37870173
-                          </CustomBottomLink>
-                        </Box>
+                          services@focusteck.com
+                        </Typography>
                       </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "1.2em",
+                          marginBottom: "8px",
+                        }}
+                      >
+                        <FacebookIcon
+                          sx={{ color: "#767676", fontSize: "1.3rem" }}
+                        />
+                        <InstagramIcon
+                          sx={{ color: "#767676", fontSize: "1.3rem" }}
+                        />
+                        <LinkedInIcon
+                          sx={{ color: "#767676", fontSize: "1.3rem" }}
+                        />
+                        <TwitterIcon
+                          sx={{ color: "#767676", fontSize: "1.3rem" }}
+                        />
+                      </Box>
+                      <img
+                        style={{
+                          background: `url('https://focusteck.com/wp-content/uploads/2023/09/Aws_certificate-480x480.png')`,
+                          backgroundSize: "cover",
+                          width: "102px",
+                          height: "102px",
+                          border: "0 solid #fff",
+                          // marginRight: "153.396px",
+                        }}
+                      />
                     </Box>
+
                     <Box
                       sx={{
-                        paddingBottom: "23px",
+                        display: "flex",
                         // width: "100%",
-                        // padding: "1% 6% 3% 0",
-                        // margin: "1% 1% 1.2% 0",
-                        // display: "flex",
-                        // flexWrap: "wrap",
                       }}
                     >
-                      <CustomBottomHeading variant="h6">
-                        SERVICES
-                      </CustomBottomHeading>
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
-                          // flexWrap: "wrap",
+                          gap: "10px",
+
+                          // width: "100%",
+                          // padding: "1% 1% 3% 0",
+                          // margin: "1% 3% 1.2% 0",
                         }}
                       >
-                        <CustomBottomLink href="#">
-                          Custom Software Development
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Mobile Development
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Web Development
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          QA and Testing
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          UI / UX Design
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          AWS Managed Services
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          DevOps Automation
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Magento Development
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">Shopify</CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Woocommerce
-                        </CustomBottomLink>
+                        <Box>
+                          <CustomBottomHeading variant="h6">
+                            COMPANY
+                          </CustomBottomHeading>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              // flexWrap: "wrap",
+                            }}
+                          >
+                            <CustomBottomLink href="#">About Us</CustomBottomLink>
+                            <CustomBottomLink href="#">
+                              Success Stories
+                            </CustomBottomLink>
+                            <CustomBottomLink href="#">Blogs</CustomBottomLink>
+                            <CustomBottomLink href="#">Careers</CustomBottomLink>
+                          </Box>
+                        </Box>
+                        <Box sx={{ paddingBottom: "23px" }}>
+                          <CustomBottomHeading variant="h6">
+                            LOCATION
+                          </CustomBottomHeading>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              // flexWrap: "wrap",
+                            }}
+                          >
+                            <CustomBottomLink href="#">
+                              Leesburg, Virginia
+                            </CustomBottomLink>
+                            <CustomBottomLink href="#">
+                              +1 571 577 4513
+                            </CustomBottomLink>
+                            <CustomBottomLink href="#">
+                              Lahore, Pakistan
+                            </CustomBottomLink>
+                            <CustomBottomLink href="#">
+                              +92 42 37870173
+                            </CustomBottomLink>
+                          </Box>
+                        </Box>
                       </Box>
-                    </Box>
-                    <Box
-                      sx={
-                        {
+                      <Box
+                        sx={{
+                          paddingBottom: "23px",
                           // width: "100%",
-                          // padding: "1% 15% 3% 0",
-                          // margin: "1% 3% 1.2% 0",
+                          // padding: "1% 6% 3% 0",
+                          // margin: "1% 1% 1.2% 0",
                           // display: "flex",
                           // flexWrap: "wrap",
-                          // height: "min-content",
-                        }
-                      }
-                    >
-                      <CustomBottomHeading
-                        variant="h6"
-                        sx={{
-                          // width: "min-content",
-                          paddingRight: ".5% !important",
                         }}
                       >
-                        ENGAGEMENT MODELS
-                      </CustomBottomHeading>
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <CustomBottomLink href="#">
-                          Dedicated Team
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Staff Augmentation
-                        </CustomBottomLink>
-                        <CustomBottomLink href="#">
-                          Project Based
-                        </CustomBottomLink>
+                        <CustomBottomHeading variant="h6">
+                          SERVICES
+                        </CustomBottomHeading>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            // flexWrap: "wrap",
+                          }}
+                        >
+                          <CustomBottomLink href="#">
+                            Custom Software Development
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Mobile Development
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Web Development
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            QA and Testing
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            UI / UX Design
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            AWS Managed Services
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            DevOps Automation
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Magento Development
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">Shopify</CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Woocommerce
+                          </CustomBottomLink>
+                        </Box>
+                      </Box>
+                      <Box
+                        sx={
+                          {
+                            // width: "100%",
+                            // padding: "1% 15% 3% 0",
+                            // margin: "1% 3% 1.2% 0",
+                            // display: "flex",
+                            // flexWrap: "wrap",
+                            // height: "min-content",
+                          }
+                        }
+                      >
+                        <CustomBottomHeading
+                          variant="h6"
+                          sx={{
+                            // width: "min-content",
+                            paddingRight: ".5% !important",
+                          }}
+                        >
+                          ENGAGEMENT MODELS
+                        </CustomBottomHeading>
+                        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                          <CustomBottomLink href="#">
+                            Dedicated Team
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Staff Augmentation
+                          </CustomBottomLink>
+                          <CustomBottomLink href="#">
+                            Project Based
+                          </CustomBottomLink>
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                </BottomNavigation>
+                  </BottomNavigation>
+                </Box>
+
               ) : (
                 <BottomNavigation
                   sx={{
@@ -880,8 +903,9 @@ export default function RootLayout({ children }) {
                       sx={{
                         background: `url('https://focusteck.com/wp-content/uploads/2022/03/focusteck-logo.svg')`,
                         backgroundRepeat: "no-repeat",
-                        width: "220px",
-                        height: "97px",
+                        width: isMobileScreen ? "190px" : "220px",
+                        height: isMobileScreen ? "57px" : "97px",
+                        marginBottom: isMobileScreen ? "2em" : 0,
                         "&:hover": {
                           backgroundColor: "#fff",
                         },
@@ -899,7 +923,7 @@ export default function RootLayout({ children }) {
                     >
                       services@focusteck.com
                     </Typography>
-                    <Box sx={{ display: "flex", gap: ".5em" }}>
+                    <Box sx={{ display: "flex", gap: "1em" }}>
                       <FacebookIcon
                         sx={{ color: "#767676", fontSize: "1rem" }}
                       />
