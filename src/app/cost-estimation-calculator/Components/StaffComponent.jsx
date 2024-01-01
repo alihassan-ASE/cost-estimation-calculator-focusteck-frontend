@@ -609,7 +609,8 @@ const StaffComponent = () => {
                                     transition: "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
                                     "&:hover": {
                                       backgroundColor: "#0045e6",
-                                      color: "#fff"
+                                      color: "#fff",
+                                      cursor: "pointer"
                                     }
                                   }} onClick={() => { editResource(index) }} />
                                   <DeleteIcon sx={{
@@ -618,7 +619,8 @@ const StaffComponent = () => {
                                     transition: "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
                                     "&:hover": {
                                       backgroundColor: "#0045e6",
-                                      color: "#fff"
+                                      color: "#fff",
+                                      cursor: "pointer"
                                     }
                                   }} onClick={() => {
                                     setCount(index)
