@@ -135,6 +135,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const StaffComponent = () => {
+  
   const [count, setCount] = useState(0);
   const [values, setValues] = useState([]);
   const [buttonState, setButtonState] = useState(true);
@@ -806,6 +807,6 @@ const StaffComponent = () => {
       }
     </Box >
   );
-};
+}
 
 export default StaffComponent;
