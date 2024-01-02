@@ -68,7 +68,7 @@ export default function VerticalLinearStepper(props) {
   return (
     <Box
       sx={{
-        padding: "2.4em 0em 1em 0"
+        padding: "2.4em 0em .5em 0"
       }}
     >
       <Typography sx={{ fontWeight: "bold" }}>SUMMARY</Typography>
