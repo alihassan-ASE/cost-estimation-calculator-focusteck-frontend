@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography,useMediaQuery } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -125,6 +125,7 @@ const ShowSummary = ({ response }) => {
   }
 
   const getActualResponse = (value, formData) => {
+
 
     setOpenForm(value)
     setActualResponse(formData);

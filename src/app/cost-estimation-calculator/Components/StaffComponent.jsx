@@ -82,7 +82,9 @@ const CustomButton = styled(Button)(({ theme }) => ({
   maxWidth: "341px",
   width: "280px",
   borderRadius: ".5em",
-  marginLeft: "auto",
+  margin:"0 1em",
+  height: 445,
+  width: "345px",
   [theme.breakpoints.down("md")]: {
     width: "280px",
   },
@@ -335,6 +337,7 @@ const StaffComponent = () => {
     const { index, step } = obj;
 
     console.log("step",step)
+    console.log("step",step)
     setDisplayQuestion(true);
 
     if (index == 1) {
@@ -481,33 +484,37 @@ const StaffComponent = () => {
 
   useEffect(() => {
     if (currentQuestionIndex > additionalQuesiton.length && additionalQuesiton.length != 0) {
+  
       setDisplayQuestion(false);
       setCurrentQuestion(true)
       actualResponses.totalCost = totalCost;
     }
   }, [nextQuestion]);
 
-  const [dropDownVal, setDropDownVal] = useState(false)
-
-  const handleModal = () => {
-    setopenModal(true)
-    setDropDownVal(true)
-  }
-
-  const handleClose = () => {
-    setopenModal(false)
-    setI(0)
-    setEditMode(false)
-    setDropDownVal(false)
-
-  }
-
-  const editResource = (index) => {
-    setI(index)
-    setEditMode(true)
-    setopenModal(true)
-    setDropDownVal(true)
-  }
+  // Showing selected Resources
+  const returnResources = () => {
+    const tags = [];
+    for (let i = 0; i <= count; i++) {
+      tags.push(
+        <CustomCard key={i}>
+          <StaffResource
+            key={i}
+            question={currentQuestion}
+            options={staffBase}
+            index={i}
+            count={count}
+            setCount={setCount}
+            setValues={setValues}
+            values={values}
+            selectedOption={resource}
+            selectedOptionPassToParent={selectedOptionPassToParent}
+            deleteResource={deleteResource}
+          />
+        </CustomCard>
+      );
+    }
+    return tags;
+  };
 
 
   return (
@@ -808,5 +815,5 @@ const StaffComponent = () => {
     </Box >
   );
 }
-
+}
 export default StaffComponent;
