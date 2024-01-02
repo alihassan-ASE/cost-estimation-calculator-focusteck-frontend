@@ -110,6 +110,7 @@ const CustomLinkBox = styled(Link)(({ theme }) => ({
 }));
 
 const ShowSummary = ({ response }) => {
+
   const hasResponse = window.localStorage.getItem('Response');
   const [timeline, setTimeline] = useState("");
   const [systemType, setSystemType] = useState("");
@@ -123,14 +124,25 @@ const ShowSummary = ({ response }) => {
   }
 
   const getActualResponse = (value, formData) => {
-    console.log("formData",formData)
+
     setOpenForm(value)
     setActualResponse(formData);
     let data = JSON.stringify(formData);
     if (data) {
       localStorage.setItem("Response", data);
     }
+
   };
+
+  // useEffect(()=>{
+    
+  //   let data = JSON.stringify(response);
+  //   if (data) {
+  //     console.log("data",data)
+  //     localStorage.setItem("Response", data);
+  //   }
+
+  // },[])
 
   useEffect(() => {
     {

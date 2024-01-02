@@ -138,12 +138,22 @@ const StaffComponent = () => {
 
   // Setting Staff Resources and Questions
   useEffect(() => {
-    getQuestions().then((resp) => {
-      const { Resources, additionalQuestions } = resp;
-      setAdditionalQuesiton(additionalQuestions);
-      setStaffBaseResources(Resources);
-    });
+  //  let data = localStorage.getItem("Response");
+  //  data  = JSON.parse(data);
+  //  console.log("Data in staff comp",data)
+  //  if(data){
+  //   setActualResponses(data.responses);
+  //   setDisplayQuestion(false);
+  //   setCurrentQuestionIndex(data?.responses?.length - 1);
+  //   setCurrentState(false)
+  //  }
+   getQuestions().then((resp) => {
+    const { Resources, additionalQuestions } = resp;
+    setAdditionalQuesiton(additionalQuestions);
+    setStaffBaseResources(Resources);
+  });
   }, []);
+
 
   useEffect(()=>{
 
@@ -238,6 +248,8 @@ const StaffComponent = () => {
   const changeActiveQuestion = (obj) => {
 
     const { index, step } = obj;
+
+    console.log("step",step)
     setDisplayQuestion(true);
 
     if (index == 1) {
@@ -409,7 +421,7 @@ const StaffComponent = () => {
 
   return (
     <Box >
-      {additionalQuesiton.length && staffBase.length ? (
+      { additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length? (
         <Box
           sx={{
             maxWidth: "1520px",
@@ -535,7 +547,7 @@ const StaffComponent = () => {
                               getResponsesData={getResponsesData}
                               selectedOption={lastQuestionSelectedOption}
                             />
-                            : <ShowSummary response={actualResponses} />
+                            : <ShowSummary response={actualResponses ? actualResponses : []} />
                         }
                       </div>
                     </Slide>
