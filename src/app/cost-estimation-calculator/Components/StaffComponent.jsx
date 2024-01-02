@@ -77,7 +77,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   padding: "3em",
   borderRadius: ".5em",
-  margin:"0 1em",
+  margin: "0 1em",
   height: 445,
   width: "345px",
   [theme.breakpoints.down("md")]: {
@@ -115,11 +115,11 @@ const StaffComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [currentState, setCurrentState] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [actualResponses , setActualResponses] = useState({});
+  const [actualResponses, setActualResponses] = useState({});
 
   const [isOptionSelected, setIsOptionSelected] = useState(true);
 
-  const [addedOption , setAddedOption] = useState([]);
+  const [addedOption, setAddedOption] = useState([]);
 
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
@@ -138,30 +138,47 @@ const StaffComponent = () => {
 
   // Setting Staff Resources and Questions
   useEffect(() => {
-  //  let data = localStorage.getItem("Response");
-  //  data  = JSON.parse(data);
-  //  console.log("Data in staff comp",data)
-  //  if(data){
-  //   setActualResponses(data.responses);
-  //   setDisplayQuestion(false);
-  //   setCurrentQuestionIndex(data?.responses?.length - 1);
-  //   setCurrentState(false)
-  //  }
-   getQuestions().then((resp) => {
-    const { Resources, additionalQuestions } = resp;
-    setAdditionalQuesiton(additionalQuestions);
-    setStaffBaseResources(Resources);
-  });
+
+    let data = localStorage.getItem("Response");
+    data = JSON.parse(data);
+
+    
+    if (data) {
+
+      console.log("data", data.responses[0].resources)
+      setActualResponses(data);      
+      setDisplayQuestion(false);
+      setCurrentQuestionIndex(data.length - 1);
+      setCurrentState(false);
+      setTotalCost(data.totalCost)
+
+      if (Array.isArray(data.responses[0].resources) && data.responses[0].resources.length > 0) {
+        console.log("Setting resources...");
+        setResource(data.responses[0].resources);
+      } else {
+        console.log("No valid resources found in data.");
+      }
+
+    }
+
   }, []);
 
+  useEffect(() => {
+    getQuestions().then((resp) => {
+      const { Resources, additionalQuestions } = resp;
+      setAdditionalQuesiton(additionalQuestions);
+      setStaffBaseResources(Resources);
+    });
+  }, [])
 
-  useEffect(()=>{
+  
+  useEffect(() => {
+    console.log("resources",resource);
+    if (resource.length) {
+      nextQuestion();
+    }
 
-        if(resource.length){
-          nextQuestion();
-        }
-    
-  },[addedOption])
+  }, [ addedOption])
 
   useEffect(() => {
     if (isNarrowScreen) {
@@ -184,12 +201,17 @@ const StaffComponent = () => {
     }
   }, [actualResponses, isNextClicked, isStepperClicked]);
 
+
   useEffect(() => {
     if (values?.length > 0) {
       setCount(values?.length - 1);
+      console.log("value")
     }
-    setResource(values);
+    if(values.length){
+      setResource(values);
+    }
   }, [values?.length]);
+
 
   const deleteResource = (index) => {
     if (values) {
@@ -249,7 +271,6 @@ const StaffComponent = () => {
 
     const { index, step } = obj;
 
-    console.log("step",step)
     setDisplayQuestion(true);
 
     if (index == 1) {
@@ -262,7 +283,7 @@ const StaffComponent = () => {
     setLastQuestionSelectedOption(step.selectedData);
     setIsStepperClicked(true);
     slider();
-    
+
   };
 
   // receiving selected option from child Component
@@ -276,9 +297,10 @@ const StaffComponent = () => {
 
   // setting Response in actual Array
   const setResponseData = () => {
-
+  if(values.length){
     dataObj.resources = values;
     setResource(dataObj.resources);
+  }
     currentState
       ? setActualResponses({ responses: [dataObj] })
       : setActualResponses((prev) => {
@@ -298,6 +320,9 @@ const StaffComponent = () => {
     setAddedOption(resp);
 
   };
+
+  console.log("Values",values);
+  console.log("resources",resource)
 
   // Handling Next Quesiton
   const nextQuestion = () => {
@@ -387,12 +412,13 @@ const StaffComponent = () => {
 
   useEffect(() => {
     if (currentQuestionIndex > additionalQuesiton.length && additionalQuesiton.length != 0) {
-  
+
       setDisplayQuestion(false);
       actualResponses.totalCost = totalCost;
     }
   }, [nextQuestion]);
 
+  console.log("count",count)
   // Showing selected Resources
   const returnResources = () => {
     const tags = [];
@@ -421,7 +447,7 @@ const StaffComponent = () => {
 
   return (
     <Box >
-      { additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length? (
+      {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
         <Box
           sx={{
             maxWidth: "1520px",
@@ -463,7 +489,7 @@ const StaffComponent = () => {
                 }}
               >
                 <CustomNextButton
-                 sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" },color:"white" }}
+                  sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" }, color: "white" }}
                   onClick={() => {
                     nextQuestion();
                   }}
@@ -547,7 +573,7 @@ const StaffComponent = () => {
                               getResponsesData={getResponsesData}
                               selectedOption={lastQuestionSelectedOption}
                             />
-                            : <ShowSummary response={actualResponses ? actualResponses : []} />
+                            : <ShowSummary response={actualResponses} />
                         }
                       </div>
                     </Slide>

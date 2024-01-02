@@ -45,7 +45,7 @@ const StaffResource = ({
 
     if (values.length === 0) {
       setCurrentResource({});
-      setCount(0);
+      // setCount(0);
     }
 
     if (values.length <= 0) {
