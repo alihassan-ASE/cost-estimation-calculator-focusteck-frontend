@@ -67,6 +67,7 @@ const LargeTiles = ({
 
 
   const checkSelectedOption = (value, price) => {
+
     const res =
       selectedFormats?.opt === value && selectedFormats?.price === price;
     return !!res;

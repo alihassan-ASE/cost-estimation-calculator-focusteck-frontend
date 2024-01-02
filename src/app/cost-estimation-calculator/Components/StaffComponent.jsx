@@ -25,24 +25,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
-  color: "#000",
-  backgroundColor: "#fff",
-  border: "1px solid #fff",
-  "&:hover": {
-    color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
-  },
-  "&:active": {
-    color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
-  },
-  "&:focus": {
-    color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
-  },
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -71,11 +53,9 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
 const CustomBackButton = styled(Button)(({ theme }) => ({
   padding: 0,
   color: "#ACACAC",
-  width: "40px",
-  height: "40px",
+  height: "50px",
+  width: "50px",
   borderRadius: "50%",
-  position: "absolute",
-  right: "-32px",
   justifyContent: "normal",
   minWidth: "min-content",
   border: "2px solid #ACACAC",
@@ -222,6 +202,15 @@ const StaffComponent = () => {
 
   // Setting Staff Resources and Questions
   useEffect(() => {
+    //  let data = localStorage.getItem("Response");
+    //  data  = JSON.parse(data);
+    //  console.log("Data in staff comp",data)
+    //  if(data){
+    //   setActualResponses(data.responses);
+    //   setDisplayQuestion(false);
+    //   setCurrentQuestionIndex(data?.responses?.length - 1);
+    //   setCurrentState(false)
+    //  }
     getQuestions().then((resp) => {
       const { Resources, additionalQuestions } = resp;
       setAdditionalQuesiton(additionalQuestions);
@@ -323,6 +312,8 @@ const StaffComponent = () => {
   const changeActiveQuestion = (obj) => {
 
     const { index, step } = obj;
+
+    console.log("step", step)
     setDisplayQuestion(true);
 
     if (index == 1) {
@@ -495,7 +486,7 @@ const StaffComponent = () => {
   // console.log("count: ", count)
   return (
     <Box >
-      {additionalQuesiton.length && staffBase.length ? (
+      {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
         <Box
           sx={{
             maxWidth: "1520px",
@@ -643,8 +634,7 @@ const StaffComponent = () => {
                 }}
               >
                 <CustomNextButton
-                  size="medium"
-                  variant="contained"
+                  sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" }, color: "white" }}
                   onClick={() => {
                     nextQuestion();
                     setAddMore(false)
@@ -654,39 +644,38 @@ const StaffComponent = () => {
                   Next
                 </CustomNextButton>
               </Box>
-              {/* )} */}
             </>
           ) : (
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} sx={{ maxWidth: "100%" }}>
               <Grid item lg={8} md={12} sm={12} xs={12}>
                 <Box sx={{
-                  display: "flex", alignItems: "center",
-                  padding: "2.2em 0 1em 0",
-                  gap: isNarrowScreen && actualResponses.responses.length > 0 ? "1.9em" : 0,
-                  paddingLeft: isNarrowScreen && actualResponses.responses.length > 0 ? "7.4%" : 0
+                  display: "flex", gap: "1em", alignItems: "center",
+                  paddingTop: "1.9em",
                 }}>
                   <Box
                     sx={{
                       display: "flex",
                       gap: "1em",
                       alignItems: "center",
-                      position: "relative"
+                      margin: "1em 0",
                     }}
                   >
                     {currentQuestionIndex > 0 && (
                       <CustomBackButton onClick={backQuestion}>
                         <KeyboardBackspaceIcon
                           sx={{
-                            textAlign: "center",
-                            fontSize: "1.6em",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            display: "flex",
-                            width: "100%",
-                            transition: "all 0.3s ease-in-out",
-                            ":hover": {
-                              cursor: "pointer",
-                            },
+                            color: "#ACACAC",
+                            // border: "2px solid #ACACAC",
+                            // borderRadius: "50%",
+                            padding: ".3em",
+                            borderRadius: "50%",
+
+                            // ":hover": {
+                            //   cursor: "pointer",
+                            //   backgroundColor: "#0069d9",
+                            //   border: "2px solid #fff",
+                            //   color: "#fff",
+                            // },
                           }}
                         />
                       </CustomBackButton>
@@ -696,19 +685,13 @@ const StaffComponent = () => {
                     displayQuestion
                       ?
                       <Box
-                        sx={{ paddingLeft: "7.4%" }}
+
                       >
                         <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
                           Question {actualResponses.responses.length}
                         </Typography>
                       </Box>
-                      : <Box
-                        sx={{ paddingLeft: "7.4%" }}
-                      >
-                        <CustomNormalTypography variant="h5" sx={{ color: "#89899C", fontWeight: 600, }}>
-                          Your Results
-                        </CustomNormalTypography>
-                      </Box>
+                      : null
                   }
                 </Box>
 
@@ -726,7 +709,7 @@ const StaffComponent = () => {
                         node.style.transform = "translateY(-50px)";
                       }}
                     >
-                      <div style={{ padding: "0 7.4%" }}>
+                      <div style={{ padding: "0 4.7%" }}>
                         {
                           displayQuestion
                             ?
@@ -735,7 +718,7 @@ const StaffComponent = () => {
                               getResponsesData={getResponsesData}
                               selectedOption={lastQuestionSelectedOption}
                             />
-                            : <ShowSummary response={actualResponses} />
+                            : <ShowSummary response={actualResponses ? actualResponses : []} />
                         }
                       </div>
                     </Slide>

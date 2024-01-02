@@ -5,7 +5,6 @@ import TilesComponent from "./TilesOptions";
 import CheckBoxComponent from "./CheckBoxOptions";
 import MultipleComponent from "./MultipleSelectOptions";
 import DropDownComponent from "./DropDownOptions";
-import RadioButtonComponent from "./RadioButtonOptions";
 import LargeTiles from "./LargeTiles";
 
 // Show Options will get options Array, selected option Array, and the Style of the Component
@@ -19,6 +18,7 @@ const ShowOption = ({
   typeofUI,
   selectedOptionPassToParent,
 }) => {
+console.log(options,typeofUI,typeOfSelection)
   return (
     <Box>
       {typeOfSelection === "single" ? (
@@ -33,6 +33,7 @@ const ShowOption = ({
         
         ) : typeofUI === "Tiles" ? (
           options.length > 4 ? (
+            
             <TilesComponent
               options={options}
               selectedOption={selectedOption}

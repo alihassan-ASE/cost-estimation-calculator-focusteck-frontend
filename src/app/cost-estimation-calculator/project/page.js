@@ -136,13 +136,20 @@ const page = () => {
 
   const projectPageRef = useRef(null);
 
-  const route = useRouter();
   let cost;
 
   useEffect(() => {
     if (projectPageRef.current) {
       projectPageRef.current.scrollIntoView({ behavior: "smooth" });
     }
+
+    // if(data){
+    //   setDisplayQuestion(false)
+    //   setActualResponses(data.responses)
+    //   setCurrentQuestionIndex(data.responses.length-1);
+    //   console.log("data in project",data)
+    // }
+
   }, []);
 
   useEffect(() => {
@@ -177,6 +184,7 @@ const page = () => {
     fetchData();
   }, []);
 
+
   const handlePrice = (type, price) => {
     cost = 0;
     switch (type) {
@@ -196,8 +204,10 @@ const page = () => {
     }
   };
 
+
   // getting Response from child Component
   const getResponsesData = (resp) => {
+
     setSelectedData(resp.selectedData);
     setSelectedOption(resp.nextQuestion);
 
@@ -207,10 +217,13 @@ const page = () => {
     else {
       setIsOptionSelected(false)
     }
+
   };
+
 
   // setting Response in actual Array
   const setResponseData = () => {
+
     const dataObj = {};
 
     dataObj.selectedOption = selectedData;
@@ -224,8 +237,11 @@ const page = () => {
     setActualResponses((prev) => [...prev, dataObj]);
   };
 
+
+  
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
+
     setDisplayQuestion(true);
 
     const { index, step } = obj;
@@ -244,8 +260,8 @@ const page = () => {
     } else {
       setQuestionsToShow(step.stack);
     }
-    if (step.question.typeofselection === "multiple") {
-      setSelectedData(step.selectedOption)
+    if(step.question.typeofselection === "multiple"){
+      setSelectedData(step.selectedOption);
       setIsOptionSelected(true);
     }
     slider();
@@ -261,7 +277,6 @@ const page = () => {
 
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
-
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
@@ -275,6 +290,7 @@ const page = () => {
     if (lastQuestion.question.typeofselection === "multiple") {
       setSelectedData(lastQuestion.selectedOption)
       setIsOptionSelected(true)
+      setSelectedData(lastQuestion.selectedOption)
     }
     else {
       setIsOptionSelected(false)
@@ -292,7 +308,6 @@ const page = () => {
 
     cost = 0;
     setStepperState(true);
-
     let currentStateLocal = currentState;
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
@@ -316,6 +331,7 @@ const page = () => {
       case "dynamic": {
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
+          console.log("current question",currentQuestionLocal)
         } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
@@ -370,6 +386,7 @@ const page = () => {
     setLastQuestionSelectedOption([]);
     slider();
   };
+
 
   useEffect(() => {
     if (
