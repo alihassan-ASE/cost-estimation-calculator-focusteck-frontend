@@ -85,11 +85,12 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
 const CustomCostBox = styled(Box)(({ theme }) => ({
   backgroundColor: "#1E1D28",
   padding: "2em",
+  margin: "1em 0",
   borderRadius: "10px",
   minWidth: "250px",
-  margin: "1em 0",
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
+    minWidth: "230px"
   },
 }));
 
@@ -272,6 +273,7 @@ const page = () => {
     });
 
     if (lastQuestion.question.typeofselection === "multiple") {
+      setSelectedData(lastQuestion.selectedOption)
       setIsOptionSelected(true)
     }
     else {
@@ -534,15 +536,17 @@ const page = () => {
                 {
                   displayQuestion
                     ?
-                    <CustomCostBox>
-                      <CustomNormalTypography
-                        variant="h6"
-                        sx={{ color: "#fff", fontSize: "1.1em" }}
-                      >
-                        Estimated Cost
-                      </CustomNormalTypography>
-                      <CustomTypography>$ {totalCost}</CustomTypography>
-                    </CustomCostBox>
+                    <Box sx={{ padding: "1em 0" }}>
+                      <CustomCostBox>
+                        <CustomNormalTypography
+                          variant="h6"
+                          sx={{ color: "#fff", fontSize: "1.1em" }}
+                        >
+                          Estimated Cost
+                        </CustomNormalTypography>
+                        <CustomTypography>$ {totalCost}</CustomTypography>
+                      </CustomCostBox>
+                    </Box>
                     : null
                 }
 
