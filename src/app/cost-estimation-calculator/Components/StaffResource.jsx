@@ -51,6 +51,15 @@ const StaffResource = ({
 
 
   useEffect(() => {
+
+    if (values.length === 0) {
+      setCurrentResource({});
+      setCount(0);
+    }
+
+    if (values.length <= 0) {
+      setShowDropdown(true)
+    }
     if (selectedOption?.length ? selectedOption[index] : null) {
       setCurrentResource({
         resource: selectedOption[index]?.resource,

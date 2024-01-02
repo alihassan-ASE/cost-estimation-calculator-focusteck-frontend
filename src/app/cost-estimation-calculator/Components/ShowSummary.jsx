@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography, Modal, useMediaQuery } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -8,7 +8,7 @@ import Link from "next/link";
 import Form from "../Components/Form";
 
 const CustomMainBox = styled(Box)(({ theme }) => ({
-  // margin: "1em 3em",
+  margin: "1em 3em",
   [theme.breakpoints.down("md")]: {
     margin: "1em 2em",
   },
@@ -125,6 +125,7 @@ const ShowSummary = ({ response }) => {
   }
 
   const getActualResponse = (value, formData) => {
+
     setOpenForm(value)
     setActualResponse(formData);
     let data = JSON.stringify(formData);
@@ -134,10 +135,8 @@ const ShowSummary = ({ response }) => {
   };
 
   useEffect(() => {
-
     {
-
-      response.responses?.map((data, index) => {
+      response.responses.map((data, index) => {
         if (data.label === "engagement period") {
           data.selectedData?.map((value) => {
             setTimeline(value.opt);
@@ -168,15 +167,6 @@ const ShowSummary = ({ response }) => {
   }, [response]);
 
 
-  useEffect(() => {
-
-    let data = JSON.stringify(response);
-      localStorage.setItem('Response', data);
-      localStorage.setItem('state',"true");
-  
- 
-  }, [])
-
   return (
     <>
       {
@@ -184,10 +174,15 @@ const ShowSummary = ({ response }) => {
           ? <CustomMainBox>
 
             <Box>
-
+              <CustomNormalTypography
+                variant="h5"
+                sx={{ color: "#89899C", fontWeight: 600, padding: "12px 0" }}
+              >
+                Your Results
+              </CustomNormalTypography>
               <CustomNormalTypography
                 variant="body1"
-                sx={{ color: "#373737", margin: "12px 0 14px 0" }}
+                sx={{ color: "#373737", marginBottom: "14px " }}
               >
                 Based on the answers you provided, we've estimated a price range for
                 your software project:
@@ -204,15 +199,15 @@ const ShowSummary = ({ response }) => {
               </CustomNormalTypography>
             </Box>
 
-            <Box sx={{ display: "flex", gap: ".5em", flexWrap: isNarrowScreen ? "wrap" : "nowrap" }}>
+            <Box sx={{ display: "flex", gap: ".5em" }}>
               <CustomBox>
                 <CustomNormalTypography
                   variant="h6"
                   sx={{ color: "#fff", fontSize: "1.1em" }}
                 >
-                  Estimated Cost
+                  Project Cost
                 </CustomNormalTypography>
-                <CustomTypography>$ {response.totalCost}</CustomTypography>
+                <CustomTypography>{response.totalCost} $</CustomTypography>
               </CustomBox>
               <CustomBox>
                 <CustomNormalTypography
@@ -389,14 +384,7 @@ const ShowSummary = ({ response }) => {
             </CustomBottomBox>
 
           </CustomMainBox>
-          : <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Form response={response} getActualResponse={getActualResponse} />
-          </Modal>
+          : <Form response={response} getActualResponse={getActualResponse} />
       }
     </>
   );

@@ -66,7 +66,6 @@ const LINKS = [
 
 const page = () => {
   const pageRef = useRef(null);
-  localStorage.clear();
 
   useEffect(() => {
     if (pageRef.current) {

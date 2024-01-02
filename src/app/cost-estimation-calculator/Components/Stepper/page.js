@@ -107,8 +107,7 @@ export default function VerticalLinearStepper(props) {
             activeStep={responses?.length}
             orientation={"vertical"}
           >
-            {
-            [
+            {[
               ...questionsArray,
               ...(responses && responses.length > questionsArray.length
                 ? Array(responses.length - questionsArray.length).fill(null)

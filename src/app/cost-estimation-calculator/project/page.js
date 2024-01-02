@@ -133,50 +133,28 @@ const page = () => {
   const [isOptionSelected, setIsOptionSelected] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [stepperState, setStepperState] = useState(false);
-  const [state,setState] = useState("");
-
 
   const projectPageRef = useRef(null);
 
-
   let cost;
+
   useEffect(() => {
-
-    let data = localStorage.getItem('Response');
-    // let localState = localStorage.getItem('state');
-
-    data = JSON.parse(data);
-    // localState = JSON.parse(localState)
-
-
-    try {
-
-      if (data) {
-
-        setDisplayQuestion(false);
-        setActualResponses(data.responses);
-        // setState(localState);
-        setCurrentQuestionIndex(data.responses.length - 1);
-        setTotalCost(data.totalCost);
-
-      }
-
-      // Clear localStorage after retrieving the data
-      // localStorage.removeItem("Response")
-
-    } catch (error) {
-      console.error("Error occurred:", error);
+    if (projectPageRef.current) {
+      projectPageRef.current.scrollIntoView({ behavior: "smooth" });
     }
+
+    // if(data){
+    //   setDisplayQuestion(false)
+    //   setActualResponses(data.responses)
+    //   setCurrentQuestionIndex(data.responses.length-1);
+    //   console.log("data in project",data)
+    // }
+
   }, []);
 
-
-
   useEffect(() => {
-
     if (selectedData.length && currentQuestion.typeofselection == "single") {
       nextQuestion();
-      // setState(false)
-      // localStorage.clear();
     }
   }, [selectedData])
 
@@ -260,7 +238,7 @@ const page = () => {
   };
 
 
-
+  
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
 
@@ -282,7 +260,7 @@ const page = () => {
     } else {
       setQuestionsToShow(step.stack);
     }
-    if (step.question.typeofselection === "multiple") {
+    if(step.question.typeofselection === "multiple"){
       setSelectedData(step.selectedOption);
       setIsOptionSelected(true);
     }
@@ -304,6 +282,7 @@ const page = () => {
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
+
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
     });
@@ -352,6 +331,7 @@ const page = () => {
       case "dynamic": {
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
+          console.log("current question",currentQuestionLocal)
         } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
@@ -518,8 +498,7 @@ const page = () => {
                           : <ShowSummary response={{
                             responses: actualResponses,
                             totalCost: totalCost,
-                          }} 
-                        />
+                          }} />
                       ) : (
                         <Box
                           sx={{

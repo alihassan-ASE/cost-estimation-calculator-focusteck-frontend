@@ -144,11 +144,11 @@ const StaffComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [currentState, setCurrentState] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [actualResponses, setActualResponses] = useState({});
+  const [actualResponses , setActualResponses] = useState({});
 
   const [isOptionSelected, setIsOptionSelected] = useState(true);
 
-  const [addedOption, setAddedOption] = useState([]);
+  const [addedOption , setAddedOption] = useState([]);
 
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [isStepperClicked, setIsStepperClicked] = useState(false);
@@ -266,11 +266,9 @@ const StaffComponent = () => {
     }
   }, [actualResponses, isNextClicked, isStepperClicked]);
 
-
   useEffect(() => {
     if (values?.length > 0) {
       setCount(values?.length - 1);
-      console.log("value")
     }
     if(values.length){
       setResource(values);
@@ -335,6 +333,7 @@ const StaffComponent = () => {
 
     const { index, step } = obj;
 
+    console.log("step",step)
     setDisplayQuestion(true);
 
     if (index == 1) {
@@ -375,7 +374,6 @@ const StaffComponent = () => {
   if(values.length){
     dataObj.resources = values;
     setResource(dataObj.resources);
-  }
     currentState
       ? setActualResponses({ responses: [dataObj] })
       : setActualResponses((prev) => {
@@ -393,9 +391,6 @@ const StaffComponent = () => {
     setIsOptionSelected(false);
     setAddedOption(resp);
   };
-
-  console.log("Values",values);
-  console.log("actual responses",actualResponses)
 
   // Handling Next Quesiton
   const nextQuestion = () => {
@@ -516,7 +511,7 @@ const StaffComponent = () => {
 
   return (
     <Box >
-      {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
+      { additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length? (
         <Box
           sx={{
             maxWidth: "1520px",
@@ -664,7 +659,7 @@ const StaffComponent = () => {
                 }}
               >
                 <CustomNextButton
-                  sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" }, color: "white" }}
+                 sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" },color:"white" }}
                   onClick={() => {
                     nextQuestion();
                     setAddMore(false)
@@ -748,7 +743,7 @@ const StaffComponent = () => {
                               getResponsesData={getResponsesData}
                               selectedOption={lastQuestionSelectedOption}
                             />
-                            : <ShowSummary response={actualResponses} />
+                            : <ShowSummary response={actualResponses ? actualResponses : []} />
                         }
                       </div>
                     </Slide>

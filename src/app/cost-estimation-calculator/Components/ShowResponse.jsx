@@ -79,7 +79,7 @@ const ShowResponse = () => {
 
   useEffect(() => {
     if (response && Object.keys(response).length > 0) {
-      // window.localStorage.removeItem("Response");
+      window.localStorage.removeItem("Response");
     }
   }, [response]);
 
