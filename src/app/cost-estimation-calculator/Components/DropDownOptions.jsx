@@ -7,10 +7,6 @@ import {
   InputLabel,
   OutlinedInput,
   Chip,
-  Button,
-  Grid,
-  TextField,
-  InputBase
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -51,6 +47,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+
 const MenuProps = {
   PaperProps: {
     style: {
@@ -84,30 +81,18 @@ const DropDownComponent = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
-  let otherData = {
-    opt: null,
-    price: null,
-  };
-
-  const [otherVal, setOtherVal] = useState("");
-  const [inputField, setInputField] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [checkInputVal, setCheckInputVal] = useState(false);
   const [selectedFormats, setSelectedFormats] = useState("");
-  const [selectedValue, setSelectedValue] = useState('');
-
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
 
   useEffect(() => {
     if (Array.isArray(selectedOption)) {
       setSelectedFormats(selectedOption[0]);
     } else {
       setSelectedFormats(selectedOption);
-      setSelectedFormats(selectedOption);
     }
-  }, [selectedOption, options]);
+  }, [selectedOption]);
+
+  // console.log("selectedOption", selectedOption);
+  // console.log("selectedFormats", selectedFormats)
 
   return (
     <StyledFormControl
@@ -140,7 +125,7 @@ const DropDownComponent = ({
 
       }}
     >
-      <CustomInputLabel id="demo-simple-select-label">{label ? label : "Select Your Option"}</CustomInputLabel>
+      <CustomInputLabel id="demo-multiple-chip-label">{label ? label : "Select Your Option"}</CustomInputLabel>
       <Select
         IconComponent={KeyboardArrowDownIcon}
         sx={{ height: "60px", rowGap: "10px", width: "100%", borderRadius: "50px" }}
@@ -148,25 +133,26 @@ const DropDownComponent = ({
         value={disable ? null : selectedFormats}
         onChange={(e) => {
           const selectedObject = e.target.value;
-          setInputField(false);
           setSelectedFormats(selectedObject);
           selectedOptionPassToParent(selectedObject, label);
-          handleChange
         }}
         disabled={disable ? true : false}
-        input={<OutlinedInput id="select-multiple-chip" label={label ? label : "Select Your Option"} sx={{
-          ": hover": {
-            borderColor: "#0045e6"
-          },
-          '&:focus': {
-            borderRadius: 4,
-            borderColor: '#80bdff',
-            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-          },
 
-        }} />}
+        input={
+          <OutlinedInput id="select-multiple-chip" label={label ? label : "Select Your Option"}
+            sx={{
+              "&:hover": {
+                borderColor: "#0045e6"
+              },
+              '&:focus': {
+                borderRadius: 4,
+                borderColor: '#80bdff',
+                boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+              },
+            }} />
+        }
         renderValue={(selected) => (
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, }}>
             {selected.opt ? (
               <Chip
                 key={selected.opt}

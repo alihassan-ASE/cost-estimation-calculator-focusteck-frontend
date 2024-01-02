@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useSyncExternalStore } from "react";
 import {
   Box,
   Typography,
@@ -8,18 +8,20 @@ import {
   Grid,
   useMediaQuery,
   Slide,
+  Table,
+  TableBody, TableHead, TableContainer, TableRow, Paper, Modal
 } from "@mui/material";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import { styled } from "@mui/material/styles";
+import { styled, keyframes } from "@mui/material/styles";
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import Question from "../Components/Question/page";
-import { useRouter } from "next/navigation";
 import Stepper from "../Components/Stepper/page";
 import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShowSummary from "./ShowSummary";
-
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   width: 150,
@@ -47,6 +49,7 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
     padding: ".7em 1.7em",
   },
 }));
+
 const CustomBackButton = styled(Button)(({ theme }) => ({
   padding: 0,
   color: "#ACACAC",
@@ -75,33 +78,59 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
 
 const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
-  padding: "3em",
+  // padding: "3em",
+  maxWidth: "341px",
+  width: "280px",
   borderRadius: ".5em",
-  margin: "0 1em",
-  height: 445,
-  width: "345px",
+  marginLeft: "auto",
   [theme.breakpoints.down("md")]: {
-    width: "335px",
+    width: "280px",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "290px",
+    width: "270px",
   },
 }));
 
-const CustomCard = styled(Card)(({ theme }) => ({
-  height: 380,
-  width: "294px",
-  padding: "2em 1.5em",
-  margin: "0 1em",
-  borderRadius: ".5em",
-  display: "flex",
-  justifyContent: "center",
-  [theme.breakpoints.down("md")]: {
-    margin: "2em 0 ",
-  },
+const CustomCostBox = styled(Box)(({ theme }) => ({
+  backgroundColor: "#1E1D28",
+  padding: "2em",
+  borderRadius: "10px",
+  minWidth: "250px",
+  margin: "1em 0",
   [theme.breakpoints.down("sm")]: {
-    margin: "1em 0",
-    padding: "2em 1em",
+    padding: "1em",
+    minWidth: "230px"
+  },
+}));
+
+const CustomNormalTypography = styled(Typography)(({ theme }) => ({
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
+}));
+
+const CustomTypography = styled(Typography)(({ theme }) => ({
+  color: "#fff",
+  fontSize: "2em",
+  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  textAlign: "center",
+  '&:last-child td, &:last-child th': {
+    border: 0,
   },
 }));
 
@@ -126,15 +155,50 @@ const StaffComponent = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
+  const isNarrowStaff = useMediaQuery("(max-width:680px)");
   const [resource, setResource] = useState([]);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
   const [slideIn, setSlideIn] = useState(true);
   const [stepperState, setStepperState] = useState(false);
-  const route = useRouter();
   const dataObj = {};
   const [displayQuestion, setDisplayQuestion] = useState(true);
+  const [openModal, setopenModal] = useState(false);
+  const [i, setI] = useState(0)
+  const [editMode, setEditMode] = useState(false);
+  const [addMore, setAddMore] = useState(true);
+  const [clicked, setClicked] = useState();
+  const bounceAnimation = keyframes`
+  0%, 100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.1);
+  }
+  60% {
+    transform: scale(.9);
+  }
+`;
+
+  const CustomCard = styled(Card)(({ theme }) => ({
+    height: 370,
+    width: "50%",
+    minWidth: "270px",
+    padding: "2em 1.5em",
+    borderRadius: ".5em",
+    margin: "3em 0",
+    transform: "translate(-50 %, -50 %)",
+    position: "absolute",
+    animation: openModal ? `${bounceAnimation} .5s ease` : 'none',
+    [theme.breakpoints.down("md")]: {
+      margin: "2em 0 ",
+    },
+    [theme.breakpoints.down("sm")]: {
+      margin: "1em 0",
+      padding: "2em 1em",
+    },
+  }));
 
   // Setting Staff Resources and Questions
   useEffect(() => {
@@ -145,10 +209,9 @@ const StaffComponent = () => {
     
     if (data) {
 
-      console.log("data", data.responses[0].resources)
       setActualResponses(data);      
       setDisplayQuestion(false);
-      setCurrentQuestionIndex(data.length - 1);
+      setCurrentQuestionIndex(data.responses.length - 1);
       setCurrentState(false);
       setTotalCost(data.totalCost)
 
@@ -171,9 +234,11 @@ const StaffComponent = () => {
     });
   }, [])
 
-  
   useEffect(() => {
-    console.log("resources",resource);
+    setopenModal(false)
+  }, [clicked])
+
+  useEffect(() => {
     if (resource.length) {
       nextQuestion();
     }
@@ -210,14 +275,14 @@ const StaffComponent = () => {
     if(values.length){
       setResource(values);
     }
-  }, [values?.length]);
-
+  }, [values]);
 
   const deleteResource = (index) => {
     if (values) {
       if (index >= 0 && index < values.length) {
         const newValues = values.filter((_, i) => i !== index);
         setValues(newValues);
+        setResource(newValues)
       } else {
         if (index > 0) {
           setCount(count - 1);
@@ -225,7 +290,6 @@ const StaffComponent = () => {
       }
     }
   };
-
 
   // Function To Handling Price
   const handlePrice = (type) => {
@@ -275,6 +339,7 @@ const StaffComponent = () => {
 
     if (index == 1) {
       setCurrentState(true);
+      setAddMore(true)
     }
 
     setCurrentQuestionIndex(index - 1);
@@ -284,19 +349,29 @@ const StaffComponent = () => {
     setIsStepperClicked(true);
     slider();
 
+
   };
 
   // receiving selected option from child Component
-  const selectedOptionPassToParent = (data, boolVal, label) => {
+  const selectedOptionPassToParent = (data) => {
+
     setValues((prev) => [...prev, data]);
     setButtonState(true);
-
+    setEditMode(false)
+    setopenModal(false)
     setIsOptionSelected(false);
     setResource((prev) => [...prev, data]);
+    setClicked(false)
   };
+
+  const selectedSave = (bool) => {
+    setopenModal(bool)
+    setEditMode(false)
+  }
 
   // setting Response in actual Array
   const setResponseData = () => {
+
   if(values.length){
     dataObj.resources = values;
     setResource(dataObj.resources);
@@ -315,14 +390,12 @@ const StaffComponent = () => {
 
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
-
     setIsOptionSelected(false);
     setAddedOption(resp);
-
   };
 
   console.log("Values",values);
-  console.log("resources",resource)
+  console.log("actual responses",actualResponses)
 
   // Handling Next Quesiton
   const nextQuestion = () => {
@@ -360,12 +433,12 @@ const StaffComponent = () => {
 
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
-
     setDisplayQuestion(true);
 
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
       setCurrentState(true);
+      setAddMore(true)
     }
 
     if (currentQuestionIndex > 0) {
@@ -412,37 +485,33 @@ const StaffComponent = () => {
 
   useEffect(() => {
     if (currentQuestionIndex > additionalQuesiton.length && additionalQuesiton.length != 0) {
-
       setDisplayQuestion(false);
+      setCurrentQuestion(true)
       actualResponses.totalCost = totalCost;
     }
   }, [nextQuestion]);
 
-  console.log("count",count)
-  // Showing selected Resources
-  const returnResources = () => {
-    const tags = [];
-    for (let i = 0; i <= count; i++) {
-      tags.push(
-        <CustomCard key={i}>
-          <StaffResource
-            key={i}
-            question={currentQuestion}
-            options={staffBase}
-            index={i}
-            count={count}
-            setCount={setCount}
-            setValues={setValues}
-            values={values}
-            selectedOption={resource}
-            selectedOptionPassToParent={selectedOptionPassToParent}
-            deleteResource={deleteResource}
-          />
-        </CustomCard>
-      );
-    }
-    return tags;
-  };
+  const [dropDownVal, setDropDownVal] = useState(false)
+
+  const handleModal = () => {
+    setopenModal(true)
+    setDropDownVal(true)
+  }
+
+  const handleClose = () => {
+    setopenModal(false)
+    setI(0)
+    setEditMode(false)
+    setDropDownVal(false)
+
+  }
+
+  const editResource = (index) => {
+    setI(index)
+    setEditMode(true)
+    setopenModal(true)
+    setDropDownVal(true)
+  }
 
 
   return (
@@ -455,50 +524,156 @@ const StaffComponent = () => {
             marginLeft: "auto",
           }}
         >
+          {
+            openModal ?
+              <Modal
+                open={openModal}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
 
-
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                <CustomCard>
+                  <StaffResource
+                    question={currentQuestion}
+                    options={staffBase}
+                    count={count}
+                    setCount={setCount}
+                    setValues={setValues}
+                    index={editMode ? i : count}
+                    values={values}
+                    selectedOption={resource}
+                    selectedOptionPassToParent={selectedOptionPassToParent}
+                    selectedSave={selectedSave}
+                    deleteResource={deleteResource}
+                    dropDownVal={dropDownVal}
+                  />
+                </CustomCard>
+              </Modal>
+              : null
+          }
           {currentState ? (
             <>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                  padding: "2em",
-                  gap: "1em",
-                }}
-              >
-                {returnResources()}
-
-                {resource.length > 0 ? (
+              <Box sx={{ padding: "3em 1em" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    gap: '1em',
+                    maxWidth: 800,
+                    flexWrap: isNarrowStaff ? "wrap" : "nowrap",
+                    marginBottom: ".5em"
+                  }}>
+                  <Typography variant="h5" sx={{ padding: ".5em 0", fontSize: "1.3em", }}>
+                    Please Select Staff Resources as per your requirement
+                  </Typography>
                   <Box>
                     <CustomButton
                       onClick={() => {
                         setCount(count + 1);
-                        returnResources();
+                        handleModal()
+                        setI(count)
                       }}
                     >
-                      <ControlPointIcon sx={{ fontSize: 30 }} />
+                      Add New Resource
                     </CustomButton>
                   </Box>
-                ) : null}
+                </Box>
+
+                <TableContainer component={Paper} sx={{ maxWidth: 800, margin: "auto" }}>
+                  <Table
+                    sx={{
+                      minWidth: 700,
+                      "& .MuiTableCell-root.MuiTableCell-head": {
+                        backgroundColor: "#0045e6",
+                        color: "#fff"
+                      }
+                    }}
+                    aria-label="customized table">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell>Resources</StyledTableCell>
+                        <StyledTableCell>Resources Option</StyledTableCell>
+                        <StyledTableCell>Seniority Level</StyledTableCell>
+                        <StyledTableCell>Number Of Resources</StyledTableCell>
+                        <StyledTableCell>Actions</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {
+                        resource?.length === 0
+                          ? <StyledTableRow>
+                            <StyledTableCell component="th" scope="row" colSpan={5}>
+                              No Resources to Show
+                            </StyledTableCell>
+                          </StyledTableRow>
+                          : resource.map((row, index) => (
+                            < StyledTableRow key={index} >
+                              <StyledTableCell sx={{ textAlign: "center", }} component="th" scope="row">
+                                {row.resource}
+                              </StyledTableCell>
+                              <StyledTableCell sx={{ textAlign: "center", }}>{row.resourceOption?.opt}</StyledTableCell>
+                              <StyledTableCell sx={{ textAlign: "center", }}>{row.seniorityLevel}</StyledTableCell>
+                              <StyledTableCell sx={{ textAlign: "center", }}>{row.numOfResources}</StyledTableCell>
+                              <StyledTableCell sx={{ textAlign: "center", }}>
+                                <Box sx={{ display: "flex", justifyContent: "space-between", padding: " 0 .3em", gap: ".5em" }}>
+                                  <ModeEditIcon sx={{
+                                    color: "rgb(99, 115, 129)",
+                                    fontSize: 20,
+                                    padding: ".5em",
+                                    backgroundColor: "#F4F6F8",
+                                    borderRadius: "50%",
+                                    transition: "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
+                                    "&:hover": {
+                                      backgroundColor: "#0045e6",
+                                      color: "#fff",
+                                      cursor: "pointer"
+                                    }
+                                  }} onClick={() => { editResource(index) }} />
+                                  <DeleteIcon sx={{
+                                    color: "rgb(99, 115, 129)", fontSize: 20, padding: ".5em", backgroundColor: "#F4F6F8",
+                                    borderRadius: "50%",
+                                    transition: "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
+                                    "&:hover": {
+                                      backgroundColor: "#0045e6",
+                                      color: "#fff",
+                                      cursor: "pointer"
+                                    }
+                                  }} onClick={() => {
+                                    setCount(index)
+                                    deleteResource(index)
+                                  }} />
+                                </Box>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Box>
+
               <Box
                 sx={{
-                  margin: "2em 1em",
+                  margin: "1em 3em",
+                  width: "80%",
+                  display: "flex",
+                  justifyContent: "flex-end"
                 }}
               >
                 <CustomNextButton
                   sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" }, color: "white" }}
                   onClick={() => {
                     nextQuestion();
+                    setAddMore(false)
                   }}
                   disabled={values[0] ? false : true}
                 >
                   Next
                 </CustomNextButton>
               </Box>
-              {/* )} */}
             </>
           ) : (
             <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} sx={{ maxWidth: "100%" }}>
@@ -578,40 +753,43 @@ const StaffComponent = () => {
                       </div>
                     </Slide>
                     : ""}
-                {/* {additionalQuesiton.length >= currentQuestionIndex && (
-                  <Box
-                    sx={{
-                      margin: "2em 0",
-                    }}
-                  >
-                    <CustomNextButton
-                      size="medium"
-                      variant="contained"
-                      sx={{ width: 150 }}
-                      onClick={nextQuestion}
-                      disabled={isOptionSelected}
-                    >
-                      Next
-                    </CustomNextButton>
-                  </Box>
-                )} */}
-
               </Grid>
               <Box sx={{
                 borderRight: orientation === "vertical" ? "1px solid grey" : "0",
                 borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-                width: orientation !== "vertical" ? "100%" : "0",
-                marginTop: "7%",
-                height: orientation === "vertical" ? "65vh" : 0
+                width: orientation !== "vertical" ? "90%" : "0",
+                margin: orientation !== "vertical" ? "auto" : "0",
+                marginTop: "5%",
+                height: orientation === "vertical" ? "90vh" : 0
 
               }}></Box>
               <Grid item lg={3.9} md={12} sm={12} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
-                  <Stepper
-                    responses={actualResponses.responses}
-                    changeActiveQuestion={changeActiveQuestion}
-                    orientation={orientation}
-                  />
+                  <div style={{
+                    padding: orientation !== "vertical" ? "0 7.4%" : 0
+                  }}>
+                    <Stepper
+                      responses={actualResponses.responses}
+                      changeActiveQuestion={changeActiveQuestion}
+                      orientation={orientation}
+                    />
+                    {
+                      displayQuestion
+                        ?
+                        <Box sx={{ padding: "1em 0" }}>
+                          <CustomCostBox>
+                            <CustomNormalTypography
+                              variant="h6"
+                              sx={{ color: "#fff", fontSize: "1.1em" }}
+                            >
+                              Estimated Cost
+                            </CustomNormalTypography>
+                            <CustomTypography>$ {totalCost}</CustomTypography>
+                          </CustomCostBox>
+                        </Box>
+                        : null
+                    }
+                  </div>
                 ) : null}
               </Grid>
             </Grid>
@@ -629,8 +807,9 @@ const StaffComponent = () => {
         >
           <CircularProgress />
         </Box>
-      )}
-    </Box>
+      )
+      }
+    </Box >
   );
 };
 

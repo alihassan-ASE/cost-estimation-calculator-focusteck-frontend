@@ -85,11 +85,12 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
 const CustomCostBox = styled(Box)(({ theme }) => ({
   backgroundColor: "#1E1D28",
   padding: "2em",
+  margin: "1em 0",
   borderRadius: "10px",
   minWidth: "250px",
-  margin: "1em 0",
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
+    minWidth: "230px"
   },
 }));
 
@@ -308,6 +309,7 @@ const page = () => {
     });
 
     if (lastQuestion.question.typeofselection === "multiple") {
+      setSelectedData(lastQuestion.selectedOption)
       setIsOptionSelected(true)
       setSelectedData(lastQuestion.selectedOption)
     }
@@ -441,7 +443,8 @@ const page = () => {
                 display: "flex", alignItems: "center",
                 padding: "2.2em 0 1em 0",
                 gap: isNarrowScreen && actualResponses.length > 0 ? "1.9em" : 0,
-                paddingLeft: isNarrowScreen && actualResponses.length > 0 ? "7.4%" : 0
+                paddingLeft: isNarrowScreen && actualResponses.length > 0 ? "7.4%" : 0,
+                paddingBottom: actualResponses.length > 0 ? "1em" : 0
               }}>
                 <Box
                   sx={{
@@ -556,8 +559,8 @@ const page = () => {
               borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
               width: orientation !== "vertical" ? "90%" : "0",
               margin: orientation !== "vertical" ? "auto" : "0",
-              marginTop: "7%",
-              height: orientation === "vertical" ? "65vh" : 0
+              marginTop: "5%",
+              height: orientation === "vertical" ? "90vh" : 0
             }}></Box>
             <Grid item lg={3.9} md={12} sm={12} xs={12}>
               <div style={{
@@ -571,15 +574,17 @@ const page = () => {
                 {
                   displayQuestion
                     ?
-                    <CustomCostBox>
-                      <CustomNormalTypography
-                        variant="h6"
-                        sx={{ color: "#fff", fontSize: "1.1em" }}
-                      >
-                        Estimated Cost
-                      </CustomNormalTypography>
-                      <CustomTypography>{totalCost} $</CustomTypography>
-                    </CustomCostBox>
+                    <Box sx={{ padding: "1em 0" }}>
+                      <CustomCostBox>
+                        <CustomNormalTypography
+                          variant="h6"
+                          sx={{ color: "#fff", fontSize: "1.1em" }}
+                        >
+                          Estimated Cost
+                        </CustomNormalTypography>
+                        <CustomTypography>$ {totalCost}</CustomTypography>
+                      </CustomCostBox>
+                    </Box>
                     : null
                 }
 

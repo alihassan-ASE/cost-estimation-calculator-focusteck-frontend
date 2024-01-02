@@ -110,18 +110,16 @@ const CustomLinkBox = styled(Link)(({ theme }) => ({
 }));
 
 const ShowSummary = ({ response }) => {
-
   const hasResponse = window.localStorage.getItem('Response');
   const [timeline, setTimeline] = useState("");
   const [systemType, setSystemType] = useState("");
   const [industry, setIndustry] = useState("");
   const [actualResponse, setActualResponse] = useState({});
+
+  const handleClose = () => setOpenForm(false);
   const [openForm, setOpenForm] = useState(false);
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
 
-  const handleClose = () => setOpenForm(false);
-
-  const [data, setData] = useState({})
   const handleForm = () => {
     setOpenForm(true)
   }
@@ -134,8 +132,6 @@ const ShowSummary = ({ response }) => {
       localStorage.setItem("Response", data);
     }
   };
-
-  console.log("response",response);
 
   useEffect(() => {
 
