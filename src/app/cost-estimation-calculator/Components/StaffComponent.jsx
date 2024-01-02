@@ -23,8 +23,34 @@ import ShowSummary from "./ShowSummary";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+const CustomButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#00A76f",
+  border: "1px solid #00A76f",
+  color: "#fff",
+  maxWidth: "341px",
+  width: "210px",
+  borderRadius: ".5em",
+  marginLeft: "auto",
+  marginBottom: ".7em",
+  "&:hover": {
+    border: "1px solid #00A76f",
+    color: "#00A76f",
+    backgroundColor: "#fff"
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "280px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "270px",
+  },
+}));
+
 const CustomNextButton = styled(Button)(({ theme }) => ({
-  width: 150,
+  border: "1px solid #0069d9",
+  maxWidth: "341px",
+  width: "210px",
+  marginTop: ".7em",
+  marginLeft: "auto",
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -42,20 +68,23 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
     padding: ".7em 1.3em",
+    width: "280px",
   },
   [theme.breakpoints.down("sm")]: {
     width: 100,
     fontSize: 10,
     padding: ".7em 1.7em",
+    width: "270px",
   },
 }));
 
 const CustomBackButton = styled(Button)(({ theme }) => ({
-  padding: 0,
   color: "#ACACAC",
-  height: "50px",
-  width: "50px",
+  width: "40px",
+  height: "40px",
   borderRadius: "50%",
+  position: "absolute",
+  // left: "-5px",
   justifyContent: "normal",
   minWidth: "min-content",
   border: "2px solid #ACACAC",
@@ -75,23 +104,6 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
 }));
-
-const CustomButton = styled(Button)(({ theme }) => ({
-  border: "1px solid #0069d9",
-  // padding: "3em",
-  maxWidth: "341px",
-  width: "280px",
-  borderRadius: ".5em",
-  marginLeft: "auto",
-  [theme.breakpoints.down("md")]: {
-    width: "280px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    width: "270px",
-  },
-}));
-
-
 
 const CustomCostBox = styled(Box)(({ theme }) => ({
   backgroundColor: "#1E1D28",
@@ -128,12 +140,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  textAlign: "center",
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+
 
 const StaffComponent = () => {
   const [count, setCount] = useState(0);
@@ -161,6 +168,7 @@ const StaffComponent = () => {
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
+  const [back, setBack] = useState(false)
   const [slideIn, setSlideIn] = useState(true);
   const [stepperState, setStepperState] = useState(false);
   const dataObj = {};
@@ -170,6 +178,12 @@ const StaffComponent = () => {
   const [editMode, setEditMode] = useState(false);
   const [addMore, setAddMore] = useState(true);
   const [clicked, setClicked] = useState();
+  const [deleteResources, setDeleteResource] = useState(false);
+  const [startAnimation, setStartAnimation] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [addTransition, setAddTransition] = useState(false);
+  const [editTransition, setEditTransition] = useState(false)
+
   const bounceAnimation = keyframes`
   0%, 100% {
     transform: scale(1);
@@ -181,6 +195,37 @@ const StaffComponent = () => {
     transform: scale(.9);
   }
 `;
+
+  const newRowTransition = keyframes`
+  0% {
+   transform: translateY(-25px);
+   opacity: 0;
+  }
+  50% {
+    background-color: rgba(25, 118, 210, 0.1);
+  }
+  100%{
+    transform: translateY(0px),
+    z-index:1
+    background-color: #fff;
+  }
+  `;
+
+  const deleteRowTransition = keyframes`
+  0 % {
+    opacity: 0
+  }
+  100 % {
+     opacity: 1
+  }
+    `;
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    textAlign: "center",
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
   const CustomCard = styled(Card)(({ theme }) => ({
     height: 370,
@@ -203,15 +248,6 @@ const StaffComponent = () => {
 
   // Setting Staff Resources and Questions
   useEffect(() => {
-    //  let data = localStorage.getItem("Response");
-    //  data  = JSON.parse(data);
-    //  console.log("Data in staff comp",data)
-    //  if(data){
-    //   setActualResponses(data.responses);
-    //   setDisplayQuestion(false);
-    //   setCurrentQuestionIndex(data?.responses?.length - 1);
-    //   setCurrentState(false)
-    //  }
     getQuestions().then((resp) => {
       const { Resources, additionalQuestions } = resp;
       setAdditionalQuesiton(additionalQuestions);
@@ -229,13 +265,6 @@ const StaffComponent = () => {
     }
   }, [addedOption])
 
-  useEffect(() => {
-    if (isNarrowScreen) {
-      setOrientation("horizontal");
-    } else {
-      setOrientation("vertical");
-    }
-  }, [isNarrowScreen]);
 
   //calling Handle Price function on next button click and on stepper
   useEffect(() => {
@@ -258,10 +287,15 @@ const StaffComponent = () => {
   }, [values]);
 
   const deleteResource = (index) => {
+    setDeleteResource(true);
+    setAddTransition(false)
+    setEditTransition(false)
+
     if (values) {
       if (index >= 0 && index < values.length) {
         const newValues = values.filter((_, i) => i !== index);
         setValues(newValues);
+        setResource(newValues)
       } else {
         if (index > 0) {
           setCount(count - 1);
@@ -311,10 +345,12 @@ const StaffComponent = () => {
 
   // Changing active question on stepper
   const changeActiveQuestion = (obj) => {
-
+    setBack(true);
+    setAddTransition(false)
+    setDeleteResource(false);
+    setStartAnimation(false)
     const { index, step } = obj;
 
-    console.log("step", step)
     setDisplayQuestion(true);
 
     if (index == 1) {
@@ -331,9 +367,16 @@ const StaffComponent = () => {
 
   };
 
+  useEffect(() => {
+    if (isNarrowScreen) {
+      setOrientation("horizontal");
+    } else {
+      setOrientation("vertical");
+    }
+  }, [isNarrowScreen]);
+
   // receiving selected option from child Component
   const selectedOptionPassToParent = (data) => {
-    console.log("data", data)
     setValues((prev) => [...prev, data]);
     setButtonState(true);
     setEditMode(false)
@@ -342,9 +385,11 @@ const StaffComponent = () => {
     setResource((prev) => [...prev, data]);
     setClicked(false)
   };
+
   const selectedSave = (bool) => {
     setopenModal(bool)
     setEditMode(false)
+    setEditTransition(true)
   }
 
   // setting Response in actual Array
@@ -407,6 +452,10 @@ const StaffComponent = () => {
   // Handling Back Question and Calculating Price on Back Button
   const backQuestion = () => {
     setDisplayQuestion(true);
+    setBack(true);
+    setDeleteResource(false)
+    setStartAnimation(false)
+
 
     let lastQuestion;
     if (actualResponses.responses && actualResponses.responses.length === 1) {
@@ -468,23 +517,33 @@ const StaffComponent = () => {
   const handleModal = () => {
     setopenModal(true)
     setDropDownVal(true)
+    setBack(false)
+    setDeleteResource(false)
+    setStartAnimation(false)
+    setEditTransition(false)
+
   }
   const handleClose = () => {
     setopenModal(false)
     setI(0)
     setEditMode(false)
     setDropDownVal(false)
-
+    setBack(false)
+    setStartAnimation(true)
+    setAddTransition(false)
   }
   const editResource = (index) => {
     setI(index)
+    setAddTransition(false)
+    setEditIndex(index)
+    // setCount(index)
+    setEditTransition(false)
     setEditMode(true)
     setopenModal(true)
     setDropDownVal(true)
+    setBack(false)
   }
 
-  // console.log("values", values)
-  // console.log("count: ", count)
   return (
     <Box >
       {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
@@ -517,7 +576,6 @@ const StaffComponent = () => {
                     selectedOption={resource}
                     selectedOptionPassToParent={selectedOptionPassToParent}
                     selectedSave={selectedSave}
-                    deleteResource={deleteResource}
                     dropDownVal={dropDownVal}
                   />
                 </CustomCard>
@@ -526,7 +584,16 @@ const StaffComponent = () => {
           }
           {currentState ? (
             <>
-              <Box sx={{ padding: "3em 1em" }}>
+              <Box>
+                <Typography variant="h5"
+                  sx={{
+                    // paddingLeft: "4.7%",
+                    fontSize: "1.3em",
+                    marginBottom: "4em",
+                    textAlign: "center"
+                  }}>
+                  Please Select Staff Resources as per your requirement
+                </Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -538,20 +605,16 @@ const StaffComponent = () => {
                     flexWrap: isNarrowStaff ? "wrap" : "nowrap",
                     marginBottom: ".5em"
                   }}>
-                  <Typography variant="h5" sx={{ padding: ".5em 0", fontSize: "1.3em", }}>
-                    Please Select Staff Resources as per your requirement
-                  </Typography>
-                  <Box>
-                    <CustomButton
-                      onClick={() => {
-                        setCount(count + 1);
-                        handleModal()
-                        setI(count)
-                      }}
-                    >
-                      Add New Resource
-                    </CustomButton>
-                  </Box>
+                  <CustomButton
+                    onClick={() => {
+                      setCount(count + 1);
+                      handleModal()
+                      setI(count)
+                      setAddTransition(true)
+                    }}
+                  >
+                    Add New
+                  </CustomButton>
                 </Box>
 
                 <TableContainer component={Paper} sx={{ maxWidth: 800, margin: "auto" }}>
@@ -561,7 +624,7 @@ const StaffComponent = () => {
                       "& .MuiTableCell-root.MuiTableCell-head": {
                         backgroundColor: "#0045e6",
                         color: "#fff"
-                      }
+                      },
                     }}
                     aria-label="customized table">
                     <TableHead>
@@ -575,15 +638,25 @@ const StaffComponent = () => {
                     </TableHead>
                     <TableBody>
                       {
-                        values.length === 0
+                        resource.length === 0
                           ? <StyledTableRow>
-                            <StyledTableCell component="th" scope="row" colSpan={5}>
+                            <StyledTableCell component="th" scope="row" colSpan={5} sx={{ textAlign: "center" }}>
                               No Resources to Show
                             </StyledTableCell>
                           </StyledTableRow>
-                          : values.map((row, index) => (
-                            < StyledTableRow key={index} >
-                              <StyledTableCell sx={{ textAlign: "center", }} component="th" scope="row">
+                          : resource.map((row, index) => (
+                            < StyledTableRow key={index} sx={{
+                              backgroundColor: "#fff",
+                              zIndex: 1,
+                              opacity: 1,
+                              animation: index === count && !back && addTransition && !deleteResources
+                                ? `${newRowTransition} .5s ease`
+                                : editIndex === index && editTransition && !addTransition && !back
+                                  ? `${newRowTransition} .5s ease`
+                                  : 'none',
+                            }}
+                            >
+                              <StyledTableCell sx={{ textAlign: "center", }} scope="row">
                                 {row.resource}
                               </StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }}>{row.resourceOption?.opt}</StyledTableCell>
@@ -603,7 +676,9 @@ const StaffComponent = () => {
                                       color: "#fff",
                                       cursor: "pointer"
                                     }
-                                  }} onClick={() => { editResource(index) }} />
+                                  }} onClick={() => {
+                                    editResource(index)
+                                  }} />
                                   <DeleteIcon sx={{
                                     color: "rgb(99, 115, 129)", fontSize: 20, padding: ".5em", backgroundColor: "#F4F6F8",
                                     borderRadius: "50%",
@@ -612,9 +687,8 @@ const StaffComponent = () => {
                                       backgroundColor: "#0045e6",
                                       color: "#fff",
                                       cursor: "pointer"
-                                    }
+                                    },
                                   }} onClick={() => {
-                                    setCount(index)
                                     deleteResource(index)
                                   }} />
                                 </Box>
@@ -629,16 +703,20 @@ const StaffComponent = () => {
               <Box
                 sx={{
                   margin: "1em 3em",
-                  width: "80%",
+                  color: "#fff",
                   display: "flex",
-                  justifyContent: "flex-end"
+                  alignItems: "center",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  gap: '1em',
+                  maxWidth: 800,
                 }}
               >
                 <CustomNextButton
-                  sx={{ width: 150, backgroundColor: "#0045e6", "&:hover": { backgroundColor: "#0045e6" }, color: "white" }}
                   onClick={() => {
                     nextQuestion();
                     setAddMore(false)
+                    setEditIndex(null)
                   }}
                   disabled={values[0] ? false : true}
                 >
@@ -658,25 +736,23 @@ const StaffComponent = () => {
                       display: "flex",
                       gap: "1em",
                       alignItems: "center",
-                      margin: "1em 0",
+                      position: "relative"
                     }}
                   >
                     {currentQuestionIndex > 0 && (
                       <CustomBackButton onClick={backQuestion}>
                         <KeyboardBackspaceIcon
                           sx={{
-                            color: "#ACACAC",
-                            // border: "2px solid #ACACAC",
-                            // borderRadius: "50%",
-                            padding: ".3em",
-                            borderRadius: "50%",
-
-                            // ":hover": {
-                            //   cursor: "pointer",
-                            //   backgroundColor: "#0069d9",
-                            //   border: "2px solid #fff",
-                            //   color: "#fff",
-                            // },
+                            textAlign: "center",
+                            fontSize: "1.6em",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            display: "flex",
+                            width: "100%",
+                            transition: "all 0.3s ease-in-out",
+                            ":hover": {
+                              cursor: "pointer",
+                            },
                           }}
                         />
                       </CustomBackButton>
@@ -686,13 +762,19 @@ const StaffComponent = () => {
                     displayQuestion
                       ?
                       <Box
-
+                        sx={{ paddingLeft: "5.7%" }}
                       >
                         <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
                           Question {actualResponses.responses.length}
                         </Typography>
                       </Box>
-                      : null
+                      : <Box
+                        sx={{ paddingLeft: "5.7%" }}
+                      >
+                        <CustomNormalTypography variant="h5" sx={{ color: "#89899C", fontWeight: 600, }}>
+                          Your Results
+                        </CustomNormalTypography>
+                      </Box>
                   }
                 </Box>
 
@@ -710,7 +792,7 @@ const StaffComponent = () => {
                         node.style.transform = "translateY(-50px)";
                       }}
                     >
-                      <div style={{ padding: "0 4.7%" }}>
+                      <div style={{ padding: "0 7.4%" }}>
                         {
                           displayQuestion
                             ?

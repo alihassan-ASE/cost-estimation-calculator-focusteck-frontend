@@ -141,14 +141,6 @@ const page = () => {
     if (projectPageRef.current) {
       projectPageRef.current.scrollIntoView({ behavior: "smooth" });
     }
-
-    // if(data){
-    //   setDisplayQuestion(false)
-    //   setActualResponses(data.responses)
-    //   setCurrentQuestionIndex(data.responses.length-1);
-    //   console.log("data in project",data)
-    // }
-
   }, []);
 
   useEffect(() => {
@@ -237,7 +229,7 @@ const page = () => {
   };
 
 
-  
+
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
 
@@ -259,7 +251,7 @@ const page = () => {
     } else {
       setQuestionsToShow(step.stack);
     }
-    if(step.question.typeofselection === "multiple"){
+    if (step.question.typeofselection === "multiple") {
       setSelectedData(step.selectedOption);
       setIsOptionSelected(true);
     }
@@ -329,7 +321,6 @@ const page = () => {
       case "dynamic": {
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
-          console.log("current question",currentQuestionLocal)
         } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);

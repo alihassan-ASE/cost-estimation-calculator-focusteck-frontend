@@ -128,12 +128,12 @@ export default function VerticalLinearStepper(props) {
                             },
 
                             "&.css-1xr15il-MuiStepLabel-root": {
-                              // padding: "0"
+                              padding: "0"
                             },
                             "& .MuiStepLabel-label": {
                               fontSize: "0.7rem",
                               alignItems: "start",
-                              padding: "5px"
+                              padding: "0px"
                             }
                             ,
                             "& .MuiBox-root": {
@@ -144,13 +144,20 @@ export default function VerticalLinearStepper(props) {
                             key={index}
                             cursor="pointer"
                             onClick={() => handleStep(responses[index], index + 1)}>
-                            <Typography>Resources</Typography>
+
+                            <Typography sx={{
+                              fontSize: "14px",
+                              textTransform: "capitalize",
+                              fontWeight: 500,
+
+                            }}>Resources</Typography>
+
                           </StepLabel>
                           {responses[index].resources.map((resource, resourceIndex) => (
                             <div key={resourceIndex}>
                               <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "center", alignItems: "start" }}>
                                 <Box sx={{ width: "50%", paddingLeft: "30px", }}>
-                                  <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>  {resource.resource}</Typography>
+                                  <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>{resource.resource}</Typography>
                                 </Box>
                                 <Box sx={{ width: "50%", padding: "3px" }}>
                                   <Typography textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{

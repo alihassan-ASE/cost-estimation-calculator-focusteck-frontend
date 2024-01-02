@@ -101,7 +101,6 @@ const StaffResource = ({
     return options[0]?.typeofselection;
   }, [options]);
 
-  console.log("selectedOption", selectedOption)
   return (
     <Box
       sx={{

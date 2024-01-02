@@ -91,9 +91,6 @@ const DropDownComponent = ({
     }
   }, [selectedOption]);
 
-  // console.log("selectedOption", selectedOption);
-  // console.log("selectedFormats", selectedFormats)
-
   return (
     <StyledFormControl
       sx={{
