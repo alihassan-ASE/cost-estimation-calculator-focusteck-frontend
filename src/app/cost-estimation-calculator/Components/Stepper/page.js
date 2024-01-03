@@ -4,10 +4,12 @@ import { Box, Grid, Stepper, Step, StepLabel, Typography, useMediaQuery } from "
 import styled from "styled-components";
 import { maxHeight } from "@mui/system";
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+import { ContactPageSharp } from "@mui/icons-material";
 
 export default function VerticalLinearStepper(props) {
   const { responses, changeActiveQuestion } = props;
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
+  const isMobileScreen = useMediaQuery("(max-width:445px)");
   const leng = responses?.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
   const containerRef = useRef(null);
@@ -54,9 +56,11 @@ export default function VerticalLinearStepper(props) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [handleStep]);
+  let questionsArray = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"];
 
   const [containerHeight, setContainerHeight] = useState(20);
   const containerLabelRef = useRef(null);
+
   useEffect(() => {
     if (containerLabelRef.current) {
       const newHeight = containerLabelRef.current.clientHeight;
@@ -64,42 +68,57 @@ export default function VerticalLinearStepper(props) {
     }
   }, [responses]);
 
-  let questionsArray = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"];
+
   return (
     <Box
       sx={{
-        padding: "2.4em 0em .5em 0"
+        padding: "2.4em 0em .5em 0",
       }}
     >
       <Typography sx={{ fontWeight: "bold" }}>SUMMARY</Typography>
       <Box
         sx={{
           maxHeight: "max-content",
-          height: isNarrowScreen ? "40vh" : "45vh",
+          height: "45vh",
           paddingLeft: "0em",
           marginRight: "5px",
           maxWidth: "100%",
+          marginBottom: isMobileScreen ? "2em" : 0
         }}
       >
         <CustomScrollableContainer ref={containerRef}>
           <Stepper
             ref={containerLabelRef}
             sx={{
+              borderColor: "#0045e6",
+              "& .MuiStepper-root": {
+                position: "relative"
+              },
               "& .MuiStepLabel-root": {
-                padding: ".3em 0",
-                alignItems: "start",
-                textAlign: "start"
+                padding: "0 0em 2em 0",
+                textAlign: "start",
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
               },
               "& .MuiStepConnector-line": {
                 borderColor: "#0045e6",
                 borderLeftWidth: "2px",
                 marginLeft: "-3px",
-                padding: "1px"
+                height: "45vh",
+                // height: "208px"
               },
               "& .MuiStepConnector-root": {
-                marginTop: "-2px",
+                position: "absolute",
+                marginTop: "auto",
+                marginBottom: "auto",
+                zIndex: -100
               },
-              borderColor: "#0045e6",
+              "& .MuiStepIcon-root": {
+                width: "1.2rem",
+                height: "1.2rem",
+                alignItems: "start",
+              },
 
             }}
             nonLinear
@@ -119,68 +138,69 @@ export default function VerticalLinearStepper(props) {
                       {responses[index].resources && index === 0 ? (
                         <>
                           <StepLabel sx={{
+                            // "& .MuiStepLabel-root": {
+                            //   padding: "0 0em 2em 0",
+                            // },
+                            padding: 0,
+                            "& .MuiStepIcon-root.Mui-active": {
+                              color: "#0045e6",
+                            },
                             "& .MuiStepIcon-root": {
                               width: "1.2rem",
                               height: "1.2rem",
                               alignItems: "start",
-                              color: index < activeStep ? "#0045e6" : "#0045e6",
-                            },
-
-                            "&.css-1xr15il-MuiStepLabel-root": {
-                              // padding: "0"
+                              color: index < activeStep ? "#0045e6" : "#838383",
                             },
                             "& .MuiStepLabel-label": {
                               fontSize: "0.7rem",
                               alignItems: "start",
-                              padding: "5px"
                             }
                             ,
                             "& .MuiBox-root": {
                               alignItems: "start"
                             }
-
                           }}
                             key={index}
                             cursor="pointer"
-                            onClick={() => handleStep(responses[index], index + 1)}>
-
-                            <Typography sx={{
-                              fontSize: "14px",
-                              textTransform: "capitalize",
-                              fontWeight: 500,
-                              lineHeight: 1.3
-
-                            }}>Resources</Typography>
-
+                            onClick={() => {
+                              handleStep(responses[index], index + 1)
+                            }}>
+                            {responses[index].resources.map((resource, resourceIndex) => (
+                              <div key={resourceIndex}>
+                                <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start" }}>
+                                  <Box sx={{ width: "40%", }}>
+                                    <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>{resource.resource}</Typography>
+                                  </Box>
+                                  <Box sx={{ width: "55%", marginLeft: "2em" }}>
+                                    <Typography paddingRight={"6px"} textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{
+                                      fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                        ","
+                                      ),
+                                    }}>
+                                      {resource.resourceOption.opt}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </div>
+                            ))}
                           </StepLabel>
-                          {responses[index].resources.map((resource, resourceIndex) => (
-                            <div key={resourceIndex}>
-                              <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "center", alignItems: "start" }}>
-                                <Box sx={{ width: "50%", paddingLeft: "30px", }}>
-                                  <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>{resource.resource}</Typography>
-                                </Box>
-                                <Box sx={{ width: "50%", padding: "3px" }}>
-                                  <Typography paddingRight={"6px"} textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{
-                                    fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-                                      ","
-                                    ),
-                                  }}>
-                                    {resource.resourceOption.opt}
-                                  </Typography>
-                                </Box>
-                              </Box>
-                            </div>
-                          ))}
+
                         </>
                       ) : (
                         <StepLabel
                           sx={{
+                            // "& .MuiStepLabel-root": {
+                            //   padding: "0 0em 2em 0",
+                            // },
+                            "& .MuiStepIcon-root.Mui-active": {
+                              color: "#0045e6",
+                            },
                             "& .MuiStepIcon-root": {
                               width: "1.2rem",
                               height: "1.2rem",
                               alignItems: "start",
-                              color: index < activeStep ? "#0045e6" : "0045e6",
-                              color: "#0045e6"
+                              color: index < activeStep ? "#0045e6" : "#838383",
+
                             },
                             "& .MuiStepLabel-label": {
                               fontSize: "0.7rem",
@@ -198,18 +218,20 @@ export default function VerticalLinearStepper(props) {
                             }
                           }}
                           cursor="pointer"
-                          onClick={() => handleStep(responses[index], index + 1)}
+                          onClick={() => {
+                            handleStep(responses[index], index + 1)
+                          }}
                         >
                           {(responses[index].selectedOption || responses[index].selectedData) && (
                             <div>
-                              <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                                <Box sx={{ width: "50%" }}>
+                              <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", }}>
+                                <Box sx={{ width: "40%" }}>
                                   <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}> {responses[index].question?.label
                                     ? responses[index].question.label
                                     : responses[index].label}
                                   </Typography>
                                 </Box>
-                                <Box sx={{ width: "50%" }} >
+                                <Box sx={{ width: "55%", marginLeft: "2em" }} >
                                   {(responses[index].selectedOption || responses[index].selectedData).map((selected, key) => (
                                     <div key={key}>
                                       <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={600} color={"black"} paddingRight={"6px"}>
@@ -228,31 +250,35 @@ export default function VerticalLinearStepper(props) {
                   ) : (
                     <StepLabel
                       sx={{
+                        // "& .MuiStepLabel-root": {
+                        //   padding: "0 0em 2em 0",
+                        // },
+                        "& .MuiStepIcon-root.Mui-active": {
+                          color: "#0045e6",
+                        },
                         "& .MuiStepIcon-root": {
                           width: "1.2rem",
                           height: "1.2rem",
                           alignItems: "start",
-                          color: index < activeStep ? "#0045e6" : "0045e6",
-                        },
+                          color: index < activeStep ? "#0045e6" : "#838383",
 
+                        },
                         "& .MuiStepLabel-label": {
                           fontSize: "0.7rem",
                           alignItems: "start",
                           padding: "0px"
-                        },
-                        "&.css-1xr15il-MuiStepLabel-root": {
-                          padding: "0"
                         },
                         "& .MuiSvgIcon-root-MuiStepIcon-root .Mui-completed": {
                           backgroundColor: "#0045e6"
                         },
                         "& .MuiBox-root": {
                           alignItems: "start"
-                        }
-
+                        },
                       }}
                       cursor="pointer"
-                      onClick={() => setActiveStep(index + 1)}
+                      onClick={() => {
+                        setActiveStep(index + 1)
+                      }}
                     >
                       <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500} paddingRight={"6px"}>
                         {index < questionsArray?.length ? questionsArray[index] : ''}

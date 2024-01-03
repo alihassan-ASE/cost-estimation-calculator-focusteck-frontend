@@ -96,7 +96,7 @@ const CustomCostBox = styled(Box)(({ theme }) => ({
   margin: "2em 0",
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
-    margin: "2em 0 0 0",
+    // margin: "2em 0 0 0",
   },
 }));
 
@@ -821,13 +821,13 @@ const StaffComponent = () => {
                 width: orientation !== "vertical" ? "90%" : "0",
                 margin: orientation !== "vertical" ? "auto" : "0",
                 marginTop: "5%",
-                height: orientation === "vertical" ? "90vh" : 0
+                height: displayQuestion && orientation === "vertical" ? "90vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
 
               }}></Box>
               <Grid item lg={3.9} md={12} sm={12} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
                   <div style={{
-                    padding: orientation === "vertical" ? "0 7.4%" : "0 2%"
+                    padding: orientation === "vertical" ? "0" : "3% 2%"
                   }}>
                     <Stepper
                       responses={actualResponses.responses}
@@ -844,7 +844,7 @@ const StaffComponent = () => {
                           >
                             Estimated Cost
                           </CustomNormalTypography>
-                          <CustomTypography>$ {totalCost}</CustomTypography>
+                          <CustomTypography>${totalCost}</CustomTypography>
                         </CustomCostBox>
                         : null
                     }
