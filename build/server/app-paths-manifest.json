@@ -1,6 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/cost-estimation-calculator/staff/page": "app/cost-estimation-calculator/staff/page.js",
-  "/cost-estimation-calculator/submit/page": "app/cost-estimation-calculator/submit/page.js",
-  "/cost-estimation-calculator/project/page": "app/cost-estimation-calculator/project/page.js"
-}
