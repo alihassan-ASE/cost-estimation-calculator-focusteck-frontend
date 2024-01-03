@@ -295,12 +295,15 @@ const page = () => {
   
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
-    console.log("lastQuestion",lastQuestion)
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
+
+    if(lastQuestion.question.label === "monetization model"){
+      setQuestionsToShow(lastQuestion.stack)
+    }
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
