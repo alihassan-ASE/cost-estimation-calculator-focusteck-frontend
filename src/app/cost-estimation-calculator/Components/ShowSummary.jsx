@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography, Modal, useMediaQuery } from "@mui/material";
+import { Box, Button, Typography, useMediaQuery, Modal } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -121,14 +121,15 @@ const ShowSummary = ({ response }) => {
   const [openForm, setOpenForm] = useState(false)
   const isNarrowScreen = useMediaQuery("(max-width:780px)");
 
-  const handleClose = () => setOpenForm(false);
-
-  const [data, setData] = useState({})
   const handleForm = () => {
     setOpenForm(true)
   }
 
+  const handleClose = () => setOpenForm(false)
+
   const getActualResponse = (value, formData) => {
+
+
     setOpenForm(value)
     setActualResponse(formData);
     let data = JSON.stringify(formData);
@@ -206,13 +207,13 @@ const ShowSummary = ({ response }) => {
               </CustomNormalTypography>
             </Box>
 
-            <Box sx={{ display: "flex", gap: ".5em", flexWrap: isNarrowScreen ? "wrap" : "nowrap" }}>
+            <Box sx={{ display: "flex", gap: ".5em" }}>
               <CustomBox>
                 <CustomNormalTypography
                   variant="h6"
                   sx={{ color: "#fff", fontSize: "1.1em" }}
                 >
-                  Project Cost
+                  Estimated Cost
                 </CustomNormalTypography>
                 <CustomTypography>$ {response.totalCost}</CustomTypography>
               </CustomBox>
@@ -398,8 +399,7 @@ const ShowSummary = ({ response }) => {
             aria-describedby="modal-modal-description"
           >
             <Form response={response} getActualResponse={getActualResponse} />
-          </Modal>
-      }
+          </Modal>}
     </>
   );
 };

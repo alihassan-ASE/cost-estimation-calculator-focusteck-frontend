@@ -127,6 +127,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 
 const StaffComponent = () => {
+
   const [count, setCount] = useState(0);
   const [values, setValues] = useState([]);
   const [buttonState, setButtonState] = useState(true);
@@ -248,7 +249,7 @@ const StaffComponent = () => {
       setAdditionalQuesiton(additionalQuestions);
       setStaffBaseResources(Resources);
     });
-  }, []);
+  }, [])
 
   useEffect(() => {
     setopenModal(false)
@@ -291,6 +292,7 @@ const StaffComponent = () => {
       if (index >= 0 && index < values.length) {
         const newValues = values.filter((_, i) => i !== index);
         setValues(newValues);
+        setResource(newValues)
         setResource(newValues)
       } else {
         if (index > 0) {
@@ -361,6 +363,7 @@ const StaffComponent = () => {
     setIsStepperClicked(true);
     slider();
 
+
   };
 
   useEffect(() => {
@@ -381,6 +384,7 @@ const StaffComponent = () => {
     setResource((prev) => [...prev, data]);
     setClicked(false)
   };
+
 
   const selectedSave = (bool) => {
     setopenModal(bool)
@@ -508,6 +512,7 @@ const StaffComponent = () => {
     if (currentQuestionIndex > additionalQuesiton.length && additionalQuesiton.length != 0) {
 
       setDisplayQuestion(false);
+      setCurrentQuestion(true)
       setCurrentQuestion(true)
       actualResponses.totalCost = totalCost;
     }

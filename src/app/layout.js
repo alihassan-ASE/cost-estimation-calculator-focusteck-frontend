@@ -224,7 +224,6 @@ const CustomBox = styled(Box)(({ theme }) => ({
 
 export default function RootLayout({ children }) {
   const isNarrowScreen = useMediaQuery("(max-width:1148px)");
-  const isNarrowForStaff = useMediaQuery("(max-width:500px)");
   const isMobileScreen = useMediaQuery("(max-width:360px)");
   const route = useRouter();
 
