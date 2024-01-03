@@ -150,6 +150,7 @@ const page = () => {
       nextQuestion();
     }
   }, [selectedData])
+
   useEffect(() => {
 
     let data = localStorage.getItem('Response');
@@ -291,9 +292,10 @@ const page = () => {
     setDisplayQuestion(true);
     cost = 0;
 
-
+  
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
+    console.log("lastQuestion",lastQuestion)
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
@@ -328,6 +330,7 @@ const page = () => {
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
     let questionsToShowLocal = questionsToShow;
+    console.log("question to show",questionsToShow)
 
     switch (currentStateLocal) {
       case "pre": {
@@ -412,6 +415,7 @@ const page = () => {
     }
   }, [nextQuestion]);
 
+  console.log("Actual Responses",actualResponses);
 
   const slider = function () {
     setSlideIn(false);

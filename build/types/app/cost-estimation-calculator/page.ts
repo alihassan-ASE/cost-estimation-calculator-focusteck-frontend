@@ -1,4 +1,4 @@
-// File: C:\Users\Focusteck\Desktop\Frontend\cost-estimation-calculator-focusteck-frontend\src\app\cost-estimation-calculator\page.jsx
+// File: C:\Users\Hp\Desktop\costEstimation\cost-estimation-calculator-focusteck-frontend\src\app\cost-estimation-calculator\page.jsx
 import * as entry from '../../../../src/app/cost-estimation-calculator/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

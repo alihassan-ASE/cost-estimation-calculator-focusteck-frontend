@@ -93,8 +93,10 @@ export default function VerticalLinearStepper(props) {
               "& .MuiStepConnector-line": {
                 borderColor: "#0045e6",
                 borderLeftWidth: "2px",
+                top:"0px",
                 marginLeft: "-3px",
-                padding: "1px"
+                padding: "1px",
+                position:"relative",
               },
               "& .MuiStepConnector-root": {
                 marginTop: "-2px",
@@ -125,14 +127,20 @@ export default function VerticalLinearStepper(props) {
                               alignItems: "start",
                               color: index < activeStep ? "#0045e6" : "#0045e6",
                             },
+                            "& MuiStepper-root .MuiStepLabel-root":{
+                              // borderLeft:"2px solid blue"
+
+                            },
 
                             "&.css-1xr15il-MuiStepLabel-root": {
-                              // padding: "0"
-                            },
+                                borderLeft:"2px solid blue"
+                              },
                             "& .MuiStepLabel-label": {
                               fontSize: "0.7rem",
                               alignItems: "start",
-                              padding: "5px"
+                              // borderLeft:"2px solid blue"
+
+                              // padding: "5px"
                             }
                             ,
                             "& .MuiBox-root": {
@@ -179,17 +187,18 @@ export default function VerticalLinearStepper(props) {
                               width: "1.2rem",
                               height: "1.2rem",
                               alignItems: "start",
-                              color: index < activeStep ? "#0045e6" : "0045e6",
+                              color: index < activeStep ? "#0045e6" : "#0045e6",
                               color: "#0045e6"
                             },
                             "& .MuiStepLabel-label": {
                               fontSize: "0.7rem",
                               alignItems: "start",
-                              padding: "0px"
+                              padding: "0px",
+                              position:"relative"
+
+
                             },
-                            "&.css-1xr15il-MuiStepLabel-root": {
-                              padding: "0"
-                            },
+                            
                             "& .MuiSvgIcon-root-MuiStepIcon-root .Mui-completed": {
                               backgroundColor: "#0045e6"
                             },
@@ -202,7 +211,9 @@ export default function VerticalLinearStepper(props) {
                         >
                           {(responses[index].selectedOption || responses[index].selectedData) && (
                             <div>
+
                               <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
+
                                 <Box sx={{ width: "50%" }}>
                                   <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}> {responses[index].question?.label
                                     ? responses[index].question.label

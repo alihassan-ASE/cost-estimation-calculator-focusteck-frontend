@@ -15,11 +15,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/cost-estimation-calculator/page.js"
     ],
-    "/cost-estimation-calculator/project/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/cost-estimation-calculator/project/page.js"
-    ],
     "/cost-estimation-calculator/staff/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -29,6 +24,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/cost-estimation-calculator/submit/page.js"
+    ],
+    "/cost-estimation-calculator/project/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cost-estimation-calculator/project/page.js"
     ]
   }
 }
