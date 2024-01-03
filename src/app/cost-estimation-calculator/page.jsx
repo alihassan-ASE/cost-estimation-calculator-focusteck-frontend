@@ -77,7 +77,6 @@ const page = () => {
     ? window.localStorage.clear()
     : false;
 
-
   return (
     <Box
       ref={pageRef}

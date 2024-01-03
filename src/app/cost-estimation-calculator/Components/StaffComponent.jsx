@@ -28,7 +28,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #00A76f",
   color: "#fff",
   maxWidth: "341px",
-  width: "210px",
+  width: "130px",
   borderRadius: ".5em",
   marginLeft: "auto",
   marginBottom: ".7em",
@@ -37,23 +37,14 @@ const CustomButton = styled(Button)(({ theme }) => ({
     color: "#00A76f",
     backgroundColor: "#fff"
   },
-  [theme.breakpoints.down("md")]: {
-    width: "280px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    width: "270px",
-  },
 }));
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0069d9",
   maxWidth: "341px",
-  width: "210px",
+  width: "130px",
   marginTop: ".7em",
   marginLeft: "auto",
-  // backgroundColor: "#0045e6", 
-  // "&:hover": { backgroundColor: "#0045e6" },
-  // color:"white",
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -68,17 +59,6 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
     '"Segoe UI Emoji"',
     '"Segoe UI Symbol"',
   ].join(","),
-  [theme.breakpoints.down("md")]: {
-    fontSize: 14,
-    padding: ".7em 1.3em",
-    width: "280px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    width: 100,
-    fontSize: 10,
-    padding: ".7em 1.7em",
-    width: "270px",
-  },
 }));
 
 const CustomBackButton = styled(Button)(({ theme }) => ({

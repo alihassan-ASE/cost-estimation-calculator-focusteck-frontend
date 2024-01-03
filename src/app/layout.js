@@ -213,6 +213,15 @@ const CustomToolBar = styled(Box)(({ theme }) => ({
   },
 }));
 
+const CustomBox = styled(Box)(({ theme }) => ({
+  padding: "0 2em",
+  [theme.breakpoints.down("sm")]: {
+    margin: "0",
+    padding: "0 0.5em"
+  },
+}));
+
+
 export default function RootLayout({ children }) {
   const isNarrowScreen = useMediaQuery("(max-width:1148px)");
   const isNarrowForStaff = useMediaQuery("(max-width:500px)");
@@ -226,13 +235,6 @@ export default function RootLayout({ children }) {
   const handleNavBar = () => {
     setHamburgerClicked(!hamburgerClicked);
   };
-
-  const CustomBox = styled(Box)(({ theme }) => ({
-    padding: isNarrowForStaff ? "0 .5em" : "0 2em",
-    [theme.breakpoints.down("sm")]: {
-      margin: "0",
-    },
-  }));
 
   useEffect(() => {
     if (hamburgerClicked) {
