@@ -94,6 +94,7 @@ const ShowResponse = () => {
                   sx={{
                     borderLeft: "0px",
                     borderRight: "0px",
+                    borderTop: index === 0 ? 0 : "1px",
                     "& .MuiSvgIcon-root": {
                       height: "1.5rem",
                       width: "1.5rem",

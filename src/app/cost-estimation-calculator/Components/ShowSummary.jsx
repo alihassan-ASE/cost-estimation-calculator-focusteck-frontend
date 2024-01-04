@@ -20,9 +20,23 @@ const CustomBox = styled(Box)(({ theme }) => ({
   backgroundColor: "#1E1D28",
   padding: "2em",
   borderRadius: "10px",
-  minWidth: "200px",
+  // minWidth: "200px",
+  width: "100%",
+  [theme.breakpoints.down("md")]: {
+    flexWrap: "wrap"
+  },
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
+    minWidth: "200px",
+  },
+}));
+
+const CustomInfoBox = styled(Box)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    flexWrap: "wrap"
+  },
+  [theme.breakpoints.down("sm")]: {
+    flexWrap: "wrap"
   },
 }));
 
@@ -49,6 +63,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #0045e6",
   boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
   textTransform: "none",
+  textDecoration: "none",
   fontSize: "0.9rem",
   textAlign: "center",
   padding: ".3em 1em",
@@ -111,6 +126,8 @@ const CustomLinkBox = styled(Link)(({ theme }) => ({
   },
 }));
 
+
+
 const ShowSummary = ({ response }) => {
 
   const hasResponse = window.localStorage.getItem('Response');
@@ -119,7 +136,7 @@ const ShowSummary = ({ response }) => {
   const [industry, setIndustry] = useState("");
   const [actualResponse, setActualResponse] = useState({});
   const [openForm, setOpenForm] = useState(false)
-  const isNarrowScreen = useMediaQuery("(max-width:780px)");
+  const isNarrowScreen = useMediaQuery("(max-width:445px)");
 
   const handleForm = () => {
     setOpenForm(true)
@@ -128,24 +145,19 @@ const ShowSummary = ({ response }) => {
   const handleClose = () => setOpenForm(false)
 
   const getActualResponse = (value, formData) => {
-
-
     setOpenForm(value)
     setActualResponse(formData);
     let data = JSON.stringify(formData);
     if (data) {
       localStorage.setItem("Response", data);
     }
-
   };
 
   useEffect(() => {
-
     let data = JSON.stringify(response);
     if (data) {
       localStorage.setItem("Response", data);
     }
-
   }, [])
 
   useEffect(() => {
@@ -207,7 +219,7 @@ const ShowSummary = ({ response }) => {
               </CustomNormalTypography>
             </Box>
 
-            <Box sx={{ display: "flex", gap: ".5em" }}>
+            <CustomInfoBox sx={{ display: "flex", gap: ".5em" }}>
               <CustomBox>
                 <CustomNormalTypography
                   variant="h6"
@@ -215,7 +227,7 @@ const ShowSummary = ({ response }) => {
                 >
                   Estimated Cost
                 </CustomNormalTypography>
-                <CustomTypography>$ {response.totalCost}</CustomTypography>
+                <CustomTypography>${response.totalCost}</CustomTypography>
               </CustomBox>
               <CustomBox>
                 <CustomNormalTypography
@@ -226,7 +238,7 @@ const ShowSummary = ({ response }) => {
                 </CustomNormalTypography>
                 <CustomTypography sx={{ wordBreak: timeline.length > 4 ? "break-word" : "normal" }}>{timeline}</CustomTypography>
               </CustomBox>
-            </Box>
+            </CustomInfoBox>
 
             <CustomBottomBox
               sx={{
@@ -275,49 +287,83 @@ const ShowSummary = ({ response }) => {
                       color: "#fff",
                       backgroundColor: "#1E1D28",
                       borderRadius: "50%",
-                      width: "57px",
-                      height: "57px",
+                      width: "45px",
+                      height: "45px",
                     }}
                     id="slide"
                   >
                     <ArrowRightAltIcon
                       sx={{
-                        padding: ".7em",
+                        padding: ".43em",
                       }}
                     />
                   </Box>
                 </Box>
-                <CustomLinkBox href="/cost-estimation-calculator">
-                  <Box>
-                    <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                      Calculate new
-                    </CustomNormalTypography>
-                    <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                      Project cost
-                    </CustomNormalTypography>
-                  </Box>
+                {
+                  isNarrowScreen
+                    ? <CustomLinkBox href="/cost-estimation-calculator" sx={{ marginLeft: "auto" }}>
 
-                  <Box
-                    sx={{
-                      border: "3px solid #b8b8b8",
-                      borderRadius: "50%",
-                      width: "57px",
-                      height: "57px",
-                    }}
-                  >
-                    <RefreshIcon
-                      sx={{
-                        color: "#b8b8b8",
-                        padding: ".7em",
-                      }}
-                    />
-                  </Box>
-                </CustomLinkBox>
+                      <Box
+                        sx={{
+                          border: "3px solid #b8b8b8",
+                          borderRadius: "50%",
+                          width: "45px",
+                          height: "45px",
+                        }}
+                      >
+                        <RefreshIcon
+                          sx={{
+                            color: "#b8b8b8",
+                            padding: ".43em",
+                          }}
+                        />
+                      </Box>
+                      <Box>
+                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
+                          Calculate new
+                        </CustomNormalTypography>
+                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
+                          Project cost
+                        </CustomNormalTypography>
+                      </Box>
+
+
+                    </CustomLinkBox>
+                    : <CustomLinkBox href="/cost-estimation-calculator">
+
+                      <Box>
+                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
+                          Calculate new
+                        </CustomNormalTypography>
+                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
+                          Project cost
+                        </CustomNormalTypography>
+                      </Box>
+
+                      <Box
+                        sx={{
+                          border: "3px solid #b8b8b8",
+                          borderRadius: "50%",
+                          width: "45px",
+                          height: "45px",
+                        }}
+                      >
+                        <RefreshIcon
+                          sx={{
+                            color: "#b8b8b8",
+                            padding: ".43em",
+                          }}
+                        />
+                      </Box>
+                    </CustomLinkBox>
+
+                }
+
               </Box>
 
               {hasResponse ? (
                 <Link href="/cost-estimation-calculator/submit"
-                  sx={{ textDecoration: "none", color: "white" }}>
+                  style={{ textDecoration: "none", color: "white" }}>
                   <CustomButton
                     sx={{
                       display: "flex",
