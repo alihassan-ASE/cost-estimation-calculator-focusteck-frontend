@@ -302,7 +302,12 @@ const page = () => {
 
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
+
     });
+
+    if (lastQuestion.question.label === "monetization model") {
+      setQuestionsToShow(lastQuestion.stack)
+    }
 
     if (lastQuestion.question.typeofselection === "multiple") {
       setIsOptionSelected(true)
@@ -554,7 +559,7 @@ const page = () => {
               width: orientation !== "vertical" ? "90%" : "0",
               margin: orientation !== "vertical" ? "auto" : "0",
               marginTop: "5%",
-              height: displayQuestion && orientation === "vertical" ? "90vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
+              height: displayQuestion && orientation === "vertical" ? "80vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
 
             }}></Box>
             <Grid item lg={3.9} md={12} sm={12} xs={12}>
