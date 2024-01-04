@@ -594,9 +594,10 @@ const StaffComponent = () => {
                 <Typography variant="h5"
                   sx={{
                     // paddingLeft: "4.7%",
-                    fontSize: "1.3em",
+                    fontSize: "1.5em",
                     marginBottom: "4em",
-                    textAlign: "center"
+                    textAlign: "center",
+                    fontWeight: "bold"
                   }}>
                   Please Select Staff Resources as per your requirement
                 </Typography>
@@ -821,7 +822,7 @@ const StaffComponent = () => {
                 width: orientation !== "vertical" ? "90%" : "0",
                 margin: orientation !== "vertical" ? "auto" : "0",
                 marginTop: "5%",
-                height: displayQuestion && orientation === "vertical" ? "90vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
+                height: displayQuestion && orientation === "vertical" ? "80vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
 
               }}></Box>
               <Grid item lg={3.9} md={12} sm={12} xs={12}>
