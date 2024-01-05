@@ -20,7 +20,6 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 import ShowSummary from "../Components/ShowSummary";
-import { PaddingOutlined } from "@mui/icons-material";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   padding: 0,
@@ -559,7 +558,7 @@ const page = () => {
               width: orientation !== "vertical" ? "90%" : "0",
               margin: orientation !== "vertical" ? "auto" : "0",
               marginTop: "5%",
-              height: displayQuestion && orientation === "vertical" ? "80vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
+              height: displayQuestion && orientation === "vertical" ? "510px" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "400px" : "1px"
 
             }}></Box>
             <Grid item lg={3.9} md={12} sm={12} xs={12}>

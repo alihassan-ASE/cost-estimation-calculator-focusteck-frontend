@@ -617,6 +617,11 @@ export default function RootLayout({ children }) {
             >
               {children}
             </CustomBox>
+          ) : baseRoute ===
+            "/thank-you" ? (
+            <Box id="scroll-down" sx={{ minHeight: "100vh" }}>
+              {children}
+            </Box>
           ) : (
             <CustomBox id="scroll-down" sx={{ minHeight: "100vh", paddingTop: "1em", paddingBottom: "3em" }}>
               {children}

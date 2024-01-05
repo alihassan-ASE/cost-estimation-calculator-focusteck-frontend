@@ -2,9 +2,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Grid, Stepper, Step, StepLabel, Typography, useMediaQuery } from "@mui/material";
 import styled from "styled-components";
-import { maxHeight } from "@mui/system";
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import { ContactPageSharp } from "@mui/icons-material";
+import { keyframes } from "@mui/material/styles";
+
 
 export default function VerticalLinearStepper(props) {
   const { responses, changeActiveQuestion } = props;
@@ -75,7 +74,18 @@ export default function VerticalLinearStepper(props) {
     ...(responses && responses.length > questionsArray.length
       ? Array(responses.length - questionsArray.length).fill(null)
       : [])
-  ]
+  ];
+  const newStepperRowTransition = keyframes`
+  0% {
+   transform: translateY(-25px);
+   opacity: 0;
+  }
+  100%{
+    transform: translateY(0px),
+    z-index:1
+  }
+  `;
+
 
   return (
     <Box
@@ -101,17 +111,15 @@ export default function VerticalLinearStepper(props) {
               borderColor: "#0045e6",
               position: "relative",
               "& .MuiStepLabel-root": {
-                padding: ".2em 0em 2em 0",
+                padding: "0em 0em 1.5em 0",
                 textAlign: "start",
                 display: "flex",
                 alignItems: "flex-start",
                 justifyContent: "space-between",
-                // padding: 0
               },
               "& .MuiStepConnector-line": {
-                // borderColor: "#0045e6",
                 borderLeftWidth: "2px",
-                marginLeft: "0px",
+                marginLeft: "-2px",
                 height: "100%"
               },
               "& .MuiStepConnector-root": {
@@ -155,7 +163,15 @@ export default function VerticalLinearStepper(props) {
                     alignItems: "flex-start",
                   }}>
                     <Box sx={{
-                      color: "#fff", padding: ".3em", borderRadius: "50%", backgroundColor: index < activeStep ? "#0045e6" : "#838383", marginRight: "7px", width: "1em", height: "1em", textAlign: "center", fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                      color: "#fff",
+                      padding: ".3em",
+                      borderRadius: "50%",
+                      backgroundColor: index < activeStep ? "#0045e6" : "#838383",
+                      marginRight: "7px",
+                      width: ".7em",
+                      height: ".7em",
+                      textAlign: "center",
+                      fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                         ","
                       ),
                       display: "flex",
@@ -202,7 +218,7 @@ export default function VerticalLinearStepper(props) {
                               }}>
                               {responses[index].resources.map((resource, resourceIndex) => (
                                 <div key={resourceIndex}>
-                                  <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start" }}>
+                                  <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start", animation: `${newStepperRowTransition} .5s ease` }}>
                                     <Box sx={{ width: "40%", }}>
                                       <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>{resource.resource}</Typography>
                                     </Box>
@@ -259,7 +275,7 @@ export default function VerticalLinearStepper(props) {
                           >
                             {(responses[index].selectedOption || responses[index].selectedData) && (
                               <div>
-                                <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", }}>
+                                <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", animation: `${newStepperRowTransition} .5s ease` }}>
                                   <Box sx={{ width: "40%" }}>
                                     <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}> {responses[index].question?.label
                                       ? responses[index].question.label
@@ -269,7 +285,11 @@ export default function VerticalLinearStepper(props) {
                                   <Box sx={{ width: "55%", marginLeft: "2em" }} >
                                     {(responses[index].selectedOption || responses[index].selectedData).map((selected, key) => (
                                       <div key={key}>
-                                        <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={600} color={"black"} paddingRight={"6px"}>
+                                        <Typography fontSize={"13px"} textTransform={"capitalize"} fontWeight={600} color={"black"} paddingRight={"6px"} sx={{
+                                          fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                            ","
+                                          ),
+                                        }}>
                                           {selected.opt}
                                         </Typography>
                                       </div>
@@ -311,11 +331,12 @@ export default function VerticalLinearStepper(props) {
                           },
                         }}
                         cursor="pointer"
-                        onClick={() => {
-                          setActiveStep(index + 1)
-                        }}
                       >
-                        <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500} paddingRight={"6px"}>
+                        <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500} paddingRight={"6px"} sx={{
+                          fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                            ","
+                          ),
+                        }}>
                           {index < questionsArray?.length ? questionsArray[index] : ''}
                         </Typography>
                       </StepLabel>

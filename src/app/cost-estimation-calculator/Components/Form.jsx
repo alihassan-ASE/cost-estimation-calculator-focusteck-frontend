@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { postData } from "../../lib/api/postData";
 import { styled } from "@mui/material/styles";
+import Link from "next/link";
+
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "3em auto",
@@ -438,15 +440,18 @@ const Form = ({ response, getActualResponse }) => {
           <Typography variant="body1" sx={{ fontSize: "12px", padding: "1.5em 0" }}>We will add your info to our CRM for contacting you regarding your request. For more info please consult our <span style={{ color: "#0045e6", fontWeight: 600 }}>privacy policy</span></Typography>
 
           <br />
-          <Button
-            sx={{ backgroundColor: "#0045e6", padding: '1em 4em', borderRadius: "3em" }}
-            variant="contained"
-            onClick={() => {
-              submitForm(formInput);
-            }}
-          >
-            Send Message
-          </Button>
+          <Link href="/thank-you">
+            <Button
+              sx={{ backgroundColor: "#0045e6", padding: '1em 4em', borderRadius: "3em" }}
+              variant="contained"
+              onClick={() => {
+                submitForm(formInput);
+              }}
+            >
+              Send Message
+            </Button>
+          </Link>
+
         </Box>
       </form>
     </CustomBox>
