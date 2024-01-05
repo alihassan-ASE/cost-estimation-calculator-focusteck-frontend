@@ -551,6 +551,7 @@ const StaffComponent = () => {
   }
 
   return (
+    
     <Box >
       {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
         <Box

@@ -310,10 +310,6 @@ const page = () => {
 
     });
 
-    if (lastQuestion.question.label === "monetization model") {
-      setQuestionsToShow(lastQuestion.stack)
-    }
-
     if (lastQuestion.question.typeofselection === "multiple") {
       setIsOptionSelected(true)
       setSelectedData(lastQuestion.selectedOption)
@@ -338,7 +334,6 @@ const page = () => {
     let currentQuestionLocal = currentQuestion;
     let currentQuestionIndexLocal = currentQuestionIndex;
     let questionsToShowLocal = questionsToShow;
-    console.log("question to show",questionsToShow)
 
     switch (currentStateLocal) {
       case "pre": {
@@ -422,8 +417,6 @@ const page = () => {
       setDisplayQuestion(false);
     }
   }, [nextQuestion]);
-
-  console.log("Actual Responses",actualResponses);
 
   const slider = function () {
     setSlideIn(false);

@@ -77,6 +77,7 @@ const Form = ({ response, getActualResponse }) => {
   });
 
   const submitForm = (formInput) => {
+    
     const trimmedUserName = (formInput.userName || "").trim();
     const trimmedEmail = (formInput.email || "").trim();
     const trimmedPhone = (formInput.phone || "").trim();
@@ -85,10 +86,10 @@ const Form = ({ response, getActualResponse }) => {
     const trimmedMessage = (formInput.message || "").trim();
     let formIsValid = true;
 
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const phoneRegex = /^[0-9]+$/;
-    const countryRegex = /^[A-Za-z]+$/;
+    const countryRegex = /^[A-Za-z\s]+$/;
 
     if (!nameRegex.test(trimmedUserName)) {
       setErrorMessage((prevErrors) => ({
