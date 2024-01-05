@@ -6,6 +6,7 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Link from "next/link";
 import Form from "../Components/Form";
+import { useRouter } from "next/navigation";
 
 const CustomMainBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
@@ -137,7 +138,7 @@ const ShowSummary = ({ response }) => {
   const [actualResponse, setActualResponse] = useState({});
   const [openForm, setOpenForm] = useState(false)
   const isNarrowScreen = useMediaQuery("(max-width:445px)");
-
+  const route = useRouter();
   const handleForm = () => {
     setOpenForm(true)
   }
@@ -147,6 +148,7 @@ const ShowSummary = ({ response }) => {
   const getActualResponse = (value, formData) => {
     setOpenForm(value)
     setActualResponse(formData);
+    console.log("form Data",formData)
     let data = JSON.stringify(formData);
     if (data) {
       localStorage.setItem("Response", data);
@@ -191,7 +193,6 @@ const ShowSummary = ({ response }) => {
       });
     }
   }, [response]);
-
 
   return (
     <>
@@ -251,7 +252,7 @@ const ShowSummary = ({ response }) => {
             >
               <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap" }}>
                 <Box
-                  onClick={handleForm}
+                  onClick={()=>{route.push("/cost-estimation-calculator/submit")}}
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -275,10 +276,10 @@ const ShowSummary = ({ response }) => {
                 >
                   <Box>
                     <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                      Send Results
+                      Check Your
                     </CustomNormalTypography>
                     <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                      to my mail
+                      Response
                     </CustomNormalTypography>
                   </Box>
 
@@ -362,9 +363,9 @@ const ShowSummary = ({ response }) => {
               </Box>
 
               {hasResponse ? (
-                <Link href="/cost-estimation-calculator/submit"
-                  style={{ textDecoration: "none", color: "white" }}>
+              
                   <CustomButton
+                  onClick={handleForm}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -396,7 +397,7 @@ const ShowSummary = ({ response }) => {
                     }}
                   >
 
-                    <span id="forward">Show Response</span>{" "}
+                    <span id="forward">Start Project</span>{" "}
                     <ArrowRightAltIcon
                       sx={{
                         marginLeft: "auto",
@@ -409,7 +410,6 @@ const ShowSummary = ({ response }) => {
                       }}
                     />{" "}
                   </CustomButton>
-                </Link>
               ) : (
                 <CustomButton
                   disabled

@@ -685,6 +685,7 @@ const StaffComponent = () => {
   console.log("resource", resource);
 
   return (
+    
     <Box >
       {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
         <Box

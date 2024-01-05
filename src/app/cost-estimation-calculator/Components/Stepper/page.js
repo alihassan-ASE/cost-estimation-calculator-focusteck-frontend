@@ -9,6 +9,7 @@ export default function VerticalLinearStepper(props) {
   const { responses, changeActiveQuestion } = props;
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const isMobileScreen = useMediaQuery("(max-width:445px)");
+  const [lineStatus, setLineStatus] = useState(true); //state to handle line
   const leng = responses?.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
   const containerRef = useRef(null);
@@ -52,11 +53,13 @@ export default function VerticalLinearStepper(props) {
     setActiveStep(responses?.length + 1);
   }, [responses?.length]);
 
+
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [handleStep]);
+
   let questionsArray = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"];
 
   const [containerHeight, setContainerHeight] = useState(20);

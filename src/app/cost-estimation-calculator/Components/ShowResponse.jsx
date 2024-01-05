@@ -7,6 +7,35 @@ import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import { useRouter } from "next/navigation";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+
+
+const CustomBackButton = styled(Button)(({ theme }) => ({
+  color: "#ACACAC",
+  width: "40px",
+  height: "40px",
+  borderRadius: "50%",
+
+  justifyContent: "normal",
+  minWidth: "min-content",
+  border: "2px solid #ACACAC",
+  padding: ".2em",
+  "&:hover svg": {
+    transform: "translateX(-5px)"
+  },
+  "&:hover": {
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+  },
+  "&.Mui-disabled": {
+    background: "#4f9ef0",
+    color: "#eaeaea",
+  },
+  "&:focus": {
+    outline: "none",
+    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+  },
+}));
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -61,6 +90,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 const ShowResponse = () => {
   const [response, setResponse] = useState({});
   const [showOption, setShowOption] = useState(null);
+  const route = useRouter();
 
   useEffect(() => {
     const fetchData = () => {
@@ -91,6 +121,22 @@ const ShowResponse = () => {
     <>
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ maxWidth: "1100px", padding: "0px 20px" }}>
+        <CustomBackButton onClick={()=>{route.back()}}>
+                        <KeyboardBackspaceIcon
+                          sx={{
+                            textAlign: "center",
+                            fontSize: "1.6em",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            display: "flex",
+                            width: "100%",
+                            transition: "all 0.3s ease-in-out",
+                            ":hover": {
+                              cursor: "pointer",
+                            },
+                          }}
+                        />
+                      </CustomBackButton>
           {(response.responses && response.responses.length > 0) ? (
             (response.responses).map((question, index) => (
               <Box key={index}>

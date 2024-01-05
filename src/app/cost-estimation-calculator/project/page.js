@@ -149,6 +149,7 @@ const page = () => {
       nextQuestion();
     }
   }, [selectedData])
+
   useEffect(() => {
 
     let data = localStorage.getItem('Response');
@@ -290,7 +291,7 @@ const page = () => {
     setDisplayQuestion(true);
     cost = 0;
 
-
+  
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
     setCurrentQuestion(lastQuestion.question);
@@ -299,14 +300,14 @@ const page = () => {
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
 
+    if(lastQuestion.question.label === "monetization model"){
+      setQuestionsToShow(lastQuestion.stack)
+    }
+
     lastQuestion.selectedOption.map((op) => {
       setTotalCost((prev) => prev - op.price);
 
     });
-
-    if (lastQuestion.question.label === "monetization model") {
-      setQuestionsToShow(lastQuestion.stack)
-    }
 
     if (lastQuestion.question.typeofselection === "multiple") {
       setIsOptionSelected(true)
@@ -415,7 +416,6 @@ const page = () => {
       setDisplayQuestion(false);
     }
   }, [nextQuestion]);
-
 
   const slider = function () {
     setSlideIn(false);
