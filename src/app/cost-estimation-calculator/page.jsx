@@ -5,7 +5,6 @@ import { Box, Button } from "@mui/material";
 import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { styled } from "@mui/material/styles";
-import { textAlign } from "@mui/system";
 
 const CustomRouteButton = styled(Button)(({ theme }) => ({
   color: "#000",
@@ -103,13 +102,14 @@ const page = () => {
         margin: "auto",
       }}
     >
-      {LINKS.map(({ text, href, icon: Icon , description}) => (
+      {LINKS.map(({ text, href, icon: Icon, description }) => (
         <Box
           key={href}
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+
           }}
         >
           <CustomRouteButton
@@ -132,14 +132,19 @@ const page = () => {
               }}
             />
 
-            <Box sx={{fontWeight:"bold"}}>
-            {text}
+            <Box>
+              <Box sx={{ fontWeight: "bold" }}>
+                {text}
+              </Box>
+              <Box>
+                <ul style={{ textAlign: "left", color: "#95a5a6", fontSize: "14px" }}>
+                  {description.map((point, idx) => (
+                    <li key={idx}>{point}</li>
+                  ))}
+                </ul>
+              </Box>
+
             </Box>
-            <ul style={{textAlign:"left",color:"#95a5a6",fontSize:"14px"}}>
-            {description.map((point, idx) => (
-              <li key={idx}>{point}</li>
-            ))}
-          </ul>
           </CustomRouteButton>
         </Box>
       ))}

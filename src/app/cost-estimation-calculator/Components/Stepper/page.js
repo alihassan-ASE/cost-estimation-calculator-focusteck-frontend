@@ -128,14 +128,13 @@ export default function VerticalLinearStepper(props) {
                 marginBottom: "auto",
                 zIndex: -100,
                 height: "100%",
-                top: '15px'
+                top: '15px',  
               },
               "& .MuiStepIcon-root": {
                 width: "1.2rem",
                 height: "1.2rem",
                 alignItems: "start",
               },
-
             }}
             nonLinear
             activeStep={responses?.length}
@@ -177,7 +176,7 @@ export default function VerticalLinearStepper(props) {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-
+                     
                     }}>
                       <Typography sx={{
                         fontSize: "11px"
