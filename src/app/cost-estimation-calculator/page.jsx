@@ -22,7 +22,8 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
   minHeight: "200px",
   textAlign: "center",
   display: "flex",
-  // justifyContent: "flex-start",
+  justifyContent: "center",
+  alignItems: "center",
   flexWrap: "wrap",
   flexDirection: "column",
   flexGrow: 1,
@@ -33,6 +34,9 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
   ),
   "&:hover": {
     backgroundColor: "#0045e6",
+    color: "#fff",
+  },
+  "&:hover #list": {
     color: "#fff",
   },
   "&:focus": {
@@ -138,18 +142,31 @@ const page = () => {
               }}
             />
 
-            <Box sx={{ display: "flex", justifyContent: "flex-start", flexDirection: "column", paddingBottom: ".3em" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", flexDirection: "column", }}>
 
-              <Typography variant="h5">
+              <Typography variant="h5" sx={{
+                textAlign: "left",
+                paddingBottom: ".3em"
+              }}>
                 {text}
               </Typography>
 
-              <List sx={{ listStyleType: !isMobileScreen ? 'disc' : "none", }}>
+              <List sx={{
+                listStyleType: !isMobileScreen ? 'disc' : "none",
+                listStylePosition: "inside",
+                textAlign: "center"
+              }}>
                 {description.map((point, idx) => (
-                  <ListItem key={idx} sx={{ display: 'list-item', paddingBottom: 0 }}>
-                    <ListItemText sx={{ color: "#95a5a6", fontSize: "14px" }}>
-                      {point}
-                    </ListItemText>
+                  <ListItem key={idx}
+                    id="list"
+                    component="Typography"
+                    sx={{
+                      display: "list-item", paddingTop: 0, paddingLeft: 0, textWrap: "wrap", color: "#95a5a6", fontSize: "14px", fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                        ","
+                      ),
+                      fontWeight: "normal"
+                    }}>
+                    {point}
                   </ListItem>
                 ))}
               </List>
