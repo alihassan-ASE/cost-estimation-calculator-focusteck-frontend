@@ -1,11 +1,10 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
-import { Box, Button } from "@mui/material";
+import { Box, Button, List, ListItem, ListItemText, Typography, useMediaQuery } from "@mui/material";
 import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { styled } from "@mui/material/styles";
-import { textAlign } from "@mui/system";
 
 const CustomRouteButton = styled(Button)(({ theme }) => ({
   color: "#000",
@@ -23,7 +22,7 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
   minHeight: "200px",
   textAlign: "center",
   display: "flex",
-  justifyContent: "flex-start",
+  // justifyContent: "flex-start",
   flexWrap: "wrap",
   flexDirection: "column",
   flexGrow: 1,
@@ -42,14 +41,16 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
   },
 
   [theme.breakpoints.down("md")]: {
-    // fontSize: "1rem",
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 400,
+    padding: "1em",
+
   },
   [theme.breakpoints.down("sm")]: {
-    // fontSize: ".8rem",
     width: 300,
     height: 300,
+    padding: "1em .5em",
+
   },
 }));
 
@@ -59,19 +60,19 @@ const LINKS = [
     href: "/cost-estimation-calculator/project",
     icon: AccountTreeOutlinedIcon,
     description: [
-      "Clear project vision needed.",
-      "Cost breakdown available.",
-      "Understand financial aspects.",
+      "Clear project vision needed",
+      "Cost breakdown available",
+      "Understand financial aspects",
     ],
   },
   {
-    text: "Explore Our Team",
+    text: "Estimate Team Cost",
     href: "/cost-estimation-calculator/staff",
     icon: GroupsOutlinedIcon,
     description: [
-      "Skilled professionals available.",
-      "Seek expertise and guidance.",
-      "Dedicated team support.",
+      "Skilled professionals available",
+      "Seek expertise and guidance",
+      "Dedicated team support",
     ],
   },
 ];
@@ -79,6 +80,8 @@ const LINKS = [
 
 const page = () => {
   const pageRef = useRef(null);
+  const isMobileScreen = useMediaQuery("(max-width:600px)");
+
 
   useEffect(() => {
     if (pageRef.current) {
@@ -130,20 +133,31 @@ const page = () => {
               sx={{
                 fontSize: "2em",
                 color: "#0045e6",
+                padding: ".3em",
                 "&:hover": { color: "#fff" },
               }}
             />
 
-            {text}
-            <ul style={{ textAlign: "left", color: "#bdc3c7", fontSize: "14px", }}>
-              {description.map((point, idx) => (
-                <li key={idx}>{point}</li>
-              ))}
-            </ul>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", flexDirection: "column", paddingBottom: ".3em" }}>
+
+              <Typography variant="h5">
+                {text}
+              </Typography>
+
+              <List sx={{ listStyleType: !isMobileScreen ? 'disc' : "none", }}>
+                {description.map((point, idx) => (
+                  <ListItem key={idx} sx={{ display: 'list-item', paddingBottom: 0 }}>
+                    <ListItemText sx={{ color: "#95a5a6", fontSize: "14px" }}>
+                      {point}
+                    </ListItemText>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
           </CustomRouteButton>
-        </Box>
+        </Box >
       ))}
-    </Box>
+    </Box >
   );
 };
 
