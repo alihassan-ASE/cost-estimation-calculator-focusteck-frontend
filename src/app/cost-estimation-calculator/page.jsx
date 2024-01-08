@@ -5,6 +5,7 @@ import { Box, Button } from "@mui/material";
 import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { styled } from "@mui/material/styles";
+import { textAlign } from "@mui/system";
 
 const CustomRouteButton = styled(Button)(({ theme }) => ({
   color: "#000",
@@ -53,16 +54,27 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
 
 const LINKS = [
   {
-    text: "Project",
+    text: "Estimate Project Cost",
     href: "/cost-estimation-calculator/project",
     icon: AccountTreeOutlinedIcon,
+    description: [
+      "Clear project vision needed.",
+      "Cost breakdown available.",
+      "Understand financial aspects.",
+    ],
   },
   {
-    text: "Staff",
+    text: "Explore Our Team",
     href: "/cost-estimation-calculator/staff",
     icon: GroupsOutlinedIcon,
+    description: [
+      "Skilled professionals available.",
+      "Seek expertise and guidance.",
+      "Dedicated team support.",
+    ],
   },
 ];
+
 
 const page = () => {
   const pageRef = useRef(null);
@@ -91,7 +103,7 @@ const page = () => {
         margin: "auto",
       }}
     >
-      {LINKS.map(({ text, href, icon: Icon }) => (
+      {LINKS.map(({ text, href, icon: Icon , description}) => (
         <Box
           key={href}
           sx={{
@@ -104,6 +116,7 @@ const page = () => {
             component={Link}
             href={href}
             sx={{
+              fontWeight:"600",
               "&:hover svg": {
                 color: "#fff",
               },
@@ -121,6 +134,11 @@ const page = () => {
             />
 
             {text}
+            <ul style={{textAlign:"left",color:"#bdc3c7",fontSize:"14px"}}>
+            {description.map((point, idx) => (
+              <li key={idx}>{point}</li>
+            ))}
+          </ul>
           </CustomRouteButton>
         </Box>
       ))}
