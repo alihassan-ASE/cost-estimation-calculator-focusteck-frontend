@@ -58,19 +58,19 @@ const LINKS = [
     href: "/cost-estimation-calculator/project",
     icon: AccountTreeOutlinedIcon,
     description: [
-      "Clear project vision needed.",
-      "Cost breakdown available.",
-      "Understand financial aspects.",
+      "Clear project vision needed",
+      "Cost breakdown available",
+      "Understand financial aspects",
     ],
   },
   {
-    text: "Explore Our Team",
+    text: "Estimate Team Cost",
     href: "/cost-estimation-calculator/staff",
     icon: GroupsOutlinedIcon,
     description: [
-      "Skilled professionals available.",
-      "Seek expertise and guidance.",
-      "Dedicated team support.",
+      "Skilled professionals available",
+      "Seek expertise and guidance",
+      "Dedicated team support",
     ],
   },
 ];
@@ -116,7 +116,6 @@ const page = () => {
             component={Link}
             href={href}
             sx={{
-              fontWeight:"600",
               "&:hover svg": {
                 color: "#fff",
               },
@@ -133,8 +132,10 @@ const page = () => {
               }}
             />
 
+            <Box sx={{fontWeight:"bold"}}>
             {text}
-            <ul style={{textAlign:"left",color:"#bdc3c7",fontSize:"14px"}}>
+            </Box>
+            <ul style={{textAlign:"left",color:"#95a5a6",fontSize:"14px"}}>
             {description.map((point, idx) => (
               <li key={idx}>{point}</li>
             ))}
