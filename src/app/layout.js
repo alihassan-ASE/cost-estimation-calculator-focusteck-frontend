@@ -230,7 +230,7 @@ export default function RootLayout({ children }) {
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
-  // const [scrollState, setScrollState] = useState(false)
+  const [scrollState, setScrollState] = useState(false)
 
   const handleClick = () => {
     setHamburgerClicked(!hamburgerClicked);
@@ -239,22 +239,24 @@ export default function RootLayout({ children }) {
 
 
   const isRoot = baseRoute === "/";
-  const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
+  // const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
+  const isEstimationPage = baseRoute === "/cost-estimation-calculator";
 
-  const href = "/cost-estimation-calculator"
-  // const href = isRoot
-  //   ? "/cost-estimation-calculator"
-  //   : isEstimationPage
-  //     ? "#scroll-down"
-  //     : "/cost-estimation-calculator";
 
-  // useEffect(() => {
-  //   if (baseRoute === "/") {
-  //     setScrollState(false)
-  //   } else if (baseRoute === "/cost-estimation-calculator") {
-  //     setScrollState(true)
-  //   }
-  // }, [href])
+  // const href = "/cost-estimation-calculator"
+  const href = isRoot
+    ? "/cost-estimation-calculator"
+    : isEstimationPage
+      ? "#scroll-down"
+      : "/cost-estimation-calculator";
+
+  useEffect(() => {
+    if (baseRoute === "/") {
+      setScrollState(false)
+    } else if (baseRoute === "/cost-estimation-calculator") {
+      setScrollState(true)
+    }
+  }, [href])
 
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
@@ -556,8 +558,8 @@ export default function RootLayout({ children }) {
                   >
                     <Link
                       href={href}
-                      // scroll={scrollState}
-                      scroll={false}
+                      scroll={scrollState}
+                      // scroll={false}
                       style={{
                         textDecoration: "none",
                         scrollBehavior: "smooth"

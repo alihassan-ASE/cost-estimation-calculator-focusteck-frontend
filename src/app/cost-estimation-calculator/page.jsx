@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
-import { Box, Button } from "@mui/material";
+import { Box, Button, List, ListItem, ListItemText, Typography, useMediaQuery } from "@mui/material";
 import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { styled } from "@mui/material/styles";
@@ -22,6 +22,8 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
   minHeight: "200px",
   textAlign: "center",
   display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   flexWrap: "wrap",
   flexDirection: "column",
   flexGrow: 1,
@@ -34,20 +36,25 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#0045e6",
     color: "#fff",
   },
+  "&:hover #list": {
+    color: "#fff",
+  },
   "&:focus": {
     backgroundColor: "#0045e6",
     color: "#fff",
   },
 
   [theme.breakpoints.down("md")]: {
-    // fontSize: "1rem",
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 400,
+    padding: "1em",
+
   },
   [theme.breakpoints.down("sm")]: {
-    // fontSize: ".8rem",
     width: 300,
     height: 300,
+    padding: "1em .5em",
+
   },
 }));
 
@@ -77,6 +84,8 @@ const LINKS = [
 
 const page = () => {
   const pageRef = useRef(null);
+  const isMobileScreen = useMediaQuery("(max-width:600px)");
+
 
   useEffect(() => {
     if (pageRef.current) {
@@ -116,6 +125,7 @@ const page = () => {
             component={Link}
             href={href}
             sx={{
+              fontWeight: "600",
               "&:hover svg": {
                 color: "#fff",
               },
@@ -128,27 +138,44 @@ const page = () => {
               sx={{
                 fontSize: "2em",
                 color: "#0045e6",
+                padding: ".3em",
                 "&:hover": { color: "#fff" },
               }}
             />
 
-            <Box>
-              <Box sx={{ fontWeight: "bold" }}>
-                {text}
-              </Box>
-              <Box>
-                <ul style={{ textAlign: "left", color: "#95a5a6", fontSize: "14px" }}>
-                  {description.map((point, idx) => (
-                    <li key={idx}>{point}</li>
-                  ))}
-                </ul>
-              </Box>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", flexDirection: "column", }}>
 
+              <Typography variant="h5" sx={{
+                textAlign: "left",
+                paddingBottom: ".3em"
+              }}>
+                {text}
+              </Typography>
+
+              <List sx={{
+                listStyleType: !isMobileScreen ? 'disc' : "none",
+                listStylePosition: "inside",
+                textAlign: "center"
+              }}>
+                {description.map((point, idx) => (
+                  <ListItem key={idx}
+                    id="list"
+                    component="Typography"
+                    sx={{
+                      display: "list-item", paddingTop: 0, paddingLeft: 0, textWrap: "wrap", color: "#95a5a6", fontSize: "14px", fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                        ","
+                      ),
+                      fontWeight: "normal"
+                    }}>
+                    {point}
+                  </ListItem>
+                ))}
+              </List>
             </Box>
           </CustomRouteButton>
-        </Box>
+        </Box >
       ))}
-    </Box>
+    </Box >
   );
 };
 

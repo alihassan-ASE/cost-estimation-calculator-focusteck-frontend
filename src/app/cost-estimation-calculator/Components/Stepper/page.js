@@ -128,7 +128,7 @@ export default function VerticalLinearStepper(props) {
                 marginBottom: "auto",
                 zIndex: -100,
                 height: "100%",
-                top: '15px',  
+                top: '15px',
               },
               "& .MuiStepIcon-root": {
                 width: "1.2rem",
@@ -152,10 +152,10 @@ export default function VerticalLinearStepper(props) {
                     position: "relative",
                     "& .MuiStepConnector-root": {
                       display: index === mergedArray.length - 1 ? "none" : "block",
-                      "& .MuiStepConnector-line": {
-                        borderColor: index < activeStep - 1 ? "#0045e6" : "#838383",
-                      }
                     },
+                    "& .MuiStepConnector-line": {
+                      borderColor: index < activeStep - 1 ? "#0045e6" : "#838383",
+                    }
                   }}>
                   <Step key={index} sx={{
                     display: "flex",
