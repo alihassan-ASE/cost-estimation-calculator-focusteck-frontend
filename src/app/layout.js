@@ -230,7 +230,7 @@ export default function RootLayout({ children }) {
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
-  // const [scrollState, setScrollState] = useState(false)
+  const [scrollState, setScrollState] = useState(false)
 
   const handleClick = () => {
     setHamburgerClicked(!hamburgerClicked);
@@ -240,6 +240,8 @@ export default function RootLayout({ children }) {
 
   const isRoot = baseRoute === "/";
   const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
+  // const isEstimationPage = baseRoute === "/cost-estimation-calculator";
+
 
   const href = "/cost-estimation-calculator"
   // const href = isRoot

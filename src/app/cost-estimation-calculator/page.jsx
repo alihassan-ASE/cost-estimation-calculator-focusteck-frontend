@@ -23,6 +23,7 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
   minHeight: "200px",
   textAlign: "center",
   display: "flex",
+  justifyContent: "flex-start",
   flexWrap: "wrap",
   flexDirection: "column",
   flexGrow: 1,
@@ -103,7 +104,7 @@ const page = () => {
         margin: "auto",
       }}
     >
-      {LINKS.map(({ text, href, icon: Icon , description}) => (
+      {LINKS.map(({ text, href, icon: Icon, description }) => (
         <Box
           key={href}
           sx={{
@@ -116,7 +117,7 @@ const page = () => {
             component={Link}
             href={href}
             sx={{
-              fontWeight:"600",
+              fontWeight: "600",
               "&:hover svg": {
                 color: "#fff",
               },
@@ -134,11 +135,11 @@ const page = () => {
             />
 
             {text}
-            <ul style={{textAlign:"left",color:"#bdc3c7",fontSize:"14px"}}>
-            {description.map((point, idx) => (
-              <li key={idx}>{point}</li>
-            ))}
-          </ul>
+            <ul style={{ textAlign: "left", color: "#bdc3c7", fontSize: "14px", }}>
+              {description.map((point, idx) => (
+                <li key={idx}>{point}</li>
+              ))}
+            </ul>
           </CustomRouteButton>
         </Box>
       ))}
