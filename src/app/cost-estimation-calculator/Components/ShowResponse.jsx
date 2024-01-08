@@ -68,14 +68,19 @@ const AccordionSummary = styled((props) => (
   },
 }));
 
-const CustomTypography = styled(Typography)({
+const CustomTypography = styled(Typography)(({ theme }) => ({
   fontSize: "20px",
   fontWeight: "bold",
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
-  )
-
-});
+  ),
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1rem ",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: ".9rem ",
+  },
+}));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),

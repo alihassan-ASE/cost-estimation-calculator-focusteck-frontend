@@ -23,6 +23,71 @@ import ShowSummary from "./ShowSummary";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+/* ---------------- Languages Icons ---------------- */
+// Frontend
+import reactIcon from "../../../icons/frontend/react.png"
+import angularIcon from "../../../icons/frontend/angular.png"
+import vueIcon from "../../../icons/frontend/vue.png"
+import svelteIcon from "../../../icons/frontend/svelte.png"
+import jQueryIcon from "../../../icons/frontend/jquery.png"
+import emberIcon from "../../../icons/frontend/ember.png"
+import backboneIcon from "../../../icons/frontend/backbone.png"
+import semanticIcon from "../../../icons/frontend/semantic.png"
+import foundationIcon from "../../../icons/frontend/foundation.png"
+import preactIcon from "../../../icons/frontend/preact.png"
+import aureliaIcon from "../../../icons/frontend/aurelia.svg"
+
+// UI/UX
+import AdobeIcon from "../../../icons/ui-ux/xd.png"
+import figmaIcon from "../../../icons/ui-ux/figma.png"
+import invisionIcon from "../../../icons/ui-ux/invision.png"
+import sketchIcon from "../../../icons/ui-ux/sketch.png"
+import zeplinIcon from "../../../icons/ui-ux/zeplin.png"
+import axureIcon from "../../../icons/ui-ux/axure.png"
+import marvelIcon from "../../../icons/ui-ux/marvel.png"
+
+// Data Engineer
+import airflowIcon from "../../../icons/engineer/airflow.png"
+import cassandraIcon from "../../../icons/engineer/cassandra.png"
+import elasticsearchIcon from "../../../icons/engineer/elasticsearch.svg"
+import informaticaIcon from "../../../icons/engineer/informatica.png"
+import kafkaIcon from "../../../icons/engineer/kafka.png"
+import mysqlIcon from "../../../icons/engineer/mysql.png"
+import prestoIcon from "../../../icons/engineer/presto.png"
+import snowflakeIcon from "../../../icons/engineer/snowflake.png"
+import sparkIcon from "../../../icons/engineer/spark.png"
+import talendIcon from "../../../icons/engineer/talend.png"
+import hadoopIcon from "../../../icons/engineer/hadoop.png"
+
+// Automation
+import appiumIcon from "../../../icons/automation/appium.png"
+import cucumberIcon from "../../../icons/automation/cucumber.png"
+import junitIcon from "../../../icons/automation/junit.png"
+import postmanIcon from "../../../icons/automation/postman.png"
+import seleniumIcon from "../../../icons/automation/selenium.png"
+import testcompleteIcon from "../../../icons/automation/testcomplete.svg"
+import testngIcon from "../../../icons/automation/testng.png"
+
+// Backend
+import cakeIcon from "../../../icons/backend/cake.png"
+import djangoIcon from "../../../icons/backend/django.jpg"
+import expressIcon from "../../../icons/backend/express.png"
+import featherIcon from "../../../icons/backend/feather.svg"
+import laravelIcon from "../../../icons/backend/laravel.png"
+import meteorIcon from "../../../icons/backend/meteor.svg"
+import netIcon from "../../../icons/backend/net.png"
+import nextIcon from "../../../icons/backend/next.svg"
+import nodeIcon from "../../../icons/backend/node.png"
+import rorIcon from "../../../icons/backend/ror.png"
+import sailsIcon from "../../../icons/backend/sails.png"
+import flaskIcon from "../../../icons/backend/flask.png"
+
+// Devops
+import archimateIcon from "../../../icons/devops/archimate.png"
+import awsIcon from "../../../icons/devops/zachman.png"
+import togafIcon from "../../../icons/devops/togaf.svg"
+/* ------------------------------------------------- */
+
 const CustomButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#00A76f",
   border: "1px solid #00A76f",
@@ -93,10 +158,9 @@ const CustomCostBox = styled(Box)(({ theme }) => ({
   padding: "2em",
   borderRadius: "10px",
   minWidth: "250px",
-  margin: "2em 0",
+  margin: "1em 0",
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
-    // margin: "2em 0 0 0",
   },
 }));
 
@@ -236,8 +300,6 @@ const StaffComponent = () => {
       if (Array.isArray(data.responses[0].resources) && data.responses[0].resources.length > 0) {
         setResource(data.responses[0].resources);
         setValues(data.responses[0].resources)
-      } else {
-        console.log("No valid resources found in data.");
       }
 
     }
@@ -301,6 +363,70 @@ const StaffComponent = () => {
       }
     }
   };
+  let imageIcons = {
+    // Frontend
+    'React': reactIcon,
+    'Angular': angularIcon,
+    'Vue': vueIcon,
+    'Svelte': svelteIcon,
+    'jQuery': jQueryIcon,
+    'Ember.js': emberIcon,
+    'Backbone.js': backboneIcon,
+    'Semantic-UI': semanticIcon,
+    'Foundation': foundationIcon,
+    'Preact': preactIcon,
+    'Aurelia': aureliaIcon,
+
+    // Data Engineer
+    'Apache Hadoop': hadoopIcon,
+    'Apache Spark': sparkIcon,
+    'Apache Kafka': kafkaIcon,
+    'Snowflake': snowflakeIcon,
+    'Airflow': airflowIcon,
+    'Talend': talendIcon,
+    'Informatica': informaticaIcon,
+    'Apache Cassandra': cassandraIcon,
+    'Elasticsearch': elasticsearchIcon,
+    'Presto': prestoIcon,
+    'MySQL': mysqlIcon,
+
+    //UI/UX
+    'Figma': figmaIcon,
+    'Sketch': sketchIcon,
+    'Adobe XD': AdobeIcon,
+    'INvision': invisionIcon,
+    'Zeplin': zeplinIcon,
+    'Marvel': marvelIcon,
+    'Axure Rp': axureIcon,
+
+    // Automation
+    'Selenium': seleniumIcon,
+    'JUnint': junitIcon,
+    'TestNG': testngIcon,
+    'APPium': appiumIcon,
+    'Cucumber': cucumberIcon,
+    'TestComplete': testcompleteIcon,
+    'Postman': postmanIcon,
+
+    //Backend
+    'Django': djangoIcon,
+    'ASP.NET Core': netIcon,
+    'Laravel': laravelIcon,
+    'Ruby on Rails': rorIcon,
+    'Flask': flaskIcon, //not found
+    'Cake php': cakeIcon,
+    'NextJs': nextIcon,
+    'Meteor': meteorIcon,
+    'Node.js': nodeIcon,
+    'Express.js': expressIcon,
+    'Feather.js': featherIcon,
+    'sail.js': sailsIcon,
+
+    //DevOps
+    'TOGAF (The Open Group Architecture Framework)': togafIcon,
+    'Zachman Framework,AWS Well-Architected Framework': awsIcon,
+    'Archimate': archimateIcon,
+  }
 
   // Function To Handling Price
   const handlePrice = (type) => {
@@ -376,6 +502,13 @@ const StaffComponent = () => {
 
   // receiving selected option from child Component
   const selectedOptionPassToParent = (data) => {
+
+    for (const key in imageIcons) {
+      if (key === data?.resourceOption?.opt) {
+        data.resourceOption = { ...data.resourceOption, icon: imageIcons[key] }
+      }
+    }
+
     setValues((prev) => [...prev, data]);
     setButtonState(true);
     setEditMode(false)
@@ -409,8 +542,7 @@ const StaffComponent = () => {
           ],
         };
       });
-  }
-    ;
+  };
 
   // Getting Response from child Component(Question Component)
   const getResponsesData = (resp) => {
@@ -551,7 +683,7 @@ const StaffComponent = () => {
   }
 
   return (
-    
+
     <Box >
       {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
         <Box
@@ -609,7 +741,7 @@ const StaffComponent = () => {
                     marginLeft: "auto",
                     marginRight: "auto",
                     gap: '1em',
-                    maxWidth: 800,
+                    maxWidth: 900,
                     flexWrap: isNarrowStaff ? "wrap" : "nowrap",
                     marginBottom: ".5em"
                   }}>
@@ -625,7 +757,7 @@ const StaffComponent = () => {
                   </CustomButton>
                 </Box>
 
-                <TableContainer component={Paper} sx={{ maxWidth: 800, margin: "auto" }}>
+                <TableContainer component={Paper} sx={{ maxWidth: 900, margin: "auto" }}>
                   <Table
                     sx={{
                       minWidth: 700,
@@ -636,11 +768,11 @@ const StaffComponent = () => {
                     }}
                     aria-label="customized table">
                     <TableHead>
-                      <StyledTableCell>Resources</StyledTableCell>
-                      <StyledTableCell>Resources Option</StyledTableCell>
-                      <StyledTableCell>Seniority Level</StyledTableCell>
-                      <StyledTableCell>Number Of Resources</StyledTableCell>
-                      <StyledTableCell>Actions</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center" }}>Framework</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center" }}>Specialist</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center" }}>Seniority Level</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center" }}>Number Of Resources</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center" }}>Actions</StyledTableCell>
                     </TableHead>
                     <TableBody>
                       {
@@ -656,6 +788,9 @@ const StaffComponent = () => {
                                 backgroundColor: "#fff",
                                 zIndex: 1,
                                 opacity: 1,
+                                "&:hover": {
+                                  backgroundColor: "rgba(0, 0, 0, 0.04)"
+                                },
                                 animation: index === count && !back && addTransition && !deleteResources
                                   ? `${newRowTransition} .5s ease`
                                   : editIndex === index && editTransition && !addTransition && !back
@@ -663,14 +798,45 @@ const StaffComponent = () => {
                                     : 'none',
                               }}
                             >
+                              <StyledTableCell sx={{
+                                textAlign: "left", display: "flex", alignItems: "center",
+                                // justifyContent: "space-between",
+                                gap: "0em", maxWidth: 300,
+                                gap: "1.5em"
+                              }}>
+                                {row.resourceOption?.icon
+                                  ?
+                                  <div style={{
+                                    padding: ".5em", backgroundColor: "#fff",
+                                    boxShadow: "0px 0px 5px 2px rgba(199,199,199,1)",
+                                    borderRadius: "50%",
+                                    width: "35px",
+                                    height: "35px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center"
+                                  }}>
+                                    <img src={row.resourceOption?.icon?.src} style={{
+                                      width: "30px",
+                                      height: "30px",
+                                    }} />
+                                  </div>
+                                  : null}
+                                <div style={{ maxWidth: "200px", textAlign: "left" }}>
+                                  {row.resourceOption?.opt}
+                                </div>
+                              </StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }} scope="row">
                                 {row.resource}
                               </StyledTableCell>
-                              <StyledTableCell sx={{ textAlign: "center", }}>{row.resourceOption?.opt}</StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }}>{row.seniorityLevel}</StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }}>{row.numOfResources}</StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }}>
-                                <Box sx={{ display: "flex", justifyContent: "space-between", padding: " 0 .3em", gap: ".5em" }}>
+                                <Box sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  padding: " 0 .3em", gap: "1em"
+                                }}>
                                   <ModeEditIcon sx={{
                                     color: "rgb(99, 115, 129)",
                                     fontSize: 20,
@@ -716,7 +882,7 @@ const StaffComponent = () => {
                   marginLeft: "auto",
                   marginRight: "auto",
                   gap: '1em',
-                  maxWidth: 800,
+                  maxWidth: 900,
                 }}
               >
                 <CustomNextButton
@@ -732,7 +898,9 @@ const StaffComponent = () => {
               </Box>
             </>
           ) : (
-            <Grid container spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} sx={{ maxWidth: "100%" }}>
+            <Grid container spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
+            //  sx={{ maxWidth: "100%" }}
+            >
               <Grid item lg={8} md={12} sm={12} xs={12}>
                 <Box sx={{
                   display: "flex", alignItems: "center",
@@ -817,24 +985,27 @@ const StaffComponent = () => {
                     </Slide>
                     : ""}
               </Grid>
-              <Box sx={{
+              {/* <Box sx={{
                 borderRight: orientation === "vertical" ? "1px solid grey" : "0",
                 borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
                 width: orientation !== "vertical" ? "90%" : "0",
                 margin: orientation !== "vertical" ? "auto" : "0",
                 marginTop: "5%",
-                height: displayQuestion && orientation === "vertical" ? "80vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
+                height: displayQuestion && orientation === "vertical" ? "510px" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "400px" : "1px"
 
-              }}></Box>
+              }}></Box> */}
               <Grid item lg={3.9} md={12} sm={12} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
                   <div style={{
-                    padding: orientation === "vertical" ? "0" : "3% 2%"
+                    padding: orientation === "vertical" ? "0 0 3% 5%  " : "3% 2%",
+                    borderLeft: orientation === "vertical" ? "1px solid grey" : "0",
+                    borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
+                    margin: orientation !== "vertical" ? "auto" : "0",
+                    marginTop: "5%",
                   }}>
                     <Stepper
                       responses={actualResponses.responses}
                       changeActiveQuestion={changeActiveQuestion}
-                      orientation={orientation}
                     />
                     {
                       displayQuestion

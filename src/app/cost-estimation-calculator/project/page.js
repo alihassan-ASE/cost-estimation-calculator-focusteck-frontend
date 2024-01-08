@@ -20,7 +20,6 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 import ShowSummary from "../Components/ShowSummary";
-import { PaddingOutlined } from "@mui/icons-material";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   padding: 0,
@@ -292,7 +291,7 @@ const page = () => {
     setDisplayQuestion(true);
     cost = 0;
 
-  
+
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
     setCurrentQuestion(lastQuestion.question);
@@ -301,7 +300,7 @@ const page = () => {
     setCurrentQuestionIndex(lastQuestion.index);
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
 
-    if(lastQuestion.question.label === "monetization model"){
+    if (lastQuestion.question.label === "monetization model") {
       setQuestionsToShow(lastQuestion.stack)
     }
 
@@ -436,7 +435,7 @@ const page = () => {
         >
           <Grid
             container
-            spacing={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+            spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
           >
             <Grid item lg={8} md={12} sm={12} xs={12}>
               <Box sx={{
@@ -553,18 +552,24 @@ const page = () => {
               }
 
             </Grid>
-            <Box sx={{
+            {/* <Box sx={{
               borderRight: orientation === "vertical" ? "1px solid grey" : "0",
               borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
               width: orientation !== "vertical" ? "90%" : "0",
               margin: orientation !== "vertical" ? "auto" : "0",
               marginTop: "5%",
-              height: displayQuestion && orientation === "vertical" ? "80vh" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "70vh" : "1px"
+              height: displayQuestion && orientation === "vertical" ? "510px" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "400px" : "1px"
 
-            }}></Box>
-            <Grid item lg={3.9} md={12} sm={12} xs={12}>
+            }}></Box> */}
+            <Grid item
+              lg={3.9} md={12} sm={12} xs={12}
+            >
               <div style={{
-                padding: orientation === "vertical" ? "0" : "3% 2%"
+                padding: orientation === "vertical" ? "0 0 3% 5%  " : "3% 2%",
+                borderLeft: orientation === "vertical" ? "1px solid grey" : "0",
+                borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
+                margin: orientation !== "vertical" ? "auto" : "0",
+                marginTop: "5%",
               }}>
                 <Stepper
                   responses={actualResponses}

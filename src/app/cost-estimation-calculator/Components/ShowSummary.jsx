@@ -148,7 +148,6 @@ const ShowSummary = ({ response }) => {
   const getActualResponse = (value, formData) => {
     setOpenForm(value)
     setActualResponse(formData);
-    console.log("form Data",formData)
     let data = JSON.stringify(formData);
     if (data) {
       localStorage.setItem("Response", data);
@@ -252,7 +251,7 @@ const ShowSummary = ({ response }) => {
             >
               <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap" }}>
                 <Box
-                  onClick={()=>{route.push("/cost-estimation-calculator/submit")}}
+                  onClick={() => { route.push("/cost-estimation-calculator/submit") }}
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -363,53 +362,53 @@ const ShowSummary = ({ response }) => {
               </Box>
 
               {hasResponse ? (
-              
-                  <CustomButton
+
+                <CustomButton
                   onClick={handleForm}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      position: "relative",
-                      overflow: "hidden",
-                      "&:hover": {
-                        cursor: "pointer",
-                        backgroundColor: "#fff",
-                        boxShadow: "none",
-                        color: "#000",
-                        "& #forward": {
-                          marginRight: "30px",
-                          transition: "margin-right 0.2s ease-in-out",
-                        },
-                        "& svg": {
-                          backgroundColor: "#0045e6",
-
-                          opacity: 1,
-                          marginRight: "15px",
-                          transition:
-                            "margin-right 0.2s ease-in-out, border-color 0.2s ease-in-out",
-                          borderRadius: "50% 0 0 50%",
-                        },
-                        "&:before": {
-                          transform: "scale(1, 1)",
-                          textIndent: 0,
-                        },
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    "&:hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#fff",
+                      boxShadow: "none",
+                      color: "#000",
+                      "& #forward": {
+                        marginRight: "30px",
+                        transition: "margin-right 0.2s ease-in-out",
                       },
-                    }}
-                  >
+                      "& svg": {
+                        backgroundColor: "#0045e6",
 
-                    <span id="forward">Start Project</span>{" "}
-                    <ArrowRightAltIcon
-                      sx={{
-                        marginLeft: "auto",
-                        opacity: 0,
-                        color: "#fff",
-                        position: "absolute",
-                        right: "-19px",
-                        padding: ".5em",
-                        borderRadius: "0 50% 50% 0",
-                      }}
-                    />{" "}
-                  </CustomButton>
+                        opacity: 1,
+                        marginRight: "15px",
+                        transition:
+                          "margin-right 0.2s ease-in-out, border-color 0.2s ease-in-out",
+                        borderRadius: "50% 0 0 50%",
+                      },
+                      "&:before": {
+                        transform: "scale(1, 1)",
+                        textIndent: 0,
+                      },
+                    },
+                  }}
+                >
+
+                  <span id="forward">Start Project</span>{" "}
+                  <ArrowRightAltIcon
+                    sx={{
+                      marginLeft: "auto",
+                      opacity: 0,
+                      color: "#fff",
+                      position: "absolute",
+                      right: "-19px",
+                      padding: ".5em",
+                      borderRadius: "0 50% 50% 0",
+                    }}
+                  />{" "}
+                </CustomButton>
               ) : (
                 <CustomButton
                   disabled

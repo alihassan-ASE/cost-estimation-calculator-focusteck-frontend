@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { postData } from "../../lib/api/postData";
 import { styled } from "@mui/material/styles";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "3em auto",
@@ -47,6 +49,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const Form = ({ response, getActualResponse }) => {
+  const route = useRouter();
 
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
@@ -77,7 +80,7 @@ const Form = ({ response, getActualResponse }) => {
   });
 
   const submitForm = (formInput) => {
-    
+
     const trimmedUserName = (formInput.userName || "").trim();
     const trimmedEmail = (formInput.email || "").trim();
     const trimmedPhone = (formInput.phone || "").trim();
@@ -209,7 +212,7 @@ const Form = ({ response, getActualResponse }) => {
         ...formInput,
         ...response,
       });
-
+      route.push('/thank-you');
       postData({ ...response, ...formInput });
     } else {
       setSubmitted(false);
@@ -444,10 +447,12 @@ const Form = ({ response, getActualResponse }) => {
             variant="contained"
             onClick={() => {
               submitForm(formInput);
+
             }}
           >
             Send Message
           </Button>
+
         </Box>
       </form>
     </CustomBox>

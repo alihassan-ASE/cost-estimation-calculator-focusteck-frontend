@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { styled, alpha } from "@mui/material/styles";
-import SearchIcon from "@mui/icons-material/Search";
+import { styled } from "@mui/material/styles";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -15,17 +14,17 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 
 import {
   BottomNavigation,
-  InputBase,
   Typography,
-  Toolbar,
   Box,
   Button,
-  AppBar,
   useMediaQuery,
+  IconButton
 } from "@mui/material";
-import { baseUrl } from "@/config/constants";
+import e from "cors";
 
-
+const RotatingIconButton = styled(IconButton)({
+  transition: 'transform 0.3s ease-in-out',
+});
 
 const CustomStartButton = styled(Button)(({ theme }) => ({
   width: "300px",
@@ -229,33 +228,33 @@ export default function RootLayout({ children }) {
 
   const baseRoute = usePathname();
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
-  const handleNavBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  // const [scrollState, setScrollState] = useState(false)
+
+  const handleClick = () => {
     setHamburgerClicked(!hamburgerClicked);
-  };
-
-  useEffect(() => {
-    if (hamburgerClicked) {
-      setIsTransitionComplete(!isTransitionComplete);
-    }
-  }, [hamburgerClicked]);
-
-  const handleTransitionEnd = () => {
-    setIsTransitionComplete(!isTransitionComplete);
+    setIsOpen(!isOpen);
   };
 
 
-  // const isRoot = baseRoute === "/";
-  // const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
+  const isRoot = baseRoute === "/";
+  const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
 
+  const href = "/cost-estimation-calculator"
   // const href = isRoot
   //   ? "/cost-estimation-calculator"
   //   : isEstimationPage
-  //   ? "#scroll-down"
-  //   : "/cost-estimation-calculator";
+  //     ? "#scroll-down"
+  //     : "/cost-estimation-calculator";
 
-  const href = "/cost-estimation-calculator";
+  // useEffect(() => {
+  //   if (baseRoute === "/") {
+  //     setScrollState(false)
+  //   } else if (baseRoute === "/cost-estimation-calculator") {
+  //     setScrollState(true)
+  //   }
+  // }, [href])
 
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
@@ -407,36 +406,18 @@ export default function RootLayout({ children }) {
                 </Box>
 
                 <>
-                  {hamburgerClicked ? (
-                    <CloseIcon
-                      onClick={handleNavBar}
-                      sx={{
-                        color: "#005DBD",
-                        display: { xs: "block", md: "block", lg: "none" },
-                        marginLeft: "auto",
-                        transition: "transform .4s ease",
-                        transform: `rotate(${isTransitionComplete ? '180deg' : '0deg'})`,
-                        "&:hover": {
-                          cursor: "pointer",
-                        },
+                  {isNarrowScreen ? (
+                    <RotatingIconButton
+                      onClick={handleClick}
+                      aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                      style={{
+                        transform: `rotate(${isOpen ? 180 : 0}deg)`,
                       }}
-                    />
-                  ) : (
-                    <MenuIcon
-                      onClick={handleNavBar}
-                      onEntering={handleTransitionEnd}
-                      sx={{
-                        color: "#005DBD",
-                        display: { xs: "block", md: "block", lg: "none" },
-                        margin: "auto 0 auto auto",
-                        transition: "transform .4s ease",
-                        transform: "rotate(180deg)",
-                        "&:hover": {
-                          cursor: "pointer",
-                        },
-                      }}
-                    />
-                  )}
+                    >
+                      {isOpen ? <CloseIcon sx={{ color: '#005DBD', width: "1.3em", height: "1.3em" }} /> : <MenuIcon sx={{ color: '#005DBD', width: "1.3em", height: "1.3em" }} />}
+                    </RotatingIconButton>
+                  ) : null}
+
                 </>
               </CustomToolBar>
             </CustomAppBar>
@@ -575,9 +556,11 @@ export default function RootLayout({ children }) {
                   >
                     <Link
                       href={href}
+                      // scroll={scrollState}
                       scroll={false}
                       style={{
                         textDecoration: "none",
+                        scrollBehavior: "smooth"
                       }}
                     >
                       <CustomStartButton
@@ -617,6 +600,11 @@ export default function RootLayout({ children }) {
             >
               {children}
             </CustomBox>
+          ) : baseRoute ===
+            "/thank-you" ? (
+            <Box id="scroll-down" sx={{ minHeight: "100vh" }}>
+              {children}
+            </Box>
           ) : (
             <CustomBox id="scroll-down" sx={{ minHeight: "100vh", paddingTop: "1em", paddingBottom: "3em" }}>
               {children}
