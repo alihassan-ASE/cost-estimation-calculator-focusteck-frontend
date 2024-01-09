@@ -256,6 +256,9 @@ export default function RootLayout({ children }) {
     } else if (baseRoute === "/cost-estimation-calculator") {
       setScrollState(true)
     }
+    else{
+      setScrollState(false)
+    }
   }, [href])
 
   return (

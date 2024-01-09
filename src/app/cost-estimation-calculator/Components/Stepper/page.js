@@ -86,6 +86,23 @@ export default function VerticalLinearStepper(props) {
   }
   `;
 
+  const heightTransition = keyframes`
+  0% {
+    opacity: 0;
+   height: 0;
+  }
+  50% {
+    opacity: 0;
+   height: 50%;
+  }
+  75% {
+    opacity: 0.4;
+  }
+  100%{
+    opacity: 1;
+    height: 100%;
+  }
+  `;
 
   return (
     <Box
@@ -120,21 +137,22 @@ export default function VerticalLinearStepper(props) {
               "& .MuiStepConnector-line": {
                 borderLeftWidth: "2px",
                 marginLeft: "-3px",
-                height: "100%"
+                height: "100%",
               },
               "& .MuiStepConnector-root": {
                 position: "absolute",
                 marginTop: "auto",
                 marginBottom: "auto",
                 zIndex: -100,
-                height: "100%",
-                top: '15px',
+                height: '100%',
+                top: '15px'
               },
               "& .MuiStepIcon-root": {
                 width: "1.2rem",
                 height: "1.2rem",
                 alignItems: "start",
               },
+
             }}
             nonLinear
             activeStep={responses?.length}
@@ -152,10 +170,12 @@ export default function VerticalLinearStepper(props) {
                     position: "relative",
                     "& .MuiStepConnector-root": {
                       display: index === mergedArray.length - 1 ? "none" : "block",
+                      "& .MuiStepConnector-line": {
+                        borderColor: index < activeStep - 1 ? "#0045e6" : "#838383",
+                        animation: index > questionsArray.length - 2 ? `${heightTransition} 1s linear` : null,
+                        opacity: 1,
+                      }
                     },
-                    "& .MuiStepConnector-line": {
-                      borderColor: index < activeStep - 1 ? "#0045e6" : "#838383",
-                    }
                   }}>
                   <Step key={index} sx={{
                     display: "flex",
@@ -176,7 +196,7 @@ export default function VerticalLinearStepper(props) {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                     
+
                     }}>
                       <Typography sx={{
                         fontSize: "11px"
@@ -217,7 +237,7 @@ export default function VerticalLinearStepper(props) {
                               }}>
                               {responses[index].resources.map((resource, resourceIndex) => (
                                 <div key={resourceIndex}>
-                                  <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start", animation: `${newStepperRowTransition} .5s ease` }}>
+                                  <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start", animation: `${newStepperRowTransition} .9s ease` }}>
                                     <Box sx={{ width: "40%", }}>
                                       <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>{resource.resource}</Typography>
                                     </Box>
@@ -274,7 +294,7 @@ export default function VerticalLinearStepper(props) {
                           >
                             {(responses[index].selectedOption || responses[index].selectedData) && (
                               <div>
-                                <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", animation: `${newStepperRowTransition} .5s ease` }}>
+                                <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", animation: `${newStepperRowTransition} .9s ease` }}>
                                   <Box sx={{ width: "40%" }}>
                                     <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}> {responses[index].question?.label
                                       ? responses[index].question.label

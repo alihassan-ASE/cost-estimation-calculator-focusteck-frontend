@@ -249,7 +249,7 @@ const ShowSummary = ({ response }) => {
                 marginTop: "40px",
               }}
             >
-              <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap" }}>
+              <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap",justifyContent:"center",alignItems:"center" }}>
                 <Box
                   onClick={() => { route.push("/cost-estimation-calculator/submit") }}
                   sx={{
@@ -301,7 +301,9 @@ const ShowSummary = ({ response }) => {
                 </Box>
                 {
                   isNarrowScreen
-                    ? <CustomLinkBox href="/cost-estimation-calculator" sx={{ marginLeft: "auto" }}>
+                    ? <CustomLinkBox href="/cost-estimation-calculator" 
+                    // sx={{ marginLeft: "auto" }}
+                    >
 
                       <Box
                         sx={{
@@ -420,7 +422,7 @@ const ShowSummary = ({ response }) => {
                   }}
                 >
 
-                  <span style={{ textDecoration: "none" }} id="forward">Show Response</span>{" "}
+                  <span style={{ textDecoration: "none" }} id="forward">start project</span>{" "}
                   <ArrowRightAltIcon
                     sx={{
                       marginLeft: "auto",
