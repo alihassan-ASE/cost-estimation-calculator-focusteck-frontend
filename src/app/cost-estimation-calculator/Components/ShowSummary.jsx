@@ -137,7 +137,8 @@ const ShowSummary = ({ response }) => {
   const [industry, setIndustry] = useState("");
   const [actualResponse, setActualResponse] = useState({});
   const [openForm, setOpenForm] = useState(false)
-  const isNarrowScreen = useMediaQuery("(max-width:445px)");
+  const isNarrowScreen = useMediaQuery("(max-width:421.5px)");
+  const centerButtons = useMediaQuery("(max-width:420px)");
   const route = useRouter();
   const handleForm = () => {
     setOpenForm(true)
@@ -249,7 +250,7 @@ const ShowSummary = ({ response }) => {
                 marginTop: "40px",
               }}
             >
-              <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap" }}>
+              <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
                 <Box
                   onClick={() => { route.push("/cost-estimation-calculator/submit") }}
                   sx={{
@@ -301,7 +302,9 @@ const ShowSummary = ({ response }) => {
                 </Box>
                 {
                   isNarrowScreen
-                    ? <CustomLinkBox href="/cost-estimation-calculator" sx={{ marginLeft: "auto" }}>
+                    ? <CustomLinkBox href="/cost-estimation-calculator"
+                    // sx={{ marginLeft: "auto" }}
+                    >
 
                       <Box
                         sx={{
@@ -356,7 +359,6 @@ const ShowSummary = ({ response }) => {
                         />
                       </Box>
                     </CustomLinkBox>
-
                 }
 
               </Box>
@@ -420,7 +422,7 @@ const ShowSummary = ({ response }) => {
                   }}
                 >
 
-                  <span style={{ textDecoration: "none" }} id="forward">Show Response</span>{" "}
+                  <span style={{ textDecoration: "none" }} id="forward">Start Project</span>{" "}
                   <ArrowRightAltIcon
                     sx={{
                       marginLeft: "auto",

@@ -18,6 +18,7 @@ const ShowOption = ({
   typeofUI,
   selectedOptionPassToParent,
 }) => {
+
   return (
     <Box>
       {typeOfSelection === "single" ? (

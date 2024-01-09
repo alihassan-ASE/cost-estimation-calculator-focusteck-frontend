@@ -72,7 +72,7 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
   "&.Mui-selected": {
     backgroundColor: "#0045e6",
-    border: "1px solid #fff",
+    border: "1px solid #0045e6",
     color: "white",
     "& span.price": {
       color: "#fff",
@@ -92,6 +92,9 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
   "&:focus span.price": {
     color: "white",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "110px",
   },
 }));
 
@@ -143,7 +146,7 @@ const MultipleComponent = ({
               handleFormat(null, updatedSelection);
             }}
           >
-            <span>{data.opt}</span>&nbsp;
+            <span>{data.opt}</span>
           </StyleToggleButton>
         ))}
       </StyledToggleButtonGroup>

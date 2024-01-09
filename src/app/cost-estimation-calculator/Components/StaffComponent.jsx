@@ -774,7 +774,9 @@ const StaffComponent = () => {
                       <StyledTableCell sx={{ textAlign: "center" }}>Number Of Resources</StyledTableCell>
                       <StyledTableCell sx={{ textAlign: "center" }}>Actions</StyledTableCell>
                     </TableHead>
-                    <TableBody>
+                    <TableBody
+                    // sx={{ width: "100%" }}
+                    >
                       {
                         resource.length === 0
                           ? <StyledTableRow>
@@ -788,6 +790,7 @@ const StaffComponent = () => {
                                 backgroundColor: "#fff",
                                 zIndex: 1,
                                 opacity: 1,
+                                width: "100%",
                                 "&:hover": {
                                   backgroundColor: "rgba(0, 0, 0, 0.04)"
                                 },
@@ -799,10 +802,11 @@ const StaffComponent = () => {
                               }}
                             >
                               <StyledTableCell sx={{
-                                textAlign: "left", display: "flex", alignItems: "center",
-                                // justifyContent: "space-between",
-                                gap: "0em", maxWidth: 300,
-                                gap: "1.5em"
+                                display: "flex",
+                                alignItems: "center",
+                                maxWidth: 300,
+                                gap: "1.5em",
+                                // justifyContent: "center"
                               }}>
                                 {row.resourceOption?.icon
                                   ?
@@ -821,7 +825,13 @@ const StaffComponent = () => {
                                       height: "30px",
                                     }} />
                                   </div>
-                                  : null}
+                                  : <div style={{
+                                    backgroundColor: "#fff",
+                                    height: "40px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center"
+                                  }}></div>}
                                 <div style={{ maxWidth: "200px", textAlign: "left" }}>
                                   {row.resourceOption?.opt}
                                 </div>
@@ -997,10 +1007,9 @@ const StaffComponent = () => {
               <Grid item lg={3.9} md={12} sm={12} xs={12}>
                 {actualResponses.length || actualResponses.responses ? (
                   <div style={{
-                    padding: orientation === "vertical" ? "0 0 3% 5%  " : "3% 2%",
+                    padding: orientation === "vertical" ? "0 0 3% 8%  " : "3% 2%",
                     borderLeft: orientation === "vertical" ? "1px solid grey" : "0",
                     borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-                    margin: orientation !== "vertical" ? "auto" : "0",
                     marginTop: "5%",
                   }}>
                     <Stepper

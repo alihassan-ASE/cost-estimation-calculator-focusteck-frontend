@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Box, Typography, TextField } from "@mui/material";
+import { Button, Box, Typography, TextField, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const CustomButton = styled(Button)(({ theme }) => ({
@@ -11,7 +11,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   fontSize: "1.2rem",
   padding: "2em 1em",
   display: "flex",
-  flexGrow: 1,
+  // flexGrow: 1,
   flexWrap: "wrap",
   lineHeight: 1.5,
   fontWeight: "normal",
@@ -53,6 +53,7 @@ const LargeTiles = ({
   selectedOptionPassToParent,
 }) => {
   const [selectedFormats, setSelectedFormats] = useState("");
+  const isNarrowScreen = useMediaQuery("(max-width:600px)");
   const buttonRefs = useRef([]);
 
   useEffect(() => {
@@ -74,37 +75,37 @@ const LargeTiles = ({
   };
 
   return (
-    <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
+    <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap", justifyContent: isNarrowScreen ? "center" : "normal" }}>
       {options?.map((data, index) => (
-        <Box key={index}>
-          <CustomButton
-            // ref={(el) => (buttonRefs.current[index] = el)}
-            value={
-              selectedFormats?.opt && selectedFormats?.price
-                ? { opt: selectedFormats.opt, price: selectedFormats.price }
-                : selectedFormats
-            }
-            onClick={() => {
-              setSelectedFormats(data);
-              selectedOptionPassToParent(data);
-            }}
-            sx={{
-              backgroundColor: checkSelectedOption(data.opt, data.price)
-                ? "#0045e6"
-                : "#fff",
-              border: checkSelectedOption(data.opt, data.price)
-                ? "1px solid #0045e6"
-                : "1px solid #fff",
-              color: checkSelectedOption(data.opt, data.price)
-                ? "#fff"
-                : "#000",
-              flexGrow: 1,
-              minWidth: 0,
-            }}
-          >
-            {data.opt ? data.opt : data}
-          </CustomButton>
-        </Box>
+        // <Box key={index}>
+        <CustomButton
+          key={index}
+          // ref={(el) => (buttonRefs.current[index] = el)}
+          value={
+            selectedFormats?.opt && selectedFormats?.price
+              ? { opt: selectedFormats.opt, price: selectedFormats.price }
+              : selectedFormats
+          }
+          onClick={() => {
+            setSelectedFormats(data);
+            selectedOptionPassToParent(data);
+          }}
+          sx={{
+            backgroundColor: checkSelectedOption(data.opt, data.price)
+              ? "#0045e6"
+              : "#fff",
+            border: checkSelectedOption(data.opt, data.price)
+              ? "1px solid #0045e6"
+              : "1px solid #fff",
+            color: checkSelectedOption(data.opt, data.price)
+              ? "#fff"
+              : "#000",
+            minWidth: 0,
+          }}
+        >
+          {data.opt ? data.opt : data}
+        </CustomButton>
+        // </Box>
       ))}
     </Box>
   );

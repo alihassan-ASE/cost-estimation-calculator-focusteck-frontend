@@ -1,8 +1,7 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import { styled, } from "@mui/material/styles";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 
@@ -80,12 +79,18 @@ const page = () => {
             ? window.localStorage.clear()
             : false;
     }
+    const pageRef = useRef(null);
 
 
-
+    useEffect(() => {
+        if (pageRef.current) {
+            pageRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, []);
 
     return (
         <Box
+            ref={pageRef}
             sx={{
                 display: "flex",
                 // width: "100%",

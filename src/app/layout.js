@@ -224,6 +224,7 @@ const CustomBox = styled(Box)(({ theme }) => ({
 export default function RootLayout({ children }) {
   const isNarrowScreen = useMediaQuery("(max-width:1148px)");
   const isMobileScreen = useMediaQuery("(max-width:360px)");
+  const changeLogoSize = useMediaQuery("(max-width:980px)");
   const route = useRouter();
 
   const baseRoute = usePathname();
@@ -239,7 +240,7 @@ export default function RootLayout({ children }) {
 
 
   const isRoot = baseRoute === "/";
-  // const isEstimationPage = baseRoute.startsWith("/cost-estimation-calculator");
+  // const isThankYouPage = baseRoute === "/thank-you" ;
   const isEstimationPage = baseRoute === "/cost-estimation-calculator";
 
 
@@ -256,7 +257,11 @@ export default function RootLayout({ children }) {
     } else if (baseRoute === "/cost-estimation-calculator") {
       setScrollState(true)
     }
+    else {
+      setScrollState(false)
+    }
   }, [href])
+
 
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
@@ -276,7 +281,7 @@ export default function RootLayout({ children }) {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    paddingTop: "9.3px",
+                    paddingTop: changeLogoSize ? "2px" : "9.3px",
                     marginRight: isMobileScreen ? "0px" : "37.27px",
                   }}
                 >
@@ -284,8 +289,9 @@ export default function RootLayout({ children }) {
                     sx={{
                       background: `url('https://focusteck.com/wp-content/uploads/2022/03/focusteck-logo.svg')`,
                       backgroundRepeat: "no-repeat",
-                      width: 149.13,
-                      height: 42.4,
+                      width: "149.13px",
+                      width: changeLogoSize ? "100px" : "149.13px",
+                      height: changeLogoSize ? "30px" : "42.4px",
                       marginLeft: ".3em",
                       "&:hover": {
                         backgroundColor: "#fff",
@@ -416,7 +422,7 @@ export default function RootLayout({ children }) {
                         transform: `rotate(${isOpen ? 180 : 0}deg)`,
                       }}
                     >
-                      {isOpen ? <CloseIcon sx={{ color: '#005DBD', width: "1.3em", height: "1.3em" }} /> : <MenuIcon sx={{ color: '#005DBD', width: "1.3em", height: "1.3em" }} />}
+                      {isOpen ? <CloseIcon sx={{ color: '#005DBD', width: changeLogoSize ? ".9em" : "1.3em", height: changeLogoSize ? ".9em" : "1.3em" }} /> : <MenuIcon sx={{ color: '#005DBD', width: changeLogoSize ? ".9em" : "1.3em", height: changeLogoSize ? ".9em" : "1.3em" }} />}
                     </RotatingIconButton>
                   ) : null}
 
@@ -604,7 +610,7 @@ export default function RootLayout({ children }) {
             </CustomBox>
           ) : baseRoute ===
             "/thank-you" ? (
-            <Box id="scroll-down" sx={{ minHeight: "100vh" }}>
+            <Box sx={{ minHeight: "100vh" }}>
               {children}
             </Box>
           ) : (

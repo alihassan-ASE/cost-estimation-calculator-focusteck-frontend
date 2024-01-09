@@ -565,10 +565,9 @@ const page = () => {
               lg={3.9} md={12} sm={12} xs={12}
             >
               <div style={{
-                padding: orientation === "vertical" ? "0 0 3% 5%  " : "3% 2%",
+                padding: orientation === "vertical" ? "0 0 3% 8%  " : "3% 2% 4% 2%",
                 borderLeft: orientation === "vertical" ? "1px solid grey" : "0",
                 borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-                margin: orientation !== "vertical" ? "auto" : "0",
                 marginTop: "5%",
               }}>
                 <Stepper

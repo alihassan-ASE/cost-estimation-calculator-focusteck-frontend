@@ -1,15 +1,20 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Grid, Stepper, Step, StepLabel, Typography, useMediaQuery } from "@mui/material";
+import { Box, StepConnector, Stepper, Step, StepLabel, Typography, useMediaQuery } from "@mui/material";
 import styled from "styled-components";
 import { keyframes } from "@mui/material/styles";
+import { borderColor } from "@mui/system";
 
 
 export default function VerticalLinearStepper(props) {
+  let questionsArray = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"];
+
   const { responses, changeActiveQuestion } = props;
   const isMobileScreen = useMediaQuery("(max-width:445px)");
   const leng = responses?.length;
   const [activeStep, setActiveStep] = useState(leng - 1);
+  const [lengthOfArray, setLengthOfArray] = useState(5);
+  const [isLength, setIsLength] = useState(false);
   const containerRef = useRef(null);
 
   const [CustomScrollableContainer] = useState(
@@ -40,14 +45,32 @@ export default function VerticalLinearStepper(props) {
     })
   );
 
+  const mergedArray = [
+    ...questionsArray,
+    ...(responses && responses.length > questionsArray.length
+      ? Array(responses.length - questionsArray.length).fill(null)
+      : [])
+  ];
+
+  useEffect(() => {
+    if (mergedArray > isLength) {
+      setLengthOfArray(true)
+    }
+    else if (mergedArray < isLength) {
+      setLengthOfArray(false)
+    }
+    setIsLength(mergedArray)
+  }, [responses?.length])
+
   const handleStep = (step, index) => {
     changeActiveQuestion({ step, index });
     setActiveStep(index - 1);
-
+    setLengthOfArray(false)
   };
 
   useEffect(() => {
     setActiveStep(responses?.length + 1);
+    // setLengthOfArray(true)
   }, [responses?.length]);
 
 
@@ -57,7 +80,6 @@ export default function VerticalLinearStepper(props) {
     }
   }, [handleStep]);
 
-  let questionsArray = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"];
 
   const [containerHeight, setContainerHeight] = useState(20);
   const containerLabelRef = useRef(null);
@@ -69,12 +91,8 @@ export default function VerticalLinearStepper(props) {
     }
   }, [responses]);
 
-  const mergedArray = [
-    ...questionsArray,
-    ...(responses && responses.length > questionsArray.length
-      ? Array(responses.length - questionsArray.length).fill(null)
-      : [])
-  ];
+
+
   const newStepperRowTransition = keyframes`
   0% {
    transform: translateY(-25px);
@@ -86,6 +104,23 @@ export default function VerticalLinearStepper(props) {
   }
   `;
 
+  const heightTransition = keyframes`
+  0% {
+    opacity: 0;
+   height: 0;
+  }
+  50% {
+    opacity: 0;
+   height: 50%;
+  }
+  75% {
+    opacity: 0.4;
+  }
+  100%{
+    opacity: 1;
+    height: 100%;
+  }
+  `;
 
   return (
     <Box
@@ -96,12 +131,11 @@ export default function VerticalLinearStepper(props) {
       <Typography sx={{ fontWeight: "bold" }}>SUMMARY</Typography>
       <Box
         sx={{
-          maxHeight: "max-content",
-          // height: "45vh",
+          height: "45vh",
           paddingLeft: "0em",
           marginRight: "5px",
           maxWidth: "100%",
-          marginBottom: isMobileScreen ? "2em" : 0
+          // marginBottom: isMobileScreen ? "2em" : 0
         }}
       >
         <CustomScrollableContainer ref={containerRef}>
@@ -117,27 +151,23 @@ export default function VerticalLinearStepper(props) {
                 alignItems: "flex-start",
                 justifyContent: "space-between",
               },
-              "& .MuiStepConnector-line": {
-                borderLeftWidth: "2px",
-                marginLeft: "-3px",
-                height: "100%"
-              },
               "& .MuiStepConnector-root": {
-                position: "absolute",
-                marginTop: "auto",
-                marginBottom: "auto",
-                zIndex: -100,
-                height: "100%",
-                top: '15px',
+                display: "none"
+              },
+              "& .MuiStepConnector-line": {
+                // display: "none",
+                // height: "100%",
+                // borderLeftWidth: "2px",
+                // marginLeft: "-3px",
+                // borderColor: "#fff",
+                // borderColor: "magenta"
               },
               "& .MuiStepIcon-root": {
                 width: "1.2rem",
                 height: "1.2rem",
                 alignItems: "start",
               },
-
             }}
-            nonLinear
             activeStep={responses?.length}
             orientation={"vertical"}
           >
@@ -151,34 +181,64 @@ export default function VerticalLinearStepper(props) {
                 <Box
                   sx={{
                     position: "relative",
-                    "& .MuiStepConnector-root": {
-                      display: index === mergedArray.length - 1 ? "none" : "block",
-                    },
-                    "& .MuiStepConnector-line": {
-                      borderColor: index < activeStep - 1 ? "#0045e6" : "#838383",
-                    }
-                  }}>
-                  <Step key={index} sx={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                  }}>
-                    <Box sx={{
-                      color: "#fff",
-                      padding: ".3em",
-                      borderRadius: "50%",
-                      backgroundColor: index < activeStep ? "#0045e6" : "#838383",
-                      marginRight: "7px",
-                      width: ".7em",
-                      height: ".7em",
-                      textAlign: "center",
-                      fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-                        ","
-                      ),
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                    // "& .MuiStepConnector-line": {
+                    //   display: "block",
+                    //   borderLeftWidth: "2px",
+                    //   marginLeft: "-3px",
+                    //   height: "100%",
+                    //   borderColor: index < mergedArray.length - 2 ? "#0045e6" : "#fff",
+                    //   // borderColor: index <= activeStep - 1 ? "#0045e6" : "#838383",
+                    // }
+                  }}
+                >
+                  {index === mergedArray.length - 1
+                    ? null
+                    : <StepConnector
+                      style={{
+                        position: "absolute",
+                        display: "block",
+                        top: "0px",
+                        zIndex: -100,
+                        height: "100%",
+                      }}
+                      sx={{
+                        "& .MuiStepConnector-line": {
+                          borderLeftWidth: "2px",
+                          marginLeft: "-3px",
+                          height: "100%",
 
-                    }}>
+                          borderColor: index <= activeStep - 1 ? "#0045e6" : "#838383",
+                          // animation: `${heightTransition} .5s linear`,
+                          opacity: 1,
+                          animation: index > questionsArray.length - 2 ? `${heightTransition} .5s linear` : null,
+                        }
+                      }}
+                    />}
+                  <Step key={index}
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        color: "#fff",
+                        padding: ".3em",
+                        borderRadius: "50%",
+                        backgroundColor: index < activeStep ? "#0045e6" : "#838383",
+                        marginRight: "7px",
+                        width: ".7em",
+                        height: ".7em",
+                        textAlign: "center",
+                        fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                          ","
+                        ),
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+
+                      }}
+                    >
                       <Typography sx={{
                         fontSize: "11px"
                       }}>
@@ -190,6 +250,7 @@ export default function VerticalLinearStepper(props) {
                         {responses[index].resources && index === 0 ? (
                           <>
                             <StepLabel sx={{
+                              padding: 0,
                               width: "100%",
                               "& .MuiStepIcon-root.Mui-active": {
                                 color: "#0045e6",
@@ -240,6 +301,7 @@ export default function VerticalLinearStepper(props) {
                         ) : (
                           <StepLabel
                             sx={{
+                              padding: 0,
                               display: "flex",
                               justifyContent: "space-between",
                               width: "100%",
@@ -305,6 +367,7 @@ export default function VerticalLinearStepper(props) {
                     ) : (
                       <StepLabel
                         sx={{
+                          padding: 0,
                           display: "flex",
                           justifyContent: "space-between",
                           width: "100%",

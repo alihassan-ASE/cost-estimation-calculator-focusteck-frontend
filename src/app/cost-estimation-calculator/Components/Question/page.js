@@ -76,7 +76,7 @@ const page = (props) => {
       <CustomTypography variant="h4">
         {currentQuestion?.question}
       </CustomTypography>
-      <Typography variant="body1" sx={{ paddingBottom: "1em" }}>Please choose from the options below.</Typography>
+      <Typography variant="body1" sx={{ paddingBottom: "1em", color: "#838383" }}>Please choose from the options below.</Typography>
       <ShowOptions
         typeofUI={typeofUI || currentQuestion?.typeOfUI}
         typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}

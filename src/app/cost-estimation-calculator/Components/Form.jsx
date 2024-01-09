@@ -7,6 +7,7 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
+  useMediaQuery
 } from "@mui/material";
 import { postData } from "../../lib/api/postData";
 import { styled } from "@mui/material/styles";
@@ -45,11 +46,17 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
   "& .css-e4w4as-MuiFormLabel-root-MuiInputLabel-root": {
     transform: "translate(10px, 32px) scale(1) !important",
-  }
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "43px"
+  },
 }));
 
 const Form = ({ response, getActualResponse }) => {
+  const isNarrowScreen = useMediaQuery("(max-width:425px)");
+
   const route = useRouter();
+
 
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
@@ -426,7 +433,7 @@ const Form = ({ response, getActualResponse }) => {
             />
           </Box>
 
-          <Box sx={{ padding: ".3em 0" }}>
+          <Box sx={{ paddingTop: isNarrowScreen ? ".5em" : ".3em" }}>
             <FormControlLabel control={<Checkbox defaultChecked />} sx={{
               "& .MuiTypography-root": {
                 fontSize: 13
@@ -439,7 +446,7 @@ const Form = ({ response, getActualResponse }) => {
           </Box>
 
 
-          <Typography variant="body1" sx={{ fontSize: "12px", padding: "1.5em 0" }}>We will add your info to our CRM for contacting you regarding your request. For more info please consult our <span style={{ color: "#0045e6", fontWeight: 600 }}>privacy policy</span></Typography>
+          <Typography variant="body1" sx={{ fontSize: "12px", padding: isNarrowScreen ? "1em 0 .7em 0" : "1em 0 1.5em 0" }}>We will add your info to our CRM for contacting you regarding your request. For more info please consult our <span style={{ color: "#0045e6", fontWeight: 600 }}>privacy policy</span></Typography>
 
           <br />
           <Button

@@ -42,6 +42,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     fontSize: ".7rem ",
     width: "120px",
+    flexGrow: "1",
   },
 }));
 
@@ -72,30 +73,31 @@ const TilesComponent = ({
   return (
     <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
       {options?.map((data, index) => (
-        <Box sx={{ display: "inline-block" }} key={index}>
-          <CustomButton
-            value={
-              selectedFormats?.opt && selectedFormats?.price
-                ? { opt: selectedFormats.opt, price: selectedFormats.price }
-                : selectedFormats
-            }
-            onClick={() => {
-              setSelectedFormats(data);
-              selectedOptionPassToParent(data);
-            }}
-            sx={
-              checkSelectedOption(data.opt, data.price)
-                ? {
-                  backgroundColor: "#0045e6",
-                  border: "1px solid #0045e6",
-                  color: "white",
-                }
-                : {}
-            }
-          >
-            <span>{data.opt ? data.opt : data}</span>
-          </CustomButton>
-        </Box>
+        // <Box sx={{ display: "inline-block" }} key={index}>
+        <CustomButton
+          key={index}
+          value={
+            selectedFormats?.opt && selectedFormats?.price
+              ? { opt: selectedFormats.opt, price: selectedFormats.price }
+              : selectedFormats
+          }
+          onClick={() => {
+            setSelectedFormats(data);
+            selectedOptionPassToParent(data);
+          }}
+          sx={
+            checkSelectedOption(data.opt, data.price)
+              ? {
+                backgroundColor: "#0045e6",
+                border: "1px solid #0045e6",
+                color: "white",
+              }
+              : {}
+          }
+        >
+          <span>{data.opt ? data.opt : data}</span>
+        </CustomButton>
+        // </Box>
       ))}
     </Box>
   );
