@@ -433,7 +433,7 @@ const Form = ({ response, getActualResponse }) => {
             />
           </Box>
 
-          <Box sx={{ paddingTop: isNarrowScreen ? ".5em" : ".3em" }}>
+          <Box sx={{ paddingTop: isNarrowScreen ? ".5em" : ".4em" }}>
             <FormControlLabel control={<Checkbox defaultChecked />} sx={{
               "& .MuiTypography-root": {
                 fontSize: 13

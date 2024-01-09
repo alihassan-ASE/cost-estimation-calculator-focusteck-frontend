@@ -95,6 +95,7 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     width: "110px",
+    flexGrow: "1",
   },
 }));
 

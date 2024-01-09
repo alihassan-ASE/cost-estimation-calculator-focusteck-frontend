@@ -69,6 +69,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
 
 const page = () => {
     const isNarrowScreen = useMediaQuery("(max-width:1200px)");
+    const isMobileScreen = useMediaQuery("(max-width:400px)");
     let response =
         typeof window !== "undefined"
             ? window.localStorage.getItem("Response")
@@ -97,7 +98,7 @@ const page = () => {
                 flexWrap: isNarrowScreen ? "wrap" : "nowrap"
             }}>
             <Box sx={{
-                padding: "1em 0 1em 3em",
+                padding: isMobileScreen ? "1em 1.5em" : "1em .5em 1em 3em",
             }}>
                 <Typography variant='h4' sx={{ fontWeight: "600", padding: "1em 0 .5em 0" }}>Thank You for Reaching Out!</Typography>
                 <Typography variant='body1' sx={{ paddingBottom: "4em" }}>We’ll get back to you shortly.</Typography>

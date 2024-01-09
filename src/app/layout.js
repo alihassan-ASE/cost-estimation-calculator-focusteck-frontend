@@ -271,7 +271,6 @@ export default function RootLayout({ children }) {
     }
   }, [href])
 
-  console.log("baseRoute: ", baseRoute)
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <body style={{ margin: "0" }}>
