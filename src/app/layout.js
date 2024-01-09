@@ -212,13 +212,6 @@ const CustomToolBar = styled(Box)(({ theme }) => ({
   },
 }));
 
-const CustomBox = styled(Box)(({ theme }) => ({
-  padding: "0 2em",
-  [theme.breakpoints.down("sm")]: {
-    margin: "0",
-    padding: "0 0.5em"
-  },
-}));
 
 
 export default function RootLayout({ children }) {
@@ -239,6 +232,22 @@ export default function RootLayout({ children }) {
   };
 
 
+  const [CustomBox, setCustomBox] = useState(styled(Box)(({ theme }) => ({
+    [theme.breakpoints.down("sm")]: {
+      margin: "0",
+      padding: baseRoute === "/thank-you" ? "0em" : "0 0.5em"
+    },
+  })))
+
+  useEffect(() => {
+    setCustomBox(styled(Box)(({ theme }) => ({
+      [theme.breakpoints.down("sm")]: {
+        margin: "0",
+        padding: baseRoute === "/thank-you" ? "0em" : "0 0.5em"
+      },
+    }))
+    )
+  }, [baseRoute])
   const isRoot = baseRoute === "/";
   // const isThankYouPage = baseRoute === "/thank-you" ;
   const isEstimationPage = baseRoute === "/cost-estimation-calculator";
@@ -262,7 +271,7 @@ export default function RootLayout({ children }) {
     }
   }, [href])
 
-
+  console.log("baseRoute: ", baseRoute)
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <body style={{ margin: "0" }}>
@@ -608,13 +617,11 @@ export default function RootLayout({ children }) {
             >
               {children}
             </CustomBox>
-          ) : baseRoute ===
-            "/thank-you" ? (
-            <Box sx={{ minHeight: "100vh" }}>
-              {children}
-            </Box>
           ) : (
-            <CustomBox id="scroll-down" sx={{ minHeight: "100vh", paddingTop: "1em", paddingBottom: "3em" }}>
+            <CustomBox id="scroll-down" sx={{
+              minHeight: "100vh", paddingTop: baseRoute === "/thank-you" ? "0em" : "1em", paddingBottom: baseRoute === "/thank-you" ? "0em" : "3em",
+              padding: baseRoute === "/thank-you" ? "0em" : "0 2em",
+            }}>
               {children}
             </CustomBox>
           )}

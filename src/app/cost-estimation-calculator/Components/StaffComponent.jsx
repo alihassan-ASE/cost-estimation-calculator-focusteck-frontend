@@ -911,7 +911,10 @@ const StaffComponent = () => {
             <Grid container spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
             //  sx={{ maxWidth: "100%" }}
             >
-              <Grid item lg={8} md={12} sm={12} xs={12}>
+              <Grid item lg={8} md={12} sm={12} xs={12}
+                sx={{
+                  minHeight: "60vh"
+                }}>
                 <Box sx={{
                   display: "flex", alignItems: "center",
                   padding: "2.2em 0 1em 0",

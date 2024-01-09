@@ -93,13 +93,11 @@ const page = () => {
             ref={pageRef}
             sx={{
                 display: "flex",
-                // width: "100%",
                 alignItems: "center",
                 flexWrap: isNarrowScreen ? "wrap" : "nowrap"
             }}>
             <Box sx={{
                 padding: "1em 0 1em 3em",
-                // width: "50%"
             }}>
                 <Typography variant='h4' sx={{ fontWeight: "600", padding: "1em 0 .5em 0" }}>Thank You for Reaching Out!</Typography>
                 <Typography variant='body1' sx={{ paddingBottom: "4em" }}>We’ll get back to you shortly.</Typography>

@@ -154,14 +154,6 @@ export default function VerticalLinearStepper(props) {
               "& .MuiStepConnector-root": {
                 display: "none"
               },
-              "& .MuiStepConnector-line": {
-                // display: "none",
-                // height: "100%",
-                // borderLeftWidth: "2px",
-                // marginLeft: "-3px",
-                // borderColor: "#fff",
-                // borderColor: "magenta"
-              },
               "& .MuiStepIcon-root": {
                 width: "1.2rem",
                 height: "1.2rem",
@@ -181,14 +173,6 @@ export default function VerticalLinearStepper(props) {
                 <Box
                   sx={{
                     position: "relative",
-                    // "& .MuiStepConnector-line": {
-                    //   display: "block",
-                    //   borderLeftWidth: "2px",
-                    //   marginLeft: "-3px",
-                    //   height: "100%",
-                    //   borderColor: index < mergedArray.length - 2 ? "#0045e6" : "#fff",
-                    //   // borderColor: index <= activeStep - 1 ? "#0045e6" : "#838383",
-                    // }
                   }}
                 >
                   {index === mergedArray.length - 1
@@ -207,8 +191,7 @@ export default function VerticalLinearStepper(props) {
                           marginLeft: "-3px",
                           height: "100%",
 
-                          borderColor: index <= activeStep - 1 ? "#0045e6" : "#838383",
-                          // animation: `${heightTransition} .5s linear`,
+                          borderColor: index < activeStep - 1 ? "#0045e6" : "#838383",
                           opacity: 1,
                           animation: index > questionsArray.length - 2 ? `${heightTransition} .5s linear` : null,
                         }
