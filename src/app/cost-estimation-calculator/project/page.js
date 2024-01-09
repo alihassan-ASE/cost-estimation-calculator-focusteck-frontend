@@ -424,7 +424,7 @@ const page = () => {
     }, 250);
   };
   return (
-    <Box ref={projectPageRef} >
+    <Box ref={projectPageRef}>
       {fetchQuesitons !== null ? (
         <Box
           sx={{
@@ -600,7 +600,7 @@ const page = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh",
+            // height: "100vh",
           }}
         >
           <CircularProgress />

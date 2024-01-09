@@ -16,10 +16,11 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
   width: "40px",
   height: "40px",
   borderRadius: "50%",
-
-  justifyContent: "normal",
+  marginTop: "15px",
+  // justifyContent: "normal",
   minWidth: "min-content",
   border: "2px solid #ACACAC",
+  transition:"all 0.3s ease-in-out",
   padding: ".2em",
   "&:hover svg": {
     transform: "translateX(-5px)"
@@ -121,22 +122,22 @@ const ShowResponse = () => {
     <>
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ maxWidth: "1100px", padding: "0px 20px" }}>
-        <CustomBackButton onClick={()=>{route.back()}}>
-                        <KeyboardBackspaceIcon
-                          sx={{
-                            textAlign: "center",
-                            fontSize: "1.6em",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            display: "flex",
-                            width: "100%",
-                            transition: "all 0.3s ease-in-out",
-                            ":hover": {
-                              cursor: "pointer",
-                            },
-                          }}
-                        />
-                      </CustomBackButton>
+          <CustomBackButton onClick={() => { route.back() }}>
+            <KeyboardBackspaceIcon
+              sx={{
+                textAlign: "center",
+                fontSize: "1.6em",
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+                width: "100%",
+                transition: "all 0.3s ease-in-out",
+                ":hover": {
+                  cursor: "pointer",
+                },
+              }}
+            />
+          </CustomBackButton>
           {(response.responses && response.responses.length > 0) ? (
             (response.responses).map((question, index) => (
               <Box key={index}>
@@ -156,6 +157,7 @@ const ShowResponse = () => {
                     "& .MuiAccordionSummary-root": {
                       height: "130px",
                       backgroundColor: "white",
+                      padding:"5px 0px",
 
 
                     }

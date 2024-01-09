@@ -279,7 +279,7 @@ export default function VerticalLinearStepper(props) {
                               }}>
                               {responses[index].resources.map((resource, resourceIndex) => (
                                 <div key={resourceIndex}>
-                                  <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start", animation: `${newStepperRowTransition} .5s ease` }}>
+                                  <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start", animation: `${newStepperRowTransition} .9s ease` }}>
                                     <Box sx={{ width: "40%", }}>
                                       <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>{resource.resource}</Typography>
                                     </Box>
@@ -337,7 +337,7 @@ export default function VerticalLinearStepper(props) {
                           >
                             {(responses[index].selectedOption || responses[index].selectedData) && (
                               <div>
-                                <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", animation: `${newStepperRowTransition} .5s ease` }}>
+                                <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", animation: `${newStepperRowTransition} .9s ease` }}>
                                   <Box sx={{ width: "40%" }}>
                                     <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}> {responses[index].question?.label
                                       ? responses[index].question.label
