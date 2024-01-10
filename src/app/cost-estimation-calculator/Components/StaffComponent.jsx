@@ -240,7 +240,7 @@ const StaffComponent = () => {
   const dataObj = {};
   const [displayQuestion, setDisplayQuestion] = useState(true);
   const [openModal, setopenModal] = useState(false);
-  const [i, setI] = useState(0)
+  const [i, setI] = useState(null)
   const [editMode, setEditMode] = useState(false);
   const [addMore, setAddMore] = useState(true);
   const [clicked, setClicked] = useState();
@@ -358,6 +358,13 @@ const StaffComponent = () => {
       setCount(values?.length - 1);
     }
     if (values.length) {
+      console.log(i)
+
+      for (const key in imageIcons) {
+        if (key === values[i]?.resourceOption?.opt) {
+          values[i].resourceOption = { ...values[i]?.resourceOption, icon: imageIcons[key] }
+        }
+      }
       setResource(values);
     }
   }, [values]);
@@ -519,7 +526,6 @@ const StaffComponent = () => {
 
   // receiving selected option from child Component
   const selectedOptionPassToParent = (data) => {
-
     for (const key in imageIcons) {
       if (key === data?.resourceOption?.opt) {
         data.resourceOption = { ...data.resourceOption, icon: imageIcons[key] }
@@ -544,7 +550,6 @@ const StaffComponent = () => {
 
   // setting Response in actual Array
   const setResponseData = () => {
-
     if (values.length) {
       dataObj.resources = values;
       setResource(dataObj.resources);
@@ -680,7 +685,7 @@ const StaffComponent = () => {
   }
   const handleClose = () => {
     setopenModal(false)
-    setI(0)
+    setI(null)
     setEditMode(false)
     setDropDownVal(false)
     setBack(false)
@@ -698,6 +703,8 @@ const StaffComponent = () => {
     setDropDownVal(true)
     setBack(false)
   }
+
+  console.log("resource: ", resource)
 
   return (
 
@@ -749,7 +756,7 @@ const StaffComponent = () => {
                     textAlign: "center",
                     fontWeight: "bold"
                   }}>
-                  Please choose team as per your requirements
+                  Please select a team as per your requirements
                 </Typography>
                 <Box
                   sx={{
@@ -766,7 +773,7 @@ const StaffComponent = () => {
                     onClick={() => {
                       setCount(count + 1);
                       handleModal()
-                      setI(count)
+                      // setI(count + 1)
                       setAddTransition(true)
                     }}
                   >
