@@ -973,7 +973,7 @@ const StaffComponent = () => {
                       <Box
                         sx={{ paddingLeft: '7.4%' }}
                       >
-                        <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
+                        <Typography sx={{ color: "#0045e6", fontSize: "1.2em", minWidth: "100px" }}>
                           Question {actualResponses.responses.length}
                         </Typography>
                       </Box>

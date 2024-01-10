@@ -91,14 +91,13 @@ const page = () => {
         }
     }, []);
 
-    // console.log(pathname)
-
     return (
         <Box
             ref={pageRef}
             sx={{
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "space-between",
                 flexWrap: isNarrowScreen ? "wrap" : "nowrap"
             }}>
             <Box sx={{
