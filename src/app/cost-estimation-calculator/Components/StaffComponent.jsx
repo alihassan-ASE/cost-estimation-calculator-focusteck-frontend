@@ -132,7 +132,6 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
   height: "40px",
   borderRadius: "50%",
   position: "absolute",
-  left: "23px",
   justifyContent: "normal",
   minWidth: "min-content",
   border: "2px solid #ACACAC",
@@ -150,6 +149,15 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
   "&:focus": {
     outline: "none",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+  },
+  [theme.breakpoints.down("lg")]: {
+    left: "23px",
+  },
+  [theme.breakpoints.down("md")]: {
+    left: "23px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    left: "23px",
   },
 }));
 
@@ -188,6 +196,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+const CustomBox = styled(Box)(({ theme }) => ({
+  padding: "0 2em",
+  [theme.breakpoints.down("sm")]: {
+    margin: "0",
+    padding: "0 0.5em"
+  },
+}))
+
 
 
 const StaffComponent = () => {
@@ -212,6 +228,7 @@ const StaffComponent = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
+  const changeGap = useMediaQuery("(max-width:600px)");
   const isNarrowStaff = useMediaQuery("(max-width:680px)");
   const [resource, setResource] = useState([]);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
@@ -684,7 +701,7 @@ const StaffComponent = () => {
 
   return (
 
-    <Box >
+    <CustomBox >
       {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
         <Box
           sx={{
@@ -701,7 +718,7 @@ const StaffComponent = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
 
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
               >
                 <CustomCard>
                   <StaffResource
@@ -732,7 +749,7 @@ const StaffComponent = () => {
                     textAlign: "center",
                     fontWeight: "bold"
                   }}>
-                  Please Select Staff Resources as per your requirement
+                  Please choose team as per your requirements
                 </Typography>
                 <Box
                   sx={{
@@ -918,14 +935,15 @@ const StaffComponent = () => {
                 <Box sx={{
                   display: "flex", alignItems: "center",
                   padding: "2.2em 0 1em 0",
-                  gap: isNarrowScreen && actualResponses.responses.length > 0 ? "1.9em" : 0,
-                  paddingLeft: isNarrowScreen && actualResponses.responses.length > 0 ? "7.4%" : 0,
+                  // gap: isNarrowScreen && actualResponses.responses.length > 0 ? "1.9em" : 0,
+                  gap: changeGap && actualResponses.responses.length > 0 ? "2.9em" : "0",
+                  // paddingLeft: changeGap && actualResponses.responses.length > 0 ? "4%" : 0,
                   paddingBottom: actualResponses.responses.length > 0 ? "1em" : 0
                 }}>
                   <Box
                     sx={{
                       display: "flex",
-                      gap: "1em",
+                      // gap: "1em",
                       alignItems: "center",
                       margin: "1em 0"
                     }}
@@ -953,7 +971,7 @@ const StaffComponent = () => {
                     displayQuestion
                       ?
                       <Box
-                        sx={{ paddingLeft: "7.4%" }}
+                        sx={{ paddingLeft: '7.4%' }}
                       >
                         <Typography sx={{ color: "#0045e6", fontSize: "1.2em" }}>
                           Question {actualResponses.responses.length}
@@ -1053,7 +1071,7 @@ const StaffComponent = () => {
         </Box>
       )
       }
-    </Box >
+    </CustomBox >
   );
 }
 export default StaffComponent;

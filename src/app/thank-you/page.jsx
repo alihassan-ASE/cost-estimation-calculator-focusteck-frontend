@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import { styled, } from "@mui/material/styles";
 import Link from "next/link";
+import { usePathname } from 'next/navigation'
 
 
 const CustomImageBox = styled(Box)(({ theme }) => ({
@@ -68,6 +69,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
 
 
 const page = () => {
+    const pathname = usePathname()
     const isNarrowScreen = useMediaQuery("(max-width:1200px)");
     const isMobileScreen = useMediaQuery("(max-width:400px)");
     let response =
@@ -88,6 +90,8 @@ const page = () => {
             pageRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, []);
+
+    // console.log(pathname)
 
     return (
         <Box

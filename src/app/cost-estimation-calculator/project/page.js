@@ -15,7 +15,6 @@ import {
   Grid,
   Slide,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
@@ -46,6 +45,12 @@ const CustomButton = styled(Button)(({ theme }) => ({
   "&:focus": {
     outline: "none",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+  },
+  [theme.breakpoints.down("md")]: {
+    right: "-32px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    right: "-52px",
   },
 }));
 
@@ -108,6 +113,14 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
   ),
 }));
 
+const CustomBox = styled(Box)(({ theme }) => ({
+  padding: "0 2em",
+  [theme.breakpoints.down("sm")]: {
+    margin: "0",
+    padding: "0 0.5em"
+  },
+}))
+
 const page = () => {
   const [preProjectQuestions, setPreQuestion] = useState([]);
   const [postProjectQuestions, setPostQuestion] = useState([]);
@@ -124,6 +137,7 @@ const page = () => {
   const [questionsToShow, setQuestionsToShow] = useState([]);
   const [orientation, setOrientation] = useState("horizontal");
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
+  const changeGap = useMediaQuery("(max-width:600px)");
   const [slideIn, setSlideIn] = useState(true);
   const [displayQuestion, setDisplayQuestion] = useState(true);
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
@@ -423,8 +437,9 @@ const page = () => {
       setSlideIn(true);
     }, 250);
   };
+
   return (
-    <Box ref={projectPageRef}>
+    <CustomBox ref={projectPageRef}>
       {fetchQuesitons !== null ? (
         <Box
           sx={{
@@ -443,14 +458,15 @@ const page = () => {
               <Box sx={{
                 display: "flex", alignItems: "center",
                 padding: "2.2em 0 1em 0",
-                gap: isNarrowScreen && actualResponses.length > 0 ? "1.9em" : 0,
-                paddingLeft: isNarrowScreen && actualResponses.length > 0 ? "7.4%" : 0,
+                // gap: isNarrowScreen && actualResponses.length > 0 ? "1.9em" : 0,
+                gap: changeGap && actualResponses.length > 0 ? "2.9em" : "0",
+                // paddingLeft: isNarrowScreen && actualResponses.length > 0 ? "4%" : 0,
                 paddingBottom: actualResponses.length > 0 ? "1em" : 0
               }}>
                 <Box
                   sx={{
                     display: "flex",
-                    gap: "1em",
+                    // gap: "1em",
                     alignItems: "center",
                     position: "relative"
                   }}
@@ -609,7 +625,7 @@ const page = () => {
         </Box>
       )
       }
-    </Box >
+    </CustomBox >
   )
 }
 

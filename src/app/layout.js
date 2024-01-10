@@ -18,7 +18,8 @@ import {
   Box,
   Button,
   useMediaQuery,
-  IconButton
+  IconButton,
+  ThemeProvider
 } from "@mui/material";
 import e from "cors";
 
@@ -212,7 +213,11 @@ const CustomToolBar = styled(Box)(({ theme }) => ({
   },
 }));
 
-
+const CustomBox = styled(Box)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    margin: "0",
+  },
+}))
 
 export default function RootLayout({ children }) {
   const isNarrowScreen = useMediaQuery("(max-width:1148px)");
@@ -231,23 +236,6 @@ export default function RootLayout({ children }) {
     setIsOpen(!isOpen);
   };
 
-
-  const [CustomBox, setCustomBox] = useState(styled(Box)(({ theme }) => ({
-    [theme.breakpoints.down("sm")]: {
-      margin: "0",
-      padding: baseRoute === "/thank-you" ? "0em" : "0 0.5em"
-    },
-  })))
-
-  useEffect(() => {
-    setCustomBox(styled(Box)(({ theme }) => ({
-      [theme.breakpoints.down("sm")]: {
-        margin: "0",
-        padding: baseRoute === "/thank-you" ? "0em" : "0 0.5em"
-      },
-    }))
-    )
-  }, [baseRoute])
   const isRoot = baseRoute === "/";
   // const isThankYouPage = baseRoute === "/thank-you" ;
   const isEstimationPage = baseRoute === "/cost-estimation-calculator";
@@ -573,7 +561,6 @@ export default function RootLayout({ children }) {
                     <Link
                       href={href}
                       scroll={scrollState}
-                      // scroll={false}
                       style={{
                         textDecoration: "none",
                         scrollBehavior: "smooth"
@@ -612,14 +599,15 @@ export default function RootLayout({ children }) {
             "/cost-estimation-calculator" ? (
             <CustomBox
               id="scroll-down"
-              sx={{ minHeight: "100vh", display: "flex", alignItems: "center", paddingTop: "1em", paddingBottom: "3em" }}
+              sx={{
+                minHeight: "100vh", display: "flex", alignItems: "center", paddingTop: "1em", paddingBottom: "3em",
+              }}
             >
               {children}
             </CustomBox>
           ) : (
             <CustomBox id="scroll-down" sx={{
               minHeight: "100vh", paddingTop: baseRoute === "/thank-you" ? "0em" : "1em", paddingBottom: baseRoute === "/thank-you" ? "0em" : "3em",
-              padding: baseRoute === "/thank-you" ? "0em" : "0 2em",
             }}>
               {children}
             </CustomBox>

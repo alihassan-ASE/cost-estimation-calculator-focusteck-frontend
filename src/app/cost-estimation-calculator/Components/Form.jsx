@@ -48,12 +48,14 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
     transform: "translate(10px, 32px) scale(1) !important",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "43px"
+    // height: "43px"
+    marginBottom: "10px"
   },
 }));
 
 const Form = ({ response, getActualResponse }) => {
   const isNarrowScreen = useMediaQuery("(max-width:425px)");
+  const changeLayout = useMediaQuery("(max-width:480px)");
 
   const route = useRouter();
 
@@ -219,7 +221,7 @@ const Form = ({ response, getActualResponse }) => {
         ...formInput,
         ...response,
       });
-      route.push('/thank-you');
+      route.push('/thank-you', { scroll: false });
       postData({ ...response, ...formInput });
     } else {
       setSubmitted(false);
@@ -242,7 +244,7 @@ const Form = ({ response, getActualResponse }) => {
       </Typography>
       <form>
         <Box>
-          <Box sx={{ display: "flex", gap: "1em" }}>
+          <Box sx={{ display: "flex", gap: changeLayout ? "0em" : "1em", flexDirection: changeLayout ? "column" : "row" }}>
 
             <CustomTextField
               required
@@ -307,7 +309,7 @@ const Form = ({ response, getActualResponse }) => {
             />
           </Box>
 
-          <Box sx={{ display: "flex", gap: "1em" }}>
+          <Box sx={{ display: "flex", gap: changeLayout ? "0em" : "1em", flexDirection: changeLayout ? "column" : "row" }}>
             <CustomTextField
               required
               id="filled-required, phone"
@@ -433,7 +435,7 @@ const Form = ({ response, getActualResponse }) => {
             />
           </Box>
 
-          <Box sx={{ paddingTop: isNarrowScreen ? ".5em" : ".4em" }}>
+          <Box sx={{ paddingTop: isNarrowScreen ? "1em" : ".5em" }}>
             <FormControlLabel control={<Checkbox defaultChecked />} sx={{
               "& .MuiTypography-root": {
                 fontSize: 13
@@ -448,7 +450,6 @@ const Form = ({ response, getActualResponse }) => {
 
           <Typography variant="body1" sx={{ fontSize: "12px", padding: isNarrowScreen ? "1em 0 .7em 0" : "1em 0 1.5em 0" }}>We will add your info to our CRM for contacting you regarding your request. For more info please consult our <span style={{ color: "#0045e6", fontWeight: 600 }}>privacy policy</span></Typography>
 
-          <br />
           <Button
             sx={{ backgroundColor: "#0045e6", padding: '1em 4em', borderRadius: "3em" }}
             variant="contained"
@@ -462,7 +463,7 @@ const Form = ({ response, getActualResponse }) => {
 
         </Box>
       </form>
-    </CustomBox>
+    </CustomBox >
   );
 };
 

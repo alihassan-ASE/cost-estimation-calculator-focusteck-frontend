@@ -43,7 +43,9 @@ const CustomRouteButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#0045e6",
     color: "#fff",
   },
-
+  "&:focus #list": {
+    color: "#fff",
+  },
   [theme.breakpoints.down("md")]: {
     width: 400,
     height: 400,

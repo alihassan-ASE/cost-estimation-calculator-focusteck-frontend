@@ -76,9 +76,9 @@ const StaffResource = ({
 
 
   const getData = (data, label) => {
-    if (label === "Resources") {
+    if (label === "Specialist") {
       setCurrentResource({ resource: data });
-    } else if (label === "Resource Option") {
+    } else if (label === "Framework") {
       setCurrentResource({ ...currentResource, resourceOption: data });
     } else if (label === "Seniority Level") {
       setCurrentResource({
@@ -121,7 +121,7 @@ const StaffResource = ({
                 question={question}
                 typeofUI={type}
                 options={newOption}
-                label={label ? label : "Resources"}
+                label={label ? label : "Specialist"}
                 disable={false}
                 selectedOption={currentResource?.resource}
                 selectedOptionPassToParent={getData}
@@ -142,7 +142,7 @@ const StaffResource = ({
                       question={question}
                       typeofUI={type}
                       options={resourceData}
-                      label={label ? label : "Resource Option"}
+                      label={label ? label : "Framework"}
                       disable={currentResource.resource ? false : true}
                       selectedOption={currentResource?.resourceOption}
                       selectedOptionPassToParent={getData}
