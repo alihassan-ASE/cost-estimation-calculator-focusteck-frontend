@@ -10,10 +10,10 @@ import { useRouter } from "next/navigation";
 
 const CustomMainBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
-    // margin: "1em 2em",
+    margin: "1em 2em",
   },
   [theme.breakpoints.down("sm")]: {
-    // margin: "1em .5em",
+    margin: "1em .5em",
   },
 }));
 
