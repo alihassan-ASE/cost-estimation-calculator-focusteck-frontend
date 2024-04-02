@@ -184,6 +184,7 @@ export default function VerticalLinearStepper(props) {
                         top: "0px",
                         zIndex: -100,
                         height: "100%",
+                        marginLeft: '13px'
                       }}
                       sx={{
                         "& .MuiStepConnector-line": {
@@ -210,8 +211,8 @@ export default function VerticalLinearStepper(props) {
                         borderRadius: "50%",
                         backgroundColor: index < activeStep ? "#0045e6" : "#838383",
                         marginRight: "7px",
-                        width: ".7em",
-                        height: ".7em",
+                        width: ".8em",
+                        height: ".8em",
                         textAlign: "center",
                         fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                           ","
@@ -223,7 +224,9 @@ export default function VerticalLinearStepper(props) {
                       }}
                     >
                       <Typography sx={{
-                        fontSize: "11px"
+                        fontSize: "11px",
+                        lineHeight: '0',
+                        letterSpacing: '0'
                       }}>
                         {index + 1}
                       </Typography>

@@ -277,12 +277,19 @@ const StaffComponent = () => {
   }
   `;
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  const [StyledTableRow] = useState(styled(TableRow)(({ theme }) => ({
     textAlign: "center",
     '&:last-child td, &:last-child th': {
       border: 0,
     },
-  }));
+  })));
+
+  // const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  //   textAlign: "center",
+  //   '&:last-child td, &:last-child th': {
+  //     border: 0,
+  //   },
+  // }))
 
   const CustomCard = styled(Card)(({ theme }) => ({
     height: 370,
@@ -358,8 +365,6 @@ const StaffComponent = () => {
       setCount(values?.length - 1);
     }
     if (values.length) {
-      console.log(i)
-
       for (const key in imageIcons) {
         if (key === values[i]?.resourceOption?.opt) {
           values[i].resourceOption = { ...values[i]?.resourceOption, icon: imageIcons[key] }
@@ -703,8 +708,6 @@ const StaffComponent = () => {
     setDropDownVal(true)
     setBack(false)
   }
-
-  console.log("resource: ", resource)
 
   return (
 
