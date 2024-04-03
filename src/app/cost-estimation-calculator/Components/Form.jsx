@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "3em auto",
-  padding: "3em",
+  padding: "2em",
   maxWidth: 700,
   borderRadius: ".5em",
   border: "1px solid gray",

@@ -3,6 +3,7 @@ import { baseUrl } from "../../../config/constants";
 export const postData = async (data) => {
   try {
     if (data.responses && data.responses.length > 0) {
+      console.log("Response Data: ", data.responses)
       await fetch(`${baseUrl}/postdata`, {
         method: "POST",
         headers: {
@@ -10,7 +11,7 @@ export const postData = async (data) => {
         },
         body: JSON.stringify(data),
       });
-    } 
+    }
   } catch (error) {
     console.log("Error", error);
   }

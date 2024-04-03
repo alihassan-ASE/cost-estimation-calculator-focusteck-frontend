@@ -9,6 +9,7 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { useRouter } from "next/navigation";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { positions, width } from "@mui/system";
 
 
 const CustomBackButton = styled(Button)(({ theme }) => ({
@@ -17,10 +18,14 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
   height: "40px",
   borderRadius: "50%",
   marginTop: "15px",
+  marginLeft: '.5em',
+  position: 'absolute',
+  top: '4px',
+  left: '-72px',
   // justifyContent: "normal",
   minWidth: "min-content",
   border: "2px solid #ACACAC",
-  transition:"all 0.3s ease-in-out",
+  transition: "all 0.3s ease-in-out",
   padding: ".2em",
   "&:hover svg": {
     transform: "translateX(-5px)"
@@ -120,8 +125,8 @@ const ShowResponse = () => {
   };
   return (
     <>
-      <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ maxWidth: "1100px", padding: "0px 20px" }}>
+      <Box sx={{ maxWidth: '1320px', margin: '0 5.4%', margin: 'auto' }}>
+        <Box sx={{ position: 'relative' }}>
           <CustomBackButton onClick={() => { route.back() }}>
             <KeyboardBackspaceIcon
               sx={{
@@ -138,110 +143,130 @@ const ShowResponse = () => {
               }}
             />
           </CustomBackButton>
-          {(response.responses && response.responses.length > 0) ? (
-            (response.responses).map((question, index) => (
-              <Box key={index}>
-                <Accordion
-                  TransitionProps={{ timeout: 900 }}
-                  sx={{
-                    borderLeft: "0px",
-                    borderRight: "0px",
-                    borderTop: index === 0 ? 0 : "1px solid rgba(0, 0, 0, 0.12)",
-                    borderBottom: "0px",
-                    "& .MuiSvgIcon-root": {
-                      height: "1.5rem",
-                      width: "1.5rem",
-                      fontWeight: "100",
-                      color: "#4571d3"
-                    },
-                    "& .MuiAccordionSummary-root": {
-                      height: "130px",
-                      backgroundColor: "white",
-                      padding:"5px 0px",
+          <Box sx={{ marginTop: '28px' }}>
+            {(response.responses && response.responses.length > 0) ? (
+              (response.responses).map((question, index) => (
+                <Box key={index} >
+                  <Accordion
+                    TransitionProps={{ timeout: 900 }}
+                    sx={{
+                      borderLeft: "0px",
+                      borderRight: "0px",
+                      borderTop: index === 0 ? 0 : "1px solid rgba(0, 0, 0, 0.12)",
+                      borderBottom: "0px",
+                      "& .MuiSvgIcon-root": {
+                        height: "1.5rem",
+                        width: "1.5rem",
+                        fontWeight: "100",
+                        color: "#4571d3",
+                      },
+                      "& .MuiAccordionSummary-root": {
+                        // height: "130px",
+                        backgroundColor: "white",
+                        padding: "5px 0px",
+                      },
+                      "& .css-yw020d-MuiAccordionSummary-expandIconWrapper": {
+                        marginTop: '-10px',
+                        paddingRight: '8px'
+                      }
+                    }}
+                    expanded={showOption === index}
+                    onChange={() => { toggleOption(index) }}
+                  >
+                    <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" sx={{
+                      "& .css-1betqn-MuiAccordionSummary-content": {
+                        marginBottom: '3px'
+                      },
+                      "& .css-1n11r91": {
+                        marginBottom: '3px'
+                      }
+                    }}>
+                      {index === 0 && question.resources ? (
+                        <Box>
+                          <CustomTypography>Resources</CustomTypography>
+                          {showOption === index ? (
 
-
-                    }
-                  }}
-                  expanded={showOption === index}
-                  onChange={() => { toggleOption(index) }}
-                >
-                  <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                    {index === 0 && question.resources ? (
-                      <Box>
-                        <CustomTypography>Resources</CustomTypography>
-                        {showOption === index ? (
-
-                          <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>Hide Answer</Typography>
-                        ) : (
-                          <Box sx={{ display: "flex" }}>
-                            <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>View Answer</Typography>
-                            <ArrowRightAltIcon sx={{ fontSize: "16px", marginBottom: "2px" }} />
-
-                          </Box>
-                        )}
-                      </Box>
-                    ) : (
-                      <Box>
-                        <CustomTypography key={index}>
-                          {typeof question.question === 'string' ? (
-                            question.question // Display the question if it's a string
+                            <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>Hide Answer</Typography>
                           ) : (
-                            question.question.question // Display the question.question if it's an object
-                          )}
-                        </CustomTypography>
-                        {showOption === index ? (
-                          <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>Hide Answer</Typography>
-                        ) : (
-                          <Box sx={{ display: "flex" }}>
-                            <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>View Answer</Typography>
-                            <ArrowRightAltIcon sx={{ fontSize: "16px", marginBottom: "2px" }} />
+                            <Box sx={{ display: "flex" }}>
+                              <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>View Answer</Typography>
+                              <ArrowRightAltIcon sx={{ fontSize: "16px", marginBottom: "2px" }} />
 
-                          </Box>
-                        )}
-                      </Box>
-                    )}
-                  </AccordionSummary>
-                  <AccordionDetails sx={{ border: "0px" }}>
-                    {/* Display selectedData or selectedOption based on the type of response */}
-                    {index === 0 && question.resources ? (
-                      question.resources.map((resource, idx) => (
-                        <ul style={{ color: "#708090", fontSize: "20px", marginLeft: "15px" }}>
-                          <li>
-                            <Typography sx={{ fontWeight: "bold", color: "#708090", paddingBottom: "50px" }} key={idx}>{resource.resource}</Typography>
-                          </li>
-                        </ul>
-                      ))
-                    ) : (
-                      (question.selectedData && question.selectedData.length > 0) ? (
-                        question.selectedData.map((option, idx) => (
-                          <ul style={{ color: "#708090", fontSize: "20px", marginLeft: "15px" }}>
+                            </Box>
+                          )}
+                        </Box>
+                      ) : (
+                        <Box>
+                          <CustomTypography key={index}>
+                            {typeof question.question === 'string' ? (
+                              question.question // Display the question if it's a string
+                            ) : (
+                              question.question.question // Display the question.question if it's an object
+                            )}
+                          </CustomTypography>
+                          {showOption === index ? (
+                            <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>Hide Answer</Typography>
+                          ) : (
+                            <Box sx={{ display: "flex" }}>
+                              <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#4571d3" }}>View Answer</Typography>
+                              <ArrowRightAltIcon sx={{ fontSize: "16px", marginBottom: "2px" }} />
+
+                            </Box>
+                          )}
+                        </Box>
+                      )}
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ border: "0px", padding: 0 }}>
+                      {/* Display selectedData or selectedOption based on the type of response */}
+                      {index === 0 && question.resources ? (
+                        question.resources.map((resource, idx) => (
+                          <ul style={{ color: "#708090", fontSize: "20px", listStyleType: "none", marginTop: '5px', marginBottom: "23px", paddingLeft: '32px' }}>
                             <li>
-                              <Typography sx={{ fontWeight: "bold", color: "#708090", paddingBottom: "50px" }} key={idx}>{option.opt}</Typography>
+                              <Typography sx={{ fontWeight: "bold", color: "#708090" }} key={idx}>Framework: {resource.resource}</Typography>
+                            </li>
+                            <li>
+                              <Typography sx={{ fontWeight: "bold", color: "#708090" }} key={idx}>Specialist: {resource.resourceOption.opt}</Typography>
+                            </li>
+                            <li>
+                              <Typography sx={{ fontWeight: "bold", color: "#708090" }} key={idx}>Seniority Level: {resource.seniorityLevel}</Typography>
+                            </li>
+                            <li>
+                              <Typography sx={{ fontWeight: "bold", color: "#708090" }} key={idx}>Number Of Resources: {resource.numOfResources}</Typography>
                             </li>
                           </ul>
-
                         ))
                       ) : (
-                        (question.selectedOption && question.selectedOption.length > 0) && (
-                          question.selectedOption.map((option, idx) => (
-                            <ul style={{ color: "#708090", fontSize: "20px", marginLeft: "15px" }}>
+                        (question.selectedData && question.selectedData.length > 0) ? (
+                          question.selectedData.map((option, idx) => (
+                            <ul style={{ color: "#708090", fontSize: "20px", listStyleType: "none", marginTop: '5px', marginBottom: "23px", paddingLeft: '32px' }}>
                               <li>
-                                <Typography sx={{ fontWeight: "bold", color: "#708090", height: "50px" }} key={idx}>{option.opt}</Typography>
+                                <Typography sx={{ fontWeight: "bold", color: "#708090" }} key={idx}>{option.opt}</Typography>
                               </li>
                             </ul>
+
                           ))
+                        ) : (
+                          (question.selectedOption && question.selectedOption.length > 0) && (
+                            question.selectedOption.map((option, idx) => (
+                              <ul style={{ color: "#708090", fontSize: "20px", listStyleType: "none", marginTop: '5px', marginBottom: "23px", paddingLeft: '32px' }}>
+                                <li>
+                                  <Typography sx={{ fontWeight: "bold", color: "#708090" }} key={idx}>{option.opt}</Typography>
+                                </li>
+                              </ul>
+                            ))
+                          )
                         )
-                      )
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-            ))
-          ) : (
-            <Typography>No responses available yet.</Typography>
-          )}
-        </div>
-      </Box>
+                      )}
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              ))
+            ) : (
+              <Typography>No responses available yet.</Typography>
+            )}
+          </Box>
+        </Box>
+      </Box >
 
     </>
   );

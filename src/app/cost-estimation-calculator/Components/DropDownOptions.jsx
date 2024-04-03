@@ -116,10 +116,20 @@ const DropDownComponent = ({
         "& .css-17bpk52-MuiInputBase-root-MuiOutlinedInput-root": {
           borderColor: "#0045e6",
           "& .MuiSvgIcon-root ": {
-            backgroundColor: disable ? "#1e1d28" : "#0045e6",
+            backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
           },
-        }
+        },
+        "& .css-mw2ubh .MuiSvgIcon-root": {
+          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+        },
+        "& .css-1kbjsjj .MuiSvgIcon-root": {
+          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
 
+        },
+        "& .MuiSvgIcon-root.MuiSelect-icon.MuiSelect-iconOutlined.css-1636szt": {
+          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+
+        }
       }}
     >
       <CustomInputLabel id="demo-multiple-chip-label">{label ? label : "Select Your Option"}</CustomInputLabel>

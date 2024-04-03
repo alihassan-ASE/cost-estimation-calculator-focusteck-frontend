@@ -704,8 +704,6 @@ const StaffComponent = () => {
     setBack(false)
   }
 
-  console.log("resource: ", resource)
-
   return (
 
     <CustomBox >
@@ -792,11 +790,11 @@ const StaffComponent = () => {
                     }}
                     aria-label="customized table">
                     <TableHead>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Framework</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Specialist</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Seniority Level</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Number Of Resources</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Actions</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "left" }}>Framework</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "left" }}>Specialist</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "left" }}>Seniority Level</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "left" }}>Number Of Resources</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "left" }}>Actions</StyledTableCell>
                     </TableHead>
                     <TableBody
                     // sx={{ width: "100%" }}
