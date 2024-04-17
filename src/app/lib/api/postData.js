@@ -10,7 +10,7 @@ export const postData = async (data) => {
         },
         body: JSON.stringify(data),
       });
-    } 
+    }
   } catch (error) {
     console.log("Error", error);
   }

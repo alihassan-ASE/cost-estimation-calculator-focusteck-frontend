@@ -126,21 +126,21 @@ const CheckBoxComponent = ({
         <FormGroup>
           {options.map((data, index) => (
             <FormControlLabel
-            
+
               key={index}
               control={
                 <Checkbox
-                onClick={() => {
+                  onClick={() => {
 
-                  if (data.opt === "Other (Specify)" || data.opt === "Other") {
-                    setInputField(!inputField);
-                    setPrice(data.price)
-                  } else {
-                    setSelectedFormats([data]);
-                    setInputField(false);
-                  }
-                  
-                }}
+                    if (data.opt === "Other (Specify)" || data.opt === "Other") {
+                      setInputField(!inputField);
+                      setPrice(data.price)
+                    } else {
+                      setSelectedFormats([data]);
+                      setInputField(false);
+                    }
+
+                  }}
                   checked={isChecked(data.opt, data.price)}
                   onChange={handleFormat}
                   name={data.opt}
@@ -172,7 +172,15 @@ const CheckBoxComponent = ({
               id="fullWidth"
               label="Other"
               variant="outlined"
-              sx={{ width: "90%" }}
+              sx={{
+                width: "90%",
+                "& .css-1wc848c-MuiFormHelperText-root": {
+                  marginLeft: '0px'
+                },
+                "& .css-v7esy": {
+                  marginLeft: '0px'
+                },
+              }}
               value={otherVal}
               onChange={(e) => {
                 setOtherVal(e.target.value);
@@ -188,7 +196,7 @@ const CheckBoxComponent = ({
               onClick={() => {
                 otherData.price = price;
                 otherData.opt = otherVal;
-                if (otherVal !== "") {
+                if (otherVal.trim() !== "") {
                   const updatedSelectedFormats = [...selectedFormats, otherData];
                   setSelectedFormats(updatedSelectedFormats);
                   setInputField(false);

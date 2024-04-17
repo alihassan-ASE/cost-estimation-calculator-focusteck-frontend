@@ -260,8 +260,8 @@ const ShowSummary = ({ response }) => {
                     "&:hover": {
                       cursor: "pointer",
                       "& #slide": {
-                        backgroundColor: "#005DBD",
-                        borderColor: "#005DBD",
+                        backgroundColor: "#0045e6",
+                        borderColor: "#0045e6",
                         transition: "background-color 0.5s ease-in-out, border-color 0.5s ease-in-out",
                       },
                       "& svg": {
@@ -287,8 +287,8 @@ const ShowSummary = ({ response }) => {
                   <Box
                     sx={{
                       color: "#fff",
-                      border: "3px solid #1E1D28",
-                      backgroundColor: "#1E1D28",
+                      border: "3px solid #0045e6",
+                      backgroundColor: "#0045e6",
                       borderRadius: "50%",
                       width: "45px",
                       height: "45px",

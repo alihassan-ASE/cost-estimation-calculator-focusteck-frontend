@@ -35,7 +35,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
     minwidth: "140px",
     display: "flex",
     flexWrap: "wrap",
-    margin: "2.5em 1em",
+    margin: "2.5em 0em",
     transition:
         "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
     fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
@@ -101,10 +101,13 @@ const page = () => {
                 flexWrap: isNarrowScreen ? "wrap" : "nowrap"
             }}>
             <Box sx={{
-                padding: isMobileScreen ? "1em 1.5em" : "1em .5em 1em 3em",
+                // padding: isMobileScreen ? "1em 1.5em" : "1em .5em 1em 3em",
+                // maxWidth: '538px',
+                // margin: "auto"
+                padding: '0 7%'
             }}>
                 <Typography variant='h4' sx={{ fontWeight: "600", padding: "1em 0 .5em 0" }}>Thank You for Reaching Out!</Typography>
-                <Typography variant='body1' sx={{ paddingBottom: "4em" }}>We’ll get back to you shortly.</Typography>
+                <Typography variant='body1' sx={{ paddingBottom: "2em" }}>We’ll get back to you shortly.</Typography>
 
                 <Box
                     sx={{

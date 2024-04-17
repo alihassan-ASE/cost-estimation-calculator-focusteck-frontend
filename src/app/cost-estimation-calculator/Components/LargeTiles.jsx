@@ -52,9 +52,19 @@ const LargeTiles = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
+  let otherData = {
+    opt: null,
+    price: null,
+  };
   const [selectedFormats, setSelectedFormats] = useState("");
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
   const buttonRefs = useRef([]);
+
+
+  const [otherVal, setOtherVal] = useState("");
+  const [inputField, setInputField] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [checkInputVal, setCheckInputVal] = useState(false);
 
   useEffect(() => {
     if (selectedOption && selectedOption.length > 0) {
@@ -63,6 +73,18 @@ const LargeTiles = ({
       const isSelectedOptAvailable = options.some(
         (option) => option.opt === selectedOption[0]?.opt
       );
+      if (!isSelectedOptAvailable) {
+        if (
+          selectedOption[0]?.opt !== "Other (Specify)" &&
+          selectedOption[0]?.opt !== "Other"
+        ) {
+          setOtherVal(selectedOption[0]?.opt || null);
+          selectedOption.length = 0;
+          setInputField(true);
+        }
+      }
+    } else {
+      setOtherVal("");
     }
   }, [selectedOption, options]);
 
@@ -74,38 +96,115 @@ const LargeTiles = ({
     return !!res;
   };
 
+  const submitOtherVal = () => {
+    const trimmedOtherVal = otherVal.trim();
+
+    if (!trimmedOtherVal) {
+      setErrorMessage("Field cannot be empty");
+      setCheckInputVal(true);
+      setInputField(true);
+    }
+    if (trimmedOtherVal) {
+      setErrorMessage(null);
+      setInputField(false);
+      setCheckInputVal(false);
+      setOtherVal(trimmedOtherVal);
+    }
+  };
+
   return (
     <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap", justifyContent: isNarrowScreen ? "center" : "normal" }}>
       {options?.map((data, index) => (
-        // <Box key={index}>
-        <CustomButton
-          key={index}
-          // ref={(el) => (buttonRefs.current[index] = el)}
-          value={
-            selectedFormats?.opt && selectedFormats?.price
-              ? { opt: selectedFormats.opt, price: selectedFormats.price }
-              : selectedFormats
+        <Box key={index}>
+          <CustomButton
+            key={index}
+            // ref={(el) => (buttonRefs.current[index] = el)}
+            value={
+              selectedFormats?.opt && selectedFormats?.price
+                ? { opt: selectedFormats.opt, price: selectedFormats.price }
+                : selectedFormats
+            }
+            onClick={() => {
+              if (data.opt === "Other (Specify)" || data.opt === "Other") {
+                setInputField(!inputField);
+              } else {
+                setSelectedFormats(data);
+                selectedOptionPassToParent(data);
+              }
+            }}
+            sx={{
+              backgroundColor: checkSelectedOption(data.opt, data.price)
+                ? "#0045e6"
+                : "#fff",
+              border: checkSelectedOption(data.opt, data.price)
+                ? "1px solid #0045e6"
+                : "1px solid #fff",
+              color: checkSelectedOption(data.opt, data.price)
+                ? "#fff"
+                : "#000",
+              minWidth: 0,
+            }}
+          >
+            {data.opt ? data.opt : data}
+          </CustomButton>
+          {
+            data.opt === "Other (Specify)" || data.opt === "Other"
+              ? inputField && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: "1em",
+                    flexWrap: "wrap",
+                    margin: ".5em 0",
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="fullWidth"
+                    label="Other"
+                    variant="outlined"
+                    sx={{
+                      width: "90%",
+                      width: "90%",
+                      "& .css-1wc848c-MuiFormHelperText-root": {
+                        marginLeft: '0px'
+                      },
+                      "& .css-v7esy": {
+                        marginLeft: '0px'
+                      },
+                    }}
+                    value={otherVal}
+                    onChange={(e) => {
+                      setOtherVal(e.target.value);
+                      setCheckInputVal(false);
+                      setErrorMessage(null);
+                    }}
+                    error={checkInputVal}
+                    helperText={errorMessage}
+                  />
+                  <Button
+                    variant="contained"
+                    sx={{ width: "100px" }}
+                    onClick={() => {
+                      otherData.price = data.price;
+                      otherData.opt = otherVal;
+                      if (otherVal.trim() !== "") {
+                        setSelectedFormats(otherData);
+                        selectedOptionPassToParent(otherData);
+                        setInputField(false);
+                        setOtherVal(otherVal);
+                        setErrorMessage(null);
+                      }
+                      submitOtherVal();
+                    }}
+                  >
+                    Enter
+                  </Button>
+                </Box>
+              )
+              : null
           }
-          onClick={() => {
-            setSelectedFormats(data);
-            selectedOptionPassToParent(data);
-          }}
-          sx={{
-            backgroundColor: checkSelectedOption(data.opt, data.price)
-              ? "#0045e6"
-              : "#fff",
-            border: checkSelectedOption(data.opt, data.price)
-              ? "1px solid #0045e6"
-              : "1px solid #fff",
-            color: checkSelectedOption(data.opt, data.price)
-              ? "#fff"
-              : "#000",
-            minWidth: 0,
-          }}
-        >
-          {data.opt ? data.opt : data}
-        </CustomButton>
-        // </Box>
+        </Box>
       ))}
     </Box>
   );

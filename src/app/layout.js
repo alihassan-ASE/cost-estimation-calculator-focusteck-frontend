@@ -698,15 +698,14 @@ export default function RootLayout({ children }) {
                           sx={{ color: "#767676", fontSize: "1.3rem" }}
                         />
                       </Box>
-                      <img
-                        style={{
-                          background: `url('https://focusteck.com/wp-content/uploads/2023/09/Aws_certificate-480x480.png')`,
-                          backgroundSize: "cover",
-                          width: "102px",
-                          height: "102px",
-                          border: "0 solid #fff",
-                          // marginRight: "153.396px",
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 110,
+                          width: 110,
                         }}
+                        alt="AWS Cetificate"
+                        src="https://focusteck.com/wp-content/uploads/2023/09/Aws_certificate.png"
                       />
                     </Box>
 

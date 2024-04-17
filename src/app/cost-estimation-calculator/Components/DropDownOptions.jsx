@@ -7,6 +7,8 @@ import {
   InputLabel,
   OutlinedInput,
   Chip,
+  TextField,
+  Button
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -81,15 +83,83 @@ const DropDownComponent = ({
   selectedOption,
   selectedOptionPassToParent,
 }) => {
+  let otherData = {
+    opt: null,
+    price: null,
+  };
   const [selectedFormats, setSelectedFormats] = useState("");
 
+  const [otherVal, setOtherVal] = useState("");
+  const [inputField, setInputField] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [checkInputVal, setCheckInputVal] = useState(false);
+  const [price, setPrice] = useState(0);
+
   useEffect(() => {
+    // if (selectedOption && selectedOption.length > 0) {
+    //   setSelectedFormats(selectedOption[0] || null);
+
+    //   const isSelectedOptAvailable = options.some(
+    //     (option) => option.opt === selectedOption[0]?.opt
+    //   );
+    //   if (!isSelectedOptAvailable) {
+    //     if (
+    //       selectedOption[0]?.opt !== "Other (Specify)" &&
+    //       selectedOption[0]?.opt !== "Other"
+    //     ) {
+
+    //       setOtherVal(selectedOption[0]?.opt || null);
+    //       selectedOption.length = 0;
+    //       setInputField(true);
+    //     }
+    //   }
+    // } else {
+    //   setOtherVal("");
+    //   setSelectedFormats(selectedOption);
+    // }
     if (Array.isArray(selectedOption)) {
       setSelectedFormats(selectedOption[0]);
+      const isSelectedOptAvailable = options.some(
+        (option) => option.opt === selectedOption[0]?.opt
+      );
+      if (!isSelectedOptAvailable) {
+        if (
+          selectedOption[0]?.opt !== "Other (Specify)" &&
+          selectedOption[0]?.opt !== "Other" && selectedOption[0]?.opt !== undefined
+        ) {
+
+          setOtherVal(selectedOption[0]?.opt || null);
+          selectedOption.length = 0;
+          setInputField(true);
+        }
+        else {
+          setOtherVal("");
+        }
+      }
+      else {
+        setOtherVal("");
+      }
     } else {
       setSelectedFormats(selectedOption);
     }
-  }, [selectedOption]);
+  }, [selectedOption, options])
+
+  const submitOtherVal = () => {
+    const trimmedOtherVal = otherVal.trim();
+
+    if (!trimmedOtherVal) {
+      setErrorMessage("Field cannot be empty");
+      setCheckInputVal(true);
+      setInputField(true);
+    }
+    if (trimmedOtherVal) {
+      setErrorMessage(null);
+      setInputField(false);
+      setCheckInputVal(false);
+      setOtherVal(trimmedOtherVal);
+    }
+
+  };
 
   return (
     <StyledFormControl
@@ -116,10 +186,20 @@ const DropDownComponent = ({
         "& .css-17bpk52-MuiInputBase-root-MuiOutlinedInput-root": {
           borderColor: "#0045e6",
           "& .MuiSvgIcon-root ": {
-            backgroundColor: disable ? "#1e1d28" : "#0045e6",
+            backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
           },
-        }
+        },
+        "& .css-mw2ubh .MuiSvgIcon-root": {
+          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+        },
+        "& .css-1kbjsjj .MuiSvgIcon-root": {
+          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
 
+        },
+        "& .MuiSvgIcon-root.MuiSelect-icon.MuiSelect-iconOutlined.css-1636szt": {
+          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+
+        }
       }}
     >
       <CustomInputLabel id="demo-multiple-chip-label">{label ? label : "Select Your Option"}</CustomInputLabel>
@@ -130,8 +210,15 @@ const DropDownComponent = ({
         value={disable ? null : selectedFormats}
         onChange={(e) => {
           const selectedObject = e.target.value;
-          setSelectedFormats(selectedObject);
-          selectedOptionPassToParent(selectedObject, label);
+          if (selectedObject.opt === "Other (Specify)" || selectedObject.opt === "Other") {
+            setPrice(selectedObject.price)
+            setInputField(true);
+            setOtherVal("");
+          } else {
+            setInputField(false);
+            setSelectedFormats(selectedObject);
+            selectedOptionPassToParent(selectedObject, label);
+          }
         }}
         disabled={disable ? true : false}
 
@@ -176,6 +263,67 @@ const DropDownComponent = ({
           </StyledMenuItem>
         ))}
       </Select>
+      {/* Input field for "Other (Specify)" or "Other" */}
+
+      {inputField ?
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1em",
+            flexWrap: "wrap",
+            margin: ".5em 0",
+          }}
+        >
+          <TextField
+            fullWidth
+            id="fullWidth"
+            label="Other"
+            variant="outlined"
+            sx={{
+              width: "36%",
+              "& .css-1wc848c-MuiFormHelperText-root": {
+                marginLeft: '0px'
+              },
+              "& .css-v7esy": {
+                marginLeft: '0px'
+              },
+              "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                color: 'black'
+              },
+              "& .css-1x5jdmq": {
+                color: 'black'
+              }
+            }}
+            value={otherVal}
+            onChange={(e) => {
+              setOtherVal(e.target.value);
+              setCheckInputVal(false);
+              setErrorMessage(null);
+            }}
+            error={checkInputVal}
+            helperText={errorMessage}
+          />
+          <Button
+            variant="contained"
+            sx={{ width: "100px" }}
+            onClick={() => {
+              otherData.price = price;
+              otherData.opt = otherVal;
+
+              if (otherVal.trim() !== "") {
+                setSelectedFormats(otherData);
+                selectedOptionPassToParent(otherData);
+                setInputField(false);
+                setErrorMessage(null);
+              }
+              submitOtherVal();
+            }}
+          >
+            Enter
+          </Button>
+        </Box> : null
+      }
     </StyledFormControl>
   );
 };

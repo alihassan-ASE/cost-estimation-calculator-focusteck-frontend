@@ -45,7 +45,7 @@ const RadioButtonComponent = ({
   const [errorMessage, setErrorMessage] = useState(null);
   const [checkInputVal, setCheckInputVal] = useState(false);
   const [selectedFormats, setSelectedFormats] = useState("");
-  const [price , setPrice] = useState(0);
+  const [price, setPrice] = useState(0);
 
   useEffect(() => {
     if (selectedOption && selectedOption.length > 0) {
@@ -100,7 +100,7 @@ const RadioButtonComponent = ({
     selectedOptionPassToParent(selectedData);
   };
 
-  
+
   return (
     <Box>
       <FormControl>
@@ -135,55 +135,63 @@ const RadioButtonComponent = ({
                 }
               }}
 
-              checked={checkSelectedOption(data.opt , data.price)}
+              checked={checkSelectedOption(data.opt, data.price)}
             />
           ))}
         </RadioGroup>
-     { inputField ?
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: "1em",
-                    flexWrap: "wrap",
-                    margin: ".5em 0",
-                  }}
-                >
-                  <TextField
-                    fullWidth
-                    id="fullWidth"
-                    label="Other"
-                    variant="outlined"
-                    sx={{ width: "90%" }}
-                    value={otherVal}
-                    onChange={(e) => {
-                      setOtherVal(e.target.value);
-                      setCheckInputVal(false);
-                      setErrorMessage(null);
-                    }}
-                    error={checkInputVal}
-                    helperText={errorMessage}
-                  />
-                  <Button
-                    variant="contained"
-                    sx={{ width: "100px" }}
-                    onClick={() => {
-                      otherData.price = price;
-                      otherData.opt = otherVal;
-                      if (otherVal !== "") {
-                        setSelectedFormats(otherData);
-                        selectedOptionPassToParent(otherData);
-                        setInputField(false);
-                        setOtherVal(otherVal);
-                        setErrorMessage(null);
-                      }
-                      submitOtherVal();
-                    }}
-                  >
-                    Enter
-                  </Button>
-                </Box>
-              
-            : null}
+        {inputField ?
+          <Box
+            sx={{
+              display: "flex",
+              gap: "1em",
+              flexWrap: "wrap",
+              margin: ".5em 0",
+            }}
+          >
+            <TextField
+              fullWidth
+              id="fullWidth"
+              label="Other"
+              variant="outlined"
+              sx={{
+                width: "90%",
+                "& .css-1wc848c-MuiFormHelperText-root": {
+                  marginLeft: '0px'
+                },
+                "& .css-v7esy": {
+                  marginLeft: '0px'
+                },
+              }}
+              value={otherVal}
+              onChange={(e) => {
+                setOtherVal(e.target.value);
+                setCheckInputVal(false);
+                setErrorMessage(null);
+              }}
+              error={checkInputVal}
+              helperText={errorMessage}
+            />
+            <Button
+              variant="contained"
+              sx={{ width: "100px" }}
+              onClick={() => {
+                otherData.price = price;
+                otherData.opt = otherVal;
+                if (otherVal.trim() !== "") {
+                  setSelectedFormats(otherData);
+                  selectedOptionPassToParent(otherData);
+                  setInputField(false);
+                  setOtherVal(otherVal);
+                  setErrorMessage(null);
+                }
+                submitOtherVal();
+              }}
+            >
+              Enter
+            </Button>
+          </Box>
+
+          : null}
       </FormControl>
     </Box>
   );

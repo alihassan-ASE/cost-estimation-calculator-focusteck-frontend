@@ -86,6 +86,13 @@ import flaskIcon from "../../../icons/backend/flask.png"
 import archimateIcon from "../../../icons/devops/archimate.png"
 import awsIcon from "../../../icons/devops/zachman.png"
 import togafIcon from "../../../icons/devops/togaf.svg"
+
+
+// Quality Assurance
+import manualIcon from "../../../icons/quality-assurance/manual.png"
+import automationIcon from "../../../icons/quality-assurance/automation.png"
+import bothIcon from "../../../icons/quality-assurance/both.png"
+
 /* ------------------------------------------------- */
 
 const CustomButton = styled(Button)(({ theme }) => ({
@@ -455,6 +462,11 @@ const StaffComponent = () => {
     'TOGAF (The Open Group Architecture Framework)': togafIcon,
     'Zachman Framework,AWS Well-Architected Framework': awsIcon,
     'Archimate': archimateIcon,
+
+    //Quality Assurance
+    'Automation': automationIcon,
+    'Manual': manualIcon,
+    'Both': bothIcon,
   }
 
   // Function To Handling Price
@@ -768,7 +780,7 @@ const StaffComponent = () => {
                     marginLeft: "auto",
                     marginRight: "auto",
                     gap: '1em',
-                    maxWidth: 900,
+                    maxWidth: 1200,
                     flexWrap: isNarrowStaff ? "wrap" : "nowrap",
                     marginBottom: ".5em"
                   }}>
@@ -784,7 +796,7 @@ const StaffComponent = () => {
                   </CustomButton>
                 </Box>
 
-                <TableContainer component={Paper} sx={{ maxWidth: 900, margin: "auto" }}>
+                <TableContainer component={Paper} sx={{ maxWidth: 1200, margin: "auto" }}>
                   <Table
                     sx={{
                       minWidth: 700,
@@ -795,11 +807,11 @@ const StaffComponent = () => {
                     }}
                     aria-label="customized table">
                     <TableHead>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Framework</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Specialist</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Seniority Level</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Number Of Resources</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center" }}>Actions</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Framework</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Specialist</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Seniority Level</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Number Of Resources</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Actions</StyledTableCell>
                     </TableHead>
                     <TableBody
                     // sx={{ width: "100%" }}
@@ -872,7 +884,7 @@ const StaffComponent = () => {
                                 <Box sx={{
                                   display: "flex",
                                   justifyContent: "center",
-                                  padding: " 0 .3em", gap: "1em"
+                                  gap: "1em"
                                 }}>
                                   <ModeEditIcon sx={{
                                     color: "rgb(99, 115, 129)",
@@ -919,7 +931,7 @@ const StaffComponent = () => {
                   marginLeft: "auto",
                   marginRight: "auto",
                   gap: '1em',
-                  maxWidth: 900,
+                  maxWidth: 1200,
                 }}
               >
                 <CustomNextButton
