@@ -8,12 +8,13 @@ import { usePathname } from 'next/navigation'
 
 const CustomImageBox = styled(Box)(({ theme }) => ({
     color: "white",
-    background: `url('https://eleks.com/wp-content/uploads/thank-you-page-img-1.jpg')`,
+    background: `url('https://i.ibb.co/brCSybX/thank-you.png')`,
     backgroundRepeat: "no-repeat",
     objectFit: "cover",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    height: "100vh",
+    width: "303px",
+    height: "303px",
     [theme.breakpoints.down("md")]: {
         height: "60vh"
     },
@@ -24,18 +25,18 @@ const CustomImageBox = styled(Box)(({ theme }) => ({
 
 const CustomButton = styled(Button)(({ theme }) => ({
     color: "#fff",
-    backgroundColor: "#1e1d28",
-    border: "1px solid #1e1d28",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
     textTransform: "none",
-    fontSize: "13px",
-    padding: "1.2em 3.5em",
+    fontSize: "14px",
+    padding: "15px 38.5px",
     lineHeight: 1.5,
     fontWeight: "normal",
-    borderRadius: "2em",
+    borderRadius: "4px",
     minwidth: "140px",
     display: "flex",
     flexWrap: "wrap",
-    margin: "2.5em 0em",
+    marginTop: '50px',
     transition:
         "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
     fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
@@ -97,24 +98,42 @@ const page = () => {
             sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: isNarrowScreen ? "wrap" : "nowrap"
+                flexDirection: 'column',
+                // justifyContent: "space-between",
+                flexWrap: isNarrowScreen ? "wrap" : "nowrap",
+                padding: '34px 20 89px 0',
             }}>
+            <Box sx={{
+                height: "100%", width: isNarrowScreen ? "100%" : "50% ",
+                display: 'flex',
+                justifyContent: 'center'
+            }}>
+                <CustomImageBox>
+
+                </CustomImageBox>
+            </Box>
             <Box sx={{
                 // padding: isMobileScreen ? "1em 1.5em" : "1em .5em 1em 3em",
                 // maxWidth: '538px',
                 // margin: "auto"
-                padding: '0 7%'
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: "center",
+                alignItems: 'center'
+                // padding: '0 7%'
             }}>
-                <Typography variant='h4' sx={{ fontWeight: "600", padding: "1em 0 .5em 0" }}>Thank You for Reaching Out!</Typography>
-                <Typography variant='body1' sx={{ paddingBottom: "2em" }}>We’ll get back to you shortly.</Typography>
+                <Typography variant='h4' sx={{ fontWeight: "600", padding: "0 0 30px 0", fontSize: '30px' }}>Thank You for Reaching Out!</Typography>
+                <Typography variant='body1' sx={{ paddingBottom: "35px", fontSize: '26px', fontWeight: 400 }}>We’ll get back to you shortly.</Typography>
 
                 <Box
                     sx={{
-                        paddingRight: "3em"
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: "center",
+                        alignItems: 'center'
                     }}>
-                    <Typography variant='h5'>In the meantime, explore the newest case studies from our clients.</Typography>
-                    <Typography variant='body1' sx={{ padding: ".8em 0" }}>Our team is here to help you replicate their success for your business.</Typography>
+                    <Typography variant='h5' sx={{ fontSize: '26px', fontWeight: 400 }}>In the meantime, explore the newest case studies from our clients.</Typography>
+                    <Typography variant='body1' sx={{ paddingTop: "15px", fontSize: '20px', fontWeight: 400 }}>Our team is here to help you replicate their success for your business.</Typography>
                     <Link
                         target='_blank'
                         href="https://focusteck.com/success-stories/"
@@ -123,13 +142,6 @@ const page = () => {
                     </Link>
                 </Box>
             </Box>
-            <Box
-                sx={{ height: "100%", width: isNarrowScreen ? "100%" : "50% ", }}
-            >
-                < CustomImageBox >
-
-                </CustomImageBox>
-            </Box >
         </Box >
     )
 }
