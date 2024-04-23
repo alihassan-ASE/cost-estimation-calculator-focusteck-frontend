@@ -67,12 +67,12 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   ),
   "&:hover": {
     color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
   },
   "&.Mui-selected": {
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
     color: "white",
     "& span.price": {
       color: "#fff",
@@ -80,8 +80,8 @@ const StyleToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
   "&.Mui-selected:hover": {
     color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
   },
   "& span.price": {
     color: "#005DBD",

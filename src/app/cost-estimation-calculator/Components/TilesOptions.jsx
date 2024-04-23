@@ -24,18 +24,18 @@ const CustomButton = styled(Button)(({ theme }) => ({
   ),
   "&:hover": {
     color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
   },
   "&:active": {
     color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
   },
   "&:focus": {
     color: "#fff",
-    backgroundColor: "#0045e6",
-    border: "1px solid #0045e6",
+    backgroundColor: "#005DBD",
+    border: "1px solid #005DBD",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: ".9rem ",
@@ -129,8 +129,8 @@ const TilesComponent = ({
             sx={
               checkSelectedOption(data.opt, data.price)
                 ? {
-                  backgroundColor: "#0045e6",
-                  border: "1px solid #0045e6",
+                  backgroundColor: "#005DBD",
+                  border: "1px solid #005DBD",
                   color: "white",
                 }
                 : {}

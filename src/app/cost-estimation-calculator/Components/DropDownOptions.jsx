@@ -16,16 +16,20 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   width: "100%",
   borderRadius: ".5em",
-  margin: ".3em 0",
+  // margin: ".3em 0",
 }));
 
 const CustomInputLabel = styled(InputLabel)(({ theme }) => ({
   position: 'absolute',
   top: 0,
+  left: 0,
   backgroundColor: 'white',
-  padding: theme.spacing(0, 3),
+  padding: "0",
+  fontSize: '16px',
+  fontWeight: 400,
   transformOrigin: 'top left',
   pointerEvents: 'none',
+  color: "#9A9A9A"
 }));
 
 
@@ -34,14 +38,14 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     ","
   ),
   "&:hover": {
-    backgroundColor: "#0045e6",
-    borderColor: "#0045e6",
+    backgroundColor: "#005DBD",
+    borderColor: "#005DBD",
     boxShadow: "none",
     color: "white",
   },
   "&:focus": {
-    backgroundColor: "#0045e6",
-    borderColor: "#0045e6",
+    backgroundColor: "#005DBD",
+    borderColor: "#005DBD",
     boxShadow: "none",
     color: "white",
   },
@@ -57,19 +61,19 @@ const MenuProps = {
     },
     sx: {
       "& .MuiMenuItem-root.Mui-selected": {
-        backgroundColor: "#0045e6",
+        backgroundColor: "#005DBD",
         color: "white",
       },
       "& .MuiMenuItem-root.Mui-selected:hover": {
-        backgroundColor: "#0045e6",
+        backgroundColor: "#005DBD",
         color: "white",
       },
       "& .Mui-selected:hover": {
-        backgroundColor: "#0045e6",
+        backgroundColor: "#005DBD",
         color: "white",
       },
       "& .MuiMenuItem-root.Mui-selected:focus": {
-        backgroundColor: "#0045e6",
+        backgroundColor: "#005DBD",
         color: "white",
       },
     },
@@ -163,51 +167,61 @@ const DropDownComponent = ({
 
   return (
     <StyledFormControl
+      size="small"
       sx={{
         "& .MuiSvgIcon-root ": {
-          backgroundColor: "#1e1d28",
           borderRadius: "50%",
-          color: "white",
+          color: "#1e1d28",
           transition: "all 0.5s ease-in-out",
           right: "8px",
           height: "1.5rem",
           width: "1.5rem",
-          top: "10.5px",
+          top: "2px",
           padding: ".5rem",
           zIndex: 1
         },
         "&:hover .MuiSvgIcon-root ": {
-          backgroundColor: disable ? "#1e1d28" : "#0045e6",
+          color: disable ? "#1e1d28" : "#005DBD",
         },
         transition: "all 0.5s ease-in-out",
         "&:hover .MuiOutlinedInput-root": {
-          color: "#0045e6",
+          color: "#005DBD",
         },
         "& .css-17bpk52-MuiInputBase-root-MuiOutlinedInput-root": {
-          borderColor: "#0045e6",
+          borderColor: "#005DBD",
           "& .MuiSvgIcon-root ": {
-            backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+            color: disable ? "#1e1d28 !important" : "#005DBD !important",
           },
         },
         "& .css-mw2ubh .MuiSvgIcon-root": {
-          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+          color: disable ? "#1e1d28 !important" : "#005DBD !important",
         },
         "& .css-1kbjsjj .MuiSvgIcon-root": {
-          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+          color: disable ? "#1e1d28 !important" : "#005DBD !important",
+
+        },
+        "& .MuiSvgIcon-root": {
+          color: disable ? "#1e1d28 !important" : "#005DBD !important",
 
         },
         "& .MuiSvgIcon-root.MuiSelect-icon.MuiSelect-iconOutlined.css-1636szt": {
-          backgroundColor: disable ? "#1e1d28 !important" : "#0045e6 !important",
+          color: disable ? "#1e1d28 !important" : "#005DBD !important",
 
+        },
+        "&.MuiFormControl-root .MuiInputBase-root .MuiSelect-select": {
+          paddingLeft: "4px"
         }
       }}
     >
       <CustomInputLabel id="demo-multiple-chip-label">{label ? label : "Select Your Option"}</CustomInputLabel>
       <Select
         IconComponent={KeyboardArrowDownIcon}
-        sx={{ height: "60px", rowGap: "10px", width: "100%", borderRadius: "50px" }}
+        sx={{
+          height: "41px", width: "100%", borderRadius: "6px",
+        }}
         autoFocus={false}
         value={disable ? null : selectedFormats}
+        // placeholder={label ? label : "Select Your Option"}
         onChange={(e) => {
           const selectedObject = e.target.value;
           if (selectedObject.opt === "Other (Specify)" || selectedObject.opt === "Other") {
@@ -226,7 +240,7 @@ const DropDownComponent = ({
           <OutlinedInput id="select-multiple-chip" label={label ? label : "Select Your Option"}
             sx={{
               "&:hover": {
-                borderColor: "#0045e6"
+                borderColor: "#005DBD"
               },
               '&:focus': {
                 borderRadius: 4,
@@ -236,14 +250,23 @@ const DropDownComponent = ({
             }} />
         }
         renderValue={(selected) => (
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, }}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, zIndex: 1000, position: "relative" }}>
             {selected.opt ? (
               <Chip
+                sx={{
+                  // "&.MuiChip-root": {
+                  borderRadius: "4px"
+                  // }
+                }}
                 key={selected.opt}
                 label={`${selected.opt}`}
               />
             ) : (
-              <Chip key={selected} label={selected} />
+              <Chip sx={{
+                // "&.MuiChip-root": {
+                borderRadius: "4px"
+                // }
+              }} key={selected} label={selected} />
             )}
           </Box>
         )}
@@ -265,66 +288,67 @@ const DropDownComponent = ({
       </Select>
       {/* Input field for "Other (Specify)" or "Other" */}
 
-      {inputField ?
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1em",
-            flexWrap: "wrap",
-            margin: ".5em 0",
-          }}
-        >
-          <TextField
-            fullWidth
-            id="fullWidth"
-            label="Other"
-            variant="outlined"
+      {
+        inputField ?
+          <Box
             sx={{
-              width: "36%",
-              "& .css-1wc848c-MuiFormHelperText-root": {
-                marginLeft: '0px'
-              },
-              "& .css-v7esy": {
-                marginLeft: '0px'
-              },
-              "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                color: 'black'
-              },
-              "& .css-1x5jdmq": {
-                color: 'black'
-              }
-            }}
-            value={otherVal}
-            onChange={(e) => {
-              setOtherVal(e.target.value);
-              setCheckInputVal(false);
-              setErrorMessage(null);
-            }}
-            error={checkInputVal}
-            helperText={errorMessage}
-          />
-          <Button
-            variant="contained"
-            sx={{ width: "100px" }}
-            onClick={() => {
-              otherData.price = price;
-              otherData.opt = otherVal;
-
-              if (otherVal.trim() !== "") {
-                setSelectedFormats(otherData);
-                selectedOptionPassToParent(otherData);
-                setInputField(false);
-                setErrorMessage(null);
-              }
-              submitOtherVal();
+              display: "flex",
+              flexDirection: "column",
+              gap: "1em",
+              flexWrap: "wrap",
+              margin: ".5em 0",
             }}
           >
-            Enter
-          </Button>
-        </Box> : null
+            <TextField
+              fullWidth
+              id="fullWidth"
+              label="Other"
+              variant="outlined"
+              sx={{
+                width: "36%",
+                "& .css-1wc848c-MuiFormHelperText-root": {
+                  marginLeft: '0px'
+                },
+                "& .css-v7esy": {
+                  marginLeft: '0px'
+                },
+                "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                  color: 'black'
+                },
+                "& .css-1x5jdmq": {
+                  color: 'black'
+                }
+              }}
+              value={otherVal}
+              onChange={(e) => {
+                setOtherVal(e.target.value);
+                setCheckInputVal(false);
+                setErrorMessage(null);
+              }}
+              error={checkInputVal}
+              helperText={errorMessage}
+            />
+            <Button
+              variant="contained"
+              sx={{ width: "100px" }}
+              onClick={() => {
+                otherData.price = price;
+                otherData.opt = otherVal;
+
+                if (otherVal.trim() !== "") {
+                  setSelectedFormats(otherData);
+                  selectedOptionPassToParent(otherData);
+                  setInputField(false);
+                  setErrorMessage(null);
+                }
+                submitOtherVal();
+              }}
+            >
+              Enter
+            </Button>
+          </Box> : null
       }
-    </StyledFormControl>
+    </StyledFormControl >
   );
 };
 

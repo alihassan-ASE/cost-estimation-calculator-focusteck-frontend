@@ -66,7 +66,7 @@ const page = () => {
         alignItems: "center",
         gap: "2em",
         flexWrap: "wrap",
-        padding: "1em 8.5%",
+        padding: "60px 8.5% 108px 8.5%",
         flexGrow: 1,
         margin: "auto",
       }}
@@ -87,10 +87,10 @@ const page = () => {
             backgroundColor: '#005DBD',
             fontWeight: "600",
             "&:hover": {
-              backgroundColor: "#0045e6",
+              backgroundColor: "#0045E6",
             },
             "&:focus": {
-              backgroundColor: "#0045e6",
+              backgroundColor: "#0045E6",
             },
           }}
         >

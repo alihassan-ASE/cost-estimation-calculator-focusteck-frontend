@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useMemo, useSyncExternalStore } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -9,19 +9,28 @@ import {
   useMediaQuery,
   Slide,
   Table,
-  TableBody, TableHead, TableContainer, TableRow, Paper, Modal
+  TableBody,
+  TableHead,
+  TableContainer,
+  TableRow,
+  Paper,
+  Modal,
+  Breadcrumbs,
+  Link,
+  ButtonGroup,
+  TableCell,
+  tableCellClasses,
+  CircularProgress
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { styled, keyframes } from "@mui/material/styles";
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+
+import { getQuestions } from "../../lib/api/getData";
 import Question from "../Components/Question/page";
 import Stepper from "../Components/Stepper/page";
-import { getQuestions } from "../../lib/api/getData";
 import StaffResource from "./StaffResource";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import CircularProgress from "@mui/material/CircularProgress";
 import ShowSummary from "./ShowSummary";
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import QuestionsProgress from "./QuestionsProgress";
 
 /* ---------------- Languages Icons ---------------- */
 // Frontend
@@ -96,27 +105,33 @@ import bothIcon from "../../../icons/quality-assurance/both.png"
 /* ------------------------------------------------- */
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  backgroundColor: "#00A76f",
-  border: "1px solid #00A76f",
-  color: "#fff",
-  maxWidth: "341px",
-  width: "130px",
-  borderRadius: ".5em",
+  backgroundColor: "#fff",
+  border: "1px solid #005DBD",
+  color: "#005DBD",
+  // maxWidth: "341px",
+  // width: "130px",
+  borderRadius: "4px",
   marginLeft: "auto",
-  marginBottom: ".7em",
+  textTransform: 'capitalize',
+  padding: '15px 26px',
   "&:hover": {
-    border: "1px solid #00A76f",
-    color: "#00A76f",
-    backgroundColor: "#fff"
+    border: "1px solid #005DBD",
+    color: "#fff",
+    backgroundColor: "#005DBD"
   },
 }));
 
 const CustomNextButton = styled(Button)(({ theme }) => ({
-  border: "1px solid #0069d9",
+  border: "1px solid #005DBD",
+  backgroundColor: "#005DBD",
+  color: "#fff",
   maxWidth: "341px",
   width: "130px",
-  marginTop: ".7em",
   marginLeft: "auto",
+  padding: "15px 48.5px",
+  fontSize: "14px",
+  fontWeight: 400,
+  textTransform: 'capitalize',
   fontFamily: [
     "Proxima Nova",
     "Poppins",
@@ -138,42 +153,46 @@ const CustomBackButton = styled(Button)(({ theme }) => ({
   width: "40px",
   height: "40px",
   borderRadius: "50%",
-  position: "absolute",
+  marginLeft: '50px !important',
+  backgroundColor: '#005DBD',
   justifyContent: "normal",
   minWidth: "min-content",
-  border: "2px solid #ACACAC",
+  border: "2px solid #005DBD",
   padding: ".2em",
   "&:hover svg": {
     transform: "translateX(-5px)"
   },
   "&:hover": {
-    boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
+    boxShadow: "0 0 7px rgba(12, 61, 255, 0.8)",
+    backgroundColor: '#0045e6',
   },
   "&.Mui-disabled": {
-    background: "#4f9ef0",
+    background: "#0045e6",
     color: "#eaeaea",
   },
   "&:focus": {
     outline: "none",
     boxShadow: "0 0 5px rgba(0, 93, 189, 0.8)",
   },
-  [theme.breakpoints.down("lg")]: {
-    left: "23px",
-  },
   [theme.breakpoints.down("md")]: {
-    left: "23px",
+    right: "-32px",
   },
   [theme.breakpoints.down("sm")]: {
-    left: "23px",
+    right: "-52px",
   },
 }));
 
 const CustomCostBox = styled(Box)(({ theme }) => ({
-  backgroundColor: "#1E1D28",
-  padding: "2em",
-  borderRadius: "10px",
+  backgroundColor: "#005DBD",
+  padding: "30px 25px",
+  borderRadius: "20px",
   minWidth: "250px",
+  maxWidth: '433px',
   margin: "1em 0",
+  height: '134px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
   },
@@ -187,7 +206,9 @@ const CustomNormalTypography = styled(Typography)(({ theme }) => ({
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
   color: "#fff",
-  fontSize: "2em",
+  fontSize: "60px",
+  fontWeight: 500,
+  lineHeight: '50px',
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
@@ -195,8 +216,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    color: "black",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -291,18 +311,11 @@ const StaffComponent = () => {
     },
   })));
 
-  // const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  //   textAlign: "center",
-  //   '&:last-child td, &:last-child th': {
-  //     border: 0,
-  //   },
-  // }))
-
   const CustomCard = styled(Card)(({ theme }) => ({
-    height: 370,
+    maxHeight: 600,
     width: "50%",
     minWidth: "270px",
-    padding: "2em 1.5em",
+    padding: "25px 41px",
     borderRadius: ".5em",
     margin: "3em 0",
     transform: "translate(-50 %, -50 %)",
@@ -723,15 +736,33 @@ const StaffComponent = () => {
 
   return (
 
-    <CustomBox >
+    <CustomBox>
       {additionalQuesiton.length && staffBase.length || !displayQuestion || !actualResponses.length ? (
         <Box
           sx={{
-            maxWidth: "1520px",
+            maxWidth: "1285px",
             marginRight: "auto",
             marginLeft: "auto",
           }}
         >
+          {
+            currentState || displayQuestion ?
+              <Box sx={{ marginBottom: '30px' }}>
+                <Typography variant="h1" sx={{
+                  fontSize: '60px',
+                  fontWeight: 700,
+                  marginBottom: '20px'
+                }}>Estimate Team Cost</Typography>
+                <div role="presentation">
+                  <Breadcrumbs aria-label="breadcrumb">
+                    <Link underline="hover" color="black" href="/">Home</Link>
+                    <Link underline="hover" color="black" href="/cost-estimation-calculator">Cost Estimation Calculator</Link>
+                    <Link underline="hover" color="black" href="/cost-estimation-calculator/staff">Team</Link>
+                  </Breadcrumbs>
+                </div>
+              </Box>
+              : <></>
+          }
           {
             openModal ?
               <Modal
@@ -743,19 +774,31 @@ const StaffComponent = () => {
                 sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
               >
                 <CustomCard>
-                  <StaffResource
-                    question={currentQuestion}
-                    options={staffBase}
-                    count={count}
-                    setCount={setCount}
-                    setValues={setValues}
-                    index={editMode ? i : count}
-                    values={values}
-                    selectedOption={resource}
-                    selectedOptionPassToParent={selectedOptionPassToParent}
-                    selectedSave={selectedSave}
-                    dropDownVal={dropDownVal}
-                  />
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Box>
+                      <CloseIcon sx={{
+                        marginBottom: "15px",
+                        fontSize: 20,
+                        float: "right",
+                        "&:hover": {
+                          cursor: "pointer",
+                        }
+                      }} onClick={handleClose} />
+                    </Box>
+                    <StaffResource
+                      question={currentQuestion}
+                      options={staffBase}
+                      count={count}
+                      setCount={setCount}
+                      setValues={setValues}
+                      index={editMode ? i : count}
+                      values={values}
+                      selectedOption={resource}
+                      selectedOptionPassToParent={selectedOptionPassToParent}
+                      selectedSave={selectedSave}
+                      dropDownVal={dropDownVal}
+                    />
+                  </Box>
                 </CustomCard>
               </Modal>
               : null
@@ -765,26 +808,24 @@ const StaffComponent = () => {
               <Box>
                 <Typography variant="h5"
                   sx={{
-                    // paddingLeft: "4.7%",
-                    fontSize: "1.5em",
-                    marginBottom: "4em",
-                    textAlign: "center",
-                    fontWeight: "bold"
+                    fontSize: "30px",
+                    margin: '60px 0 30px 0',
+                    textAlign: "left",
+                    fontWeight: 700
                   }}>
                   Please select a team as per your requirements
                 </Typography>
                 <Box
                   sx={{
                     display: "flex",
-                    alignItems: "center",
-                    marginLeft: "auto",
-                    marginRight: "auto",
+
                     gap: '1em',
-                    maxWidth: 1200,
+                    maxWidth: 970,
                     flexWrap: isNarrowStaff ? "wrap" : "nowrap",
-                    marginBottom: ".5em"
+                    marginBottom: "20px"
                   }}>
                   <CustomButton
+                    variant="default"
                     onClick={() => {
                       setCount(count + 1);
                       handleModal()
@@ -792,26 +833,27 @@ const StaffComponent = () => {
                       setAddTransition(true)
                     }}
                   >
-                    Add New
+                    + &nbsp; Add New Requirements
                   </CustomButton>
                 </Box>
 
-                <TableContainer component={Paper} sx={{ maxWidth: 1200, margin: "auto" }}>
+                <TableContainer component={Paper} sx={{ maxWidth: 970, marginRight: "auto" }}>
                   <Table
                     sx={{
                       minWidth: 700,
                       "& .MuiTableCell-root.MuiTableCell-head": {
-                        backgroundColor: "#0045e6",
-                        color: "#fff"
+                        backgroundColor: "#fff",
+                        color: "#000"
                       },
                     }}
                     aria-label="customized table">
                     <TableHead>
-                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Framework</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Specialist</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Seniority Level</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Number Of Resources</StyledTableCell>
-                      <StyledTableCell sx={{ textAlign: "center", minWidth: '200px' }}>Actions</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '100px', fontSize: '12.82px', fontWeight: 700, padding: "20px 15px", lineHeight: "15.39[x" }}>Image</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '100px', fontSize: '12.82px', fontWeight: 700, padding: "20px 15px", lineHeight: "15.39[x" }}>Framework</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '100px', fontSize: '12.82px', fontWeight: 700, padding: "20px 15px", lineHeight: "15.39[x" }}>Specialist</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '100px', fontSize: '12.82px', fontWeight: 700, padding: "20px 15px", lineHeight: "15.39[x" }}>Seniority Level</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '100px', fontSize: '12.82px', fontWeight: 700, padding: "20px 15px", lineHeight: "15.39[x" }}>Number Of Resources</StyledTableCell>
+                      <StyledTableCell sx={{ textAlign: "center", minWidth: '100px', fontSize: '12.82px', fontWeight: 700, padding: "20px 15px", lineHeight: "15.39[x" }}>Actions</StyledTableCell>
                     </TableHead>
                     <TableBody
                     // sx={{ width: "100%" }}
@@ -819,7 +861,7 @@ const StaffComponent = () => {
                       {
                         resource.length === 0
                           ? <StyledTableRow>
-                            <StyledTableCell component="th" scope="row" colSpan={5} sx={{ textAlign: "center" }}>
+                            <StyledTableCell component="th" scope="row" colSpan={6} sx={{ textAlign: "center" }}>
                               No Resources to Show
                             </StyledTableCell>
                           </StyledTableRow>
@@ -840,21 +882,21 @@ const StaffComponent = () => {
                                     : 'none',
                               }}
                             >
-                              <StyledTableCell sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                maxWidth: 300,
-                                gap: "1.5em",
-                                // justifyContent: "center"
-                              }}>
+                              <StyledTableCell
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center"
+                                }}
+                              >
                                 {row.resourceOption?.icon
                                   ?
                                   <div style={{
                                     padding: ".5em", backgroundColor: "#fff",
-                                    boxShadow: "0px 0px 5px 2px rgba(199,199,199,1)",
-                                    borderRadius: "50%",
-                                    width: "35px",
-                                    height: "35px",
+                                    boxShadow: "0px 0px 3px 1px rgba(199,199,199,1)",
+                                    borderRadius: "3px",
+                                    width: "32px",
+                                    height: "32px",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center"
@@ -871,9 +913,9 @@ const StaffComponent = () => {
                                     alignItems: "center",
                                     justifyContent: "center"
                                   }}></div>}
-                                <div style={{ maxWidth: "200px", textAlign: "left" }}>
-                                  {row.resourceOption?.opt}
-                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell sx={{ textAlign: "center", }}>
+                                {row.resourceOption?.opt}
                               </StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }} scope="row">
                                 {row.resource}
@@ -881,39 +923,66 @@ const StaffComponent = () => {
                               <StyledTableCell sx={{ textAlign: "center", }}>{row.seniorityLevel}</StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }}>{row.numOfResources}</StyledTableCell>
                               <StyledTableCell sx={{ textAlign: "center", }}>
-                                <Box sx={{
+                                <ButtonGroup variant="contained" aria-label="Basic button group" sx={{
+                                  border: "0.55px solid #D5D5D5",
+                                  backgroundColor: "#FAFBFD",
+                                  borderRadius: '6px',
+                                  boxShadow: 'none',
+                                  height: '30px',
+                                  borderColor: "#D5D5D5",
+
+                                  "&.MuiButtonGroup-root .MuiButtonGroup-firstButton": {
+                                    borderColor: "#D5D5D5",
+                                  }
+                                }}>
+                                  <Button
+                                    sx={{
+                                      backgroundColor: "#FAFBFD",
+                                      borderColor: "#D5D5D5",
+                                      "&:hover": {
+                                        backgroundColor: "#9c9c9c3b",
+                                      }
+                                    }}
+                                    onClick={() => {
+                                      editResource(index)
+                                    }}>
+                                    <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <g opacity="0.6">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.18966 8.95752L6.86609 9.28173L7.19785 7.01472L13.1733 1.1863C13.7233 0.649813 14.6151 0.649813 15.1651 1.1863C15.7151 1.72279 15.7151 2.59262 15.1651 3.12911L9.18966 8.95752Z" stroke="black" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M12.5089 1.83423L14.5007 3.77703" stroke="black" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M12.7599 9.02703V13.6062C12.7599 14.112 12.3396 14.5221 11.821 14.5221H2.43156C1.91299 14.5221 1.49261 14.112 1.49261 13.6062V4.44782C1.49261 3.94202 1.91299 3.53198 2.43156 3.53198H7.12628" stroke="black" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                      </g>
+                                    </svg>
+                                  </Button>
+                                  <Button
+                                    sx={{
+                                      backgroundColor: "#FAFBFD",
+                                      borderColor: "#D5D5D5",
+                                      "&:hover": {
+                                        backgroundColor: "#9c9c9c3b",
+                                      }
+                                    }}
+                                    onClick={() => {
+                                      deleteResource(index)
+                                    }}>
+                                    <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path fill-rule="evenodd" clip-rule="evenodd" d="M12.548 14.4308H4.66085C4.03857 14.4308 3.53412 13.9387 3.53412 13.3318V3.44067H13.6747V13.3318C13.6747 13.9387 13.1703 14.4308 12.548 14.4308Z" stroke="#EF3826" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                      <path d="M6.91446 11.1338V6.73779" stroke="#EF3826" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                      <path d="M10.2942 11.1338V6.73779" stroke="#EF3826" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                      <path d="M1.28076 3.4408H15.9283" stroke="#EF3826" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                      <path fill-rule="evenodd" clip-rule="evenodd" d="M10.2939 1.24268H6.91372C6.29144 1.24268 5.78699 1.73472 5.78699 2.34169V3.4407H11.4207V2.34169C11.4207 1.73472 10.9162 1.24268 10.2939 1.24268Z" stroke="#EF3826" stroke-width="1.09901" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+
+                                  </Button>
+                                </ButtonGroup>
+                                {/* <Box sx={{
                                   display: "flex",
                                   justifyContent: "center",
                                   gap: "1em"
                                 }}>
-                                  <ModeEditIcon sx={{
-                                    color: "rgb(99, 115, 129)",
-                                    fontSize: 20,
-                                    padding: ".5em",
-                                    backgroundColor: "#F4F6F8",
-                                    borderRadius: "50%",
-                                    transition: "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
-                                    "&:hover": {
-                                      backgroundColor: "#0045e6",
-                                      color: "#fff",
-                                      cursor: "pointer"
-                                    }
-                                  }} onClick={() => {
-                                    editResource(index)
-                                  }} />
-                                  <DeleteIcon sx={{
-                                    color: "rgb(99, 115, 129)", fontSize: 20, padding: ".5em", backgroundColor: "#F4F6F8",
-                                    borderRadius: "50%",
-                                    transition: "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
-                                    "&:hover": {
-                                      backgroundColor: "#0045e6",
-                                      color: "#fff",
-                                      cursor: "pointer"
-                                    },
-                                  }} onClick={() => {
-                                    deleteResource(index)
-                                  }} />
-                                </Box>
+
+                                  
+                                </Box> */}
                               </StyledTableCell>
                             </StyledTableRow>
                           ))}
@@ -924,17 +993,23 @@ const StaffComponent = () => {
 
               <Box
                 sx={{
-                  margin: "1em 3em",
+                  marginTop: "20px",
                   color: "#fff",
                   display: "flex",
                   alignItems: "center",
-                  marginLeft: "auto",
-                  marginRight: "auto",
                   gap: '1em',
-                  maxWidth: 1200,
+                  maxWidth: 970,
                 }}
               >
                 <CustomNextButton
+                  variant="contained"
+                  sx={{
+                    '&.MuiButton-contained.Mui-disabled': {
+                      border: "1px solid #959595",
+                      backgroundColor: "rgba(94, 94, 94, 0.12)",
+                      color: "rgba(0, 0, 0, 0.26)"
+                    }
+                  }}
                   onClick={() => {
                     nextQuestion();
                     setAddMore(false)
@@ -947,138 +1022,154 @@ const StaffComponent = () => {
               </Box>
             </>
           ) : (
-            <Grid container spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
-            //  sx={{ maxWidth: "100%" }}
-            >
-              <Grid item lg={8} md={12} sm={12} xs={12}
-                sx={{
-                  minHeight: "60vh"
-                }}>
-                <Box sx={{
-                  display: "flex", alignItems: "center",
-                  padding: "2.2em 0 1em 0",
-                  // gap: isNarrowScreen && actualResponses.responses.length > 0 ? "1.9em" : 0,
-                  gap: changeGap && actualResponses.responses.length > 0 ? "2.9em" : "0",
-                  // paddingLeft: changeGap && actualResponses.responses.length > 0 ? "4%" : 0,
-                  paddingBottom: actualResponses.responses.length > 0 ? "1em" : 0
-                }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      // gap: "1em",
-                      alignItems: "center",
-                      margin: "1em 0"
-                    }}
+            <>
+              <Box>
+                {displayQuestion
+                  ?
+                  <Grid
+                    container
+                    spacing={{ xs: 3, sm: 3, md: 12, lg: 12, xl: 12 }}
                   >
-                    {currentQuestionIndex > 0 && (
-                      <CustomBackButton onClick={backQuestion}>
-                        <KeyboardBackspaceIcon
-                          sx={{
-                            textAlign: "center",
-                            fontSize: "1.6em",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            display: "flex",
-                            width: "100%",
-                            transition: "all 0.3s ease-in-out",
-                            ":hover": {
-                              cursor: "pointer",
-                            },
-                          }}
-                        />
-                      </CustomBackButton>
-                    )}
-                  </Box>
-                  {
-                    displayQuestion
-                      ?
-                      <Box
-                        sx={{ paddingLeft: '7.4%' }}
-                      >
-                        <Typography sx={{ color: "#0045e6", fontSize: "1.2em", minWidth: "100px" }}>
-                          Question {actualResponses.responses.length}
-                        </Typography>
-                      </Box>
-                      : <Box
-                        sx={{ paddingLeft: "7.4%" }}
-                      >
-                        <CustomNormalTypography variant="h5" sx={{ color: "#89899C", fontWeight: 600, }}>
-                          Your Results
-                        </CustomNormalTypography>
-                      </Box>
-                  }
-                </Box>
-
-                {
-                  slideIn ?
-                    <Slide
-                      direction="down"
-                      in={slideIn}
-                      timeout={{
-                        enter: 1500,
-                        exit: 0,
-                      }}
-                      appear={true}
-                      onEnter={(node) => {
-                        node.style.transform = "translateY(-50px)";
-                      }}
+                    <Grid item
+                      lg={7} md={12} sm={12} xs={12}
                     >
-                      <div style={{ padding: "0 7.4%" }}>
-                        {
-                          displayQuestion
-                            ?
-                            <Question
-                              currentQuestion={currentQuestion}
-                              getResponsesData={getResponsesData}
-                              selectedOption={lastQuestionSelectedOption}
-                            />
-                            : <ShowSummary response={actualResponses ? actualResponses : []} />
-                        }
-                      </div>
-                    </Slide>
-                    : ""}
-              </Grid>
-              {/* <Box sx={{
-                borderRight: orientation === "vertical" ? "1px solid grey" : "0",
-                borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-                width: orientation !== "vertical" ? "90%" : "0",
-                margin: orientation !== "vertical" ? "auto" : "0",
-                marginTop: "5%",
-                height: displayQuestion && orientation === "vertical" ? "510px" : displayQuestion && orientation === "horizontal" ? "1px" : !displayQuestion && orientation === "vertical" ? "400px" : "1px"
+                      <QuestionsProgress currentQuestion={currentQuestionIndex + 1} totalQuestions={additionalQuesiton.length + 1} />
+                    </Grid>
+                    <Grid item lg={5} md={12} sm={12} xs={12} sx={{
+                    }}>
+                      <CustomCostBox>
+                        <CustomNormalTypography
+                          variant="h6"
+                          sx={{ color: "#fff", fontSize: "1.1em" }}
+                        >
+                          Estimated Cost
+                        </CustomNormalTypography>
+                        <CustomTypography>${totalCost}.00</CustomTypography>
+                      </CustomCostBox>
+                    </Grid>
+                  </Grid>
+                  : null}
+              </Box>
 
-              }}></Box> */}
-              <Grid item lg={3.9} md={12} sm={12} xs={12}>
-                {actualResponses.length || actualResponses.responses ? (
-                  <div style={{
-                    padding: orientation === "vertical" ? "0 0 3% 8%  " : "3% 2%",
-                    borderLeft: orientation === "vertical" ? "1px solid grey" : "0",
-                    borderTop: orientation !== "vertical" ? "1px solid grey" : "0",
-                    marginTop: "5%",
-                  }}>
-                    <Stepper
-                      responses={actualResponses.responses}
-                      changeActiveQuestion={changeActiveQuestion}
-                    />
-                    {
-                      displayQuestion
-                        ?
-                        <CustomCostBox>
-                          <CustomNormalTypography
-                            variant="h6"
-                            sx={{ color: "#fff", fontSize: "1.1em" }}
+              {displayQuestion
+                ?
+                <Grid container spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }
+                } >
+                  <Grid item lg={3.9} md={12} sm={12} xs={12}>
+                    <Box sx={{
+
+                    }}>
+                      {actualResponses.length || actualResponses.responses ? (
+                        <div style={{
+                        }}>
+                          <Stepper
+                            responses={actualResponses.responses}
+                            changeActiveQuestion={changeActiveQuestion}
+                          />
+                        </div>
+                      ) : null}
+                    </Box>
+                  </Grid>
+                  <Grid item lg={8} md={12} sm={12} xs={12}
+                    sx={{
+                    }}>
+                    <Box sx={{
+                      minHeight: "65vh",
+                      backgroundColor: '#F7F7F7',
+                      marginTop: '67.5px',
+                      paddingBottom: '50px'
+                    }}>
+                      <Box
+                        sx={{
+                          display: "flex", alignItems: "center",
+                          padding: '48px 0 0 0',
+                          gap: changeGap && actualResponses.length > 0 ? "2.9em" : "0",
+                          marginBottom: '40px'
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            position: "relative",
+                          }}
+                        >
+                          {currentQuestionIndex > 0 && (
+                            <CustomBackButton onClick={backQuestion}>
+                              <svg style={{
+                                textAlign: "center",
+                                fontSize: "1.6em",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                display: "flex",
+                                width: "100%",
+                                paddingRight: '5px',
+                                transition: "all 0.3s ease-in-out",
+                                ":hover": {
+                                  cursor: "pointer",
+                                },
+                              }} width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.623712 7.37629C0.436241 7.18876 0.330925 6.93445 0.330925 6.66929C0.330925 6.40412 0.436241 6.14982 0.623712 5.96229L6.28071 0.305288C6.37296 0.209778 6.4833 0.133596 6.60531 0.0811868C6.72731 0.0287778 6.85853 0.00119152 6.99131 3.77123e-05C7.12409 -0.0011161 7.25577 0.0241859 7.37867 0.0744668C7.50156 0.124748 7.61321 0.199001 7.70711 0.292893C7.801 0.386786 7.87525 0.498438 7.92553 0.621334C7.97581 0.744231 8.00112 0.87591 7.99996 1.00869C7.99881 1.14147 7.97122 1.27269 7.91881 1.39469C7.8664 1.5167 7.79022 1.62704 7.69471 1.71929L2.74471 6.66929L7.69471 11.6193C7.87687 11.8079 7.97766 12.0605 7.97539 12.3227C7.97311 12.5849 7.86794 12.8357 7.68253 13.0211C7.49712 13.2065 7.24631 13.3117 6.98411 13.314C6.72192 13.3162 6.46931 13.2154 6.28071 13.0333L0.623712 7.37629Z" fill="white" />
+                              </svg>
+                            </CustomBackButton>
+                          )}
+                        </Box>
+                        <Box
+                          sx={{ paddingLeft: actualResponses.responses.length > 0 ? "20px" : "50px", }}
+                        >
+                          <Typography sx={{ color: "#000", fontSize: "24px", fontWeight: 700, minWidth: "100px", }}>
+                            Question No: {actualResponses.responses.length + 1}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      {
+                        slideIn ?
+                          <Slide
+                            direction="down"
+                            in={slideIn}
+                            timeout={{
+                              enter: 1500,
+                              exit: 0,
+                            }}
+                            appear={true}
+                            onEnter={(node) => {
+                              node.style.transform = "translateY(-50px)";
+                            }}
                           >
-                            Estimated Cost
-                          </CustomNormalTypography>
-                          <CustomTypography>${totalCost}</CustomTypography>
-                        </CustomCostBox>
-                        : null
-                    }
-                  </div>
-                ) : null}
-              </Grid>
-            </Grid>
+                            <div style={{
+                              margin: "0 50px",
+                              backgroundColor: '#fff',
+                              border: '1px solid #E3EAEF',
+                              borderRadius: '10px',
+                              padding: '26px 34px'
+                            }} >
+
+                              <Question
+                                questionNumber={actualResponses.responses.length}
+                                currentQuestion={currentQuestion}
+                                getResponsesData={getResponsesData}
+                                selectedOption={lastQuestionSelectedOption}
+                              />
+
+                            </div>
+                          </Slide>
+                          : ""}
+                    </Box>
+                  </Grid>
+                </Grid >
+                :
+                <Box
+                  sx={{
+                    maxWidth: "1520px",
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                  }}
+                >
+                  <ShowSummary name={"Team"} response={actualResponses ? actualResponses : []} />
+                </Box>}
+            </>
           )}
-        </Box>
+        </Box >
       ) : (
         <Box
           sx={{

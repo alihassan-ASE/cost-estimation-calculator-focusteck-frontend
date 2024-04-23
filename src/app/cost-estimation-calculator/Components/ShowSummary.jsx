@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography, useMediaQuery, Modal } from "@mui/material";
+import { Box, Button, Typography, useMediaQuery, Breadcrumbs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import Link from "next/link";
 import Form from "../Components/Form";
 import { useRouter } from "next/navigation";
 
 const CustomMainBox = styled(Box)(({ theme }) => ({
+  margin: '5em 0 2em 0',
   [theme.breakpoints.down("md")]: {
     // margin: "1em 2em",
   },
@@ -18,17 +18,23 @@ const CustomMainBox = styled(Box)(({ theme }) => ({
 }));
 
 const CustomBox = styled(Box)(({ theme }) => ({
-  backgroundColor: "#1E1D28",
-  padding: "2em",
-  borderRadius: "10px",
-  // minWidth: "200px",
-  width: "100%",
+  backgroundColor: "#005DBD",
+  padding: "26px 25px",
+  borderRadius: "20px",
+  maxWidth: '480px',
+  // width: "45%",
+  margin: "1em 0",
+  height: '194px',
+  // width: "100%",
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
   [theme.breakpoints.down("md")]: {
     flexWrap: "wrap"
   },
   [theme.breakpoints.down("sm")]: {
     padding: "1em",
-    minWidth: "200px",
+    // minWidth: "200px",
   },
 }));
 
@@ -60,14 +66,14 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 
 const CustomButton = styled(Button)(({ theme }) => ({
   color: "#fff",
-  backgroundColor: "#0045e6",
-  border: "1px solid #0045e6",
+  backgroundColor: "#005DBD",
+  border: "1px solid #005DBD",
   boxShadow: "0 0 5px 0 rgba(163,163,163,0.75)",
   textTransform: "none",
   textDecoration: "none",
   fontSize: "0.9rem",
   textAlign: "center",
-  padding: ".3em 1em",
+  padding: "15px 25px",
   lineHeight: 1.5,
   fontWeight: "normal",
   borderRadius: "5px",
@@ -113,7 +119,7 @@ const CustomBottomBox = styled(Box)(({ theme }) => ({
 const CustomLinkBox = styled(Link)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  textDecoration: "none",
+  textDecoration: "underline",
   gap: ".5em",
   "&:hover": {
     "& svg": {
@@ -129,7 +135,7 @@ const CustomLinkBox = styled(Link)(({ theme }) => ({
 
 
 
-const ShowSummary = ({ response }) => {
+const ShowSummary = ({ name, response }) => {
 
   const hasResponse = window.localStorage.getItem('Response');
   const [timeline, setTimeline] = useState("");
@@ -151,13 +157,16 @@ const ShowSummary = ({ response }) => {
     setActualResponse(formData);
     let data = JSON.stringify(formData);
     if (data) {
+      localStorage.setItem("Name", name);
       localStorage.setItem("Response", data);
     }
   };
 
   useEffect(() => {
     let data = JSON.stringify(response);
+    let type = JSON.stringify(name);
     if (data) {
+      localStorage.setItem("Name", type);
       localStorage.setItem("Response", data);
     }
   }, [])
@@ -199,16 +208,36 @@ const ShowSummary = ({ response }) => {
       {
         !openForm
           ? <CustomMainBox>
+            <Box sx={{ marginBottom: '30px' }}>
+              <Typography variant="h1" sx={{
+                fontSize: '60px',
+                fontWeight: 700,
+                marginBottom: '20px'
+              }}>Estimate {name} Cost</Typography>
+              <div role="presentation">
+                <Breadcrumbs aria-label="breadcrumb">
+                  <Link underline="hover" color="black" href="/">Home</Link>
+                  <Link underline="hover" color="black" href="/cost-estimation-calculator">Cost Estimation Calculator</Link>
+                  <Link underline="hover" color="black" href={name === "Team" ? '/cost-estimation-calculator/staff' : '/cost-estimation-calculator/project'}>{name}</Link>
+                </Breadcrumbs>
+              </div>
+            </Box>
 
-            <Box>
+            <Box sx={{ marginBottom: "14px" }}>
               <CustomNormalTypography
                 variant="body1"
-                sx={{ color: "#373737", marginBottom: "14px " }}
+                sx={{ color: "#000", fontSize: "30px", fontWeight: 700, marginBottom: '25px' }}
+              >
+                Your Result
+              </CustomNormalTypography>
+              <CustomNormalTypography
+                variant="body1"
+                sx={{ color: "#373737", }}
               >
                 Based on the answers you provided, we've estimated a price range for
                 your software project:
               </CustomNormalTypography>
-              <CustomNormalTypography
+              {/* <CustomNormalTypography
                 variant="h4"
                 sx={{ color: "#1e1d28", marginBottom: "30px " }}
               >
@@ -217,239 +246,189 @@ const ShowSummary = ({ response }) => {
                   : null
                 }
 
-              </CustomNormalTypography>
+              </CustomNormalTypography> */}
             </Box>
 
-            <CustomInfoBox sx={{ display: "flex", gap: ".5em" }}>
+            <CustomInfoBox sx={{ display: "flex", gap: ".5em", maxWidth: '500px', flexDirection: 'column' }}>
               <CustomBox>
-                <CustomNormalTypography
-                  variant="h6"
-                  sx={{ color: "#fff", fontSize: "1.1em" }}
-                >
-                  Estimated Cost
-                </CustomNormalTypography>
-                <CustomTypography>${response.totalCost}</CustomTypography>
-              </CustomBox>
-              <CustomBox>
-                <CustomNormalTypography
-                  variant="h6"
-                  sx={{ color: "#fff", fontSize: "1.1em" }}
-                >
-                  Timeline
-                </CustomNormalTypography>
-                <CustomTypography sx={{ wordBreak: timeline.length > 4 ? "break-word" : "normal" }}>{timeline}</CustomTypography>
-              </CustomBox>
-            </CustomInfoBox>
-
-            <CustomBottomBox
-              sx={{
-                display: "flex",
-                gap: "2em",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginTop: "40px",
-              }}
-            >
-              <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
-                <Box
-                  onClick={() => { route.push("/cost-estimation-calculator/submit") }}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: ".5em",
-                    "&:hover": {
-                      cursor: "pointer",
-                      "& #slide": {
-                        backgroundColor: "#0045e6",
-                        borderColor: "#0045e6",
-                        transition: "background-color 0.5s ease-in-out, border-color 0.5s ease-in-out",
-                      },
-                      "& svg": {
-                        marginLeft: "5px",
-                        transition: "margin-left 0.5s ease-in-out",
-                      },
-                      "&:before": {
-                        transform: "scale(1, 1)",
-                        textIndent: 0,
-                      },
-                    },
-                  }}
-                >
-                  <Box>
-                    <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                      Check Your
+                <Box>
+                  <Box sx={{ display: "flex", alignItems: 'center', justifyContent: "space-between", marginBottom: '12px' }}>
+                    <CustomNormalTypography
+                      variant="h6"
+                      sx={{ color: "#fff", fontSize: "20px", fontWeight: 400, lineHeight: '13px' }}
+                    >
+                      Estimated Cost
                     </CustomNormalTypography>
-                    <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                      Response
+                    <CustomNormalTypography
+                      sx={{ color: "#fff", textDecoration: 'underline', lineHeight: '13px', ":hover": { cursor: "pointer" } }}
+                      onClick={() => { route.push("/cost-estimation-calculator/submit") }}
+                    >
+                      View Details
                     </CustomNormalTypography>
                   </Box>
+                  <CustomTypography sx={{ fontSize: "60px", fontWeight: 500, lineHeight: '50px' }}>${response.totalCost}.00</CustomTypography>
+                </Box>
 
-                  <Box
-                    sx={{
-                      color: "#fff",
-                      border: "3px solid #0045e6",
-                      backgroundColor: "#0045e6",
-                      borderRadius: "50%",
-                      width: "45px",
-                      height: "45px",
-                    }}
-                    id="slide"
+                <Box>
+                  <CustomNormalTypography
+                    variant="h6"
+                    sx={{ color: "#fff", fontSize: "16px", fontWeight: 250, marginBottom: '5px', lineHeight: '12px' }}
                   >
-                    <ArrowRightAltIcon
-                      sx={{
-                        padding: ".43em",
-                      }}
-                    />
+                    Timeline
+                  </CustomNormalTypography>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "space-between" }}>
+                    <CustomNormalTypography sx={{ color: '#fff', fontSize: '20px', fontWeight: 500 }}>Medium Term</CustomNormalTypography>
+                    <CustomNormalTypography sx={{ color: '#fff', wordBreak: timeline.length > 4 ? "break-word" : "normal", fontSize: '20px', fontWeight: 500 }}>{timeline}</CustomNormalTypography>
                   </Box>
                 </Box>
-                {
-                  isNarrowScreen
-                    ? <CustomLinkBox href="/cost-estimation-calculator"
-                    // sx={{ marginLeft: "auto" }}
-                    >
 
-                      <Box
-                        sx={{
-                          border: "3px solid #b8b8b8",
-                          borderRadius: "50%",
-                          width: "45px",
-                          height: "45px",
-                        }}
-                      >
-                        <RefreshIcon
-                          sx={{
-                            color: "#b8b8b8",
-                            padding: ".43em",
-                          }}
-                        />
-                      </Box>
-                      <Box>
-                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                          Calculate new
-                        </CustomNormalTypography>
-                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                          Project cost
-                        </CustomNormalTypography>
-                      </Box>
+              </CustomBox>
+
+              <CustomBottomBox
+                sx={{
+                  display: "flex",
+                  gap: "20PX",
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  marginTop: "24px",
+                }}
+              >
 
 
-                    </CustomLinkBox>
-                    : <CustomLinkBox href="/cost-estimation-calculator">
+                {hasResponse ? (
 
-                      <Box>
-                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                          Calculate new
-                        </CustomNormalTypography>
-                        <CustomNormalTypography sx={{ color: "#1E1D28" }}>
-                          Project cost
-                        </CustomNormalTypography>
-                      </Box>
-
-                      <Box
-                        sx={{
-                          border: "3px solid #b8b8b8",
-                          borderRadius: "50%",
-                          width: "45px",
-                          height: "45px",
-                        }}
-                      >
-                        <RefreshIcon
-                          sx={{
-                            color: "#b8b8b8",
-                            padding: ".43em",
-                          }}
-                        />
-                      </Box>
-                    </CustomLinkBox>
-                }
-
-              </Box>
-
-              {hasResponse ? (
-
-                <CustomButton
-                  onClick={handleForm}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                    "&:hover": {
-                      cursor: "pointer",
-                      backgroundColor: "#fff",
-                      boxShadow: "none",
-                      color: "#000",
-                      "& #forward": {
-                        marginRight: "30px",
-                        transition: "margin-right 0.2s ease-in-out",
-                      },
-                      "& svg": {
-                        backgroundColor: "#0045e6",
-
-                        opacity: 1,
-                        marginRight: "15px",
-                        transition:
-                          "margin-right 0.2s ease-in-out, border-color 0.2s ease-in-out",
-                        borderRadius: "50% 0 0 50%",
-                      },
-                      "&:before": {
-                        transform: "scale(1, 1)",
-                        textIndent: 0,
-                      },
-                    },
-                  }}
-                >
-
-                  <span id="forward">Start Project</span>{" "}
-                  <ArrowRightAltIcon
+                  <CustomButton
+                    onClick={handleForm}
                     sx={{
-                      marginLeft: "auto",
-                      opacity: 0,
-                      color: "#fff",
-                      position: "absolute",
-                      right: "-19px",
-                      padding: ".5em",
-                      borderRadius: "0 50% 50% 0",
-                    }}
-                  />{" "}
-                </CustomButton>
-              ) : (
-                <CustomButton
-                  disabled
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
+                      display: "flex",
+                      alignItems: "center",
+                      position: "relative",
+                      overflow: "hidden",
+                      "&:hover": {
+                        cursor: "pointer",
+                        backgroundColor: "#fff",
+                        boxShadow: "none",
+                        color: "#000",
+                        "& #forward": {
+                          marginRight: "30px",
+                          transition: "margin-right 0.2s ease-in-out",
+                        },
+                        "& svg": {
+                          backgroundColor: "#005DBD",
 
-                  <span style={{ textDecoration: "none" }} id="forward">Start Project</span>{" "}
-                  <ArrowRightAltIcon
-                    sx={{
-                      marginLeft: "auto",
-                      opacity: 0,
-                      color: "#fff",
-                      position: "absolute",
-                      right: "-19px",
-                      padding: ".5em",
-                      borderRadius: "0 50% 50% 0",
+                          opacity: 1,
+                          marginRight: "15px",
+                          transition:
+                            "margin-right 0.2s ease-in-out, border-color 0.2s ease-in-out",
+                          borderRadius: "50% 0 0 50%",
+                        },
+                        "&:before": {
+                          transform: "scale(1, 1)",
+                          textIndent: 0,
+                        },
+                      },
                     }}
-                  />{" "}
-                </CustomButton>
-              )}
-            </CustomBottomBox>
+                  >
+
+                    <span id="forward" style={{ fontSize: '16px', fontWeight: 400 }}>Start Project</span>{" "}
+                    <ArrowRightAltIcon
+                      sx={{
+                        marginLeft: "auto",
+                        opacity: 0,
+                        color: "#fff",
+                        position: "absolute",
+                        right: "-19px",
+                        padding: ".7em",
+                        borderRadius: "0 50% 50% 0",
+                      }}
+                    />{" "}
+                  </CustomButton>
+                ) : (
+                  <CustomButton
+                    disabled
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      position: "relative",
+                      overflow: "hidden",
+                    }}
+                  >
+
+                    <span style={{ textDecoration: "none", fontSize: '16px', fontWeight: 400 }} id="forward">Start Project</span>{" "}
+                    <ArrowRightAltIcon
+                      sx={{
+                        marginLeft: "auto",
+                        opacity: 0,
+                        color: "#fff",
+                        position: "absolute",
+                        right: "-19px",
+                        padding: ".7em",
+                        borderRadius: "0 50% 50% 0",
+                      }}
+                    />{" "}
+                  </CustomButton>
+                )}
+                <Box sx={{ display: "flex", gap: "2em", flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
+
+                  {
+                    isNarrowScreen
+                      ? <CustomLinkBox href="/cost-estimation-calculator"
+                      >
+                        <CustomNormalTypography sx={{ color: "#1E1D28", fontSize: '14px', fontWeight: 400 }}>
+                          Calculate Another Project
+                        </CustomNormalTypography>
+
+                      </CustomLinkBox>
+                      : <CustomLinkBox href="/cost-estimation-calculator">
+
+                        <CustomNormalTypography sx={{ color: "#1E1D28", fontSize: '14px', fontWeight: 400 }}>
+                          Calculate Another Project
+                        </CustomNormalTypography>
+
+                      </CustomLinkBox>
+                  }
+
+                </Box>
+              </CustomBottomBox>
+            </CustomInfoBox>
+
 
           </CustomMainBox>
-          : <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-          >
+          :
+          <Box>
+            <Box sx={{ marginBottom: '30px', display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <Typography variant="h1" sx={{
+                fontSize: '40px',
+                fontWeight: 700,
+                marginBottom: '20px'
+              }}>Estimate {name} Cost</Typography>
+              <div role="presentation">
+                <Breadcrumbs aria-label="breadcrumb">
+                  <Link underline="hover" color="black" href="/">Home</Link>
+                  <Link underline="hover" color="black" href="/cost-estimation-calculator">Cost Estimation Calculator</Link>
+                  <Link underline="hover" color="black" href={name === "Team" ? '/cost-estimation-calculator/staff' : '/cost-estimation-calculator/project'}>{name}</Link>
+                </Breadcrumbs>
+              </div>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "17px" }}>
+              <Box onClick={handleClose}
+                sx={{
+                  "&:hover": {
+                    cursor: "pointer"
+                  },
+                }}>
+                <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 12L12 22" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </Box>
+
+              <Typography variant="h6" sx={{ fontSize: "30px", fontWeight: 700, }}>
+                Get in Touch</Typography>
+            </Box>
             <Form response={response} getActualResponse={getActualResponse} />
-          </Modal>}
+          </Box>
+      }
     </>
   );
 };

@@ -19,16 +19,10 @@ import {
   Button,
   useMediaQuery,
   IconButton,
-  ThemeProvider,
-  CssBaseline,
   Paper,
   Grid,
   TextField
 } from "@mui/material";
-
-import { border, borderRadius, display } from "@mui/system";
-import { appTheme } from "../themes/theme.js";
-
 const RotatingIconButton = styled(IconButton)({
   transition: 'transform 0.3s ease-in-out',
 });
@@ -71,13 +65,7 @@ const CustomStartButton = styled(Button)(({ theme }) => ({
 
 const CustomBannerBox = styled(Box)(({ theme }) => ({
   color: "white",
-  // padding: "1em 0",
-  // background: `linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5),rgba(0,0,0,.5)), url('https://eleks.com/wp-content/uploads/calculator-header.jpg')`,
-  // backgroundRepeat: "no-repeat",
-  // backgroundSize: "cover",
-  // backgroundPosition: "center",
   height: "100%",
-  // height: '100vh'
 }));
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
@@ -109,10 +97,7 @@ const CustomNavbarButton = styled(Link)(({ theme }) => ({
   textTransform: "none",
   fontSize: "17px",
   textDecoration: "none",
-  // width: "max-content",
-  // paddingTop: 20,
   lineHeight: 1.5,
-  // fontWeight: 300,
   fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
@@ -199,7 +184,6 @@ const CustomFooterTypography = styled(Typography)(({ theme }) => ({
 
 const CustomAppBar = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
-  // padding: ".5% 5% 1% 4.4%",
   padding: '37px 0px 40px 0px',
   paddingLeft: '8.15%',
   paddingRight: '8.15%',
@@ -597,6 +581,7 @@ export default function RootLayout({ children }) {
                               position: "absolute",
                               left: "-19px",
                               borderRadius: "0 50% 50% 0",
+                              textTransform: "capitalize"
                             }}
                           />
                           <span id="start">Start Your Project</span>
@@ -677,7 +662,7 @@ export default function RootLayout({ children }) {
               <CustomBox
                 id="scroll-down"
                 sx={{
-                  minHeight: "100vh", display: "flex", alignItems: "center", paddingTop: "1em", paddingBottom: "3em",
+                  minHeight: "100vh", display: "flex", alignItems: "center",
                 }}
               >
                 {children}
@@ -696,7 +681,7 @@ export default function RootLayout({ children }) {
               <>
                 {!isNarrowScreen ? (
                   <Box sx={{
-                    paddingTop: "30px",
+                    // paddingTop: "30px",
                   }}>
                     <Box sx={{
                       backgroundColor: '#005DBD',
@@ -718,7 +703,12 @@ export default function RootLayout({ children }) {
                           backgroundColor: '#fff',
                           color: "#005DBD",
                           textTransform: 'capitalize',
-                          padding: '12px 43px'
+                          padding: '12px 43px',
+                          borderColor: '#fff',
+                          "&:hover": {
+                            backgroundColor: '#005DBD',
+                            color: '#fff'
+                          }
                         }}
                       >Schedule Call</Button>
                     </Box>
@@ -906,7 +896,7 @@ export default function RootLayout({ children }) {
                               <Grid container spacing={0} alignItems="center">
                                 <Grid item>
                                   <TextField
-                                    label="Subscribe Our Newsletter"
+                                    placeholder="Subscribe Our Newsletter"
                                     size="small"
                                     variant="outlined"
                                     fullWidth
@@ -931,6 +921,17 @@ export default function RootLayout({ children }) {
                                       },
                                       "& .MuiInputBase-input::placeholder": {
                                         color: "#9D9D9D",
+                                      },
+                                      "&:hover": {
+                                        borderColor: "#fff"
+                                      },
+                                      "&.MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#fff"
+
+                                      },
+                                      "&.MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#fff"
+
                                       }
                                     }}
                                   />

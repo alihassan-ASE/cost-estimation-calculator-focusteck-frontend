@@ -5,9 +5,8 @@ import { Typography, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
-  fontSize: "2em",
-  display: "flex",
-  flexWrap: "wrap",
+  fontSize: "24px",
+  fontWeight: 700,
   [theme.breakpoints.down("md")]: {
     fontSize: "1.5em",
   },
@@ -23,6 +22,7 @@ const page = (props) => {
     selectedOption,
     typeofUI,
     typeOfSelection,
+    questionNumber
   } = props;
 
   const [selectedData, setSelectedData] = useState([]);
@@ -70,20 +70,42 @@ const page = (props) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: "1em",
       }}
     >
-      <CustomTypography variant="h4">
-        {currentQuestion?.question}
-      </CustomTypography>
-      <Typography variant="body1" sx={{ paddingBottom: "1em", color: "#838383" }}>Please choose from the options below.</Typography>
-      <ShowOptions
-        typeofUI={typeofUI || currentQuestion?.typeOfUI}
-        typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}
-        options={currentQuestion?.options}
-        selectedOptionPassToParent={selectedOptionPassToParent}
-        selectedOption={selectedOption}
-      />
+      <Box sx={{ display: 'flex', gap: '20px' }}>
+        <Box sx={{
+          width: '48px',
+          height: '48px',
+          minWidth: '48px',
+          minHeight: '48px',
+          backgroundColor: "#005DBD",
+          fontSize: '20px',
+          borderRadius: '50%',
+          color: "#fff",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: "center"
+        }}>
+          <span style={{ fontSize: '28px', }}>
+            {questionNumber + 1}
+          </span>
+        </Box>
+        <Box>
+          <CustomTypography variant="h4">
+            {currentQuestion?.question}
+          </CustomTypography>
+          <Typography variant="body1" sx={{ paddingTop: "10px", paddingBottom: "1.5em", color: "#212B36", fontSize: '12px', fontWeight: 400 }}>Please choose from the options below.</Typography>
+        </Box>
+      </Box>
+      <Box sx={{ marginLeft: '70px' }}>
+        <ShowOptions
+          typeofUI={typeofUI || currentQuestion?.typeOfUI}
+          typeOfSelection={typeOfSelection || currentQuestion?.typeofselection}
+          options={currentQuestion?.options}
+          selectedOptionPassToParent={selectedOptionPassToParent}
+          selectedOption={selectedOption}
+        />
+      </Box>
     </Box>
   );
 };

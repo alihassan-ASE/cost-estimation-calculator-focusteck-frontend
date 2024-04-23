@@ -2,7 +2,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, Typography, Button, Chip, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import CloseIcon from '@mui/icons-material/Close';
 import QuestionsComponent from "./Questions";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -16,6 +15,13 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: "1px solid #ebebeb",
   padding: "1em 1em",
   borderRadius: "2px",
+}));
+
+const CustomDropDownHeading = styled(Typography)(({ theme }) => ({
+  fontSize: "14px",
+  lineHeight: "21px",
+  fontWeight: 400,
+  marginBottom: "8px"
 }));
 
 const StaffResource = ({
@@ -104,32 +110,52 @@ const StaffResource = ({
   }, [options]);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        // width: 290,
+        // width: "100%"
+        // maxWidth: 700,
+        padding: "0 21px 0 21px"
+      }}
+    >
+      <Typography variant="h4"
+        sx={{
+          fontSize: "30px",
+          fontWeight: 700,
+          lineHeight: "40px",
+          textAlign: "center",
+          textTransform: "capitalize",
+          marginBottom: '35px'
+        }}>
+        Please Select A Team as per your requirements
+      </Typography>
       {
         newOption.length
           ?
           <Box
             sx={{
-              // width: 290,
-              width: "100%"
+              // maxWidth: 700
             }}
           >
-            <Box sx={{ display: "flex", flexDirection: "column", rowGap: "10px" }}>
 
-              <QuestionsComponent
-                typeOfSelection={typeOfSelection}
-                question={question}
-                typeofUI={type}
-                options={newOption}
-                label={label ? label : "Specialist"}
-                disable={false}
-                selectedOption={currentResource?.resource}
-                selectedOptionPassToParent={getData}
-              />
+            <Box sx={{ display: "flex", flexDirection: "column", rowGap: "30px" }}>
+              <Box>
+                <CustomDropDownHeading variant="h6">Specialist</CustomDropDownHeading>
+                <QuestionsComponent
+                  typeOfSelection={typeOfSelection}
+                  question={question}
+                  typeofUI={type}
+                  options={newOption}
+                  label={label ? label : "Specialist"}
+                  disable={false}
+                  selectedOption={currentResource?.resource}
+                  selectedOptionPassToParent={getData}
+                />
+              </Box>
 
               {
                 showDropDown ?
-                  <>
+                  <Box>
                     {
                       options.find((data) => {
                         if (data.typeOfResource === currentResource.resource) {
@@ -137,6 +163,8 @@ const StaffResource = ({
                         }
                       })
                     }
+                    <CustomDropDownHeading variant="h6">Framework</CustomDropDownHeading>
+
                     < QuestionsComponent
                       typeOfSelection={typeOfSelection}
                       question={question}
@@ -147,66 +175,79 @@ const StaffResource = ({
                       selectedOption={currentResource?.resourceOption}
                       selectedOptionPassToParent={getData}
                     />
-                  </>
+                  </Box>
                   : null
               }
 
               {
                 showDropDown ?
+                  <Box>
+                    <CustomDropDownHeading variant="h6">Seniority Level</CustomDropDownHeading>
 
-                  <QuestionsComponent
-                    typeOfSelection={typeOfSelection}
-                    question={question}
-                    typeofUI={"DropDown"}
-                    options={seniorityLevelOptions}
-                    label={label ? label : "Seniority Level"}
-                    disable={currentResource.resourceOption ? false : true}
-                    selectedOption={currentResource?.seniorityLevel}
-                    selectedOptionPassToParent={getData}
-                  />
+                    <QuestionsComponent
+                      typeOfSelection={typeOfSelection}
+                      question={question}
+                      typeofUI={"DropDown"}
+                      options={seniorityLevelOptions}
+                      label={label ? label : "Seniority Level"}
+                      disable={currentResource.resourceOption ? false : true}
+                      selectedOption={currentResource?.seniorityLevel}
+                      selectedOptionPassToParent={getData}
+                    />
+                  </Box>
                   : null}
 
               {
                 showDropDown ?
-                  <QuestionsComponent
-                    typeOfSelection={typeOfSelection}
-                    question={question}
-                    typeofUI={"DropDown"}
-                    options={numOfResourcesOptions[currentResource.seniorityLevel]}
-                    label={label ? label : "Number of Resources"}
-                    disable={currentResource.seniorityLevel ? false : true}
-                    selectedOption={currentResource?.numOfResources}
-                    selectedOptionPassToParent={getData}
-                  />
+                  <Box>
+                    <CustomDropDownHeading variant="h6">Number of Resources</CustomDropDownHeading>
+
+                    <QuestionsComponent
+                      typeOfSelection={typeOfSelection}
+                      question={question}
+                      typeofUI={"DropDown"}
+                      options={numOfResourcesOptions[currentResource.seniorityLevel]}
+                      label={label ? label : "Number of Resources"}
+                      disable={currentResource.seniorityLevel ? false : true}
+                      selectedOption={currentResource?.numOfResources}
+                      selectedOptionPassToParent={getData}
+                    />
+                  </Box>
                   : null}
 
 
             </Box>
 
             {/* Save Button */}
-            <Box sx={{ margin: "1em 0 0 0", display: "flex", justifyContent: "flex-end" }}>
+            <Box sx={{ margin: "32px 0 0 0", display: "flex", justifyContent: "center" }}>
               <Button
                 sx={{
                   minWidth: "120px",
-                  marginLeft: "auto",
-                  color: "#000",
-                  backgroundColor: "#fff",
-                  border: "1px solid #fff",
+                  textTransform: "capitalize",
+                  color: "#fff",
+                  backgroundColor: "#005DBD",
+                  border: "1px solid #005DBD",
+                  padding: '15px 46.5',
                   "&:hover": {
-                    color: "#fff",
-                    backgroundColor: "#0045e6",
-                    border: "1px solid #0045e6",
+                    color: "#000",
+                    backgroundColor: "#fff",
+                    border: "1px solid #fff",
                   },
                   "&:active": {
-                    color: "#fff",
-                    backgroundColor: "#0045e6",
-                    border: "1px solid #0045e6",
+                    color: "#000",
+                    backgroundColor: "#fff",
+                    border: "1px solid #fff",
                   },
                   "&:focus": {
-                    color: "#fff",
-                    backgroundColor: "#0045e6",
-                    border: "1px solid #0045e6",
+                    color: "#000",
+                    backgroundColor: "#fff",
+                    border: "1px solid #fff",
                   },
+                  '&.MuiButton-contained.Mui-disabled': {
+                    border: "1px solid #959595",
+                    backgroundColor: "rgba(94, 94, 94, 0.12)",
+                    color: "rgba(0, 0, 0, 0.26)"
+                  }
                 }}
                 disabled={
                   currentResource.resource &&

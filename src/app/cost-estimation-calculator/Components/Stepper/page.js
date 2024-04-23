@@ -19,7 +19,7 @@ export default function VerticalLinearStepper(props) {
 
   const [CustomScrollableContainer] = useState(
     styled.div({
-      maxHeight: "45vh",
+      maxHeight: "63.5vh",
       Width: "100%",
       minHeight: "70px",
       margin: "1em 0",
@@ -128,13 +128,15 @@ export default function VerticalLinearStepper(props) {
         padding: "1em 0em .5em 0",
       }}
     >
-      <Typography sx={{ fontWeight: "bold" }}>SUMMARY</Typography>
+      <Typography sx={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>Summary</Typography>
       <Box
         sx={{
-          height: "45vh",
-          paddingLeft: "0em",
-          marginRight: "5px",
+          height: "63.5vh",
+          // paddingLeft: "0em",
+          // marginRight: "5px",
           maxWidth: "100%",
+          backgroundColor: '#F7F7F7',
+          padding: '30px 0 30px 30px'
           // marginBottom: isMobileScreen ? "2em" : 0
         }}
       >
@@ -142,10 +144,10 @@ export default function VerticalLinearStepper(props) {
           <Stepper
             ref={containerLabelRef}
             sx={{
-              borderColor: "#0045e6",
+              borderColor: "#005DBD",
               position: "relative",
               "& .MuiStepLabel-root": {
-                padding: "0em 0em 1.5em 0",
+                padding: "0.6em 0em 1.5em 0",
                 textAlign: "start",
                 display: "flex",
                 alignItems: "flex-start",
@@ -182,17 +184,17 @@ export default function VerticalLinearStepper(props) {
                         position: "absolute",
                         display: "block",
                         top: "0px",
-                        zIndex: -100,
+                        zIndex: 1,
                         height: "100%",
                         marginLeft: '13px'
                       }}
                       sx={{
                         "& .MuiStepConnector-line": {
-                          borderLeftWidth: "2px",
-                          marginLeft: "-3px",
+                          borderLeftWidth: "3px",
+                          marginLeft: "6px",
                           height: "100%",
 
-                          borderColor: index < activeStep - 1 ? "#0045e6" : "#838383",
+                          borderColor: index < activeStep - 1 ? "#005DBD" : "#EEEEEE",
                           opacity: 1,
                           animation: index > questionsArray.length - 2 ? `${heightTransition} .5s linear` : null,
                         }
@@ -209,10 +211,12 @@ export default function VerticalLinearStepper(props) {
                         color: "#fff",
                         padding: ".3em",
                         borderRadius: "50%",
-                        backgroundColor: index < activeStep ? "#0045e6" : "#838383",
+                        backgroundColor: index < activeStep ? "#005DBD" : "#EEEEEE",
                         marginRight: "7px",
-                        width: ".8em",
-                        height: ".8em",
+                        width: "29px",
+                        height: "29px",
+                        minWidth: '29px',
+                        minHeight: '29px',
                         textAlign: "center",
                         fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                           ","
@@ -220,13 +224,15 @@ export default function VerticalLinearStepper(props) {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-
+                        zIndex: 100,
                       }}
                     >
                       <Typography sx={{
-                        fontSize: "11px",
+                        fontSize: "12px",
+                        fontWeight: 400,
                         lineHeight: '0',
-                        letterSpacing: '0'
+                        letterSpacing: '0',
+                        color: index < activeStep ? "#ffffff" : "#969696",
                       }}>
                         {index + 1}
                       </Typography>
@@ -239,13 +245,13 @@ export default function VerticalLinearStepper(props) {
                               padding: 0,
                               width: "100%",
                               "& .MuiStepIcon-root.Mui-active": {
-                                color: "#0045e6",
+                                color: "#005DBD",
                               },
                               "& .MuiStepIcon-root": {
                                 width: "1.2rem",
                                 height: "1.2rem",
                                 alignItems: "start",
-                                color: index < activeStep ? "#0045e6" : "#838383",
+                                color: index < activeStep ? "#005DBD" : "#EEEEEE",
                               },
                               "& .MuiStepLabel-label": {
                                 fontSize: "0.7rem",
@@ -265,12 +271,33 @@ export default function VerticalLinearStepper(props) {
                               }}>
                               {responses[index].resources.map((resource, resourceIndex) => (
                                 <div key={resourceIndex}>
-                                  <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", alignItems: "start", animation: `${newStepperRowTransition} .9s ease` }}>
+                                  <Box sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    // width: "100%",
+                                    justifyContent: "space-between",
+                                    alignItems: "start",
+                                    marginLeft: '17px',
+                                    animation: `${newStepperRowTransition} .9s ease`
+                                  }}>
                                     <Box sx={{ width: "40%", }}>
-                                      <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}>{resource.resource}</Typography>
+                                      <Typography sx={{
+                                        fontWeight: 700,
+                                        fontSize: '12px',
+                                        textTransform: "capitalize",
+                                        color: "#000",
+                                        fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                          ","
+                                        ),
+                                        marginBottom: '10px'
+                                      }}>{resource.resource}</Typography>
                                     </Box>
-                                    <Box sx={{ width: "55%", marginLeft: "2em" }}>
-                                      <Typography paddingRight={"6px"} textAlign={"left"} fontSize={"13px"} fontWeight={600} color={"black"} sx={{
+                                    <Box
+                                      sx={{
+                                        width: "55%",
+                                        // marginLeft: "2em"
+                                      }}>
+                                      <Typography paddingRight={"6px"} textAlign={"left"} fontSize={"12px"} fontWeight={400} color={"black"} sx={{
                                         fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                                           ","
                                         ),
@@ -292,13 +319,13 @@ export default function VerticalLinearStepper(props) {
                               justifyContent: "space-between",
                               width: "100%",
                               "& .MuiStepIcon-root.Mui-active": {
-                                color: "#0045e6",
+                                color: "#005DBD",
                               },
                               "& .MuiStepIcon-root": {
                                 width: "1.2rem",
                                 height: "1.2rem",
                                 alignItems: "start",
-                                color: index < activeStep ? "#0045e6" : "#838383",
+                                color: index < activeStep ? "#005DBD" : "#EEEEEE",
 
                               },
                               "& .MuiStepLabel-label": {
@@ -310,7 +337,7 @@ export default function VerticalLinearStepper(props) {
                                 padding: "0"
                               },
                               "& .MuiSvgIcon-root-MuiStepIcon-root .Mui-completed": {
-                                backgroundColor: "#0045e6"
+                                backgroundColor: "#005DBD"
                               },
                               "& .MuiBox-root": {
                                 alignItems: "start"
@@ -323,17 +350,41 @@ export default function VerticalLinearStepper(props) {
                           >
                             {(responses[index].selectedOption || responses[index].selectedData) && (
                               <div>
-                                <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", animation: `${newStepperRowTransition} .9s ease` }}>
+                                <Box sx={{
+                                  display: "flex",
+                                  // width: "100%",
+                                  // justifyContent: "space-between",
+                                  // alignItems: "center",
+                                  flexDirection: 'column',
+                                  marginLeft: '17px',
+
+                                  animation: `${newStepperRowTransition} .9s ease`
+                                }}>
                                   <Box sx={{ width: "40%" }}>
-                                    <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500}> {responses[index].question?.label
+                                    <Typography sx={{
+                                      fontWeight: 700,
+                                      fontSize: '12px',
+                                      textTransform: "capitalize",
+                                      color: "#000",
+                                      fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                        ","
+                                      ),
+                                      marginBottom: '10px'
+
+                                    }}> {responses[index].question?.label
                                       ? responses[index].question.label
                                       : responses[index].label}
                                     </Typography>
                                   </Box>
-                                  <Box sx={{ width: "55%", marginLeft: "2em" }} >
+                                  <Box
+                                    sx={{
+                                      width: "55%",
+                                      // marginLeft: "2em"
+                                    }}
+                                  >
                                     {(responses[index].selectedOption || responses[index].selectedData).map((selected, key) => (
                                       <div key={key}>
-                                        <Typography fontSize={"13px"} textTransform={"capitalize"} fontWeight={600} color={"black"} paddingRight={"6px"} sx={{
+                                        <Typography fontSize={"12px"} textTransform={"capitalize"} fontWeight={400} color={"black"} paddingRight={"6px"} sx={{
                                           fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                                             ","
                                           ),
@@ -358,13 +409,13 @@ export default function VerticalLinearStepper(props) {
                           justifyContent: "space-between",
                           width: "100%",
                           "& .MuiStepIcon-root.Mui-active": {
-                            color: "#0045e6",
+                            color: "#005DBD",
                           },
                           "& .MuiStepIcon-root": {
                             width: "1.2rem",
                             height: "1.2rem",
                             alignItems: "start",
-                            color: index < activeStep ? "#0045e6" : "#838383",
+                            color: index < activeStep ? "#005DBD" : "#EEEEEE",
 
                           },
                           "& .MuiStepLabel-label": {
@@ -373,7 +424,7 @@ export default function VerticalLinearStepper(props) {
                             padding: "0px"
                           },
                           "& .MuiSvgIcon-root-MuiStepIcon-root .Mui-completed": {
-                            backgroundColor: "#0045e6"
+                            backgroundColor: "#005DBD"
                           },
                           "& .MuiBox-root": {
                             alignItems: "start"
@@ -381,7 +432,12 @@ export default function VerticalLinearStepper(props) {
                         }}
                         cursor="pointer"
                       >
-                        <Typography fontSize={"14px"} textTransform={"capitalize"} fontWeight={500} paddingRight={"6px"} sx={{
+                        <Typography sx={{
+                          fontWeight: 700,
+                          fontSize: '12px',
+                          textTransform: "capitalize",
+                          color: index < activeStep ? "#000000" : "#969696",
+                          marginLeft: '17px',
                           fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                             ","
                           ),
