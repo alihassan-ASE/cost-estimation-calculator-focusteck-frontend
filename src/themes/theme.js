@@ -1,6 +1,32 @@
 import { createTheme } from "@mui/material/styles";
+// import AeonikRegular from "../fonts/Aeonik/Aeonik-Regular.otf";
 
-export const appTheme = createTheme({
+const appTheme = createTheme({
+    typography: {
+        fontFamily: 'Aeonik, Poppins',
+    },
+    components: {
+        MuiCssBaseline: {
+            styleOverrides:
+                `@font-face {
+                    font-family: 'Aeonik';
+                    src: url('../fonts/Aeonik/Aeonik-Regular.otf') format('opentype');
+                }
+                @font-face {
+                    font-family: 'Aeonik';
+                    src: url('../fonts/Aeonik/Aeonik-Light.otf') format('opentype');
+                }
+                @font-face {
+                    font-family: 'Aeonik';
+                    src: url('../fonts/Aeonik/Aeonik-Medium.otf') format('opentype');
+                }
+                @font-face {
+                    font-family: 'Aeonik';
+                    src: url('../fonts/Aeonik/Aeonik-Bold.otf') format('opentype');
+                }
+                `,
+        },
+    },
     palette: {
         primary: {
             main: '#005DBD'
@@ -16,3 +42,5 @@ export const appTheme = createTheme({
         }
     },
 });
+
+export default appTheme;

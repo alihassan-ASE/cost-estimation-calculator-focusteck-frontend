@@ -14,7 +14,7 @@ import { styled } from "@mui/material/styles";
 const CustomTypography = styled(Typography)(({ theme }) => ({
   fontSize: 16,
   fontWeight: "normal",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   [theme.breakpoints.down("md")]: {
@@ -117,11 +117,11 @@ const RadioButtonComponent = ({
               control={<Radio />}
               label={
                 <CustomTypography variant="body1">
-                  <span>{data.opt ? data.opt : data}</span>&nbsp;
-                  <span className="price">
+                  <Typography variant="body1">{data.opt ? data.opt : data}</Typography>&nbsp;
+                  <Typography variant="body1" className="price">
                     {" "}
                     {data.price ? `($${data.price})` : null}
-                  </span>
+                  </Typography>
                 </CustomTypography>
               }
               onClick={() => {

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -23,82 +22,18 @@ import {
   Grid,
   TextField
 } from "@mui/material";
+
+
 const RotatingIconButton = styled(IconButton)({
   transition: 'transform 0.3s ease-in-out',
 });
-
-const CustomStartButton = styled(Button)(({ theme }) => ({
-  width: "300px",
-  height: "50px",
-  backgroundColor: "#005dbd",
-  padding: '15px 25px',
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
-  "&:hover": {
-    backgroundColor: "#fff",
-    boxShadow: "none",
-    color: "#000",
-    "& #start": {
-      marginLeft: "30px",
-      transition: "margin-left 0.2s ease-in-out",
-    },
-    "& svg": {
-      opacity: 1,
-      marginLeft: "15px",
-      transition: "margin-left 0.2s ease-in-out",
-      borderRadius: "0 50% 50% 0",
-    },
-    "&:before": {
-      transform: "scale(1, 1)",
-      textIndent: 0,
-    },
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: 14,
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: 10,
-    width: "160px",
-  },
-}));
-
-const CustomBannerBox = styled(Box)(({ theme }) => ({
-  color: "white",
-  height: "100%",
-}));
-
-const CustomTypography = styled(Typography)(({ theme }) => ({
-  color: "black",
-  maxWidth: 600,
-  fontWeight: 700,
-  fontSize: '50px',
-  marginBottom: '30px',
-  fontFamily: ["Aeonik", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-    ","
-  ),
-  [theme.breakpoints.down("md")]: {
-    fontSize: "3em",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "1.5em",
-  },
-}));
-
-const CustomParagraph = styled(Typography)(({ theme }) => ({
-  maxWidth: 711,
-  color: "black",
-  fontSize: '20px',
-  marginBottom: '59px'
-
-}));
 
 const CustomNavbarButton = styled(Link)(({ theme }) => ({
   textTransform: "none",
   fontSize: "17px",
   textDecoration: "none",
   lineHeight: 1.5,
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   position: "relative",
@@ -130,7 +65,7 @@ const CustomBottomHeading = styled(Typography)(({ theme }) => ({
   fontSize: "20px",
   width: "max-content",
   transition: "all 0.25s ease-in-out 0.25s",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
 }));
@@ -144,7 +79,7 @@ const CustomBottomLink = styled(Link)(({ theme }) => ({
   width: "max-content",
   fontWeight: 500,
   paddingBottom: "14px",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   position: "relative",
@@ -245,6 +180,7 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     if (baseRoute === "/") {
       setScrollState(false)
+      route.push("/cost-estimation-calculator")
     } else if (baseRoute === "/cost-estimation-calculator") {
       setScrollState(true)
     }
@@ -507,160 +443,11 @@ export default function RootLayout({ children }) {
                 Blog
               </CustomNavbarButton>
             </Box>
-
-            <CustomBannerBox>
-              <Box sx={{
-                backgroundColor: "#F0F2FF",
-                margin: '0em 2.15em',
-                borderRadius: '2em',
-                height: '100%'
-
-              }}>
-                <Box
-                  sx={{
-                    maxWidth: "1520px",
-                    marginRight: "auto",
-                    marginLeft: "auto",
-
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                    height: '100%'
-                  }}
-                >
-                  <Box
-                    sx={{
-                      padding: "8.6% 0 7% 6.5%",
-                      display: "flex",
-                      flexDirection: "column",
-                      marginRight: '-61px',
-                      // gap: "2em",
-                    }}
-                  >
-                    <CustomTypography variant="h3">
-                      Estimate the cost of your <br /> Software Project
-                    </CustomTypography>
-                    <CustomParagraph>
-                      Answer simple questions, and you’ll receive an instant cost
-                      estimation to help you get your project moving. Don't let
-                      cost uncertainties hold you back. Define your budget
-                      effortlessly with just a few clicks.
-                    </CustomParagraph>
-
-                    <Box
-                      sx={{
-                        display: "flex",
-                        // justifyContent: "center",
-                        // alignItems: "center",
-                      }}
-                    >
-                      <Link
-                        href={href}
-                        scroll={scrollState}
-                        style={{
-                          textDecoration: "none",
-                          scrollBehavior: "smooth"
-                        }}
-                      >
-                        <CustomStartButton
-                          variant="contained"
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            position: "relative",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <ArrowForwardIcon
-                            sx={{
-                              marginRight: "auto",
-                              opacity: 0,
-                              backgroundColor: "#005dbd",
-                              color: "#fff",
-                              padding: "1em",
-                              position: "absolute",
-                              left: "-19px",
-                              borderRadius: "0 50% 50% 0",
-                              textTransform: "capitalize"
-                            }}
-                          />
-                          <span id="start">Start Your Project</span>
-                        </CustomStartButton>
-                      </Link>
-                    </Box>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      padding: "8.6% 5.5% 0 0",
-                      width: '50%',
-                      height: '82vh',
-                      display: 'grid',
-                      gap: "1rem",
-                      gridTemplateColumns: 'repeat(3, 1fr)',
-                      gridTemplateRows: '10% 11% 2fr 11% 11% 1.5fr',
-                      marginLeft: '-153px',
-
-                    }}
-                  >
-                    <Box sx={{
-                      gridRow: '4 / 7',
-                      background: `url('https://i.ibb.co/GxZn3hj/pic5.jpg')`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: 'bottom',
-                      backgroundSize: "141% 153%", borderTopLeftRadius: '2rem', borderTopRightRadius: '2rem', width: 219
-                    }}>
-                    </Box>
-                    <Box
-                      sx={{
-                        gridRow: '2 / 4', gridColumn: '2 / 3',
-                        borderRadius: '2rem',
-                        width: 219,
-                        background: `url('https://i.ibb.co/CbF8F4b/pic1.jpg')`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: 'center',
-                        backgroundSize: "cover",
-                      }}
-                    >
-                    </Box>
-                    <Box sx={{
-                      gridRow: '4 / 6', background: `url('https://i.ibb.co/gyrcSCy/pic3.jpg')`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: 'left bottom',
-                      backgroundSize: "170%",
-                      borderRadius: '2rem', width: 219
-                    }}>
-                    </Box>
-                    <Box sx={{ gridRow: '6 / 7', backgroundColor: '#005dbd', border: '1px solid #005dbd', borderTopLeftRadius: '2rem', borderTopRightRadius: '2rem', width: 219 }}>
-                    </Box>
-                    <Box sx={{ gridRow: '1 / 3', gridColumn: '3 / 4', backgroundColor: '#005dbd', border: '1px solid #005dbd', borderRadius: '2rem', width: 219 }}>
-                    </Box>
-                    <Box sx={{
-                      gridRow: '3 / 5', gridColumn: '3 / 4',
-                      background: `url('https://i.ibb.co/LdhYy51/pic2.jpg')`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: 'center',
-                      backgroundSize: "cover", borderRadius: '2rem', width: 219
-                    }}>
-                    </Box>
-                    <Box sx={{
-                      gridRow: '5 / 7', gridColumn: '3 / 4',
-                      background: `url('https://i.ibb.co/d2pXq1b/pic4.jpg')`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: 'right',
-                      backgroundSize: "cover", borderTopLeftRadius: '2rem', borderTopRightRadius: '2rem', width: 219
-                    }}>
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            </CustomBannerBox>
           </Box >
           {
             baseRoute === "/" ? null : baseRoute ===
               "/cost-estimation-calculator" ? (
               <CustomBox
-                id="scroll-down"
                 sx={{
                   minHeight: "100vh", display: "flex", alignItems: "center",
                 }}
@@ -779,9 +566,9 @@ export default function RootLayout({ children }) {
                           </Box>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: 'auto', fontSize: '18px' }}>
-                          <span>
+                          <Typography variant="body1">
                             Drops us a line
-                          </span>
+                          </Typography>
                           <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 5.77887C0 10.5812 4.02 13.1398 6.962 15.4308C8 16.2386 9 17 10 17C11 17 12 16.2396 13.038 15.4299C15.981 13.1408 20 10.5812 20 5.77985C20 0.97757 14.5 -2.42837 10 2.18925C5.5 -2.42936 0 0.976583 0 5.77887Z" fill="#FAC935" />
                           </svg>
@@ -905,34 +692,20 @@ export default function RootLayout({ children }) {
                                       borderRadius: '4px',
                                       border: 'none',
                                       borderColor: '#fff',
-                                      borderTopRightRadius: 0, borderBottomRightRadius: 0,
-                                      '& .MuiInputBase-input MuiOutlinedInput-input': {
-                                        borderTopRightRadius: 0, borderBottomRightRadius: 0,
-                                        border: 'none',
+                                      borderTopRightRadius: 0,
+                                      borderBottomRightRadius: 0,
 
-                                      },
-                                      "& .MuiOutlinedInput - root.MuiOutlinedInput - notchedOutline": {
-                                        border: 'none'
-                                      },
-                                      "& .css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
-                                        borderTopRightRadius: 0, borderBottomRightRadius: 0,
-                                        border: 'none',
 
-                                      },
                                       "& .MuiInputBase-input::placeholder": {
                                         color: "#9D9D9D",
                                       },
                                       "&:hover": {
                                         borderColor: "#fff"
                                       },
-                                      "&.MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                                      "&.MuiFormControl-root .MuiInputBase-root .MuiOutlinedInput-notchedOutline": {
+                                        border: 'none',
                                         borderColor: "#fff"
-
                                       },
-                                      "&.MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "#fff"
-
-                                      }
                                     }}
                                   />
                                 </Grid>
@@ -1110,6 +883,6 @@ export default function RootLayout({ children }) {
           }
         </Box >
       </body >
-    </html >
+    </html>
   );
 }

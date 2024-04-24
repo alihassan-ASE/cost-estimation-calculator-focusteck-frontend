@@ -132,20 +132,9 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
   fontSize: "14px",
   fontWeight: 400,
   textTransform: 'capitalize',
-  fontFamily: [
-    "Proxima Nova",
-    "Poppins",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(","),
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
 }));
 
 const CustomBackButton = styled(Button)(({ theme }) => ({
@@ -199,7 +188,7 @@ const CustomCostBox = styled(Box)(({ theme }) => ({
 }));
 
 const CustomNormalTypography = styled(Typography)(({ theme }) => ({
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
 }));
@@ -209,12 +198,15 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
   fontSize: "60px",
   fontWeight: 500,
   lineHeight: '50px',
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
   [`&.${tableCellClasses.head}`]: {
     color: "black",
   },

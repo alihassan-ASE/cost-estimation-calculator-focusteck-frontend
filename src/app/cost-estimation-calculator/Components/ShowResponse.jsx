@@ -66,7 +66,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
   fontSize: "24px",
   fontWeight: 700,
   // lineHeight: "20px",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   [theme.breakpoints.down("md")]: {
@@ -168,7 +168,7 @@ const ShowResponse = () => {
                 <Accordion
                   TransitionProps={{ timeout: 900 }}
                   sx={{
-                    backgroundColor: "#DDDDDD",
+                    backgroundColor: "#e6e6e68c",
                     padding: "29px 0px",
                     marginBottom: '20px',
                     borderRadius: "10px",

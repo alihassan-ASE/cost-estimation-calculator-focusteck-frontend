@@ -218,7 +218,7 @@ export default function VerticalLinearStepper(props) {
                         minWidth: '29px',
                         minHeight: '29px',
                         textAlign: "center",
-                        fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                        fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                           ","
                         ),
                         display: "flex",
@@ -286,7 +286,7 @@ export default function VerticalLinearStepper(props) {
                                         fontSize: '12px',
                                         textTransform: "capitalize",
                                         color: "#000",
-                                        fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                        fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                                           ","
                                         ),
                                         marginBottom: '10px'
@@ -298,7 +298,7 @@ export default function VerticalLinearStepper(props) {
                                         // marginLeft: "2em"
                                       }}>
                                       <Typography paddingRight={"6px"} textAlign={"left"} fontSize={"12px"} fontWeight={400} color={"black"} sx={{
-                                        fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                        fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                                           ","
                                         ),
                                       }}>
@@ -366,7 +366,7 @@ export default function VerticalLinearStepper(props) {
                                       fontSize: '12px',
                                       textTransform: "capitalize",
                                       color: "#000",
-                                      fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                      fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                                         ","
                                       ),
                                       marginBottom: '10px'
@@ -385,7 +385,7 @@ export default function VerticalLinearStepper(props) {
                                     {(responses[index].selectedOption || responses[index].selectedData).map((selected, key) => (
                                       <div key={key}>
                                         <Typography fontSize={"12px"} textTransform={"capitalize"} fontWeight={400} color={"black"} paddingRight={"6px"} sx={{
-                                          fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                                          fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                                             ","
                                           ),
                                         }}>
@@ -438,7 +438,7 @@ export default function VerticalLinearStepper(props) {
                           textTransform: "capitalize",
                           color: index < activeStep ? "#000000" : "#969696",
                           marginLeft: '17px',
-                          fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+                          fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
                             ","
                           ),
                         }}>

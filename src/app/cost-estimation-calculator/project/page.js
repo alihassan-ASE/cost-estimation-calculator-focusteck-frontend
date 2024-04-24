@@ -64,20 +64,9 @@ const CustomNextButton = styled(Button)(({ theme }) => ({
   "&:hover": {
     backgroundColor: "#005DBD"
   },
-  fontFamily: [
-    "Proxima Nova",
-    "Poppins",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(","),
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+    ","
+  ),
   [theme.breakpoints.down("md")]: {
     fontSize: 14,
     margin: "2em 0",
@@ -109,7 +98,7 @@ const CustomCostBox = styled(Box)(({ theme }) => ({
 }));
 
 const CustomNormalTypography = styled(Typography)(({ theme }) => ({
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
 }));
@@ -119,7 +108,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
   fontSize: "60px",
   fontWeight: 500,
   lineHeight: '50px',
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
 }));
@@ -193,6 +182,7 @@ const page = () => {
         setActualResponses(data.responses);
         // setState(localState);
         setCurrentQuestionIndex(data.responses.length - 1);
+
         setTotalCost(data.totalCost);
 
       }
@@ -217,7 +207,6 @@ const page = () => {
           setPreQuestion(data.preProjectQuestion);
           setCurrentQuestion(data.preProjectQuestion[currentQuestionIndex]);
           setPostQuestion(data.postProjectQuestion);
-          console.log("Questions => ", data);
           setTotalQuestions(data.preProjectQuestion.length + data.postProjectQuestion.length)
         })
         .catch((error) => {
@@ -286,7 +275,8 @@ const page = () => {
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
-
+    console.log("Response ", obj)
+    console.log("Response Length ", actualResponses.length)
     setDisplayQuestion(true);
 
     const { index, step } = obj;
@@ -296,6 +286,13 @@ const page = () => {
     actualResponses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedOption);
     handlePrice("stepper");
+
+    console.log("step.index", step.index)
+    console.log("index", index)
+
+    if (totalQuestions > 15) {
+      setTotalQuestions(prev => prev - 1)
+    }
 
     if (
       step.question.label == "project type" ||
@@ -326,7 +323,12 @@ const page = () => {
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
     setCurrentQuestionIndex(lastQuestion.index);
+
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
+
+    if (totalQuestions > 15) {
+      setTotalQuestions(prev => prev - 1)
+    }
 
     if (lastQuestion.question.label === "monetization model") {
       setQuestionsToShow(lastQuestion.stack)
@@ -380,6 +382,7 @@ const page = () => {
       case "dynamic": {
         if (!currentQuestionLocal) {
           currentQuestionLocal = await getDynamicQuestion();
+          setTotalQuestions(prev => prev + 1);
         } else if (currentQuestionLocal) {
           if (Array.isArray(selectedOption)) {
             questionsToShowLocal.push(...selectedOption);
@@ -395,6 +398,8 @@ const page = () => {
             currentQuestionLocal = await getDynamicQuestion(
               questionsToShowLocal[questionsToShowLocal.length - 1]
             );
+            setTotalQuestions(prev => prev + 1);
+
           } else {
             currentStateLocal = "post";
             currentQuestionLocal = null;
@@ -423,6 +428,7 @@ const page = () => {
     setCurrentState(currentStateLocal);
     setCurrentQuestion(currentQuestionLocal);
     setCurrentQuestionIndex(currentQuestionIndexLocal);
+
     setQuestionsToShow(questionsToShowLocal);
     setResponseData();
     setLoaderState((prev) => !prev);
@@ -498,7 +504,7 @@ const page = () => {
                   <Grid item
                     lg={7} md={12} sm={12} xs={12}
                   >
-                    <QuestionsProgress currentQuestion={currentQuestionIndex} totalQuestions={totalQuestions} />
+                    <QuestionsProgress currentQuestion={actualResponses.length} totalQuestions={totalQuestions} />
                   </Grid>
                   <Grid item lg={4.6} md={12} sm={12} xs={12}>
                     <CustomCostBox>

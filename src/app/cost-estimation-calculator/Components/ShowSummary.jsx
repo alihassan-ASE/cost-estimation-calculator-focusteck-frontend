@@ -8,7 +8,7 @@ import Form from "../Components/Form";
 import { useRouter } from "next/navigation";
 
 const CustomMainBox = styled(Box)(({ theme }) => ({
-  margin: '5em 0 2em 0',
+  // margin: '5em 0 2em 0',
   [theme.breakpoints.down("md")]: {
     // margin: "1em 2em",
   },
@@ -48,7 +48,7 @@ const CustomInfoBox = styled(Box)(({ theme }) => ({
 }));
 
 const CustomNormalTypography = styled(Typography)(({ theme }) => ({
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
 }));
@@ -56,7 +56,7 @@ const CustomNormalTypography = styled(Typography)(({ theme }) => ({
 const CustomTypography = styled(Typography)(({ theme }) => ({
   color: "#fff",
   fontSize: "2em",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   [theme.breakpoints.down("sm")]: {
@@ -82,7 +82,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
   flexWrap: "wrap",
   transition:
     "background-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms, box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,border-color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms,color 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   "&:hover": {

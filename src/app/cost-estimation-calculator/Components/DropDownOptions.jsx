@@ -34,7 +34,7 @@ const CustomInputLabel = styled(InputLabel)(({ theme }) => ({
 
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
-  fontFamily: ["Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
+  fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   "&:hover": {
