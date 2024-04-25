@@ -4,6 +4,7 @@ import { Box, StepConnector, Stepper, Step, StepLabel, Typography, useMediaQuery
 import styled from "styled-components";
 import { keyframes } from "@mui/material/styles";
 import { borderColor } from "@mui/system";
+import { Preview } from "@mui/icons-material";
 
 
 export default function VerticalLinearStepper(props) {
@@ -15,6 +16,7 @@ export default function VerticalLinearStepper(props) {
   const [activeStep, setActiveStep] = useState(leng - 1);
   const [lengthOfArray, setLengthOfArray] = useState(5);
   const [isLength, setIsLength] = useState(false);
+  const [LastActiveQuestion, setLastActiveQuestion] = useState();
   const containerRef = useRef(null);
 
   const [CustomScrollableContainer] = useState(
@@ -60,10 +62,13 @@ export default function VerticalLinearStepper(props) {
       setLengthOfArray(false)
     }
     setIsLength(mergedArray)
+
+    console.log("Responses => ", responses)
   }, [responses?.length])
 
-  const handleStep = (step, index) => {
-    changeActiveQuestion({ step, index });
+  const handleStep = (step, index, responses) => {
+    console.log("Complete Response Array => ", responses)
+    changeActiveQuestion({ step, index, responses });
     setActiveStep(index - 1);
     setLengthOfArray(false)
   };
@@ -128,16 +133,12 @@ export default function VerticalLinearStepper(props) {
         padding: "1em 0em .5em 0",
       }}
     >
-      <Typography sx={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>Summary</Typography>
       <Box
         sx={{
           height: "63.5vh",
-          // paddingLeft: "0em",
-          // marginRight: "5px",
           maxWidth: "100%",
           backgroundColor: '#F7F7F7',
           padding: '30px 0 30px 30px'
-          // marginBottom: isMobileScreen ? "2em" : 0
         }}
       >
         <CustomScrollableContainer ref={containerRef}>
@@ -267,7 +268,7 @@ export default function VerticalLinearStepper(props) {
                               key={index}
                               cursor="pointer"
                               onClick={() => {
-                                handleStep(responses[index], index + 1)
+                                handleStep(responses[index], index + 1, responses)
                               }}>
                               {responses[index].resources.map((resource, resourceIndex) => (
                                 <div key={resourceIndex}>
@@ -345,7 +346,7 @@ export default function VerticalLinearStepper(props) {
                             }}
                             cursor="pointer"
                             onClick={() => {
-                              handleStep(responses[index], index + 1)
+                              handleStep(responses[index], index + 1, responses)
                             }}
                           >
                             {(responses[index].selectedOption || responses[index].selectedData) && (

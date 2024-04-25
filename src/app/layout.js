@@ -33,12 +33,17 @@ const CustomNavbarButton = styled(Link)(({ theme }) => ({
   fontSize: "17px",
   textDecoration: "none",
   lineHeight: 1.5,
+  fontWeight: 400,
   fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
     ","
   ),
   position: "relative",
   overflow: "hidden",
   transition: "border-bottom-width 0.5s ease-out",
+  "&:hover": {
+    color: "#005DBD"
+
+  },
 
   "&::after": {
     content: "''",
@@ -54,6 +59,7 @@ const CustomNavbarButton = styled(Link)(({ theme }) => ({
   "&:hover::after": {
     width: "100%",
   },
+
 }));
 
 const CustomBottomHeading = styled(Typography)(({ theme }) => ({
@@ -237,9 +243,17 @@ export default function RootLayout({ children }) {
                       color: "#2e2e2e",
                       alignItems: "stretch",
                       textTransform: "capitalize",
+                      gap: "6px",
+                      alignItems: "center"
                     }}
                   >
-                    Services
+                    <Typography>
+                      Services
+                    </Typography>
+                    <svg width="7" height="6" viewBox="0 0 7 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3.87817 4.86212C3.77958 4.96069 3.64587 5.01606 3.50646 5.01606C3.36705 5.01606 3.23334 4.96069 3.13475 4.86212L0.160509 1.88788C0.110293 1.83939 0.0702397 1.78137 0.042685 1.71722C0.0151303 1.65308 0.000626484 1.58409 1.98509e-05 1.51428C-0.000586782 1.44447 0.012716 1.37524 0.0391518 1.31062C0.0655876 1.24601 0.104627 1.18731 0.153992 1.13794C0.203358 1.08857 0.26206 1.04954 0.326674 1.0231C0.391288 0.996664 0.460521 0.983361 0.530331 0.983968C0.600141 0.984574 0.669132 0.999078 0.733277 1.02663C0.797422 1.05419 0.855437 1.09424 0.903937 1.14446L3.50646 3.74698L6.10899 1.14446C6.20815 1.04868 6.34095 0.995691 6.47881 0.996889C6.61666 0.998087 6.74853 1.05338 6.84601 1.15086C6.94349 1.24834 6.99878 1.38021 6.99998 1.51806C7.00118 1.65592 6.94818 1.78873 6.85241 1.88788L3.87817 4.86212Z" fill="black" />
+                    </svg>
+
                   </CustomNavbarButton>
                   <CustomNavbarButton
                     href="#"
@@ -248,9 +262,16 @@ export default function RootLayout({ children }) {
                       display: { xs: "none", md: "none", lg: "flex" },
                       color: "#2e2e2e",
                       textTransform: "capitalize",
+                      gap: "6px",
+                      alignItems: "center"
                     }}
                   >
-                    Engagement Model
+                    <Typography>
+                      Engagement Model
+                    </Typography>
+                    <svg width="7" height="6" viewBox="0 0 7 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3.87817 4.86212C3.77958 4.96069 3.64587 5.01606 3.50646 5.01606C3.36705 5.01606 3.23334 4.96069 3.13475 4.86212L0.160509 1.88788C0.110293 1.83939 0.0702397 1.78137 0.042685 1.71722C0.0151303 1.65308 0.000626484 1.58409 1.98509e-05 1.51428C-0.000586782 1.44447 0.012716 1.37524 0.0391518 1.31062C0.0655876 1.24601 0.104627 1.18731 0.153992 1.13794C0.203358 1.08857 0.26206 1.04954 0.326674 1.0231C0.391288 0.996664 0.460521 0.983361 0.530331 0.983968C0.600141 0.984574 0.669132 0.999078 0.733277 1.02663C0.797422 1.05419 0.855437 1.09424 0.903937 1.14446L3.50646 3.74698L6.10899 1.14446C6.20815 1.04868 6.34095 0.995691 6.47881 0.996889C6.61666 0.998087 6.74853 1.05338 6.84601 1.15086C6.94349 1.24834 6.99878 1.38021 6.99998 1.51806C7.00118 1.65592 6.94818 1.78873 6.85241 1.88788L3.87817 4.86212Z" fill="black" />
+                    </svg>
                   </CustomNavbarButton>
                   <CustomNavbarButton
                     href="#"
@@ -375,7 +396,6 @@ export default function RootLayout({ children }) {
                 sx={{
                   flexGrow: 1,
                   color: "#2e2e2e",
-                  // fontWeight: "bold",
                   textTransform: "capitalize",
                 }}
               >
@@ -386,7 +406,6 @@ export default function RootLayout({ children }) {
                 sx={{
                   flexGrow: 1,
                   paddingTop: "5px",
-                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -398,7 +417,6 @@ export default function RootLayout({ children }) {
                 sx={{
                   flexGrow: 1,
                   paddingTop: "5px",
-                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -410,7 +428,6 @@ export default function RootLayout({ children }) {
                 sx={{
                   flexGrow: 1,
                   paddingTop: "5px",
-                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -422,7 +439,6 @@ export default function RootLayout({ children }) {
                 sx={{
                   flexGrow: 1,
                   paddingTop: "5px",
-                  // fontWeight: "bold",
                   color: "#2e2e2e",
                   textTransform: "capitalize",
                 }}
@@ -434,7 +450,6 @@ export default function RootLayout({ children }) {
                 sx={{
                   flexGrow: 1,
                   paddingTop: "5px",
-                  // fontWeight: "bold",
                   paddingBottom: "20px",
                   color: "#2e2e2e",
                   textTransform: "capitalize",

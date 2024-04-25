@@ -1020,15 +1020,22 @@ const StaffComponent = () => {
                   ?
                   <Grid
                     container
-                    spacing={{ xs: 3, sm: 3, md: 12, lg: 12, xl: 12 }}
+                    sx={{
+                      "&.MuiGrid-root.MuiGrid-container": {
+                        justifyContent: "space-between"
+                      },
+                      "&.css-11lq3yg-MuiGrid-root": {
+                        justifyContent: "space-between",
+                        flex: 1
+                      }
+                    }}
                   >
                     <Grid item
                       lg={7} md={12} sm={12} xs={12}
                     >
                       <QuestionsProgress currentQuestion={currentQuestionIndex + 1} totalQuestions={additionalQuesiton.length + 1} />
                     </Grid>
-                    <Grid item lg={5} md={12} sm={12} xs={12} sx={{
-                    }}>
+                    <Grid item lg={4.6} md={12} sm={12} xs={12}>
                       <CustomCostBox>
                         <CustomNormalTypography
                           variant="h6"

@@ -143,7 +143,7 @@ const page = () => {
   const [lastQuestionSelectedOption, setLastQuestionSelectedOption] = useState(
     []
   );
-
+  const [isPreState, setIsPreState] = useState();
   const [isOptionSelected, setIsOptionSelected] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [stepperState, setStepperState] = useState(false);
@@ -180,6 +180,7 @@ const page = () => {
 
         setDisplayQuestion(false);
         setActualResponses(data.responses);
+        setIsPreState(data.responses[length - 1])
         // setState(localState);
         setCurrentQuestionIndex(data.responses.length - 1);
 
@@ -266,8 +267,10 @@ const page = () => {
     dataObj.index = currentQuestionIndex;
     dataObj.stack = [...questionsToShow];
 
+
     questionsToShow.pop();
     setQuestionsToShow(questionsToShow);
+    setIsPreState((prev) => [dataObj])
     setActualResponses((prev) => [...prev, dataObj]);
   };
 
@@ -275,24 +278,34 @@ const page = () => {
 
   // Handling Stepper and Active Question
   const changeActiveQuestion = (obj) => {
-    console.log("Response ", obj)
-    console.log("Response Length ", actualResponses.length)
     setDisplayQuestion(true);
 
     const { index, step } = obj;
+
+    if (totalQuestions > preProjectQuestions.length + postProjectQuestions.length && step.state === "dynamic") {
+      const newIndex = actualResponses.length - index;
+
+      if (newIndex === 0) {
+        setTotalQuestions(prev => prev - 1);
+      }
+      else {
+        if (isPreState[0].state === "post") {
+          setTotalQuestions(prev => (prev + isPreState[0].index) - newIndex);
+        } else {
+          setTotalQuestions(prev => prev - newIndex);
+        }
+      }
+    }
+    if (totalQuestions > preProjectQuestions.length + postProjectQuestions.length && step.state === "pre") {
+      setTotalQuestions(preProjectQuestions.length + postProjectQuestions.length);
+    }
+
     setCurrentQuestionIndex(step.index);
     setCurrentQuestion(step.question);
     setCurrentState(step.state);
     actualResponses.splice(index - 1);
     setLastQuestionSelectedOption(step.selectedOption);
     handlePrice("stepper");
-
-    console.log("step.index", step.index)
-    console.log("index", index)
-
-    if (totalQuestions > 15) {
-      setTotalQuestions(prev => prev - 1)
-    }
 
     if (
       step.question.label == "project type" ||
@@ -307,7 +320,6 @@ const page = () => {
       setIsOptionSelected(true);
     }
     slider();
-
   };
 
   // Handling Back Quesiton Functionality
@@ -316,17 +328,16 @@ const page = () => {
     setDisplayQuestion(true);
     cost = 0;
 
-
     let newResponse = [...actualResponses];
     let lastQuestion = newResponse.pop();
     setCurrentQuestion(lastQuestion.question);
     setCurrentState(lastQuestion.state);
     setActualResponses(newResponse);
+    setIsPreState(newResponse[length - 1])
     setCurrentQuestionIndex(lastQuestion.index);
 
     setLastQuestionSelectedOption(lastQuestion.selectedOption);
-
-    if (totalQuestions > 15) {
+    if (totalQuestions > preProjectQuestions.length + postProjectQuestions.length && lastQuestion.state === "dynamic" && lastQuestion.question.label !== "monetization model") {
       setTotalQuestions(prev => prev - 1)
     }
 
@@ -404,6 +415,7 @@ const page = () => {
             currentStateLocal = "post";
             currentQuestionLocal = null;
             currentQuestionIndexLocal = 0;
+            // setTotalQuestions(prev => prev + 1);
           }
         }
         if (currentQuestionLocal) {
@@ -468,29 +480,30 @@ const page = () => {
             marginLeft: "auto",
           }}
         >
-          <Box sx={{ marginBottom: '30px' }}>
-            <Typography variant="h1" sx={{
-              fontSize: '60px',
-              fontWeight: 700,
-              marginBottom: '20px'
-            }}>Estimate Project Cost</Typography>
-            <div role="presentation">
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" color="black" href="/">Home</Link>
-                <Link underline="hover" color="black" href="/cost-estimation-calculator">Cost Estimation Calculator</Link>
-                <Link underline="hover" color="black" href="/cost-estimation-calculator/project">Project</Link>
-              </Breadcrumbs>
-            </div>
-          </Box>
+          {
+            displayQuestion ?
+              <Box sx={{ marginBottom: '30px' }}>
+                <Typography variant="h1" sx={{
+                  fontSize: '60px',
+                  fontWeight: 700,
+                  marginBottom: '20px'
+                }}>Estimate Project Cost</Typography>
+                <div role="presentation">
+                  <Breadcrumbs aria-label="breadcrumb">
+                    <Link underline="hover" color="black" href="/">Home</Link>
+                    <Link underline="hover" color="black" href="/cost-estimation-calculator">Cost Estimation Calculator</Link>
+                    <Link underline="hover" color="black" href="/cost-estimation-calculator/project">Project</Link>
+                  </Breadcrumbs>
+                </div>
+              </Box> : null
+          }
+
           <Box>
             {
               displayQuestion
                 ?
                 <Grid
                   container
-                  // spacing={{ xs: 3, sm: 3, md: 5, lg: 5, xl: 5 }}
-                  // spacing={{ xs: 3, sm: 3, md: 12, lg: 12, xl: 12 }}
-
                   sx={{
                     "&.MuiGrid-root.MuiGrid-container": {
                       justifyContent: "space-between"
@@ -530,10 +543,13 @@ const page = () => {
               >
                 <Grid item
                   lg={3.9} md={12} sm={12} xs={12}
+                // sx={{ backgroundColor: '#F7F7F7', }}
                 >
                   <Box sx={{
-
+                    // height: "100%"
                   }}>
+                    <Typography sx={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>Summary</Typography>
+
                     <div style={{
                     }}>
                       <Stepper
@@ -642,11 +658,11 @@ const page = () => {
 
                     {
                       isOptionSelected ?
-                        <Box sx={{ display: "flex", gap: "2em", justifyContent: "flex-end", paddingBottom: "1em", margin: "0 1em" }}>
+                        <Box sx={{ display: "flex", gap: "2em", justifyContent: "flex-end", margin: "0 3.5em" }}>
                           <CustomNextButton
                             size="medium"
                             variant="contained"
-                            sx={{ width: 150, backgroundColor: "#005DBD", margin: "1em 2em", "&:hover": { backgroundColor: "#005DBD" } }}
+                            sx={{ width: 150, backgroundColor: "#005DBD", margin: "2em 2em 0em 2em", "&:hover": { backgroundColor: "#005DBD" } }}
 
                             onClick={() => {
                               nextQuestion();

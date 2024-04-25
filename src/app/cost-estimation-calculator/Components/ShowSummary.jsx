@@ -278,8 +278,26 @@ const ShowSummary = ({ name, response }) => {
                   </CustomNormalTypography>
 
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "space-between" }}>
-                    <CustomNormalTypography sx={{ color: '#fff', fontSize: '20px', fontWeight: 500 }}>Medium Term</CustomNormalTypography>
-                    <CustomNormalTypography sx={{ color: '#fff', wordBreak: timeline.length > 4 ? "break-word" : "normal", fontSize: '20px', fontWeight: 500 }}>{timeline}</CustomNormalTypography>
+                    <CustomNormalTypography sx={{ color: '#fff', fontSize: '20px', fontWeight: 500 }}>
+                      {
+                        timeline.toLowerCase() === "3-6 months" || timeline.toLowerCase() === "short-term (1-3 months)"
+                          ? "Short Term"
+                          : timeline.toLowerCase() === "6-12 months" || timeline.toLowerCase() === "medium-term (3-6 months)"
+                            ? "Medium Term"
+                            : "Long Term"
+                      }
+                    </CustomNormalTypography>
+                    <CustomNormalTypography sx={{ color: '#fff', wordBreak: timeline.length > 4 ? "break-word" : "normal", fontSize: '20px', fontWeight: 500 }}>
+                      {
+                        timeline === "Long Term" || timeline === "Long-term (6+ months)"
+                          ? '6+ Months'
+                          : timeline.toLowerCase() === "short-term (1-3 months)"
+                            ? "1-3 Months"
+                            : timeline.toLowerCase() === "medium-term (3-6 months)"
+                              ? "3-6 Months"
+                              : timeline
+                      }
+                    </CustomNormalTypography>
                   </Box>
                 </Box>
 

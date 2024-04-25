@@ -11,20 +11,28 @@ const appTheme = createTheme({
                 `@font-face {
                     font-family: 'Aeonik';
                     src: url('../fonts/Aeonik/Aeonik-Regular.otf') format('opentype');
+                    font-weight: 400;
+                }
+                @font-face {
+                    font-family: 'Aeonik';
+                    src: url('../fonts/Aeonik/Aeonik-Thin.otf') format('opentype');
+                    font-weight: 250;
                 }
                 @font-face {
                     font-family: 'Aeonik';
                     src: url('../fonts/Aeonik/Aeonik-Light.otf') format('opentype');
+                    font-weight: 300;
                 }
                 @font-face {
                     font-family: 'Aeonik';
                     src: url('../fonts/Aeonik/Aeonik-Medium.otf') format('opentype');
+                    font-weight: 500;
                 }
                 @font-face {
                     font-family: 'Aeonik';
                     src: url('../fonts/Aeonik/Aeonik-Bold.otf') format('opentype');
-                }
-                `,
+                    font-weight: 700;
+                }`,
         },
     },
     palette: {
