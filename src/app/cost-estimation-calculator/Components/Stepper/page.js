@@ -63,11 +63,9 @@ export default function VerticalLinearStepper(props) {
     }
     setIsLength(mergedArray)
 
-    console.log("Responses => ", responses)
   }, [responses?.length])
 
   const handleStep = (step, index, responses) => {
-    console.log("Complete Response Array => ", responses)
     changeActiveQuestion({ step, index, responses });
     setActiveStep(index - 1);
     setLengthOfArray(false)
@@ -131,12 +129,17 @@ export default function VerticalLinearStepper(props) {
     <Box
       sx={{
         padding: "1em 0em .5em 0",
+        height: "100%",
+
       }}
     >
+      <Typography sx={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>Summary</Typography>
+
       <Box
         sx={{
           height: "63.5vh",
           maxWidth: "100%",
+          height: "100%",
           backgroundColor: '#F7F7F7',
           padding: '30px 0 30px 30px'
         }}

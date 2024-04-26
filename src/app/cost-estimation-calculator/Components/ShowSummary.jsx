@@ -255,12 +255,12 @@ const ShowSummary = ({ name, response }) => {
                   <Box sx={{ display: "flex", alignItems: 'center', justifyContent: "space-between", marginBottom: '12px' }}>
                     <CustomNormalTypography
                       variant="h6"
-                      sx={{ color: "#fff", fontSize: "20px", fontWeight: 400, lineHeight: '13px' }}
+                      sx={{ color: "#fff", fontSize: "20px", fontWeight: 400, }}
                     >
                       Estimated Cost
                     </CustomNormalTypography>
                     <CustomNormalTypography
-                      sx={{ color: "#fff", textDecoration: 'underline', lineHeight: '13px', ":hover": { cursor: "pointer" } }}
+                      sx={{ color: "#fff", textDecoration: 'underline', ":hover": { cursor: "pointer" } }}
                       onClick={() => { route.push("/cost-estimation-calculator/submit") }}
                     >
                       View Details

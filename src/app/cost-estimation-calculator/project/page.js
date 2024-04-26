@@ -540,17 +540,19 @@ const page = () => {
               <Grid
                 container
                 spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
+                sx={{ overflow: "hidden" }}
               >
                 <Grid item
                   lg={3.9} md={12} sm={12} xs={12}
-                // sx={{ backgroundColor: '#F7F7F7', }}
                 >
                   <Box sx={{
-                    // height: "100%"
+                    height: "100%",
+                    overflow: "hidden"
                   }}>
-                    <Typography sx={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>Summary</Typography>
 
                     <div style={{
+                      height: "100%"
+
                     }}>
                       <Stepper
                         responses={actualResponses}
@@ -563,7 +565,7 @@ const page = () => {
                 <Grid item lg={8} md={12} sm={12} xs={12} sx={{
                 }}>
                   <Box sx={{
-                    minHeight: "65vh",
+                    height: "100%",
                     backgroundColor: '#F7F7F7',
                     marginTop: '67.5px',
                     paddingBottom: '50px'

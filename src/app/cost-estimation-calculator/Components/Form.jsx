@@ -8,15 +8,14 @@ import {
   FormControlLabel,
   Checkbox,
   useMediaQuery,
-  InputLabel,
-  Input,
-  InputBase,
-  OutlinedInput,
-  FormControl
+  InputLabel
 } from "@mui/material";
 import { postData } from "../../lib/api/postData";
 import { alpha, styled } from '@mui/material/styles';
 import { useRouter } from "next/navigation";
+// import { PhoneInput } from 'react-international-phone';
+// import 'react-international-phone/style.css';
+import { MuiPhone } from "./MuiPhone";
 
 const CustomBox = styled(Box)(({ theme }) => ({
   margin: "3em 0",
@@ -34,41 +33,6 @@ const CustomBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     margin: "2em 0.5em",
     padding: "1em",
-  },
-}));
-
-const InputField = styled(TextField)(({ theme }) => ({
-  'label + &': {
-    marginTop: 0,
-  },
-  '& .MuiInputBase-input': {
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: "#F9F9F9",
-    border: '1px solid',
-    borderColor: theme.palette.mode === 'light' ? '#E0E3E7' : '#2D3843',
-    fontSize: 16,
-    width: '100%',
-    padding: '10px 12px',
-    transition: theme.transitions.create([
-      'border-color',
-      'background-color',
-      'box-shadow',
-    ]),
-    fontFamily: ["Aeonik", "Poppins", "Helvetica", "Arial", "Lucida", "sans-serif"].join(
-      ","
-    ),
-    '&:focus': {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-    '&::placeholder': {
-      color: '#616161',
-      fontSize: "12.87px",
-      fontWeight: 400,
-      lineHeight: "15.45px",
-      letterSpacing: "0.009em"
-    }
   },
 }));
 
@@ -110,8 +74,7 @@ const Form = ({ response, getActualResponse }) => {
   const changeLayout = useMediaQuery("(max-width:480px)");
 
   const route = useRouter();
-
-
+  const [value, setValue] = useState()
   const [submitted, setSubmitted] = useState(false);
   const [formInput, setFormInput] = useState({
     userName: "",
@@ -177,17 +140,17 @@ const Form = ({ response, getActualResponse }) => {
       }));
       formIsValid = false;
     }
-    if (!phoneRegex.test(trimmedPhone)) {
-      setErrorMessage((prevErrors) => ({
-        ...prevErrors,
-        phoneError: "Phone should contain only numbers",
-      }));
-      setCheckInputVal((prevCheckVals) => ({
-        ...prevCheckVals,
-        phoneError: true,
-      }));
-      formIsValid = false;
-    }
+    // if (!phoneRegex.test(trimmedPhone)) {
+    //   setErrorMessage((prevErrors) => ({
+    //     ...prevErrors,
+    //     phoneError: "Phone should contain only numbers",
+    //   }));
+    //   setCheckInputVal((prevCheckVals) => ({
+    //     ...prevCheckVals,
+    //     phoneError: true,
+    //   }));
+    //   formIsValid = false;
+    // }
     // if (!countryRegex.test(trimmedCountry)) {
     //   setErrorMessage((prevErrors) => ({
     //     ...prevErrors,
@@ -280,6 +243,23 @@ const Form = ({ response, getActualResponse }) => {
     }
   };
 
+
+  const handleChange = (phone) => {
+    setFormInput({
+      phone: phone,
+      userName: formInput.userName,
+      email: formInput.email,
+      message: formInput.message,
+      company: formInput.company,
+    });
+
+    setErrorMessage({
+      usernameError: null, emailError: null, phoneError: null,
+      companyError: null,
+      messageError: null
+    });
+    setCheckInputVal(false);
+  }
 
   return (
     <CustomBox
@@ -405,33 +385,7 @@ const Form = ({ response, getActualResponse }) => {
               <CustomInputLabel htmlFor="phone">
                 Phone Number*
               </CustomInputLabel>
-              <CustomTextField
-                required
-                id="outlined-required, phone"
-                variant="outlined"
-                placeholder="0000 0000000"
-                size="small"
-                value={formInput.phone}
-                onChange={(e) => {
-                  setFormInput({
-                    phone: e.target.value,
-                    userName: formInput.userName,
-                    email: formInput.email,
-                    message: formInput.message,
-                    company: formInput.company,
-                    // country: formInput.country
-                  });
-                  setErrorMessage({
-                    usernameError: null, emailError: null, phoneError: null,
-                    // countryError: null,
-                    companyError: null,
-                    messageError: null
-                  });
-                  setCheckInputVal(false);
-                }}
-                error={checkInputVal.phoneError}
-                helperText={errorMessage.phoneError}
-              />
+              <MuiPhone value={formInput.phone} onChange={handleChange} checkInputVal={checkInputVal} errorMessage={errorMessage} />
             </Box>
           </Box>
           <Box sx={{ display: "flex", flexDirection: "column", gap: '7.36px' }}>
@@ -475,7 +429,6 @@ const Form = ({ response, getActualResponse }) => {
             "& .MuiTypography-root": {
               fontSize: "14px",
               fontWeight: 400,
-              lineHeight: "10px"
             },
             "& .Mui-checked": {
               color: "#005DBD",

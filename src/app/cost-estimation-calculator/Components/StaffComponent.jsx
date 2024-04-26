@@ -108,8 +108,6 @@ const CustomButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#fff",
   border: "1px solid #005DBD",
   color: "#005DBD",
-  // maxWidth: "341px",
-  // width: "130px",
   borderRadius: "4px",
   marginLeft: "auto",
   textTransform: 'capitalize',
@@ -225,6 +223,7 @@ const CustomBox = styled(Box)(({ theme }) => ({
 
 
 
+
 const StaffComponent = () => {
 
   const [count, setCount] = useState(0);
@@ -296,18 +295,18 @@ const StaffComponent = () => {
   }
   `;
 
-  const [StyledTableRow] = useState(styled(TableRow)(({ theme }) => ({
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
     textAlign: "center",
     '&:last-child td, &:last-child th': {
       border: 0,
     },
-  })));
+  }));
 
   const CustomCard = styled(Card)(({ theme }) => ({
-    maxHeight: 600,
+    minHeight: 370,
     width: "50%",
     minWidth: "270px",
-    padding: "25px 41px",
+    padding: "2em 1.5em",
     borderRadius: ".5em",
     margin: "3em 0",
     transform: "translate(-50 %, -50 %)",
@@ -377,6 +376,7 @@ const StaffComponent = () => {
       setCount(values?.length - 1);
     }
     if (values.length) {
+
       for (const key in imageIcons) {
         if (key === values[i]?.resourceOption?.opt) {
           values[i].resourceOption = { ...values[i]?.resourceOption, icon: imageIcons[key] }
@@ -967,14 +967,6 @@ const StaffComponent = () => {
 
                                   </Button>
                                 </ButtonGroup>
-                                {/* <Box sx={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  gap: "1em"
-                                }}>
-
-                                  
-                                </Box> */}
                               </StyledTableCell>
                             </StyledTableRow>
                           ))}
@@ -1052,28 +1044,23 @@ const StaffComponent = () => {
 
               {displayQuestion
                 ?
-                <Grid container spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }
-                } >
+                <Grid container spacing={{ xs: 3, sm: 3, md: 3, lg: 3, xl: 3 }}
+                  sx={{ overflow: "hidden" }}
+                >
                   <Grid item lg={3.9} md={12} sm={12} xs={12}>
-                    <Box sx={{
 
-                    }}>
-                      {actualResponses.length || actualResponses.responses ? (
-                        <div style={{
-                        }}>
-                          <Stepper
-                            responses={actualResponses.responses}
-                            changeActiveQuestion={changeActiveQuestion}
-                          />
-                        </div>
-                      ) : null}
-                    </Box>
+                    {actualResponses.length || actualResponses.responses ? (
+                      <Stepper
+                        responses={actualResponses.responses}
+                        changeActiveQuestion={changeActiveQuestion}
+                      />
+                    ) : null}
                   </Grid>
                   <Grid item lg={8} md={12} sm={12} xs={12}
                     sx={{
                     }}>
                     <Box sx={{
-                      minHeight: "65vh",
+                      height: "100%",
                       backgroundColor: '#F7F7F7',
                       marginTop: '67.5px',
                       paddingBottom: '50px'
@@ -1185,5 +1172,6 @@ const StaffComponent = () => {
       }
     </CustomBox >
   );
+
 }
 export default StaffComponent;
